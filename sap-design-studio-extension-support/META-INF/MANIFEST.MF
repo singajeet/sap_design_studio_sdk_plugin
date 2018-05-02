@@ -12,6 +12,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.navigator.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: com.armin.sap.ds.sdk.project,
+Export-Package: com.armin.sap.ds.ext.plugin,
  com.armin.sap.ds.sdk.project.natures
 Automatic-Module-Name: com.armin.sap.ds.ext.plugin

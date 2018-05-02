@@ -1,4 +1,4 @@
-package com.armin.sap.ds.sdk.project;
+package com.armin.sap.ds.wizard.pages.contribution;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -8,13 +8,13 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
 
-public class DesignStudioNewContributionFileWizard extends Wizard implements INewWizard {
+public class ContributionNewFileWizard extends Wizard implements INewWizard {
 
 	private IWorkbench _workbench;
 	private IStructuredSelection _selection;
 	private WizardNewFileCreationPage _pageOne;
 	
-	public DesignStudioNewContributionFileWizard() {
+	public ContributionNewFileWizard() {
 		setWindowTitle("New Contribution File");
 	}
 
@@ -30,7 +30,7 @@ public class DesignStudioNewContributionFileWizard extends Wizard implements INe
 	public void addPages() {		
 		super.addPages();
 		
-		_pageOne = new WizardContributionNewFileCreationPage(_selection);
+		_pageOne = new ContributionNewFileCreationPage(_selection);
 		addPage(_pageOne);
 	}
 
@@ -39,8 +39,9 @@ public class DesignStudioNewContributionFileWizard extends Wizard implements INe
 		boolean result = false;
 		IFile file = _pageOne.createNewFile();
 		
-		result = file != null;
-		
+		if(file != null)
+			result = true;
+			
 		if(result) {
 			try {
 				IDE.openEditor(_workbench.getActiveWorkbenchWindow().getActivePage(), file);

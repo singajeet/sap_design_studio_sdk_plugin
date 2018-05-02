@@ -1,4 +1,4 @@
-package com.armin.sap.ds.sdk.project;
+package com.armin.sap.ds.wizard;
 
 import java.net.URI;
 

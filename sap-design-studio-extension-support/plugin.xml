@@ -9,11 +9,19 @@
       </category>
       <wizard
             category="com.armin.sap.ds.category"
-            class="com.armin.sap.ds.sdk.project.DesignStudioNewProjectWizard"
+            class="com.armin.sap.ds.wizard.DesignStudioNewProjectWizard"
             finalPerspective="com.armin.sap.ds.sdk.project.perspective"
             icon="images/sap_text.png"
             id="com.armin.sap.ds.sdk.project.wizard"
             name="%wizard.name">
+      </wizard>
+      <wizard
+            category="com.armin.sap.ds.category"
+            class="com.armin.sap.ds.wizard.pages.contribution.ContributionNewFileWizard"
+            descriptionImage="images/text-xml.png"
+            icon="images/text-xml_16x16.png"
+            id="com.armin.sap.ds.sdk.project.wizard.contributionfile"
+            name="Contribution File">
       </wizard>
    </extension>
    <extension
