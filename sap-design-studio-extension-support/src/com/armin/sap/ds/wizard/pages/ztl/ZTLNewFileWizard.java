@@ -1,4 +1,4 @@
-package com.armin.sap.ds.wizard.pages.contribution;
+package com.armin.sap.ds.wizard.pages.ztl;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -8,14 +8,16 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
 
-public class ContributionNewFileWizard extends Wizard implements INewWizard {
+import com.armin.sap.ds.wizard.pages.contribution.ContributionNewFileCreationPage;
+
+public class ZTLNewFileWizard extends Wizard implements INewWizard {
 
 	private IWorkbench _workbench;
 	private IStructuredSelection _selection;
 	private WizardNewFileCreationPage _pageOne;
 	
-	public ContributionNewFileWizard() {
-		setWindowTitle("New Contribution XML File");
+	public ZTLNewFileWizard() {
+		setWindowTitle("New ZTL File");
 	}
 
 	@Override
@@ -23,12 +25,12 @@ public class ContributionNewFileWizard extends Wizard implements INewWizard {
 		_workbench = workbench;
 	    _selection = selection;
 	}
-	
+
 	@Override
 	public void addPages() {		
 		super.addPages();
 		
-		_pageOne = new ContributionNewFileCreationPage(_selection);
+		_pageOne = new ZTLNewFileCreationPage(_selection);
 		addPage(_pageOne);
 	}
 
@@ -50,5 +52,6 @@ public class ContributionNewFileWizard extends Wizard implements INewWizard {
 		
 		return result;
 	}
+
 
 }

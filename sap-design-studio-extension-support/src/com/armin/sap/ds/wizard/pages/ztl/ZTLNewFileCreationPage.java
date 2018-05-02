@@ -1,4 +1,4 @@
-package com.armin.sap.ds.wizard.pages.contribution;
+package com.armin.sap.ds.wizard.pages.ztl;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -19,30 +19,30 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 import com.armin.sap.ds.ext.plugin.Activator;
 
-public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
+public class ZTLNewFileCreationPage extends WizardNewFileCreationPage {
 
-	private String id;
-	private String name;
-	private String version;
-	private String vendor;
+	private String packageName;
+	private String className;
+	private String description;
 	
-	public ContributionNewFileCreationPage(IStructuredSelection selection) {
-		super("SAP Design Studio Contribution File", selection);
+	public ZTLNewFileCreationPage(IStructuredSelection selection) {
+		super("SAP Design Studio ZTL File", selection);
+		// TODO Auto-generated constructor stub
 		
-		setTitle("Contribution File Details");
-		setDescription("Create a contribution file for SAP Design Studio Extension");
-		setFileExtension("xml");
+		setTitle("ZTL File Details");
+		setDescription("Create a ztl file for SAP Design Studio Extension");
+		setFileExtension("ztl");
 	}
 	
-	public ContributionNewFileCreationPage(String pageName, IStructuredSelection selection) {
+	public ZTLNewFileCreationPage(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	@Override
 	protected InputStream getInitialContents() {
 		
-		String templateFilePath = "/templates/contribution-template.xml";
+		String templateFilePath = "/templates/ztl-template.ztl";
         
         try {
             InputStream inputStream = Activator.getDefault().getBundle().getEntry(templateFilePath).openStream();
@@ -56,7 +56,7 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
             }
         
             String templateString = sb.toString();
-            String contentString = String.format(templateString, id, name, version, vendor);
+            String contentString = String.format(templateString, packageName, className, description);
             
             return new ByteArrayInputStream(contentString.getBytes());
             
@@ -77,42 +77,32 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
 		GridLayout layout = new GridLayout(2, false);
 		container.setLayout(layout);
 		//--- First Row
-		Label lblId = new Label(container, SWT.NONE);
-		lblId.setText("Id");
-		Text txtId = new Text(container, SWT.SINGLE);
-		txtId.addModifyListener(new ModifyListener() {
+		Label lblPackage = new Label(container, SWT.NONE);
+		lblPackage.setText("Package");
+		Text txtPackage = new Text(container, SWT.BORDER);
+		txtPackage.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				id = txtId.getText();
+				packageName = txtPackage.getText();
 				setPageComplete(validatePage());
 			}
 		});
 		//--- Second Row
-		Label lblName = new Label(container, SWT.NONE);
-		lblName.setText("Name");
-		Text txtName = new Text(container, SWT.SINGLE);
-		txtName.addModifyListener(new ModifyListener() {
+		Label lblClass = new Label(container, SWT.NONE);
+		lblClass.setText("Class");
+		Text txtClass = new Text(container, SWT.BORDER);
+		txtClass.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				name = txtName.getText();
+				className = txtClass.getText();
 				setPageComplete(validatePage());
 			}
 		});
 		//--- Third Row
-		Label lblVersion = new Label(container, SWT.NONE);
-		lblVersion.setText("Version");
-		Text txtVersion = new Text(container, SWT.SINGLE);
-		txtVersion.addModifyListener(new ModifyListener() {
+		Label lblDescription = new Label(container, SWT.NONE);
+		lblDescription.setText("Description");
+		Text txtDescription = new Text(container, SWT.BORDER);
+		txtDescription.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				version = txtVersion.getText();
-				setPageComplete(validatePage());
-			}
-		});
-		//--- Fourth Row
-		Label lblVendor = new Label(container, SWT.NONE);
-		lblVendor.setText("Vendor");
-		Text txtVendor = new Text(container, SWT.SINGLE);
-		txtVendor.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				vendor = txtVendor.getText();
+				description = txtDescription.getText();
 				setPageComplete(validatePage());
 			}
 		});
@@ -121,10 +111,9 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
 	@Override
 	protected boolean validatePage() {
 		// TODO Auto-generated method stub
-		return super.validatePage() && !id.isEmpty() 
-				&& !name.isEmpty() && !vendor.isEmpty()
-				&& !version.isEmpty();
+		return super.validatePage() && !packageName.isEmpty() 
+				&& !className.isEmpty() && !description.isEmpty();
 	}
-	
+
 
 }

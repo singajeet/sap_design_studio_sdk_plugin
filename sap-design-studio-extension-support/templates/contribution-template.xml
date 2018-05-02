@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdkExtension
 	xmlns="http://www.sap.com/bi/zen/sdk"
-	id="com.armin.sap.ds.sdk.component"
-	title="Design Studio SDK Extension Component"
-	version="16.6"
-	vendor="SAP">
+	id="%1$s"
+	title="%2$s"
+	version="%3$s"
+	vendor="%4$s">
 </sdkExtension>

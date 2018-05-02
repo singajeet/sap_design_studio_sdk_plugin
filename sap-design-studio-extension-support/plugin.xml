@@ -23,6 +23,14 @@
             id="com.armin.sap.ds.sdk.project.wizard.contributionfile"
             name="Contribution File">
       </wizard>
+      <wizard
+            category="com.armin.sap.ds.category"
+            class="com.armin.sap.ds.wizard.pages.ztl.ZTLNewFileWizard"
+            descriptionImage="images/text-x-script.png"
+            icon="images/text-x-script.png"
+            id="com.armin.sap.ds.sdk.project.wizard.ztlfile"
+            name="ZTL File">
+      </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">

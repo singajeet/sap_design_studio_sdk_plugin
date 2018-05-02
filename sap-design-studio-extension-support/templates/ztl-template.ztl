@@ -1,0 +1,14 @@
+/*******************************************************
+ * Filename: %2$s.ztl
+ * Description: %3$s
+ * Date: {{ creationDate }}
+ * Author: {{authorName }}
+ *
+ * Revision:
+ *
+ *******************************************************/
+ 
+class %1$s.%2$s extends Component {
+
+	/* TODO: class methods in ZTL format */
+}
