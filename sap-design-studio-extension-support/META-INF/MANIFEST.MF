@@ -4,14 +4,18 @@ Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: com.armin.sap.ds.ext.plugin;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.armin.sap.ds.ext.plugin.Activator
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.13.0",
  org.eclipse.ui.ide;bundle-version="3.13.1",
- org.eclipse.core.resources,
- org.eclipse.ui.navigator,
- org.eclipse.ui.navigator.resources
+ org.eclipse.core.resources;bundle-version="3.12.0",
+ org.eclipse.ui.navigator;bundle-version="3.7.0",
+ org.eclipse.ui.navigator.resources;bundle-version="3.6.1",
+ org.eclipse.ui;bundle-version="3.109.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.armin.sap.ds.ext.plugin,
- com.armin.sap.ds.sdk.project.natures
+ com.armin.sap.ds.sdk.project.natures,
+ com.armin.sap.ds.sdk.project.perspective,
+ com.armin.sap.ds.support,
+ com.armin.sap.ds.wizard,
+ com.armin.sap.ds.wizard.pages.contribution
 Automatic-Module-Name: com.armin.sap.ds.ext.plugin

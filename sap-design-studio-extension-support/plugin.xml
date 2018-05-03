@@ -75,7 +75,11 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.eclipse.ui.ide.workbench"
-            name="%product.name">
+            name="SAP Design Studio Ext Plugin">
+         <property
+               name="appName"
+               value="SAP Design Studio Ext Plugin">
+         </property>
       </product>
    </extension>
    <extension

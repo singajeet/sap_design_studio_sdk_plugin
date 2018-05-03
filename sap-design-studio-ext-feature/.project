@@ -3,6 +3,8 @@
 	<name>sap-design-studio-ext-feature</name>
 	<comment></comment>
 	<projects>
+		<project>sap-design-studio-ext-navigator</project>
+		<project>sap-design-studio-extension-support</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

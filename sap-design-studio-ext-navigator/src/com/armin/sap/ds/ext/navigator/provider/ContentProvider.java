@@ -93,9 +93,18 @@ public class ContentProvider implements ITreeContentProvider {
 	
 	@Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-        System.out
-                .println("ContentProvider.inputChanged: old: " + oldInput.getClass().getName() + " new: " + newInput.getClass().getName()); //$NON-NLS-1$ //$NON-NLS-2$
-        // TODO Auto-generated method stub
+        if(oldInput != null && newInput != null) {
+        		System.out
+                		.println("ContentProvider.inputChanged: old: " + oldInput.getClass().getName() + " new: " + newInput.getClass().getName()); //$NON-NLS-1$ //$NON-NLS-2$
+        } else if(oldInput != null) {
+        	System.out
+    		.println("ContentProvider.inputChanged: old: " + oldInput.getClass().getName());
+        } else if(newInput != null) {
+        	System.out
+    		.println("ContentProvider.inputChanged: new: " + newInput.getClass().getName());
+        }else {
+        	System.out.println("No old or new input is passed!");
+        }
  
     }
 

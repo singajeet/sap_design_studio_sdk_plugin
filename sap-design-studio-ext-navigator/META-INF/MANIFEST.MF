@@ -4,11 +4,11 @@ Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: sap-design-studio-ext-navigator;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.armin.sap.ds.ext.navigator.Activator
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
- org.eclipse.core.resources,
- org.eclipse.ui.navigator,
- org.eclipse.ui.navigator.resources,
+Require-Bundle: org.eclipse.ui;bundle-version="3.109.0",
+ org.eclipse.core.runtime;bundle-version="3.13.0",
+ org.eclipse.core.resources;bundle-version="3.12.0",
+ org.eclipse.ui.navigator;bundle-version="3.7.0",
+ org.eclipse.ui.navigator.resources;bundle-version="3.6.1",
  com.armin.sap.ds.ext.plugin;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: sap-design-studio-ext-navigator

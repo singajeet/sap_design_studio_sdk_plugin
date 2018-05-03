@@ -121,9 +121,13 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
 	@Override
 	protected boolean validatePage() {
 		// TODO Auto-generated method stub
+		if(id != null && name != null && vendor != null && version != null) {
 		return super.validatePage() && !id.isEmpty() 
 				&& !name.isEmpty() && !vendor.isEmpty()
 				&& !version.isEmpty();
+		} else {
+			return false;
+		}
 	}
 	
 
