@@ -31,7 +31,11 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
 		
 		setTitle("Contribution File Details");
 		setDescription("Create a contribution file for SAP Design Studio Extension");
+		setFileName("contribution");
 		setFileExtension("xml");
+		
+		setAllowExistingResources(false);
+		
 	}
 	
 	public ContributionNewFileCreationPage(String pageName, IStructuredSelection selection) {
@@ -76,10 +80,11 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
 		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));;
 		GridLayout layout = new GridLayout(2, false);
 		container.setLayout(layout);
+		
 		//--- First Row
 		Label lblId = new Label(container, SWT.NONE);
 		lblId.setText("Id");
-		Text txtId = new Text(container, SWT.SINGLE);
+		Text txtId = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtId.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				id = txtId.getText();
@@ -89,7 +94,7 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
 		//--- Second Row
 		Label lblName = new Label(container, SWT.NONE);
 		lblName.setText("Name");
-		Text txtName = new Text(container, SWT.SINGLE);
+		Text txtName = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtName.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				name = txtName.getText();
@@ -99,7 +104,7 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
 		//--- Third Row
 		Label lblVersion = new Label(container, SWT.NONE);
 		lblVersion.setText("Version");
-		Text txtVersion = new Text(container, SWT.SINGLE);
+		Text txtVersion = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtVersion.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				version = txtVersion.getText();
@@ -109,7 +114,7 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
 		//--- Fourth Row
 		Label lblVendor = new Label(container, SWT.NONE);
 		lblVendor.setText("Vendor");
-		Text txtVendor = new Text(container, SWT.SINGLE);
+		Text txtVendor = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtVendor.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				vendor = txtVendor.getText();

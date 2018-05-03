@@ -6,6 +6,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -17,10 +18,16 @@ import com.armin.sap.ds.support.DesignStudioProjectSupport;
 public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, IExecutableExtension {
 
 	private WizardNewProjectCreationPage _pageOne;
+	private IWizardPage _pageTwo;
+	private IWizardPage _pageThree;
+	
 	private String PAGE_NAME = "SAP Design Studio Extension Wizard";
 	private String PAGE_TITLE = "SAP Design Studio Extension";
 	private String PAGE_DESCRIPTION = "Generates boiler plate code for SAP Design Studio Extension";
 	private IConfigurationElement _configurationElement;
+	
+	private IWorkbench workbench;
+	private IStructuredSelection selection;
 	
 	public DesignStudioNewProjectWizard() {
 		setWindowTitle(PAGE_TITLE);
@@ -29,7 +36,8 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		// TODO Auto-generated method stub
-
+		workbench = workbench;
+		selection = selection;
 	}
 
 	@Override
@@ -55,6 +63,12 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 		_pageOne.setDescription(PAGE_DESCRIPTION);
 		
 		addPage(_pageOne);
+		
+		_pageTwo = new ContributionFileDetailsPage();
+		addPage(_pageTwo);
+		
+		_pageThree = new ZTLFileDetailsPage();
+		addPage(_pageThree);
 		
 	}
 

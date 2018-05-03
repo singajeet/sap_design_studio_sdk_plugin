@@ -31,7 +31,10 @@ public class ZTLNewFileCreationPage extends WizardNewFileCreationPage {
 		
 		setTitle("ZTL File Details");
 		setDescription("Create a ztl file for SAP Design Studio Extension");
+		setFileName("contribution");
 		setFileExtension("ztl");
+		
+		setAllowExistingResources(false);
 	}
 	
 	public ZTLNewFileCreationPage(String pageName, IStructuredSelection selection) {
@@ -73,13 +76,14 @@ public class ZTLNewFileCreationPage extends WizardNewFileCreationPage {
 		super.createControl(parent);
 		Composite area = (Composite) getControl();
 		Composite container = new Composite(area, SWT.NONE);
-		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));;
+		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		GridLayout layout = new GridLayout(2, false);
 		container.setLayout(layout);
+		
 		//--- First Row
 		Label lblPackage = new Label(container, SWT.NONE);
 		lblPackage.setText("Package");
-		Text txtPackage = new Text(container, SWT.BORDER);
+		Text txtPackage = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtPackage.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				packageName = txtPackage.getText();
@@ -89,7 +93,7 @@ public class ZTLNewFileCreationPage extends WizardNewFileCreationPage {
 		//--- Second Row
 		Label lblClass = new Label(container, SWT.NONE);
 		lblClass.setText("Class");
-		Text txtClass = new Text(container, SWT.BORDER);
+		Text txtClass = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtClass.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				className = txtClass.getText();
@@ -99,7 +103,7 @@ public class ZTLNewFileCreationPage extends WizardNewFileCreationPage {
 		//--- Third Row
 		Label lblDescription = new Label(container, SWT.NONE);
 		lblDescription.setText("Description");
-		Text txtDescription = new Text(container, SWT.BORDER);
+		Text txtDescription = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtDescription.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				description = txtDescription.getText();
@@ -110,9 +114,12 @@ public class ZTLNewFileCreationPage extends WizardNewFileCreationPage {
 
 	@Override
 	protected boolean validatePage() {
-		// TODO Auto-generated method stub
-		return super.validatePage() && !packageName.isEmpty() 
-				&& !className.isEmpty() && !description.isEmpty();
+		if(packageName != null && className != null && description != null) {
+			return super.validatePage() && !packageName.isEmpty() 
+					&& !className.isEmpty() && !description.isEmpty();
+		} else {
+			return false;
+		}
 	}
 
 
