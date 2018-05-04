@@ -18,12 +18,12 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 import com.armin.sap.ds.ext.plugin.Activator;
+import com.armin.sap.ds.support.ContributionZTLModel;
+import com.armin.sap.ds.wizard.IWizardDetailsPage;
 
-public class ZTLNewFileCreationPage extends WizardNewFileCreationPage {
+public class ZTLNewFileCreationPage extends WizardNewFileCreationPage implements IWizardDetailsPage {
 
-	private String packageName;
-	private String className;
-	private String description;
+	private ContributionZTLModel _model;
 	
 	public ZTLNewFileCreationPage(IStructuredSelection selection) {
 		super("SAP Design Studio ZTL File", selection);
@@ -35,6 +35,7 @@ public class ZTLNewFileCreationPage extends WizardNewFileCreationPage {
 		setFileExtension("ztl");
 		
 		setAllowExistingResources(false);
+		_model = new ContributionZTLModel();
 	}
 	
 	public ZTLNewFileCreationPage(String pageName, IStructuredSelection selection) {
@@ -59,7 +60,8 @@ public class ZTLNewFileCreationPage extends WizardNewFileCreationPage {
             }
         
             String templateString = sb.toString();
-            String contentString = String.format(templateString, packageName, className, description);
+            String contentString = String.format(templateString, _model.getPackageName(), 
+            		_model.getClassName(), _model.getDescription());
             
             return new ByteArrayInputStream(contentString.getBytes());
             
@@ -74,49 +76,15 @@ public class ZTLNewFileCreationPage extends WizardNewFileCreationPage {
 	public void createControl(Composite parent) {
 		
 		super.createControl(parent);
-		Composite area = (Composite) getControl();
-		Composite container = new Composite(area, SWT.NONE);
-		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		GridLayout layout = new GridLayout(2, false);
-		container.setLayout(layout);
-		
-		//--- First Row
-		Label lblPackage = new Label(container, SWT.NONE);
-		lblPackage.setText("Package");
-		Text txtPackage = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtPackage.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				packageName = txtPackage.getText();
-				setPageComplete(validatePage());
-			}
-		});
-		//--- Second Row
-		Label lblClass = new Label(container, SWT.NONE);
-		lblClass.setText("Class");
-		Text txtClass = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtClass.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				className = txtClass.getText();
-				setPageComplete(validatePage());
-			}
-		});
-		//--- Third Row
-		Label lblDescription = new Label(container, SWT.NONE);
-		lblDescription.setText("Description");
-		Text txtDescription = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtDescription.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				description = txtDescription.getText();
-				setPageComplete(validatePage());
-			}
-		});
+		_model.createControl(this);
 	}
 
 	@Override
-	protected boolean validatePage() {
-		if(packageName != null && className != null && description != null) {
-			return super.validatePage() && !packageName.isEmpty() 
-					&& !className.isEmpty() && !description.isEmpty();
+	public boolean validatePage() {
+		if(_model.getPackageName() != null && _model.getClassName() != null 
+				&& _model.getDescription() != null) {
+			return super.validatePage() && !_model.getPackageName().isEmpty() 
+					&& !_model.getClassName().isEmpty() && !_model.getDescription().isEmpty();
 		} else {
 			return false;
 		}

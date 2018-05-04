@@ -13,7 +13,7 @@ import com.armin.sap.ds.sdk.project.natures.ProjectNature;
 
 public class DesignStudioProjectSupport {
 	
-	public static IProject createProject(String projectName, URI location) {		
+	public static IProject createProject(String projectName, URI location, ContributionXMLModel contribXMLDetails, ContributionZTLModel contribZTLDetails) {		
 		
 		IProject project = createBaseProject(projectName, location);
 		try {

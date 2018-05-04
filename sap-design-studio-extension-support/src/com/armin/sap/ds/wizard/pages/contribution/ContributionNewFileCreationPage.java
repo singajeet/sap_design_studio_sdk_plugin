@@ -18,13 +18,12 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
 import com.armin.sap.ds.ext.plugin.Activator;
+import com.armin.sap.ds.support.ContributionXMLModel;
+import com.armin.sap.ds.wizard.IWizardDetailsPage;
 
-public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
+public class ContributionNewFileCreationPage extends WizardNewFileCreationPage implements IWizardDetailsPage {
 
-	private String id;
-	private String name;
-	private String version;
-	private String vendor;
+	private ContributionXMLModel _model;
 	
 	public ContributionNewFileCreationPage(IStructuredSelection selection) {
 		super("SAP Design Studio Contribution File", selection);
@@ -35,6 +34,8 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
 		setFileExtension("xml");
 		
 		setAllowExistingResources(false);
+		
+		_model = new ContributionXMLModel();
 		
 	}
 	
@@ -60,7 +61,8 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
             }
         
             String templateString = sb.toString();
-            String contentString = String.format(templateString, id, name, version, vendor);
+            String contentString = String.format(templateString, _model.getId(), 
+            		_model.getName(), _model.getVersion(), _model.getVendor());
             
             return new ByteArrayInputStream(contentString.getBytes());
             
@@ -75,61 +77,17 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage {
 	public void createControl(Composite parent) {
 		
 		super.createControl(parent);
-		Composite area = (Composite) getControl();
-		Composite container = new Composite(area, SWT.NONE);
-		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));;
-		GridLayout layout = new GridLayout(2, false);
-		container.setLayout(layout);
 		
-		//--- First Row
-		Label lblId = new Label(container, SWT.NONE);
-		lblId.setText("Id");
-		Text txtId = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtId.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				id = txtId.getText();
-				setPageComplete(validatePage());
-			}
-		});
-		//--- Second Row
-		Label lblName = new Label(container, SWT.NONE);
-		lblName.setText("Name");
-		Text txtName = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtName.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				name = txtName.getText();
-				setPageComplete(validatePage());
-			}
-		});
-		//--- Third Row
-		Label lblVersion = new Label(container, SWT.NONE);
-		lblVersion.setText("Version");
-		Text txtVersion = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtVersion.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				version = txtVersion.getText();
-				setPageComplete(validatePage());
-			}
-		});
-		//--- Fourth Row
-		Label lblVendor = new Label(container, SWT.NONE);
-		lblVendor.setText("Vendor");
-		Text txtVendor = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtVendor.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				vendor = txtVendor.getText();
-				setPageComplete(validatePage());
-			}
-		});
 	}
 
 	@Override
-	protected boolean validatePage() {
+	public boolean validatePage() {
 		// TODO Auto-generated method stub
-		if(id != null && name != null && vendor != null && version != null) {
-		return super.validatePage() && !id.isEmpty() 
-				&& !name.isEmpty() && !vendor.isEmpty()
-				&& !version.isEmpty();
+		if(_model.getId() != null && _model.getName() != null && 
+				_model.getVendor() != null && _model.getVersion() != null) {
+		return super.validatePage() && !_model.getId().isEmpty() 
+				&& !_model.getName().isEmpty() && !_model.getVendor().isEmpty()
+				&& !_model.getVersion().isEmpty();
 		} else {
 			return false;
 		}
