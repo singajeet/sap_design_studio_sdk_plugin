@@ -11,9 +11,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.armin.sap.ds.sdk.project.natures.ProjectNature;
 
-public class DesignStudioProjectSupport {
+public class DesignStudioProjectHelper {
 	
-	public static IProject createProject(String projectName, URI location, ContributionXMLModel contribXMLDetails, ContributionZTLModel contribZTLDetails) {		
+	public static IProject createProject(String projectName, URI location, ContributionXMLHelper contribXMLDetails, ContributionZTLHelper contribZTLDetails) {		
 		
 		IProject project = createBaseProject(projectName, location);
 		try {

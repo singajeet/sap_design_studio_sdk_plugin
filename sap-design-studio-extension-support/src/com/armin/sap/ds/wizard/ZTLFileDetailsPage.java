@@ -3,35 +3,40 @@ package com.armin.sap.ds.wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
-import com.armin.sap.ds.support.ContributionZTLModel;
+import com.armin.sap.ds.support.ContributionZTLHelper;
 
-public class ZTLFileDetailsPage extends WizardPage {
+public class ZTLFileDetailsPage extends WizardPage implements IWizardDetailsPage {
 
-	private ContributionZTLModel _model;
+	private ContributionZTLHelper _helper;
 	
 	protected ZTLFileDetailsPage() {
 		super("ZTL File Details");
-		// TODO Auto-generated constructor stub
+		_helper = new ContributionZTLHelper();
 	}
 	
 	protected ZTLFileDetailsPage(String pageName) {
 		super(pageName);
-		// TODO Auto-generated constructor stub
+		_helper = new ContributionZTLHelper();
 	}
 
 	@Override
 	public void createControl(Composite parent) {
-		// TODO Auto-generated method stub
-
+		_helper.createControl(this);
 	}
 	
-	public ContributionZTLModel getDetails() {
+	public ContributionZTLHelper getDetails() {
 		
-		return _model;
+		return _helper;
 	}
 
 	public boolean validatePage() {
-		return false;
+		if(_helper.getPackageName() != null && _helper.getClassName() != null 
+				&& _helper.getDescription() != null) {
+			return !_helper.getPackageName().isEmpty() 
+					&& !_helper.getClassName().isEmpty() && !_helper.getDescription().isEmpty();
+		} else {
+			return false;
+		}
 	}
 	
 }

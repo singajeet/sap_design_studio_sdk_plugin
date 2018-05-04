@@ -13,9 +13,9 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 
-import com.armin.sap.ds.support.ContributionXMLModel;
-import com.armin.sap.ds.support.ContributionZTLModel;
-import com.armin.sap.ds.support.DesignStudioProjectSupport;
+import com.armin.sap.ds.support.ContributionXMLHelper;
+import com.armin.sap.ds.support.ContributionZTLHelper;
+import com.armin.sap.ds.support.DesignStudioProjectHelper;
 
 public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, IExecutableExtension {
 
@@ -26,16 +26,20 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 	private String PAGE1_NAME = "SAP Design Studio Extension Wizard";
 	private String PAGE1_TITLE = "Project Name and Location";
 	private String PAGE1_DESCRIPTION = "Generates boiler plate code for SAP Design Studio Extension";
+	
 	private String PAGE2_NAME = "SAP Design Studio Extension Wizard";
 	private String PAGE2_TITLE = "Contibution XML Details";
-	private String PAGE2_DESCRIPTION = "Generates boiler plate code for SAP Design Studio Extension";	
+	private String PAGE2_DESCRIPTION = "Provide inputs for the contribution.xml file";	
+	
 	private String PAGE3_NAME = "SAP Design Studio Extension Wizard";
 	private String PAGE3_TITLE = "Contribution ZTL Details";
-	private String PAGE3_DESCRIPTION = "Generates boiler plate code for SAP Design Studio Extension";
+	private String PAGE3_DESCRIPTION = "Provide inputs for the contribution.ztl file";
 	private IConfigurationElement _configurationElement;
 	
-	private IWorkbench workbench;
-	private IStructuredSelection selection;
+	@SuppressWarnings("unused")
+	private IWorkbench _workbench;
+	@SuppressWarnings("unused")
+	private IStructuredSelection _selection;
 	
 	public DesignStudioNewProjectWizard() {
 		setWindowTitle(PAGE1_TITLE);
@@ -43,9 +47,8 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		// TODO Auto-generated method stub
-		workbench = workbench;
-		selection = selection;
+		_workbench = workbench;
+		_selection = selection;
 	}
 
 	@Override
@@ -56,10 +59,10 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 			location = _pageOne.getLocationURI();
 		}
 		
-		ContributionXMLModel contribXMLDetails = ((ContributionFileDetailsPage)_pageTwo).getDetails();
-		ContributionZTLModel contribZTLDetails = ((ZTLFileDetailsPage)_pageThree).getDetails();
+		ContributionXMLHelper contribXMLDetails = ((ContributionFileDetailsPage)_pageTwo).getDetails();
+		ContributionZTLHelper contribZTLDetails = ((ZTLFileDetailsPage)_pageThree).getDetails();
 		
-		DesignStudioProjectSupport.createProject(name, location, contribXMLDetails, contribZTLDetails);
+		DesignStudioProjectHelper.createProject(name, location, contribXMLDetails, contribZTLDetails);
 		
 		BasicNewProjectResourceWizard.updatePerspective(_configurationElement);
 		return true;

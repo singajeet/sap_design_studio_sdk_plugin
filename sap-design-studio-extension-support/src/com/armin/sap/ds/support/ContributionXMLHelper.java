@@ -1,5 +1,11 @@
 package com.armin.sap.ds.support;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -9,10 +15,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.armin.sap.ds.wizard.ContributionFileDetailsPage;
+import com.armin.sap.ds.ext.plugin.Activator;
 import com.armin.sap.ds.wizard.IWizardDetailsPage;
 
-public class ContributionXMLModel {
+public class ContributionXMLHelper {
 	
 	private String id;
 	/**
@@ -66,6 +72,34 @@ public class ContributionXMLModel {
 	private String name;
 	private String version;
 	private String vendor;
+	
+	public InputStream getContent() {
+		String templateFilePath = "/templates/contribution-template.xml";
+        
+        try {
+            InputStream inputStream = Activator.getDefault().getBundle().getEntry(templateFilePath).openStream();
+            BufferedReader buf = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder sb = new StringBuilder();
+            
+            String line = buf.readLine();
+            while(line != null) {
+            	sb.append(line).append("\n");
+            	line = buf.readLine();
+            }
+        
+            String templateString = sb.toString();
+            String contentString = String.format(templateString, getId(), 
+            		getName(), getVersion(), getVendor());
+            
+            return new ByteArrayInputStream(contentString.getBytes());
+            
+        } catch (IOException e) {
+            // send back null
+        }
+        
+		return null;
+
+	}
 	
 	public void createControl(IWizardDetailsPage page) {
 		Composite area = (Composite) page.getControl();

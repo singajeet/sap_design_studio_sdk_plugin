@@ -8,8 +8,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
 
-import com.armin.sap.ds.wizard.pages.contribution.ContributionNewFileCreationPage;
-
 public class ZTLNewFileWizard extends Wizard implements INewWizard {
 
 	private IWorkbench _workbench;

@@ -1,40 +1,51 @@
 package com.armin.sap.ds.wizard;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
-import com.armin.sap.ds.support.ContributionXMLModel;
+import com.armin.sap.ds.support.ContributionXMLHelper;
 
-public class ContributionFileDetailsPage extends WizardPage {
+public class ContributionFileDetailsPage extends WizardPage implements IWizardDetailsPage {
 
-	private ContributionXMLModel _model;
-	
+	private ContributionXMLHelper _helper;
+
 	public ContributionFileDetailsPage() {
 		super("Contribution File Details");
-		// TODO Auto-generated constructor stub
+		_helper = new ContributionXMLHelper();
 	}
-	
+
 	public ContributionFileDetailsPage(String pageName) {
 		super(pageName);
-		// TODO Auto-generated constructor stub
+		_helper = new ContributionXMLHelper();
 	}
 
 	public ContributionFileDetailsPage(String pageName, String title, ImageDescriptor titleImage) {
 		super(pageName, title, titleImage);
-		// TODO Auto-generated constructor stub
+
+		_helper = new ContributionXMLHelper();
 	}
 
 	@Override
 	public void createControl(Composite parent) {
-		// TODO Auto-generated method stub
-
+		_helper.createControl(this);
 	}
-	
-	public ContributionXMLModel getDetails() {
-		
-		return _model;		
+
+	public ContributionXMLHelper getDetails() {
+		return _helper;
+	}
+
+	@Override
+	public boolean validatePage() {
+		// TODO Auto-generated method stub
+		if (_helper.getId() != null && _helper.getName() != null && _helper.getVendor() != null
+				&& _helper.getVersion() != null) {
+			return !_helper.getId().isEmpty() && !_helper.getName().isEmpty()
+					&& !_helper.getVendor().isEmpty()
+					&& !_helper.getVersion().isEmpty();
+		} else {
+			return false;
+		}
 	}
 
 }
