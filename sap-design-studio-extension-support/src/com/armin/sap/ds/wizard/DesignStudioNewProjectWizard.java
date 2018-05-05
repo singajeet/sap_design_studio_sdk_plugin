@@ -13,8 +13,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 
-import com.armin.sap.ds.support.ContributionXMLHelper;
-import com.armin.sap.ds.support.ContributionZTLHelper;
+import com.armin.sap.ds.support.ExtensionHelper;
+import com.armin.sap.ds.support.ComponentHelper;
 import com.armin.sap.ds.support.DesignStudioProjectHelper;
 
 public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, IExecutableExtension {
@@ -59,8 +59,8 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 			location = _pageOne.getLocationURI();
 		}
 		
-		ContributionXMLHelper contribXMLDetails = ((XMLFileDetailsPage)_pageTwo).getDetails();
-		ContributionZTLHelper contribZTLDetails = ((ZTLFileDetailsPage)_pageThree).getDetails();
+		ExtensionHelper contribXMLDetails = ((ExtensionDetailsPage)_pageTwo).getDetails();
+		ComponentHelper contribZTLDetails = ((ComponentDetailsPage)_pageThree).getDetails();
 		
 		DesignStudioProjectHelper.createProject(name, location, contribXMLDetails, contribZTLDetails);
 		
@@ -77,12 +77,12 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 		_pageOne.setDescription(PAGE1_DESCRIPTION);
 		addPage(_pageOne);
 		
-		_pageTwo = new XMLFileDetailsPage(PAGE2_NAME);
+		_pageTwo = new ExtensionDetailsPage(PAGE2_NAME);
 		_pageTwo.setTitle(PAGE2_TITLE);
 		_pageTwo.setDescription(PAGE2_DESCRIPTION);
 		addPage(_pageTwo);
 		
-		_pageThree = new ZTLFileDetailsPage(PAGE3_NAME);
+		_pageThree = new ComponentDetailsPage(PAGE3_NAME);
 		_pageThree.setTitle(PAGE3_TITLE);
 		_pageThree.setDescription(PAGE3_DESCRIPTION);
 		addPage(_pageThree);

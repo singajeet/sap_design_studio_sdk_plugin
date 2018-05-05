@@ -6,12 +6,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
-import com.armin.sap.ds.support.ContributionXMLHelper;
+import com.armin.sap.ds.support.ExtensionHelper;
 import com.armin.sap.ds.wizard.IWizardDetailsPage;
 
 public class XMLNewFileCreationPage extends WizardNewFileCreationPage implements IWizardDetailsPage {
 
-	private ContributionXMLHelper _helper;
+	private ExtensionHelper _helper;
 	
 	public XMLNewFileCreationPage(IStructuredSelection selection) {
 		super("SAP Design Studio Contribution File", selection);
@@ -23,7 +23,7 @@ public class XMLNewFileCreationPage extends WizardNewFileCreationPage implements
 		
 		setAllowExistingResources(false);
 		
-		_helper = new ContributionXMLHelper();
+		_helper = new ExtensionHelper();
 		
 	}
 	

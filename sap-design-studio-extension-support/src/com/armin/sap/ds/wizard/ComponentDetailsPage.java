@@ -7,22 +7,22 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 
-import com.armin.sap.ds.support.ContributionZTLHelper;
+import com.armin.sap.ds.support.ComponentHelper;
 
-public class ZTLFileDetailsPage extends WizardPage implements IWizardDetailsPage {
+public class ComponentDetailsPage extends WizardPage implements IWizardDetailsPage {
 
-	private ContributionZTLHelper _helper;
+	private ComponentHelper _helper;
 	
-	protected ZTLFileDetailsPage() {
+	protected ComponentDetailsPage() {
 		super("Component Details");
 		setPageComplete(false);
-		_helper = new ContributionZTLHelper();
+		_helper = new ComponentHelper();
 	}
 	
-	protected ZTLFileDetailsPage(String pageName) {
+	protected ComponentDetailsPage(String pageName) {
 		super(pageName);
 		setPageComplete(false);
-		_helper = new ContributionZTLHelper();
+		_helper = new ComponentHelper();
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class ZTLFileDetailsPage extends WizardPage implements IWizardDetailsPage
 		_helper.createControl(this);
 	}
 	
-	public ContributionZTLHelper getDetails() {
+	public ComponentHelper getDetails() {
 		
 		return _helper;
 	}

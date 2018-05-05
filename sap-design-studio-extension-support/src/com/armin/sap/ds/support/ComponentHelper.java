@@ -25,8 +25,9 @@ import org.eclipse.swt.widgets.Text;
 import com.armin.sap.ds.ext.plugin.Activator;
 import com.armin.sap.ds.wizard.IWizardDetailsPage;
 
-public class ContributionZTLHelper {
-	
+public class ComponentHelper {
+
+	public String COMPONENT_PERSIST_FILE_NAME = "contribution.ztl";
 	private String EXTENDS_KEYWORD = " extends ";
 	
 	private String packageName;
@@ -85,7 +86,7 @@ public class ContributionZTLHelper {
 		return createZTLFile;
 	}
 	
-	public void setCreateZTLFile(boolean createZTLFile) {
+	public void setCreateComponentFile(boolean createZTLFile) {
 		this.createZTLFile = createZTLFile;
 	}
 	
@@ -94,7 +95,7 @@ public class ContributionZTLHelper {
 		txtClass.setEnabled(state);
 		txtDescription.setEnabled(state);
 		comboExtends.setEnabled(state);
-		setCreateZTLFile(state);
+		setCreateComponentFile(state);
 	}
 	
 	private Text txtPackage;
@@ -110,11 +111,11 @@ public class ContributionZTLHelper {
 		GridLayout layout = new GridLayout(2, false);
 		container.setLayout(layout);
 		
-		setCreateZTLFile(true);
+		setCreateComponentFile(true);
 		
-		//--- Checkbox to ask if ZTL is required or not
+		//--- Checkbox to ask if component file is required or not
 		Button checkCreateZTLFile = new Button(container, SWT.CHECK);
-		checkCreateZTLFile.setText("Create ZTL contribution file for this extension");
+		checkCreateZTLFile.setText("Create component contribution file (ztl) for this extension");
 		checkCreateZTLFile.setSelection(true);
 		checkCreateZTLFile.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent event) {

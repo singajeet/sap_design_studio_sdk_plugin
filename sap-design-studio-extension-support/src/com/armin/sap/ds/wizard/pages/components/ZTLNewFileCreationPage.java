@@ -6,12 +6,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
-import com.armin.sap.ds.support.ContributionZTLHelper;
+import com.armin.sap.ds.support.ComponentHelper;
 import com.armin.sap.ds.wizard.IWizardDetailsPage;
 
 public class ZTLNewFileCreationPage extends WizardNewFileCreationPage implements IWizardDetailsPage {
 
-	private ContributionZTLHelper _helper;
+	private ComponentHelper _helper;
 	
 	public ZTLNewFileCreationPage(IStructuredSelection selection) {
 		super("SAP Design Studio ZTL File", selection);
@@ -22,7 +22,7 @@ public class ZTLNewFileCreationPage extends WizardNewFileCreationPage implements
 		setFileExtension("ztl");
 		
 		setAllowExistingResources(false);
-		_helper = new ContributionZTLHelper();
+		_helper = new ComponentHelper();
 	}
 	
 	public ZTLNewFileCreationPage(String pageName, IStructuredSelection selection) {

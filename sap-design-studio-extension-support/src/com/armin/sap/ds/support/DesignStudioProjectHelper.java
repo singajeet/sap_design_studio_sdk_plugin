@@ -16,13 +16,13 @@ import com.armin.sap.ds.sdk.project.natures.ProjectNature;
 
 public class DesignStudioProjectHelper {
 	
-	private static ContributionXMLHelper _contribXMLHelper;
-	private static ContributionZTLHelper _contribZTLHelper;
+	private static ExtensionHelper _extensionHelper;
+	private static ComponentHelper _componentHelper;
 	
-	public static IProject createProject(String projectName, URI location, ContributionXMLHelper contribXMLHelper, ContributionZTLHelper contribZTLHelper) {		
+	public static IProject createProject(String projectName, URI location, ExtensionHelper extensionHelper, ComponentHelper componentHelper) {		
 		
-		_contribXMLHelper = contribXMLHelper;
-		_contribZTLHelper = contribZTLHelper;
+		_extensionHelper = extensionHelper;
+		_componentHelper = componentHelper;
 		
 		IProject project = createBaseProject(projectName, location);
 		try {
@@ -36,8 +36,8 @@ public class DesignStudioProjectHelper {
 			};
 			
 			String[] filePaths = {
-					"contribution.xml",
-					"contribution.ztl"
+					_extensionHelper.EXTENSION_PERSIST_FILE_NAME,
+					_componentHelper.COMPONENT_PERSIST_FILE_NAME
 			};
 			
 			addFoldersToProjectStructure(project, folderPaths);
@@ -60,20 +60,20 @@ public class DesignStudioProjectHelper {
 	}
 
 	private static void createFile(IFile file) {
-		if(file.getName().equalsIgnoreCase("contribution.xml")) {
+		if(file.getName().equalsIgnoreCase(_extensionHelper.EXTENSION_PERSIST_FILE_NAME)) {
 			if(!file.exists()) {
 				try {
-					file.create(_contribXMLHelper.getContent(), IResource.NONE, null);
+					file.create(_extensionHelper.getContent(), IResource.NONE, null);
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
 			}
 		} 
-		else if(file.getName().equalsIgnoreCase("contribution.ztl")) {
+		else if(file.getName().equalsIgnoreCase(_componentHelper.COMPONENT_PERSIST_FILE_NAME)) {
 			if(!file.exists()) {
 				try {
-					if(_contribZTLHelper.isCreateZTLFile()) {
-						file.create(_contribZTLHelper.getContent(), IResource.NONE, null);
+					if(_componentHelper.isCreateZTLFile()) {
+						file.create(_componentHelper.getContent(), IResource.NONE, null);
 					}
 				} catch (CoreException e) {
 					e.printStackTrace();

@@ -7,28 +7,28 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
-import com.armin.sap.ds.support.ContributionXMLHelper;
+import com.armin.sap.ds.support.ExtensionHelper;
 
-public class XMLFileDetailsPage extends WizardPage implements IWizardDetailsPage {
+public class ExtensionDetailsPage extends WizardPage implements IWizardDetailsPage {
 
-	private ContributionXMLHelper _helper;
+	private ExtensionHelper _helper;
 
-	public XMLFileDetailsPage() {
+	public ExtensionDetailsPage() {
 		super("Extension Details");
 		setPageComplete(false);
-		_helper = new ContributionXMLHelper();
+		_helper = new ExtensionHelper();
 	}
 
-	public XMLFileDetailsPage(String pageName) {
+	public ExtensionDetailsPage(String pageName) {
 		super(pageName);
 		setPageComplete(false);
-		_helper = new ContributionXMLHelper();
+		_helper = new ExtensionHelper();
 	}
 
-	public XMLFileDetailsPage(String pageName, String title, ImageDescriptor titleImage) {
+	public ExtensionDetailsPage(String pageName, String title, ImageDescriptor titleImage) {
 		super(pageName, title, titleImage);
 		setPageComplete(false);
-		_helper = new ContributionXMLHelper();
+		_helper = new ExtensionHelper();
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class XMLFileDetailsPage extends WizardPage implements IWizardDetailsPage
 		
 	}
 
-	public ContributionXMLHelper getDetails() {
+	public ExtensionHelper getDetails() {
 		return _helper;
 	}
 

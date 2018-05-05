@@ -18,7 +18,9 @@ import org.eclipse.swt.widgets.Text;
 import com.armin.sap.ds.ext.plugin.Activator;
 import com.armin.sap.ds.wizard.IWizardDetailsPage;
 
-public class ContributionXMLHelper {
+public class ExtensionHelper {
+	
+	public String EXTENSION_PERSIST_FILE_NAME = "contribution.xml";
 	
 	private String id;
 	/**
