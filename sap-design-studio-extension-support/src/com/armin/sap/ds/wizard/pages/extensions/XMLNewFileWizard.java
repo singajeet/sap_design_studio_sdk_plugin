@@ -1,4 +1,4 @@
-package com.armin.sap.ds.wizard.pages.contribution;
+package com.armin.sap.ds.wizard.pages.extensions;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -8,13 +8,13 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
 
-public class ContributionNewFileWizard extends Wizard implements INewWizard {
+public class XMLNewFileWizard extends Wizard implements INewWizard {
 
 	private IWorkbench _workbench;
 	private IStructuredSelection _selection;
 	private WizardNewFileCreationPage _pageOne;
 	
-	public ContributionNewFileWizard() {
+	public XMLNewFileWizard() {
 		setWindowTitle("New Contribution XML File");
 	}
 
@@ -28,7 +28,7 @@ public class ContributionNewFileWizard extends Wizard implements INewWizard {
 	public void addPages() {		
 		super.addPages();
 		
-		_pageOne = new ContributionNewFileCreationPage(_selection);
+		_pageOne = new XMLNewFileCreationPage(_selection);
 		addPage(_pageOne);
 	}
 

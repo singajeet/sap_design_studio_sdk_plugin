@@ -72,7 +72,9 @@ public class DesignStudioProjectHelper {
 		else if(file.getName().equalsIgnoreCase("contribution.ztl")) {
 			if(!file.exists()) {
 				try {
-					file.create(_contribZTLHelper.getContent(), IResource.NONE, null);
+					if(_contribZTLHelper.isCreateZTLFile()) {
+						file.create(_contribZTLHelper.getContent(), IResource.NONE, null);
+					}
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}

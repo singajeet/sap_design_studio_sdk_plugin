@@ -9,23 +9,23 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import com.armin.sap.ds.support.ContributionXMLHelper;
 
-public class ContributionFileDetailsPage extends WizardPage implements IWizardDetailsPage {
+public class XMLFileDetailsPage extends WizardPage implements IWizardDetailsPage {
 
 	private ContributionXMLHelper _helper;
 
-	public ContributionFileDetailsPage() {
-		super("Contribution File Details");
+	public XMLFileDetailsPage() {
+		super("Extension Details");
 		setPageComplete(false);
 		_helper = new ContributionXMLHelper();
 	}
 
-	public ContributionFileDetailsPage(String pageName) {
+	public XMLFileDetailsPage(String pageName) {
 		super(pageName);
 		setPageComplete(false);
 		_helper = new ContributionXMLHelper();
 	}
 
-	public ContributionFileDetailsPage(String pageName, String title, ImageDescriptor titleImage) {
+	public XMLFileDetailsPage(String pageName, String title, ImageDescriptor titleImage) {
 		super(pageName, title, titleImage);
 		setPageComplete(false);
 		_helper = new ContributionXMLHelper();

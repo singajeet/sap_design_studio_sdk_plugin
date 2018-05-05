@@ -111,7 +111,7 @@ public class ContributionXMLHelper {
 		
 		//--- First Row
 		Label lblId = new Label(container, SWT.NONE);
-		lblId.setText("Id");
+		lblId.setText("Extension Id:");
 		Text txtId = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtId.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtId.addModifyListener(new ModifyListener() {
@@ -122,7 +122,7 @@ public class ContributionXMLHelper {
 		});
 		//--- Second Row
 		Label lblName = new Label(container, SWT.NONE);
-		lblName.setText("Name");
+		lblName.setText("Extension Name:");
 		Text txtName = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtName.addModifyListener(new ModifyListener() {
@@ -133,7 +133,7 @@ public class ContributionXMLHelper {
 		});
 		//--- Third Row
 		Label lblVersion = new Label(container, SWT.NONE);
-		lblVersion.setText("Version");
+		lblVersion.setText("Version:");
 		Text txtVersion = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtVersion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtVersion.addModifyListener(new ModifyListener() {
@@ -144,7 +144,7 @@ public class ContributionXMLHelper {
 		});
 		//--- Fourth Row
 		Label lblVendor = new Label(container, SWT.NONE);
-		lblVendor.setText("Vendor");
+		lblVendor.setText("Vendor Name:");
 		Text txtVendor = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtVendor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtVendor.addModifyListener(new ModifyListener() {
@@ -153,5 +153,10 @@ public class ContributionXMLHelper {
 				page.setPageComplete(page.validatePage());
 			}
 		});
+		//--- Separator
+		Label lineSeparator1 = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData lineSeparatorGridData1 = new GridData(GridData.FILL_HORIZONTAL);
+		lineSeparatorGridData1.horizontalSpan = 2;
+		lineSeparator1.setLayoutData(lineSeparatorGridData1);
 	}
 }

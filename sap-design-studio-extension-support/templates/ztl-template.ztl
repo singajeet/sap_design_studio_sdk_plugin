@@ -1,14 +1,14 @@
 /*******************************************************
- * Filename: %2$s.ztl
- * Description: %3$s
- * Date: {{ creationDate }}
- * Author: {{authorName }}
+ * Filename: contribution.ztl
+ * Description: %1$s
+ * Date: %2$s
+ * Author: %3$s
  *
  * Revision:
  *
  *******************************************************/
  
-class %1$s.%2$s extends %4$s {
+class %4$s.%5$s%6$s%7$s {
 
 	/* TODO: class methods in ZTL format */
 }

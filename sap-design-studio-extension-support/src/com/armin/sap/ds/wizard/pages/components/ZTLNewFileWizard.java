@@ -1,4 +1,4 @@
-package com.armin.sap.ds.wizard.pages.ztl;
+package com.armin.sap.ds.wizard.pages.components;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.IStructuredSelection;

@@ -28,12 +28,12 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 	private String PAGE1_DESCRIPTION = "Generates boiler plate code for SAP Design Studio Extension";
 	
 	private String PAGE2_NAME = "SAP Design Studio Extension Wizard";
-	private String PAGE2_TITLE = "Contibution XML Details";
-	private String PAGE2_DESCRIPTION = "Provide inputs for the contribution.xml file";	
+	private String PAGE2_TITLE = "Extension Details";
+	private String PAGE2_DESCRIPTION = "Provide details about the SAP Design Studio extension";	
 	
 	private String PAGE3_NAME = "SAP Design Studio Extension Wizard";
-	private String PAGE3_TITLE = "Contribution ZTL Details";
-	private String PAGE3_DESCRIPTION = "Provide inputs for the contribution.ztl file";
+	private String PAGE3_TITLE = "Component Details";
+	private String PAGE3_DESCRIPTION = "Provide details about the default component for this extension";
 	private IConfigurationElement _configurationElement;
 	
 	@SuppressWarnings("unused")
@@ -59,7 +59,7 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 			location = _pageOne.getLocationURI();
 		}
 		
-		ContributionXMLHelper contribXMLDetails = ((ContributionFileDetailsPage)_pageTwo).getDetails();
+		ContributionXMLHelper contribXMLDetails = ((XMLFileDetailsPage)_pageTwo).getDetails();
 		ContributionZTLHelper contribZTLDetails = ((ZTLFileDetailsPage)_pageThree).getDetails();
 		
 		DesignStudioProjectHelper.createProject(name, location, contribXMLDetails, contribZTLDetails);
@@ -77,7 +77,7 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 		_pageOne.setDescription(PAGE1_DESCRIPTION);
 		addPage(_pageOne);
 		
-		_pageTwo = new ContributionFileDetailsPage(PAGE2_NAME);
+		_pageTwo = new XMLFileDetailsPage(PAGE2_NAME);
 		_pageTwo.setTitle(PAGE2_TITLE);
 		_pageTwo.setDescription(PAGE2_DESCRIPTION);
 		addPage(_pageTwo);

@@ -1,4 +1,4 @@
-package com.armin.sap.ds.wizard.pages.contribution;
+package com.armin.sap.ds.wizard.pages.extensions;
 
 import java.io.InputStream;
 
@@ -9,11 +9,11 @@ import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import com.armin.sap.ds.support.ContributionXMLHelper;
 import com.armin.sap.ds.wizard.IWizardDetailsPage;
 
-public class ContributionNewFileCreationPage extends WizardNewFileCreationPage implements IWizardDetailsPage {
+public class XMLNewFileCreationPage extends WizardNewFileCreationPage implements IWizardDetailsPage {
 
 	private ContributionXMLHelper _helper;
 	
-	public ContributionNewFileCreationPage(IStructuredSelection selection) {
+	public XMLNewFileCreationPage(IStructuredSelection selection) {
 		super("SAP Design Studio Contribution File", selection);
 		
 		setTitle("Contribution File Details");
@@ -27,7 +27,7 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage i
 		
 	}
 	
-	public ContributionNewFileCreationPage(String pageName, IStructuredSelection selection) {
+	public XMLNewFileCreationPage(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
 		// TODO Auto-generated constructor stub
 	}

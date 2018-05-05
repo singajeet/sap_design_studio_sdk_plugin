@@ -5,12 +5,16 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Date;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -22,6 +26,8 @@ import com.armin.sap.ds.ext.plugin.Activator;
 import com.armin.sap.ds.wizard.IWizardDetailsPage;
 
 public class ContributionZTLHelper {
+	
+	private String EXTENDS_KEYWORD = " extends ";
 	
 	private String packageName;
 	/**
@@ -67,12 +73,35 @@ public class ContributionZTLHelper {
 	public String getClassToExtend() {
 		return classToExtend;
 	}
+	
 	public void setClassToExtend(String classToExtend) {
 		this.classToExtend = classToExtend;
 	}
 	
 	private String description;
+	private boolean createZTLFile;
 			
+	public boolean isCreateZTLFile() {
+		return createZTLFile;
+	}
+	
+	public void setCreateZTLFile(boolean createZTLFile) {
+		this.createZTLFile = createZTLFile;
+	}
+	
+	private void enableControls(boolean state) {
+		txtPackage.setEnabled(state);
+		txtClass.setEnabled(state);
+		txtDescription.setEnabled(state);
+		comboExtends.setEnabled(state);
+		setCreateZTLFile(state);
+	}
+	
+	private Text txtPackage;
+	private Text txtClass;
+	private Text txtDescription;
+	private Combo comboExtends;
+	
 	public void createControl(IWizardDetailsPage page) {
 		Composite area = (Composite) page.getControl();
 		
@@ -81,10 +110,36 @@ public class ContributionZTLHelper {
 		GridLayout layout = new GridLayout(2, false);
 		container.setLayout(layout);
 		
+		setCreateZTLFile(true);
+		
+		//--- Checkbox to ask if ZTL is required or not
+		Button checkCreateZTLFile = new Button(container, SWT.CHECK);
+		checkCreateZTLFile.setText("Create ZTL contribution file for this extension");
+		checkCreateZTLFile.setSelection(true);
+		checkCreateZTLFile.addSelectionListener(new SelectionListener() {
+			public void widgetSelected(SelectionEvent event) {
+				if(checkCreateZTLFile.getSelection()) {
+					enableControls(true);
+				} else {
+					enableControls(false);
+				}
+			}
+			
+			public void widgetDefaultSelected(SelectionEvent event) {
+				
+			}
+		});
+		
+		//--- Separator
+		Label lineSeparator2 = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData lineSeparatorGridData2 = new GridData(GridData.FILL_HORIZONTAL);
+		lineSeparatorGridData2.horizontalSpan = 2;
+		lineSeparator2.setLayoutData(lineSeparatorGridData2);
+				
 		//--- First Row
 		Label lblPackage = new Label(container, SWT.NONE);
-		lblPackage.setText("Package");
-		Text txtPackage = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		lblPackage.setText("Component Package Name:");
+		txtPackage = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtPackage.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtPackage.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -94,8 +149,8 @@ public class ContributionZTLHelper {
 		});
 		//--- Second Row
 		Label lblClass = new Label(container, SWT.NONE);
-		lblClass.setText("Class");
-		Text txtClass = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		lblClass.setText("Component Class Name:");
+		txtClass = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtClass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtClass.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -105,21 +160,23 @@ public class ContributionZTLHelper {
 		});
 		//--- Third Row
 		Label lblExtends = new Label(container, SWT.NONE);
-		lblExtends.setText("Extends");
-		Combo extendCombo = new Combo(container, SWT.READ_ONLY | SWT.BORDER);
-		extendCombo.add("Component");
-		extendCombo.add("SdkDataBuffer");
-		extendCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		extendCombo.addListener(SWT.Selection, new Listener() {
+		lblExtends.setText("Component Inherit From:");
+		comboExtends = new Combo(container, SWT.READ_ONLY | SWT.BORDER);
+		comboExtends.add("-- None --");
+		comboExtends.add("Component");
+		comboExtends.add("SdkDataBuffer");
+		comboExtends.select(1); //Select component by default
+		comboExtends.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboExtends.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
-				int index = extendCombo.getSelectionIndex();
-				classToExtend = extendCombo.getItem(index);
+				int index = comboExtends.getSelectionIndex();
+				classToExtend = comboExtends.getItem(index);
 			}
 		});
 		//--- Fourth Row
 		Label lblDescription = new Label(container, SWT.NONE);
 		lblDescription.setText("Description");
-		Text txtDescription = new Text(container, SWT.MULTI | SWT.BORDER | SWT.WRAP);
+		txtDescription = new Text(container, SWT.MULTI | SWT.BORDER | SWT.WRAP);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = SWT.FILL;
 		gridData.grabExcessHorizontalSpace = true;
@@ -133,10 +190,10 @@ public class ContributionZTLHelper {
 			}
 		});
 		//--- Separator
-		Label line = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
-		GridData lineGridData = new GridData(GridData.FILL_HORIZONTAL);
-		lineGridData.horizontalSpan = 2;
-		line.setLayoutData(lineGridData);
+		Label lineSeparator1 = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData lineSeparatorGridData1 = new GridData(GridData.FILL_HORIZONTAL);
+		lineSeparatorGridData1.horizontalSpan = 2;
+		lineSeparator1.setLayoutData(lineSeparatorGridData1);
 
 	}
 	
@@ -153,10 +210,19 @@ public class ContributionZTLHelper {
             	sb.append(line).append("\n");
             	line = buf.readLine();
             }
-        
+            
             String templateString = sb.toString();
-            String contentString = String.format(templateString, getPackageName(), 
-            		getClassName(), getDescription(), getClassToExtend());
+            String contentString = null;
+            
+            if(classToExtend.equalsIgnoreCase("-- None --")) {
+            	contentString = String.format(templateString, getDescription(),
+                		new Date(), "<<author name>>", getPackageName(), 
+                		getClassName(), "", "");
+            } else {
+            	contentString = String.format(templateString, getDescription(),
+            		new Date(), "<<author name>>", getPackageName(), 
+            		getClassName(), EXTENDS_KEYWORD, getClassToExtend());
+            }
             
             return new ByteArrayInputStream(contentString.getBytes());
             

@@ -14,7 +14,7 @@ public class ZTLFileDetailsPage extends WizardPage implements IWizardDetailsPage
 	private ContributionZTLHelper _helper;
 	
 	protected ZTLFileDetailsPage() {
-		super("ZTL File Details");
+		super("Component Details");
 		setPageComplete(false);
 		_helper = new ContributionZTLHelper();
 	}
