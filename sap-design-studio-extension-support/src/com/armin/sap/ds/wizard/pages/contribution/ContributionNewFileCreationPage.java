@@ -40,6 +40,7 @@ public class ContributionNewFileCreationPage extends WizardNewFileCreationPage i
 	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
+		_helper.createControl(this);
 	}
 
 	@Override

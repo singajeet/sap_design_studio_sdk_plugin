@@ -13,7 +13,7 @@ import org.eclipse.core.runtime.content.ITextContentDescriber;
 public class ZtlDescriber implements ITextContentDescriber {
 
 	private static final String CLASS_KEYWORD = "class";
-	private static final String EXTENDS_COMPONENT = "extends Component";
+	private static final String EXTENDS_KEYWORD = "extends";
 	
 	public ZtlDescriber() {
 		// TODO Auto-generated constructor stub
@@ -48,7 +48,7 @@ public class ZtlDescriber implements ITextContentDescriber {
 			return null;
 		}
 		
-		if(line.startsWith(CLASS_KEYWORD) && line.contains(EXTENDS_COMPONENT)) {
+		if(line.startsWith(CLASS_KEYWORD) && line.contains(EXTENDS_KEYWORD)) {
 			return line;
 		}
 		

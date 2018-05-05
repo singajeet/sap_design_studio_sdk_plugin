@@ -3,29 +3,45 @@ package com.armin.sap.ds.support;
 import java.net.URI;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.armin.sap.ds.sdk.project.natures.ProjectNature;
 
 public class DesignStudioProjectHelper {
 	
-	public static IProject createProject(String projectName, URI location, ContributionXMLHelper contribXMLDetails, ContributionZTLHelper contribZTLDetails) {		
+	private static ContributionXMLHelper _contribXMLHelper;
+	private static ContributionZTLHelper _contribZTLHelper;
+	
+	public static IProject createProject(String projectName, URI location, ContributionXMLHelper contribXMLHelper, ContributionZTLHelper contribZTLHelper) {		
+		
+		_contribXMLHelper = contribXMLHelper;
+		_contribZTLHelper = contribZTLHelper;
 		
 		IProject project = createBaseProject(projectName, location);
 		try {
 			addNature(project);
 			
-			String[] paths = { 
+			String[] folderPaths = { 
 					"META-INF",
 					"res/js",
 					"res/css",
 					"res/additional_properties_sheet"
 			};
-			addToProjectStructure(project, paths);
+			
+			String[] filePaths = {
+					"contribution.xml",
+					"contribution.ztl"
+			};
+			
+			addFoldersToProjectStructure(project, folderPaths);
+			addFilesToProjectStructure(project, filePaths);
 			
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -35,7 +51,39 @@ public class DesignStudioProjectHelper {
 		return project;
 	}
 
-	private static void addToProjectStructure(IProject project, String[] paths) throws Exception{
+	private static void addFilesToProjectStructure(IProject project, String[] filePaths) {
+		for(String path: filePaths) {
+			IFile file = project.getFile(path);
+			createFile(file);
+		}
+		
+	}
+
+	private static void createFile(IFile file) {
+		if(file.getName().equalsIgnoreCase("contribution.xml")) {
+			if(!file.exists()) {
+				try {
+					file.create(_contribXMLHelper.getContent(), IResource.NONE, null);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+		} 
+		else if(file.getName().equalsIgnoreCase("contribution.ztl")) {
+			if(!file.exists()) {
+				try {
+					file.create(_contribZTLHelper.getContent(), IResource.NONE, null);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+		} else {
+			System.out.println("Unknown file: " + file.getName());
+		}
+		
+	}
+
+	private static void addFoldersToProjectStructure(IProject project, String[] paths) throws Exception{
 		for(String path: paths) {
 			IFolder etcFolders = project.getFolder(path);
 			createFolder(etcFolders);

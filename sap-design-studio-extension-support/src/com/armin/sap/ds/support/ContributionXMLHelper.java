@@ -103,6 +103,7 @@ public class ContributionXMLHelper {
 	
 	public void createControl(IWizardDetailsPage page) {
 		Composite area = (Composite) page.getControl();
+		
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));;
 		GridLayout layout = new GridLayout(2, false);
@@ -112,6 +113,7 @@ public class ContributionXMLHelper {
 		Label lblId = new Label(container, SWT.NONE);
 		lblId.setText("Id");
 		Text txtId = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtId.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtId.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				id = txtId.getText();
@@ -122,6 +124,7 @@ public class ContributionXMLHelper {
 		Label lblName = new Label(container, SWT.NONE);
 		lblName.setText("Name");
 		Text txtName = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtName.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				name = txtName.getText();
@@ -132,6 +135,7 @@ public class ContributionXMLHelper {
 		Label lblVersion = new Label(container, SWT.NONE);
 		lblVersion.setText("Version");
 		Text txtVersion = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtVersion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtVersion.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				version = txtVersion.getText();
@@ -142,6 +146,7 @@ public class ContributionXMLHelper {
 		Label lblVendor = new Label(container, SWT.NONE);
 		lblVendor.setText("Vendor");
 		Text txtVendor = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtVendor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtVendor.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				vendor = txtVendor.getText();
