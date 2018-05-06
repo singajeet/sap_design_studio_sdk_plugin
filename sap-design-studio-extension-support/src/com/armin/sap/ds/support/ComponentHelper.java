@@ -29,8 +29,8 @@ import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 public class ComponentHelper implements IHelper {
 
 	public String COMPONENT_PERSIST_FILE_NAME = "contribution.ztl";
-	public int M_MODE = 0;
-	public int G_MODE = 1;
+	public boolean M_MODE = true;
+	public boolean C_MODE = false;
 	
 	private String INIT_CLASS_TO_EXTEND = "Component";
 	private String EXTENDS_KEYWORD = " extends ";
@@ -125,22 +125,33 @@ public class ComponentHelper implements IHelper {
 	}
 	
 	/**
-	 * Mode defines the component mode for rendering i.e., Mobile or General
-	 * Default is the M_MODE i.e., 0
+	 * Mobile mode for rendering components
+	 * Selected by default
 	 */
-	private int mode = M_MODE;
+	private boolean mMode = M_MODE;
 	
-	public int getMode() {
-		return mode;
+	public boolean getMMode() {
+		return mMode;
 	}
 	
-	public void setMode(int mode) {
-		this.mode = mode;
-		if(mode == M_MODE) {
-			radioModeMobile.setSelection(true);
-		} else {
-			radioModeGeneric.setSelection(true);
-		}
+	public void setMMode(boolean mode) {
+		this.mMode = mode;
+		checkModeMobile.setSelection(true);		
+	}
+	
+	/**
+	 * Commons mode for rendering
+	 * 
+	 */
+	private boolean commonsMode = C_MODE;
+	
+	public boolean getCommonsMode() {
+		return commonsMode;
+	}
+	
+	public void setCommonsMode(boolean mode) {
+		this.commonsMode = mode;
+		checkModeCommon.setSelection(true);		
 	}
 	
 	/**
@@ -181,9 +192,9 @@ public class ComponentHelper implements IHelper {
 	private Text txtDescription;
 	private Combo comboExtends;
 	private Text txtToolTip;
-	private Group radioGroup;
-	private Button radioModeGeneric;
-	private Button radioModeMobile;
+	private Group checkGroup;
+	private Button checkModeCommon;
+	private Button checkModeMobile;
 	private Button checkCreateComponentFile;
 	
 	/**
@@ -305,6 +316,23 @@ public class ComponentHelper implements IHelper {
 				page.setPageComplete(page.validatePage());
 			}
 		});
+		//--- Tooltip Row
+		Label lblTooltip = new Label(container, SWT.NONE);
+		lblTooltip.setText("Component Tooltip:");
+		txtToolTip = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtToolTip.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtToolTip.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {				
+				toolTip = txtToolTip.getText();
+				page.setPageComplete(page.validatePage());
+			}
+		});
+		//-- chech mode row
+		Label lblMode = new Label(container, SWT.NONE);
+		lblMode.setText("Component Mode:");
+		checkGroup = new Group(container, SWT.SHADOW_ETCHED_IN);
+		checkGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		//--- Separator
 		Label lineSeparator1 = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData lineSeparatorGridData1 = new GridData(GridData.FILL_HORIZONTAL);

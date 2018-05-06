@@ -2,9 +2,10 @@ package com.armin.sap.ds.ext.navigator.provider;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -14,10 +15,14 @@ import com.armin.sap.ds.ext.navigator.elements.DesignStudioProjectParent;
 import com.armin.sap.ds.ext.navigator.elements.IDesignStudioProjectElement;
 import com.armin.sap.ds.sdk.project.natures.ProjectNature;
 
-public class ContentProvider implements ITreeContentProvider {
+public class ContentProvider implements ITreeContentProvider, IResourceChangeListener {
 
 	private static final Object[] NO_CHILDREN = {};
-    private IDesignStudioProjectElement[] _designStudioProjectParents;
+    Viewer _viewer;
+    
+    public ContentProvider() {
+    	ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
+    }
     
 	@Override
 	public Object[] getElements(Object inputElement) {		
@@ -96,26 +101,27 @@ public class ContentProvider implements ITreeContentProvider {
         return hasChildren;
 	}
 	
-	private DesignStudioProjectParent[] initializeParent(Object parentElement) {
-        IProject [] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-        
-        List<DesignStudioProjectParent> list = new Vector<DesignStudioProjectParent>();
-        for (int i = 0; i < projects.length; i++) {
-        	try {
-        		if(projects[i].getNature(ProjectNature.NATURE_ID) != null) {
-        			list.add(new DesignStudioProjectParent(projects[i]));
-        		}
-        	}catch(Exception e) {}
-            
-        }        
-        
-        DesignStudioProjectParent[] result = new DesignStudioProjectParent[list.size()];
-        list.toArray(result); 
-        return result;
-    }
+//	private DesignStudioProjectParent[] initializeParent(Object parentElement) {
+//        IProject [] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+//        
+//        List<DesignStudioProjectParent> list = new Vector<DesignStudioProjectParent>();
+//        for (int i = 0; i < projects.length; i++) {
+//        	try {
+//        		if(projects[i].getNature(ProjectNature.NATURE_ID) != null) {
+//        			list.add(new DesignStudioProjectParent(projects[i]));
+//        		}
+//        	}catch(Exception e) {}
+//            
+//        }        
+//        
+//        DesignStudioProjectParent[] result = new DesignStudioProjectParent[list.size()];
+//        list.toArray(result); 
+//        return result;
+//    }
 	
 	@Override
     public void dispose() {
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
         System.out.println("ContentProvider.dispose"); //$NON-NLS-1$
         // TODO Auto-generated method stub
  
@@ -123,19 +129,26 @@ public class ContentProvider implements ITreeContentProvider {
 	
 	@Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-        if(oldInput != null && newInput != null) {
-        		System.out
-                		.println("ContentProvider.inputChanged: old: " + oldInput.getClass().getName() + " new: " + newInput.getClass().getName()); //$NON-NLS-1$ //$NON-NLS-2$
-        } else if(oldInput != null) {
-        	System.out
-    		.println("ContentProvider.inputChanged: old: " + oldInput.getClass().getName());
-        } else if(newInput != null) {
-        	System.out
-    		.println("ContentProvider.inputChanged: new: " + newInput.getClass().getName());
-        }else {
-        	System.out.println("No old or new input is passed!");
-        }
+//        if(oldInput != null && newInput != null) {
+//        		System.out
+//                		.println("ContentProvider.inputChanged: old: " + oldInput.getClass().getName() + " new: " + newInput.getClass().getName()); //$NON-NLS-1$ //$NON-NLS-2$
+//        } else if(oldInput != null) {
+//        	System.out
+//    		.println("ContentProvider.inputChanged: old: " + oldInput.getClass().getName());
+//        } else if(newInput != null) {
+//        	System.out
+//    		.println("ContentProvider.inputChanged: new: " + newInput.getClass().getName());
+//        }else {
+//        	System.out.println("No old or new input is passed!");
+//        }
+		_viewer = viewer;
  
     }
+
+	@Override
+	public void resourceChanged(IResourceChangeEvent event) {
+		_viewer.refresh();
+		
+	}
 
 }
