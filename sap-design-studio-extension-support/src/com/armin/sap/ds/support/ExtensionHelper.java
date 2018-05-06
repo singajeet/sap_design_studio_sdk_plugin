@@ -22,59 +22,75 @@ public class ExtensionHelper implements IHelper {
 	
 	public String EXTENSION_PERSIST_FILE_NAME = "contribution.xml";
 	
-	private String id;
 	/**
-	 * @return the id
+	 * The unique id of the extension. 
+	 * Also, this will be used as package name for a component.
 	 */
+	private String id;
+	
 	public String getId() {
 		return id;
 	}
-	/**
-	 * @param id the id to set
-	 */
+	
 	public void setId(String id) {
 		this.id = id;
+		txtId.setText(id);
 	}
+	
 	/**
-	 * @return the name
+	 * Name or the title of the extension
 	 */
+	private String name;
+	
 	public String getName() {
 		return name;
 	}
-	/**
-	 * @param name the name to set
-	 */
+	
 	public void setName(String name) {
 		this.name = name;
+		txtName.setText(name);
 	}
+	
 	/**
-	 * @return the version
+	 * Current version of the extension
 	 */
+	private String version;
+	
 	public String getVersion() {
 		return version;
 	}
-	/**
-	 * @param version the version to set
-	 */
+	
 	public void setVersion(String version) {
 		this.version = version;
+		txtVersion.setText(version);
 	}
+	
 	/**
-	 * @return the vendor
+	 * Name of the vendor building this extension
 	 */
+	private String vendor;
+	
 	public String getVendor() {
 		return vendor;
 	}
-	/**
-	 * @param vendor the vendor to set
-	 */
+	
 	public void setVendor(String vendor) {
 		this.vendor = vendor;
+		txtVendor.setText(vendor);
 	}
-	private String name;
-	private String version;
-	private String vendor;
 	
+	private Text txtId;
+	private Text txtName;
+	private Text txtVersion;
+	private Text txtVendor;
+	
+	/**
+	 * This function returns the initial content for an extension xml file.
+	 * The content is derived from the template after applying values for the 
+	 * place holders in the template.
+	 * 
+	 * @return		An instance of <code>InoutStream</code> which provides the content
+	 */
 	public InputStream getInitialContent() {
 		String templateFilePath = "/templates/contribution-template.xml";
         
@@ -103,6 +119,12 @@ public class ExtensionHelper implements IHelper {
 
 	}
 	
+	/**
+	 * Creates a composite of controls to be displayed on the wizard page
+	 * 
+	 * @param page		Reference of the page on which the controls should be added
+	 * 
+	 */
 	public void createControl(IWizardDetailsPage page) {
 		Composite area = (Composite) page.getControl();
 		
@@ -114,7 +136,7 @@ public class ExtensionHelper implements IHelper {
 		//--- First Row
 		Label lblId = new Label(container, SWT.NONE);
 		lblId.setText("Extension Id:");
-		Text txtId = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtId = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtId.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtId.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -129,7 +151,7 @@ public class ExtensionHelper implements IHelper {
 		//--- Second Row
 		Label lblName = new Label(container, SWT.NONE);
 		lblName.setText("Extension Name:");
-		Text txtName = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtName = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtName.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -140,7 +162,7 @@ public class ExtensionHelper implements IHelper {
 		//--- Third Row
 		Label lblVersion = new Label(container, SWT.NONE);
 		lblVersion.setText("Version:");
-		Text txtVersion = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtVersion = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtVersion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtVersion.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -151,7 +173,7 @@ public class ExtensionHelper implements IHelper {
 		//--- Fourth Row
 		Label lblVendor = new Label(container, SWT.NONE);
 		lblVendor.setText("Vendor Name:");
-		Text txtVendor = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtVendor = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtVendor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtVendor.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {

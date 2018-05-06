@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
@@ -28,10 +29,27 @@ import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 public class ComponentHelper implements IHelper {
 
 	public String COMPONENT_PERSIST_FILE_NAME = "contribution.ztl";
+	public int M_MODE = 0;
+	public int G_MODE = 1;
+	
 	private String INIT_CLASS_TO_EXTEND = "Component";
 	private String EXTENDS_KEYWORD = " extends ";
 	
 	
+	/**
+	 * Title for this component. It will also be used to derive hint for class name
+	 */
+	private String title;
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+		txtTitle.setText(title);
+	}
+
 	/**
 	 * The package name of the component. It should follow the Java standards
 	 */
@@ -43,6 +61,7 @@ public class ComponentHelper implements IHelper {
 	
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
+		txtPackage.setText(packageName);
 	}
 	
 	/**
@@ -56,6 +75,7 @@ public class ComponentHelper implements IHelper {
 	
 	public void setClassName(String className) {
 		this.className = className;
+		txtClass.setText(className);
 	}
 	
 	/**
@@ -69,6 +89,7 @@ public class ComponentHelper implements IHelper {
 	
 	public void setDescription(String description) {
 		this.description = description;
+		txtDescription.setText(description);
 	}
 	
 	/**
@@ -82,6 +103,44 @@ public class ComponentHelper implements IHelper {
 	
 	public void setClassToExtend(String classToExtend) {
 		this.classToExtend = classToExtend;
+		int index = comboExtends.indexOf(classToExtend);
+		if(index >= 0 && index < comboExtends.getItemCount()) {
+			comboExtends.select(index);
+		}
+	}
+	
+	/**
+	 * Tooltip for the current component which will be displayed in 
+	 * component toolbox in design studio
+	 */
+	private String toolTip;
+	
+	public String getToolTip() {
+		return toolTip;
+	}
+	
+	public void setToolTip(String toolTip) {
+		this.toolTip = toolTip;
+		txtToolTip.setText(toolTip);
+	}
+	
+	/**
+	 * Mode defines the component mode for rendering i.e., Mobile or General
+	 * Default is the M_MODE i.e., 0
+	 */
+	private int mode = M_MODE;
+	
+	public int getMode() {
+		return mode;
+	}
+	
+	public void setMode(int mode) {
+		this.mode = mode;
+		if(mode == M_MODE) {
+			radioModeMobile.setSelection(true);
+		} else {
+			radioModeGeneric.setSelection(true);
+		}
 	}
 	
 	/**
@@ -96,6 +155,7 @@ public class ComponentHelper implements IHelper {
 	
 	public void setComponentFileCreationEnabled(boolean state) {
 		this.componentFileCreationEnabled = state;
+		checkCreateComponentFile.setSelection(state);
 	}
 	
 	/**
@@ -113,10 +173,18 @@ public class ComponentHelper implements IHelper {
 		setComponentFileCreationEnabled(state);
 	}
 	
+	private boolean isClassNameModifiedManually = false;
+	
+	private Text txtTitle;
 	private Text txtPackage;
 	private Text txtClass;
 	private Text txtDescription;
 	private Combo comboExtends;
+	private Text txtToolTip;
+	private Group radioGroup;
+	private Button radioModeGeneric;
+	private Button radioModeMobile;
+	private Button checkCreateComponentFile;
 	
 	/**
 	 * Creates a composite of controls to be displayed on the wizard page
@@ -135,7 +203,7 @@ public class ComponentHelper implements IHelper {
 		setComponentFileCreationEnabled(true);
 		
 		//--- Checkbox to ask if component file is required or not
-		Button checkCreateComponentFile = new Button(container, SWT.CHECK);
+		checkCreateComponentFile = new Button(container, SWT.CHECK);
 		GridData checkBoxGridData = new GridData();
 		checkBoxGridData.horizontalAlignment = GridData.FILL;
 		checkBoxGridData.horizontalSpan = 2;
@@ -161,8 +229,8 @@ public class ComponentHelper implements IHelper {
 		GridData lineSeparatorGridData2 = new GridData(GridData.FILL_HORIZONTAL);
 		lineSeparatorGridData2.horizontalSpan = 2;
 		lineSeparator2.setLayoutData(lineSeparatorGridData2);
-				
-		//--- First Row
+		
+		//--- Package Name Row
 		Label lblPackage = new Label(container, SWT.NONE);
 		lblPackage.setText("Component Package Name:");
 		txtPackage = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
@@ -174,18 +242,39 @@ public class ComponentHelper implements IHelper {
 				page.setPageComplete(page.validatePage());
 			}
 		});
-		//--- Second Row
+		//--- Title Row
+		Label lblTitle = new Label(container, SWT.NONE);
+		lblTitle.setText("Component Title:");
+		txtTitle = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtTitle.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtTitle.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				title = txtTitle.getText();
+				if(!isClassNameModifiedManually) {
+					String clsName = title.replace(" ", "");
+					clsName = clsName.replace("-", "");
+					clsName = clsName.replace("_", "");
+					clsName = clsName.replace(".", "");
+					txtClass.setText(clsName);
+					setClassName(clsName);
+				}
+			}
+		});
+		//--- Class Name Row
 		Label lblClass = new Label(container, SWT.NONE);
 		lblClass.setText("Component Class Name:");
 		txtClass = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtClass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtClass.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
+				if(!isClassNameModifiedManually) {
+					isClassNameModifiedManually = true;
+				}
 				className = txtClass.getText();
 				page.setPageComplete(page.validatePage());
 			}
 		});
-		//--- Third Row
+		//--- Super Class Row
 		Label lblExtends = new Label(container, SWT.NONE);
 		lblExtends.setText("Component Inherit From:");
 		comboExtends = new Combo(container, SWT.READ_ONLY | SWT.BORDER);
@@ -200,7 +289,7 @@ public class ComponentHelper implements IHelper {
 				classToExtend = comboExtends.getItem(index);
 			}
 		});
-		//--- Fourth Row
+		//--- Description Row
 		Label lblDescription = new Label(container, SWT.NONE);
 		lblDescription.setText("Description");
 		txtDescription = new Text(container, SWT.MULTI | SWT.BORDER | SWT.WRAP);

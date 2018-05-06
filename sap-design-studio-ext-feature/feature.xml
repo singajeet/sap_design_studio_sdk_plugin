@@ -6,16 +6,22 @@
       provider-name="Armin">
 
    <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+      Plugin to create SAP Design Studio Extension projects (Eclipse Plugins). This plugin provides an easy way to create extensions with less coding and more GUI based configuration
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+   <copyright url="http://github.com/singajeet">
+      Usage of this plugin for commercial is strictly forbidden and the person who is going to steal the code of this plugin will goto hell!
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="http://github.com/singajeet">
+      Usage of this plugin for commercial is strictly forbidden and
+the person who is going to steal the code of this plugin will
+goto hell!
    </license>
+
+   <url>
+      <discovery label="Eclipse Plugin For SAP Design Studio Extension" url="http://github.com/singajeet"/>
+   </url>
 
    <plugin
          id="com.armin.sap.ds.ext.plugin"
