@@ -1,4 +1,4 @@
-package com.armin.sap.ds.wizard;
+package com.armin.sap.ds.wizard.pages;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -13,13 +13,13 @@ public class ComponentDetailsPage extends WizardPage implements IWizardDetailsPa
 
 	private ComponentHelper _helper;
 	
-	protected ComponentDetailsPage() {
+	public ComponentDetailsPage() {
 		super("Component Details");
 		setPageComplete(false);
 		_helper = new ComponentHelper();
 	}
 	
-	protected ComponentDetailsPage(String pageName) {
+	public ComponentDetailsPage(String pageName) {
 		super(pageName);
 		setPageComplete(false);
 		_helper = new ComponentHelper();

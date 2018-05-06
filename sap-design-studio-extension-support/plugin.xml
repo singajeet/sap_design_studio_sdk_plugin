@@ -17,7 +17,7 @@
       </wizard>
       <wizard
             category="com.armin.sap.ds.category"
-            class="com.armin.sap.ds.wizard.pages.extensions.XMLNewFileWizard"
+            class="com.armin.sap.ds.wizard.ExtensionNewFileWizard"
             descriptionImage="images/text-xml.png"
             icon="images/text-xml_16x16.png"
             id="com.armin.sap.ds.sdk.project.wizard.contributionfile"
@@ -25,7 +25,7 @@
       </wizard>
       <wizard
             category="com.armin.sap.ds.category"
-            class="com.armin.sap.ds.wizard.pages.components.ZTLNewFileWizard"
+            class="com.armin.sap.ds.wizard.ComponentNewFileWizard"
             descriptionImage="images/text-x-script.png"
             icon="images/text-x-script.png"
             id="com.armin.sap.ds.sdk.project.wizard.ztlfile"

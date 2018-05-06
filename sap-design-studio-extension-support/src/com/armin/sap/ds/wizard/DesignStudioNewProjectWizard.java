@@ -13,9 +13,11 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 
-import com.armin.sap.ds.support.ExtensionHelper;
 import com.armin.sap.ds.support.ComponentHelper;
 import com.armin.sap.ds.support.DesignStudioProjectHelper;
+import com.armin.sap.ds.support.ExtensionHelper;
+import com.armin.sap.ds.wizard.pages.ComponentDetailsPage;
+import com.armin.sap.ds.wizard.pages.ExtensionDetailsPage;
 
 public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, IExecutableExtension {
 

@@ -1,4 +1,4 @@
-package com.armin.sap.ds.wizard;
+package com.armin.sap.ds.wizard.pages;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;

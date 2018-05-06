@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.armin.sap.ds.ext.plugin.Activator;
-import com.armin.sap.ds.wizard.IWizardDetailsPage;
+import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 
 public class ComponentHelper {
 
@@ -80,14 +80,14 @@ public class ComponentHelper {
 	}
 	
 	private String description;
-	private boolean createZTLFile;
+	private boolean componentFileCreationEnabled = true;
 			
-	public boolean isCreateZTLFile() {
-		return createZTLFile;
+	public boolean isComponentFileCreationEnabled() {
+		return componentFileCreationEnabled;
 	}
 	
-	public void setCreateComponentFile(boolean createZTLFile) {
-		this.createZTLFile = createZTLFile;
+	public void setComponentFileCreationEnabled(boolean state) {
+		this.componentFileCreationEnabled = state;
 	}
 	
 	private void enableControls(boolean state) {
@@ -95,7 +95,7 @@ public class ComponentHelper {
 		txtClass.setEnabled(state);
 		txtDescription.setEnabled(state);
 		comboExtends.setEnabled(state);
-		setCreateComponentFile(state);
+		setComponentFileCreationEnabled(state);
 	}
 	
 	private Text txtPackage;
@@ -111,15 +111,15 @@ public class ComponentHelper {
 		GridLayout layout = new GridLayout(2, false);
 		container.setLayout(layout);
 		
-		setCreateComponentFile(true);
+		setComponentFileCreationEnabled(true);
 		
 		//--- Checkbox to ask if component file is required or not
-		Button checkCreateZTLFile = new Button(container, SWT.CHECK);
-		checkCreateZTLFile.setText("Create component contribution file (ztl) for this extension");
-		checkCreateZTLFile.setSelection(true);
-		checkCreateZTLFile.addSelectionListener(new SelectionListener() {
+		Button checkCreateComponentFile = new Button(container, SWT.CHECK);
+		checkCreateComponentFile.setText("Create component contribution file (.ztl) for this extension");
+		checkCreateComponentFile.setSelection(true);
+		checkCreateComponentFile.addSelectionListener(new SelectionListener() {
 			public void widgetSelected(SelectionEvent event) {
-				if(checkCreateZTLFile.getSelection()) {
+				if(checkCreateComponentFile.getSelection()) {
 					enableControls(true);
 				} else {
 					enableControls(false);
@@ -198,7 +198,7 @@ public class ComponentHelper {
 
 	}
 	
-	public InputStream getContent() {
+	public InputStream getInitialContent() {
 		String templateFilePath = "/templates/ztl-template.ztl";
         
         try {

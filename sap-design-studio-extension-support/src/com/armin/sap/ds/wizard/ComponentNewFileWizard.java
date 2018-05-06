@@ -1,4 +1,4 @@
-package com.armin.sap.ds.wizard.pages.components;
+package com.armin.sap.ds.wizard;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -8,13 +8,15 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
 
-public class ZTLNewFileWizard extends Wizard implements INewWizard {
+import com.armin.sap.ds.wizard.pages.ComponentNewFileCreationPage;
+
+public class ComponentNewFileWizard extends Wizard implements INewWizard {
 
 	private IWorkbench _workbench;
 	private IStructuredSelection _selection;
 	private WizardNewFileCreationPage _pageOne;
 	
-	public ZTLNewFileWizard() {
+	public ComponentNewFileWizard() {
 		setWindowTitle("New ZTL File");
 	}
 
@@ -28,7 +30,7 @@ public class ZTLNewFileWizard extends Wizard implements INewWizard {
 	public void addPages() {		
 		super.addPages();
 		
-		_pageOne = new ZTLNewFileCreationPage(_selection);
+		_pageOne = new ComponentNewFileCreationPage(_selection);
 		addPage(_pageOne);
 	}
 

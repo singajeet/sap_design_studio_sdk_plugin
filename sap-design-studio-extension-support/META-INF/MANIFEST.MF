@@ -17,5 +17,5 @@ Export-Package: com.armin.sap.ds.ext.plugin,
  com.armin.sap.ds.sdk.project.perspective,
  com.armin.sap.ds.support,
  com.armin.sap.ds.wizard,
- com.armin.sap.ds.wizard.pages.extensions
+ com.armin.sap.ds.wizard.pages
 Automatic-Module-Name: com.armin.sap.ds.ext.plugin

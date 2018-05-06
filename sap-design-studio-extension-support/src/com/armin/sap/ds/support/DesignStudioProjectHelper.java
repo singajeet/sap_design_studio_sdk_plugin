@@ -63,7 +63,7 @@ public class DesignStudioProjectHelper {
 		if(file.getName().equalsIgnoreCase(_extensionHelper.EXTENSION_PERSIST_FILE_NAME)) {
 			if(!file.exists()) {
 				try {
-					file.create(_extensionHelper.getContent(), IResource.NONE, null);
+					file.create(_extensionHelper.getInitialContent(), IResource.NONE, null);
 				} catch (CoreException e) {
 					e.printStackTrace();
 				}
@@ -72,8 +72,8 @@ public class DesignStudioProjectHelper {
 		else if(file.getName().equalsIgnoreCase(_componentHelper.COMPONENT_PERSIST_FILE_NAME)) {
 			if(!file.exists()) {
 				try {
-					if(_componentHelper.isCreateZTLFile()) {
-						file.create(_componentHelper.getContent(), IResource.NONE, null);
+					if(_componentHelper.isComponentFileCreationEnabled()) {
+						file.create(_componentHelper.getInitialContent(), IResource.NONE, null);
 					}
 				} catch (CoreException e) {
 					e.printStackTrace();

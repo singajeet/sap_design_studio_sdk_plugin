@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.armin.sap.ds.ext.plugin.Activator;
-import com.armin.sap.ds.wizard.IWizardDetailsPage;
+import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 
 public class ExtensionHelper {
 	
@@ -75,7 +75,7 @@ public class ExtensionHelper {
 	private String version;
 	private String vendor;
 	
-	public InputStream getContent() {
+	public InputStream getInitialContent() {
 		String templateFilePath = "/templates/contribution-template.xml";
         
         try {
