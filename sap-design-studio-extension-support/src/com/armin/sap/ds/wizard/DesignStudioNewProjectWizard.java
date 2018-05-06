@@ -61,10 +61,10 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 			location = _pageOne.getLocationURI();
 		}
 		
-		ExtensionHelper contribXMLDetails = ((ExtensionDetailsPage)_pageTwo).getDetails();
-		ComponentHelper contribZTLDetails = ((ComponentDetailsPage)_pageThree).getDetails();
+		ExtensionHelper extensionDetails = ((ExtensionDetailsPage)_pageTwo).getDetails();
+		ComponentHelper componentDetails = ((ComponentDetailsPage)_pageThree).getDetails();
 		
-		DesignStudioProjectHelper.createProject(name, location, contribXMLDetails, contribZTLDetails);
+		DesignStudioProjectHelper.createProject(name, location, extensionDetails, componentDetails);
 		
 		BasicNewProjectResourceWizard.updatePerspective(_configurationElement);
 		return true;

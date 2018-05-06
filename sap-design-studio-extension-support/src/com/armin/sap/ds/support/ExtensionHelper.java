@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Text;
 import com.armin.sap.ds.ext.plugin.Activator;
 import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 
-public class ExtensionHelper {
+public class ExtensionHelper implements IHelper {
 	
 	public String EXTENSION_PERSIST_FILE_NAME = "contribution.xml";
 	
@@ -119,6 +119,10 @@ public class ExtensionHelper {
 		txtId.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				id = txtId.getText();
+				IWizardDetailsPage nextPage = (IWizardDetailsPage)page.getNextPage();
+				ComponentHelper compHelper = (ComponentHelper)nextPage.getDetails();
+				compHelper.setPackageName(id);
+				
 				page.setPageComplete(page.validatePage());
 			}
 		});

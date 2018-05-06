@@ -17,7 +17,7 @@ public class ExtensionNewFileWizard extends Wizard implements INewWizard {
 	private WizardNewFileCreationPage _pageOne;
 	
 	public ExtensionNewFileWizard() {
-		setWindowTitle("New Contribution XML File");
+		setWindowTitle("New Extension File");
 	}
 
 	@Override

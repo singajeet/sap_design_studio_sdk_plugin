@@ -17,7 +17,7 @@ public class ComponentNewFileWizard extends Wizard implements INewWizard {
 	private WizardNewFileCreationPage _pageOne;
 	
 	public ComponentNewFileWizard() {
-		setWindowTitle("New ZTL File");
+		setWindowTitle("New Component File");
 	}
 
 	@Override

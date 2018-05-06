@@ -25,51 +25,56 @@ import org.eclipse.swt.widgets.Text;
 import com.armin.sap.ds.ext.plugin.Activator;
 import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 
-public class ComponentHelper {
+public class ComponentHelper implements IHelper {
 
 	public String COMPONENT_PERSIST_FILE_NAME = "contribution.ztl";
+	private String INIT_CLASS_TO_EXTEND = "Component";
 	private String EXTENDS_KEYWORD = " extends ";
 	
-	private String packageName;
+	
 	/**
-	 * @return the packageName
+	 * The package name of the component. It should follow the Java standards
 	 */
+	private String packageName;
+	
 	public String getPackageName() {
 		return packageName;
 	}
-	/**
-	 * @param packageName the packageName to set
-	 */
+	
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
 	}
+	
 	/**
-	 * @return the className
+	 * The class name of the component. It should follow the Java standards
 	 */
+	private String className;
+	
 	public String getClassName() {
 		return className;
 	}
-	/**
-	 * @param className the className to set
-	 */
+	
 	public void setClassName(String className) {
 		this.className = className;
 	}
+	
 	/**
-	 * @return the description
+	 * The description of the component
 	 */
+	private String description;
+	
 	public String getDescription() {
 		return description;
 	}
-	/**
-	 * @param description the description to set
-	 */
+	
 	public void setDescription(String description) {
 		this.description = description;
 	}
 	
-	private String className;
-	private String classToExtend;
+	/**
+	 * The class name from which this component should inherit	
+	 */
+	private String classToExtend = INIT_CLASS_TO_EXTEND;
 	
 	public String getClassToExtend() {
 		return classToExtend;
@@ -79,7 +84,10 @@ public class ComponentHelper {
 		this.classToExtend = classToExtend;
 	}
 	
-	private String description;
+	/**
+	 * Sets whether a component file (.ztl) should be created or not.
+	 * By default this is set to true and file will be created
+	 */
 	private boolean componentFileCreationEnabled = true;
 			
 	public boolean isComponentFileCreationEnabled() {
@@ -90,8 +98,15 @@ public class ComponentHelper {
 		this.componentFileCreationEnabled = state;
 	}
 	
+	/**
+	 * A private function to enable or disable wizard components based on the 
+	 * parameter passed to this function.
+	 * 
+	 * @param state		<code>true</code> or <code>false</code> to enable or
+	 * 					disable the components
+	 */
 	private void enableControls(boolean state) {
-		txtPackage.setEnabled(state);
+		//txtPackage.setEnabled(state);
 		txtClass.setEnabled(state);
 		txtDescription.setEnabled(state);
 		comboExtends.setEnabled(state);
@@ -103,6 +118,12 @@ public class ComponentHelper {
 	private Text txtDescription;
 	private Combo comboExtends;
 	
+	/**
+	 * Creates a composite of controls to be displayed on the wizard page
+	 * 
+	 * @param page		Reference of the page on which the controls should be added
+	 * 
+	 */
 	public void createControl(IWizardDetailsPage page) {
 		Composite area = (Composite) page.getControl();
 		
@@ -115,6 +136,10 @@ public class ComponentHelper {
 		
 		//--- Checkbox to ask if component file is required or not
 		Button checkCreateComponentFile = new Button(container, SWT.CHECK);
+		GridData checkBoxGridData = new GridData();
+		checkBoxGridData.horizontalAlignment = GridData.FILL;
+		checkBoxGridData.horizontalSpan = 2;
+		checkCreateComponentFile.setLayoutData(checkBoxGridData);
 		checkCreateComponentFile.setText("Create component contribution file (.ztl) for this extension");
 		checkCreateComponentFile.setSelection(true);
 		checkCreateComponentFile.addSelectionListener(new SelectionListener() {
@@ -142,6 +167,7 @@ public class ComponentHelper {
 		lblPackage.setText("Component Package Name:");
 		txtPackage = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtPackage.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtPackage.setEnabled(false); //This field will be populated from the ID of extension
 		txtPackage.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				packageName = txtPackage.getText();
@@ -198,6 +224,15 @@ public class ComponentHelper {
 
 	}
 	
+	/**
+	 * Provides the initial contents to be filled in the component (.ztl) file
+	 * 
+	 * @return		An instance of the <code>InputStream</code> class which provides
+	 * 				the content to be filled in the component file. It reads the content
+	 * 				from the template, fill in the place holders in templates and returns
+	 * 				the parsed content to caller
+	 * 
+	 */
 	public InputStream getInitialContent() {
 		String templateFilePath = "/templates/ztl-template.ztl";
         
