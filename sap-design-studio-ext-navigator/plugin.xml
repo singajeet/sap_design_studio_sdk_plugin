@@ -5,7 +5,7 @@
          point="org.eclipse.ui.views">
       <view
             category="com.armin.sap.ds.ext.navigator.category"
-            class="com.armin.sap.ds.ext.navigator.DesignStudioNavigator"
+            class="org.eclipse.ui.navigator.CommonNavigator"
             icon="images/application-javascript.png"
             id="com.armin.sap.ds.ext.navigator.view"
             name="%view.name">
@@ -43,11 +43,9 @@
             labelProvider="com.armin.sap.ds.ext.navigator.provider.LabelProvider"
             name="%navigatorContent.name">
          <triggerPoints>
-            <or>
-               <instanceof
-                     value="com.armin.sap.ds.ext.navigator.DesignStudioProjectWorkbenchRoot">
-               </instanceof>
-            </or>
+            <instanceof
+                  value="org.eclipse.core.resources.IWorkspaceRoot">
+            </instanceof>
          </triggerPoints>
          <commonSorter
                class="com.armin.sap.ds.ext.navigator.sorter.CategorySorter"
