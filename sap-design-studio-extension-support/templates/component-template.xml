@@ -1,0 +1,11 @@
+<component
+			id="%1$s"
+			title="%2$s"
+			tooltip="%3$s"
+			icon="%4$s"
+			handlerType="%5$s"
+			modes="%6$s %7$s"
+			databound="%8$s"
+	>
+	%9$s
+</component>

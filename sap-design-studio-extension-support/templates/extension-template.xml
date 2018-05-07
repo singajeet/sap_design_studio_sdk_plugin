@@ -5,4 +5,5 @@
 	title="%2$s"
 	version="%3$s"
 	vendor="%4$s">
+	%5$s
 </sdkExtension>

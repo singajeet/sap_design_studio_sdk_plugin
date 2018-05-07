@@ -2,22 +2,30 @@ package com.armin.sap.ds.support;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.util.Date;
 
+import javax.imageio.ImageIO;
+
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -29,8 +37,6 @@ import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 public class ComponentHelper implements IHelper {
 
 	public String COMPONENT_PERSIST_FILE_NAME = "contribution.ztl";
-	public boolean M_MODE = true;
-	public boolean C_MODE = false;
 	
 	private String INIT_CLASS_TO_EXTEND = "Component";
 	private String EXTENDS_KEYWORD = " extends ";
@@ -128,14 +134,14 @@ public class ComponentHelper implements IHelper {
 	 * Mobile mode for rendering components
 	 * Selected by default
 	 */
-	private boolean mMode = M_MODE;
+	private boolean mobileMode = true;
 	
-	public boolean getMMode() {
-		return mMode;
+	public boolean getMobileMode() {
+		return mobileMode;
 	}
 	
-	public void setMMode(boolean mode) {
-		this.mMode = mode;
+	public void setMobileMode(boolean mode) {
+		this.mobileMode = mode;
 		checkModeMobile.setSelection(true);		
 	}
 	
@@ -143,7 +149,7 @@ public class ComponentHelper implements IHelper {
 	 * Commons mode for rendering
 	 * 
 	 */
-	private boolean commonsMode = C_MODE;
+	private boolean commonsMode = false;
 	
 	public boolean getCommonsMode() {
 		return commonsMode;
@@ -154,6 +160,71 @@ public class ComponentHelper implements IHelper {
 		checkModeCommon.setSelection(true);		
 	}
 	
+	/**
+	 * handler type of component i.e., div or data source 
+	 */
+	private String handlerType = "div";
+	
+	public String getHandlerType() {
+		return handlerType;
+	}
+
+	public void setHandlerType(String handlerType) {
+		this.handlerType = handlerType;
+		int index = comboHandlerType.indexOf(handlerType);
+		if(index >= 0 && index < comboHandlerType.getItemCount()) {
+			comboHandlerType.select(index);
+		}
+	}
+
+	/**
+	 * mark compoment to have data source feature 
+	 */
+	private boolean dataBound;
+	
+	public boolean isDataBound() {
+		return dataBound;
+	}
+
+	public void setDataBound(boolean dataBound) {
+		this.dataBound = dataBound;
+		checkDataBound.setSelection(dataBound);
+	}
+
+	/**
+	 * property to hold and upload icon path
+	 */
+	private String iconPath;
+	
+	public String getIconPath() {
+		return iconPath;
+	}
+
+	public void setIconPath(String iconPath) {
+		File f = new File(iconPath);
+		if(f.exists()) {
+			String filename = f.getName();
+			String imagesFolder = DesignStudioProjectHelper.getProjectLocation().getPath() 
+									+ File.pathSeparator + "res/images";
+			String iconPathInImagesFolder = imagesFolder + File.pathSeparator + filename;
+			File iconFileInImagesFolder = new File(iconPathInImagesFolder);
+			if(!iconFileInImagesFolder.exists()) {
+				try {
+					Files.copy(f.toPath(), new File(imagesFolder).toPath());
+					this.iconPath = "res/images" + File.pathSeparator + filename;
+					txtIconPath.setText(this.iconPath);
+					fd.setFileName(f.getName());
+					fd.setFilterPath(f.getParent());
+				} catch (IOException e) {
+					this.iconPath = null;
+					txtIconPath.setText("");					
+					e.printStackTrace();
+				}
+			}
+			
+		}
+	}
+
 	/**
 	 * Sets whether a component file (.ztl) should be created or not.
 	 * By default this is set to true and file will be created
@@ -192,9 +263,15 @@ public class ComponentHelper implements IHelper {
 	private Text txtDescription;
 	private Combo comboExtends;
 	private Text txtToolTip;
-	private Group checkGroup;
+	private Group groupModes;
 	private Button checkModeCommon;
 	private Button checkModeMobile;
+	private Combo comboHandlerType;
+	private Button checkDataBound;
+	private Group groupIcon;
+	private Text txtIconPath;
+	private Button btnBrowseIcon;
+	private FileDialog fd;
 	private Button checkCreateComponentFile;
 	
 	/**
@@ -273,7 +350,7 @@ public class ComponentHelper implements IHelper {
 		});
 		//--- Class Name Row
 		Label lblClass = new Label(container, SWT.NONE);
-		lblClass.setText("Component Class Name:");
+		lblClass.setText("Component Class Name[Id]:");
 		txtClass = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtClass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtClass.addModifyListener(new ModifyListener() {
@@ -327,12 +404,138 @@ public class ComponentHelper implements IHelper {
 				page.setPageComplete(page.validatePage());
 			}
 		});
-		//-- chech mode row
+		//-- Modes row
 		Label lblMode = new Label(container, SWT.NONE);
 		lblMode.setText("Component Mode:");
-		checkGroup = new Group(container, SWT.SHADOW_ETCHED_IN);
-		checkGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
+		groupModes = new Group(container, SWT.SHADOW_ETCHED_IN);
+		groupModes.setLayout(new GridLayout(2, true));
+		groupModes.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		checkModeMobile = new Button(groupModes, SWT.CHECK);
+		checkModeMobile.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		checkModeMobile.setText("Mobile(m)");
+		checkModeMobile.setSelection(true);
+		checkModeMobile.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				mobileMode = checkModeMobile.getSelection();
+				page.setPageComplete(page.validatePage());
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {	
+			}
+		});
+		checkModeCommon = new Button(groupModes, SWT.CHECK);
+		checkModeCommon.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		checkModeCommon.setText("Commons");
+		checkModeCommon.setSelection(false);
+		checkModeCommon.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				commonsMode = checkModeCommon.getSelection();
+				page.setPageComplete(page.validatePage());
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {	
+			}
+		});
+		//--- HandlerType Row
+		Label lblHandlerType = new Label(container, SWT.NONE);
+		lblHandlerType.setText("Handler Type:");
+		comboHandlerType = new Combo(container, SWT.READ_ONLY | SWT.BORDER);
+		comboHandlerType.add("Div");
+		comboHandlerType.add("DataSource");
+		comboHandlerType.select(0);
+		comboHandlerType.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboHandlerType.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int index = comboHandlerType.getSelectionIndex();
+				if(index >= 0 && index < comboHandlerType.getItemCount()) {
+					handlerType = comboHandlerType.getItem(index);
+					page.setPageComplete(page.validatePage());
+				}
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			
+			}
+			
+		});
+		//--- DataBound Row
+		Label lblDataBound = new Label(container, SWT.NONE);
+		lblDataBound.setText("Is DataBound:");
+		checkDataBound = new Button(container, SWT.CHECK);
+		checkDataBound.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				dataBound = checkDataBound.getSelection();
+				page.setPageComplete(page.validatePage());
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+			
+		});
+		//--- Icon Row
+		Label lblIcon = new Label(container, SWT.NONE);
+		lblIcon.setText("Component Icon:");
+		groupIcon = new Group(container, SWT.SHADOW_ETCHED_IN);
+		groupIcon.setLayout(new GridLayout(3, false));
+		groupIcon.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Label lblIconImage = new Label(container, SWT.NONE);
+		txtIconPath = new Text(groupIcon, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtIconPath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtIconPath.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {			
+				iconPath = txtIconPath.getText();
+			}
+		});
+		btnBrowseIcon = new Button(groupIcon, SWT.CHECK);
+		btnBrowseIcon.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		btnBrowseIcon.setText("Browse...");
+		btnBrowseIcon.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				fd = new FileDialog(container.getShell(), SWT.OPEN);
+				fd.setText("Open");
+				String[] filterExt = {"*.png", "*.icon", "*.jpg"};
+				fd.setFilterExtensions(filterExt);
+				String filePath = fd.open();
+				if(filePath != null) {
+					File iconFileSource = new File(filePath);
+					File iconFileDest = new File(DesignStudioProjectHelper.getProjectLocation().getPath() 
+										+ File.pathSeparator + "res/images");
+					try {
+						Files.copy(iconFileSource.toPath(), iconFileDest.toPath());
+						iconPath = "res/images/" + File.pathSeparator + iconFileSource.getName();
+						Display display = container.getShell().getDisplay();
+						Image iconImage = new Image(display, iconPath);
+						lblIconImage.setImage(iconImage);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						MessageDialog.open(MessageDialog.ERROR, container.getShell(), "Invalid Icon File", 
+											"Selected icon file is not valid. Please choose a different file", 
+											SWT.NONE);
+						iconPath = null;
+						e1.printStackTrace();
+					}
+					
+					
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+			
+		});
 		//--- Separator
 		Label lineSeparator1 = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData lineSeparatorGridData1 = new GridData(GridData.FILL_HORIZONTAL);

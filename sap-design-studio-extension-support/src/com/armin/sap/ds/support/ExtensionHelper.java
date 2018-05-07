@@ -92,7 +92,7 @@ public class ExtensionHelper implements IHelper {
 	 * @return		An instance of <code>InoutStream</code> which provides the content
 	 */
 	public InputStream getInitialContent() {
-		String templateFilePath = "/templates/contribution-template.xml";
+		String templateFilePath = "/templates/extension-template.xml";
         
         try {
             InputStream inputStream = Activator.getDefault().getBundle().getEntry(templateFilePath).openStream();

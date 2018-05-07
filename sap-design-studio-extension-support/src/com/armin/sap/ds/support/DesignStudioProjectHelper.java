@@ -18,11 +18,23 @@ public class DesignStudioProjectHelper {
 	
 	private static ExtensionHelper _extensionHelper;
 	private static ComponentHelper _componentHelper;
+	private static String _projectName;
+	private static URI _projectLocation;
+	
+	public static String getProjectName() {
+		return _projectName;
+	}
+	
+	public static URI getProjectLocation() {
+		return _projectLocation;
+	}
 	
 	public static IProject createProject(String projectName, URI location, ExtensionHelper extensionHelper, ComponentHelper componentHelper) {		
 		
 		_extensionHelper = extensionHelper;
 		_componentHelper = componentHelper;
+		_projectName = projectName;
+		_projectLocation = location;
 		
 		IProject project = createBaseProject(projectName, location);
 		try {
@@ -32,6 +44,7 @@ public class DesignStudioProjectHelper {
 					"META-INF",
 					"res/js",
 					"res/css",
+					"res/images",
 					"res/additional_properties_sheet"
 			};
 			
