@@ -1,14 +1,14 @@
 /*******************************************************
  * Filename: contribution.ztl
- * Description: %1$s
- * Date: %2$s
- * Author: %3$s
+ * Description: ${description}
+ * Date: ${date}
+ * Author: ${author}
  *
  * Revision:
  *
  *******************************************************/
  
-class %4$s.%5$s%6$s%7$s {
+class ${packageName}.${className} ${extends} ${superClassName} {
 
 	/* TODO: class methods in ZTL format */
 }

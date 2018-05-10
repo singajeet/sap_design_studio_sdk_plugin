@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdkExtension
 	xmlns="http://www.sap.com/bi/zen/sdk"
-	id="%1$s"
-	title="%2$s"
-	version="%3$s"
-	vendor="%4$s">
-	%5$s
+	id="${id}"
+	title="${title}"
+	version="${version}"
+	vendor="${vendor}"
+	eula="${eula}">
+	<!-- license content will go here -->
+	<license>
+		${license}
+	</license>
+	<!-- groups will be added here -->
+	${groups}
+	
+	<!-- components should go here -->
+	${components}
 </sdkExtension>
