@@ -1,0 +1,2 @@
+<!-- component group template -->
+<group id="${id}" title="${title}" />

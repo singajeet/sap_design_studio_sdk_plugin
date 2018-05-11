@@ -1,0 +1,2 @@
+<!-- component property's default value -->
+<defaultValue property="${property}">${value}</defaultValue>

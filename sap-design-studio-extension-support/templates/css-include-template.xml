@@ -1,0 +1,2 @@
+<!-- cssInclude template -->
+<cssInclude>${componentCssPath}</cssInclude>

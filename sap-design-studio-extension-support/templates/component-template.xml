@@ -16,8 +16,8 @@
 	<!-- all property definitions will go here -->
 	${properties}
 	
-	<!-- Initialization section -->
+	<!-- default values section -->
 	<initialization>
-		${initialization}
+		${defaultValues}
 	</initialization>
 </component>

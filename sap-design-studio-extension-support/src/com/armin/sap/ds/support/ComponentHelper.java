@@ -1,15 +1,8 @@
 package com.armin.sap.ds.support;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
-import java.util.Date;
-
-import javax.imageio.ImageIO;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -31,15 +24,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import com.armin.sap.ds.ext.plugin.Activator;
 import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 
 public class ComponentHelper implements IHelper {
 
-	public String COMPONENT_PERSIST_FILE_NAME = "contribution.ztl";
+	public String COMPONENT_ZTL_FILE_NAME = "contribution.ztl";
 	
 	private String INIT_CLASS_TO_EXTEND = "Component";
-	private String EXTENDS_KEYWORD = " extends ";
+	public String EXTENDS_KEYWORD = " extends ";
 	
 	
 	/**
@@ -542,51 +534,6 @@ public class ComponentHelper implements IHelper {
 		lineSeparatorGridData1.horizontalSpan = 2;
 		lineSeparator1.setLayoutData(lineSeparatorGridData1);
 
-	}
+	}	
 	
-	/**
-	 * Provides the initial contents to be filled in the component (.ztl) file
-	 * 
-	 * @return		An instance of the <code>InputStream</code> class which provides
-	 * 				the content to be filled in the component file. It reads the content
-	 * 				from the template, fill in the place holders in templates and returns
-	 * 				the parsed content to caller
-	 * 
-	 */
-	public InputStream getInitialContent() {
-		String templateFilePath = "/templates/ztl-template.ztl";
-        
-        try {
-            InputStream inputStream = Activator.getDefault().getBundle().getEntry(templateFilePath).openStream();
-            BufferedReader buf = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder sb = new StringBuilder();
-            
-            String line = buf.readLine();
-            while(line != null) {
-            	sb.append(line).append("\n");
-            	line = buf.readLine();
-            }
-            
-            String templateString = sb.toString();
-            String contentString = null;
-            
-            if(classToExtend.equalsIgnoreCase("-- None --")) {
-            	contentString = String.format(templateString, getDescription(),
-                		new Date(), "<<author name>>", getPackageName(), 
-                		getClassName(), "", "");
-            } else {
-            	contentString = String.format(templateString, getDescription(),
-            		new Date(), "<<author name>>", getPackageName(), 
-            		getClassName(), EXTENDS_KEYWORD, getClassToExtend());
-            }
-            
-            return new ByteArrayInputStream(contentString.getBytes());
-            
-        } catch (IOException e) {
-            // send back null
-        }
-        
-		return null;
-
-	}
 }

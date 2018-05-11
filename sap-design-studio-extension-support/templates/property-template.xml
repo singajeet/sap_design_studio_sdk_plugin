@@ -1,0 +1,10 @@
+<!-- component's property template -->
+<property
+		id="${id}"
+		type="${type}"
+		title="${title}"
+		group="${group}"
+		bindable="${bindable}"
+		visible="${visible}">
+		
+</property>

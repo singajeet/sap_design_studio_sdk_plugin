@@ -20,11 +20,11 @@ import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 
 public class ExtensionHelper implements IHelper {
 	
-	public String EXTENSION_PERSIST_FILE_NAME = "contribution.xml";
+	public String EXTENSION_XML_FILE_NAME = "contribution.xml";
 	
 	/**
 	 * The unique id of the extension. 
-	 * Also, this will be used as package name for a component.
+	 * Also, this will be used as package title for a component.
 	 */
 	private String id;
 	
@@ -40,15 +40,15 @@ public class ExtensionHelper implements IHelper {
 	/**
 	 * Name or the title of the extension
 	 */
-	private String name;
+	private String title;
 	
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
-		txtName.setText(name);
+	public void setTitle(String name) {
+		this.title = name;
+		txtTitle.setText(name);
 	}
 	
 	/**
@@ -79,45 +79,25 @@ public class ExtensionHelper implements IHelper {
 		txtVendor.setText(vendor);
 	}
 	
+	/**
+	 * Name of the vendor building this extension
+	 */
+	private String eula;
+	
+	public String getEula() {
+		return eula;
+	}
+	
+	public void setEula(String eula) {
+		this.eula = eula;
+		txtEula.setText(eula);
+	}
+	
 	private Text txtId;
-	private Text txtName;
+	private Text txtTitle;
 	private Text txtVersion;
 	private Text txtVendor;
-	
-	/**
-	 * This function returns the initial content for an extension xml file.
-	 * The content is derived from the template after applying values for the 
-	 * place holders in the template.
-	 * 
-	 * @return		An instance of <code>InoutStream</code> which provides the content
-	 */
-	public InputStream getInitialContent() {
-		String templateFilePath = "/templates/extension-template.xml";
-        
-        try {
-            InputStream inputStream = Activator.getDefault().getBundle().getEntry(templateFilePath).openStream();
-            BufferedReader buf = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder sb = new StringBuilder();
-            
-            String line = buf.readLine();
-            while(line != null) {
-            	sb.append(line).append("\n");
-            	line = buf.readLine();
-            }
-        
-            String templateString = sb.toString();
-            String contentString = String.format(templateString, getId(), 
-            		getName(), getVersion(), getVendor());
-            
-            return new ByteArrayInputStream(contentString.getBytes());
-            
-        } catch (IOException e) {
-            // send back null
-        }
-        
-		return null;
-
-	}
+	private Text txtEula;
 	
 	/**
 	 * Creates a composite of controls to be displayed on the wizard page
@@ -141,21 +121,22 @@ public class ExtensionHelper implements IHelper {
 		txtId.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				id = txtId.getText();
-				IWizardDetailsPage nextPage = (IWizardDetailsPage)page.getNextPage();
-				ComponentHelper compHelper = (ComponentHelper)nextPage.getDetails();
-				compHelper.setPackageName(id);
-				
+				if(id != null) {
+					IWizardDetailsPage nextPage = (IWizardDetailsPage)page.getNextPage();
+					ComponentHelper compHelper = (ComponentHelper)nextPage.getDetails();
+					compHelper.setPackageName(id);
+				}
 				page.setPageComplete(page.validatePage());
 			}
 		});
 		//--- Second Row
-		Label lblName = new Label(container, SWT.NONE);
-		lblName.setText("Extension Name:");
-		txtName = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		txtName.addModifyListener(new ModifyListener() {
+		Label lblTitle = new Label(container, SWT.NONE);
+		lblTitle.setText("Extension Title:");
+		txtTitle = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtTitle.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtTitle.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				name = txtName.getText();
+				title = txtTitle.getText();
 				page.setPageComplete(page.validatePage());
 			}
 		});
@@ -186,5 +167,24 @@ public class ExtensionHelper implements IHelper {
 		GridData lineSeparatorGridData1 = new GridData(GridData.FILL_HORIZONTAL);
 		lineSeparatorGridData1.horizontalSpan = 2;
 		lineSeparator1.setLayoutData(lineSeparatorGridData1);
+		//--- Fifth Row
+		Label lblEula = new Label(container, SWT.NONE);
+		lblEula.setText("EULA (End User License Agreement:");
+		GridData gridDataEulaLabel = new GridData(GridData.FILL_HORIZONTAL);
+		gridDataEulaLabel.horizontalSpan = 2;
+		lblEula.setLayoutData(gridDataEulaLabel);
+		txtEula = new Text(container, SWT.MULTI | SWT.BORDER | SWT.WRAP);
+		GridData gridDataEulaText = new GridData();
+		gridDataEulaText.horizontalAlignment = SWT.FILL;
+		gridDataEulaText.grabExcessHorizontalSpace = true;
+		gridDataEulaText.verticalAlignment = SWT.FILL;
+		gridDataEulaText.grabExcessVerticalSpace = true;
+		txtEula.setLayoutData(gridDataEulaText);
+		txtEula.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				eula = txtEula.getText();
+				page.setPageComplete(page.validatePage());
+			}
+		});
 	}
 }

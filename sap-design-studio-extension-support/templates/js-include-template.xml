@@ -1,2 +1,2 @@
-<!-- requireJs template -->
-<requireJs modes="${modes}">${componentPath}</requireJs>
+<!-- jsInclude template -->
+<jsInclude>${componentJsPath}</jsInclude>

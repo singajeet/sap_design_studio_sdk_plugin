@@ -56,9 +56,9 @@ public class ExtensionDetailsPage extends WizardPage implements IWizardDetailsPa
 	@Override
 	public boolean validatePage() {
 		// TODO Auto-generated method stub
-		if (_helper.getId() != null && _helper.getName() != null && _helper.getVendor() != null
+		if (_helper.getId() != null && _helper.getTitle() != null && _helper.getVendor() != null
 				&& _helper.getVersion() != null) {
-			return !_helper.getId().isEmpty() && !_helper.getName().isEmpty()
+			return !_helper.getId().isEmpty() && !_helper.getTitle().isEmpty()
 					&& !_helper.getVendor().isEmpty()
 					&& !_helper.getVersion().isEmpty();
 		} else {
