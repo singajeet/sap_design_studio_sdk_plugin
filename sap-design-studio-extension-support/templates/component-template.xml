@@ -1,5 +1,5 @@
 <component
-			id="${id}"
+			id="${className}"
 			title="${title}"
 			tooltip="${tooltip}"
 			icon="${icon}"

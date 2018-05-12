@@ -7,12 +7,14 @@ import java.nio.file.Files;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -20,6 +22,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
@@ -244,7 +247,38 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 		checkCreateComponentFile.setSelection(state);
 	}
 	
+	private boolean addPropertySheet;
 	
+	
+	
+	public boolean isAddPropertySheet() {
+		return addPropertySheet;
+	}
+
+	public void setAddPropertySheet(boolean addPropertySheet) {
+		this.addPropertySheet = addPropertySheet;
+	}
+
+	private String propertySheetPath = "res/AdvancedPropertySheet";
+	
+	public String getPropertySheetPath() {
+		return propertySheetPath;
+	}
+
+	public void setPropertySheetPath(String propertySheetPath) {
+		this.propertySheetPath = propertySheetPath;
+	}
+
+	private String group;
+	
+	public String getGroup() {
+		return group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
 	private boolean isClassNameModifiedManually = false;
 	
 	Composite container;
@@ -265,6 +299,13 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 	private Button btnBrowseIcon;
 	private FileDialog fd;
 	private Button checkCreateComponentFile;
+	private Label lblError;
+	private Button checkAddPropertySheet;
+	private Text txtPropertySheetPath;
+	private Combo comboGroup;
+	private Button btnAddNewGroup;
+	private Group apsGroup;
+	
 	
 	/**
 	 * A private function to enable or disable wizard components based on the 
@@ -282,6 +323,7 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 	public void onSharedDataChanged(String key, Object value) {
 		if(key.equals("packageName")) {
 			txtPackage.setText((String)value);
+			packageName = (String)value;
 		}
 	}
 
@@ -359,6 +401,7 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 					txtClass.setText(clsName);
 					setClassName(clsName);
 				}
+				validateField(txtTitle, "txtTitle");
 				page.setPageComplete(validatePage());
 			}
 		});
@@ -373,6 +416,7 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 					isClassNameModifiedManually = true;
 				}
 				className = txtClass.getText();
+				validateField(txtClass, "txtClass");
 				page.setPageComplete(validatePage());
 			}
 		});
@@ -401,6 +445,7 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.verticalAlignment = SWT.FILL;
 		gridData.grabExcessVerticalSpace = true;
+		gridData.minimumHeight = 100;
 		txtDescription.setLayoutData(gridData);
 		txtDescription.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -431,6 +476,9 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				mobileMode = checkModeMobile.getSelection();
+				//if both mobile and commons mode are false, select commons mode
+				if(mobileMode == false && commonsMode == false)
+					checkModeCommon.setSelection(true);
 				page.setPageComplete(validatePage());
 			}
 
@@ -446,6 +494,9 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				commonsMode = checkModeCommon.getSelection();
+				//if both mobile and commons mode are false, select mobile mode
+				if(mobileMode == false && commonsMode == false)
+					checkModeMobile.setSelection(true);
 				page.setPageComplete(validatePage());
 			}
 
@@ -519,19 +570,7 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 				fd.setFilterExtensions(filterExt);
 				String filePath = fd.open();
 				if(filePath != null) {
-					txtIconPath.setText(filePath);
-					try {
-						IPath imageFolder = ResourcesPlugin.getWorkspace().getRoot().getLocation().append("images");
-						Files.copy(new File(filePath).toPath(), imageFolder.toFile().toPath());
-						URL fileUrl = ResourcesPlugin.getPlugin().getBundle().getResource("images/" + new File(filePath).getName());
-						ImageDescriptor imgDesc = ImageDescriptor.createFromURL(fileUrl);
-						Image img = imgDesc.createImage();
-						lblIconImage.setImage(img);		
-						lblIconImage.redraw();
-						
-					}catch(Exception e1) {
-						e1.printStackTrace();
-					}
+					setIconPath(filePath);					
 				}
 			}
 
@@ -541,13 +580,67 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 			}
 			
 		});
+		//--- Add PropertySheet Row
+		Label lblPropertySheet = new Label(container, SWT.NONE);
+		lblPropertySheet.setText("Add Property Sheet:");
+		apsGroup = new Group(container, SWT.SHADOW_ETCHED_IN);
+		apsGroup.setLayout(new GridLayout(2, false));
+		apsGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		checkAddPropertySheet = new Button(apsGroup, SWT.CHECK);
+		checkAddPropertySheet.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				addPropertySheet = checkAddPropertySheet.getSelection();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+			
+		});
+		txtPropertySheetPath = new Text(apsGroup, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtPropertySheetPath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtPropertySheetPath.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {			
+				propertySheetPath = txtPropertySheetPath.getText();
+			}
+		});
 		//--- Separator
 		Label lineSeparator1 = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData lineSeparatorGridData1 = new GridData(GridData.FILL_HORIZONTAL);
 		lineSeparatorGridData1.horizontalSpan = 2;
 		lineSeparator1.setLayoutData(lineSeparatorGridData1);
-
+		//--- Error Label
+		lblError = new Label(container, SWT.NONE);
+		GridData lblErrorGridData = new GridData(GridData.FILL_HORIZONTAL);
+		lblErrorGridData.horizontalSpan = 2;
+		lblError.setLayoutData(lblErrorGridData);
+		lblError.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
 	}	
+	
+	private void validateField(Control control, String name) {
+		
+		lblError.setText("");
+		if(name.equals("txtTitle")) {
+			String text = ((Text)control).getText();
+			if(text.matches("[^a-zA-Z0-9\\s+]")) {
+				lblError.setText("Title can contain only Alphanumeric and Space characters");
+				return;
+			}
+		} 
+		else if(name.equals("txtClass")) {
+			String text = ((Text)control).getText();
+			if(text.matches("[^a-zA-Z0-9]")) {
+				lblError.setText("Class can contain only Alphanumeric characters");
+			}
+			if(!text.matches("([A-Z]+[a-z0-9]+\\w+)+")) {
+				lblError.setText("First letter of Class should be uppercase and non-numeric");
+			}
+			return;
+		}
+	}
 	
 	public boolean validatePage() {
 		if(!isNullOrEmpty(checkCreateComponentFile)) {		

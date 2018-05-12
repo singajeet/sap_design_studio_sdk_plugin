@@ -73,10 +73,30 @@ public class DesignStudioProjectHelper {
 	private static void createFile(IFile extensionFile, IFile componentFile) {
 		if(!extensionFile.exists()) {
 			populateSDKExtensionNode(extensionFile);
+			populateComponentNode(extensionFile);
 		}
 	
 		if(!componentFile.exists()) {
 			populateComponentZTLFile(componentFile);
+		}
+	}
+	
+	private static void populateComponentNode(IFile extensionFile) {
+		try {
+			_fieldMap = new HashMap<String, String>();
+			_fieldMap.put("className", "");
+			_fieldMap.put("title", "");
+			_fieldMap.put("tooltip", "");
+			_fieldMap.put("icon", "");
+			_fieldMap.put("handlerType", "");
+			_fieldMap.put("modes", "");
+			_fieldMap.put("databound", "");
+			_fieldMap.put("propertySheetPath", "");
+			_fieldMap.put("group", "");
+			
+			
+		}catch(Exception e) {
+			
 		}
 	}
 	

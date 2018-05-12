@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>sap-design-studio-extension-support</name>
+	<name>apache-commons-text-jar-plugin</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -25,10 +25,4 @@
 		<nature>org.eclipse.pde.PluginNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<variableList>
-		<variable>
-			<name>IMAGES</name>
-			<value>$%7BPROJECT_LOC%7D/images</value>
-		</variable>
-	</variableList>
 </projectDescription>

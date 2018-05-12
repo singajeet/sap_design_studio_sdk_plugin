@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache-commons-text-jar-plugin
+Bundle-SymbolicName: apache-commons-text-jar-plugin
+Bundle-Version: 1.0.0
+Bundle-ClassPath: commons-text-1.3.jar
+Export-Package: org.apache.commons.text,
+ org.apache.commons.text.diff,
+ org.apache.commons.text.lookup,
+ org.apache.commons.text.matcher,
+ org.apache.commons.text.similarity,
+ org.apache.commons.text.translate
+Require-Bundle: org.apache.commons.lang3;visibility:=reexport
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: apache-commons-text-jar-plugin
