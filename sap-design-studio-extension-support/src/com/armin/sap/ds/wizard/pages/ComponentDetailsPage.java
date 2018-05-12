@@ -4,14 +4,20 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
+import com.armin.sap.ds.data.shared.ISharedData;
 import com.armin.sap.ds.support.ComponentHelper;
 
 public class ComponentDetailsPage extends WizardPage implements IWizardDetailsPage {
 
 	private ComponentHelper _helper;
+	private ISharedData _data;
 	
 	public ComponentDetailsPage() {
 		super("Component Details");
@@ -19,10 +25,12 @@ public class ComponentDetailsPage extends WizardPage implements IWizardDetailsPa
 		_helper = new ComponentHelper();
 	}
 	
-	public ComponentDetailsPage(String pageName) {
+	public ComponentDetailsPage(String pageName, ISharedData data) {
 		super(pageName);
 		setPageComplete(false);
+		_data = data;
 		_helper = new ComponentHelper();
+		_data.registerSubscriber(_helper);
 	}
 
 	@Override
@@ -47,14 +55,9 @@ public class ComponentDetailsPage extends WizardPage implements IWizardDetailsPa
 		return _helper;
 	}
 
+	@Override
 	public boolean validatePage() {
-		if(_helper.getPackageName() != null && _helper.getClassName() != null 
-				&& _helper.getDescription() != null) {
-			return !_helper.getPackageName().isEmpty() 
-					&& !_helper.getClassName().isEmpty() && !_helper.getDescription().isEmpty();
-		} else {
-			return false;
-		}
-	}
+		return _helper.validatePage();
+	}	
 	
 }

@@ -2,9 +2,12 @@ package com.armin.sap.ds.support;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -16,7 +19,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
@@ -24,15 +27,24 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import com.armin.sap.ds.data.shared.ISharedData;
+import com.armin.sap.ds.data.shared.ISharedDataSubscriber;
 import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 
-public class ComponentHelper implements IHelper {
+public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 
 	public String COMPONENT_ZTL_FILE_NAME = "contribution.ztl";
 	
 	private String INIT_CLASS_TO_EXTEND = "Component";
 	public String EXTENDS_KEYWORD = " extends ";
 	
+	public ComponentHelper() {
+		
+	}
+	
+	public ComponentHelper(ISharedData data) {
+	
+	}
 	
 	/**
 	 * Title for this component. It will also be used to derive hint for class name
@@ -232,23 +244,11 @@ public class ComponentHelper implements IHelper {
 		checkCreateComponentFile.setSelection(state);
 	}
 	
-	/**
-	 * A private function to enable or disable wizard components based on the 
-	 * parameter passed to this function.
-	 * 
-	 * @param state		<code>true</code> or <code>false</code> to enable or
-	 * 					disable the components
-	 */
-	private void enableControls(boolean state) {
-		//txtPackage.setEnabled(state);
-		txtClass.setEnabled(state);
-		txtDescription.setEnabled(state);
-		comboExtends.setEnabled(state);
-		setComponentFileCreationEnabled(state);
-	}
 	
 	private boolean isClassNameModifiedManually = false;
 	
+	Composite container;
+	Composite topContainer;
 	private Text txtTitle;
 	private Text txtPackage;
 	private Text txtClass;
@@ -267,6 +267,25 @@ public class ComponentHelper implements IHelper {
 	private Button checkCreateComponentFile;
 	
 	/**
+	 * A private function to enable or disable wizard components based on the 
+	 * parameter passed to this function.
+	 * 
+	 * @param state		<code>true</code> or <code>false</code> to enable or
+	 * 					disable the components
+	 */
+	private void enableControls(boolean state) {
+		container.setVisible(state);
+		setComponentFileCreationEnabled(state);
+	}
+	
+	@Override
+	public void onSharedDataChanged(String key, Object value) {
+		if(key.equals("packageName")) {
+			txtPackage.setText((String)value);
+		}
+	}
+
+	/**
 	 * Creates a composite of controls to be displayed on the wizard page
 	 * 
 	 * @param page		Reference of the page on which the controls should be added
@@ -275,18 +294,16 @@ public class ComponentHelper implements IHelper {
 	public void createControl(IWizardDetailsPage page) {
 		Composite area = (Composite) page.getControl();
 		
-		Composite container = new Composite(area, SWT.NONE);
-		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		GridLayout layout = new GridLayout(2, false);
-		container.setLayout(layout);
-		
-		setComponentFileCreationEnabled(true);
+		topContainer = new Composite(area, SWT.NONE);
+		topContainer.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+		GridLayout topLayout = new GridLayout(1, false);
+		topContainer.setLayout(topLayout);
 		
 		//--- Checkbox to ask if component file is required or not
-		checkCreateComponentFile = new Button(container, SWT.CHECK);
+		checkCreateComponentFile = new Button(topContainer, SWT.CHECK);
 		GridData checkBoxGridData = new GridData();
 		checkBoxGridData.horizontalAlignment = GridData.FILL;
-		checkBoxGridData.horizontalSpan = 2;
+		//checkBoxGridData.horizontalSpan = 2;
 		checkCreateComponentFile.setLayoutData(checkBoxGridData);
 		checkCreateComponentFile.setText("Create component contribution file (.ztl) for this extension");
 		checkCreateComponentFile.setSelection(true);
@@ -297,12 +314,21 @@ public class ComponentHelper implements IHelper {
 				} else {
 					enableControls(false);
 				}
+				
+				page.setPageComplete(validatePage());
 			}
 			
 			public void widgetDefaultSelected(SelectionEvent event) {
 				
 			}
 		});
+		
+		setComponentFileCreationEnabled(true);
+		
+		container = new Composite(topContainer, SWT.NONE);
+		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		GridLayout layout = new GridLayout(2, false);
+		container.setLayout(layout);
 		
 		//--- Separator
 		Label lineSeparator2 = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
@@ -315,13 +341,8 @@ public class ComponentHelper implements IHelper {
 		lblPackage.setText("Component Package Name:");
 		txtPackage = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtPackage.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		txtPackage.setEnabled(false); //This field will be populated from the ID of extension
-		txtPackage.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				packageName = txtPackage.getText();
-				page.setPageComplete(page.validatePage());
-			}
-		});
+		txtPackage.setEnabled(false); 
+		
 		//--- Title Row
 		Label lblTitle = new Label(container, SWT.NONE);
 		lblTitle.setText("Component Title:");
@@ -338,6 +359,7 @@ public class ComponentHelper implements IHelper {
 					txtClass.setText(clsName);
 					setClassName(clsName);
 				}
+				page.setPageComplete(validatePage());
 			}
 		});
 		//--- Class Name Row
@@ -347,11 +369,11 @@ public class ComponentHelper implements IHelper {
 		txtClass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtClass.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				if(!isClassNameModifiedManually) {
+				if(txtClass.isFocusControl()) {
 					isClassNameModifiedManually = true;
 				}
 				className = txtClass.getText();
-				page.setPageComplete(page.validatePage());
+				page.setPageComplete(validatePage());
 			}
 		});
 		//--- Super Class Row
@@ -367,6 +389,7 @@ public class ComponentHelper implements IHelper {
 			public void handleEvent(Event event) {
 				int index = comboExtends.getSelectionIndex();
 				classToExtend = comboExtends.getItem(index);
+				page.setPageComplete(validatePage());
 			}
 		});
 		//--- Description Row
@@ -382,7 +405,6 @@ public class ComponentHelper implements IHelper {
 		txtDescription.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				description = txtDescription.getText();
-				page.setPageComplete(page.validatePage());
 			}
 		});
 		//--- Tooltip Row
@@ -393,7 +415,6 @@ public class ComponentHelper implements IHelper {
 		txtToolTip.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {				
 				toolTip = txtToolTip.getText();
-				page.setPageComplete(page.validatePage());
 			}
 		});
 		//-- Modes row
@@ -410,7 +431,7 @@ public class ComponentHelper implements IHelper {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				mobileMode = checkModeMobile.getSelection();
-				page.setPageComplete(page.validatePage());
+				page.setPageComplete(validatePage());
 			}
 
 			@Override
@@ -425,7 +446,7 @@ public class ComponentHelper implements IHelper {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				commonsMode = checkModeCommon.getSelection();
-				page.setPageComplete(page.validatePage());
+				page.setPageComplete(validatePage());
 			}
 
 			@Override
@@ -446,7 +467,6 @@ public class ComponentHelper implements IHelper {
 				int index = comboHandlerType.getSelectionIndex();
 				if(index >= 0 && index < comboHandlerType.getItemCount()) {
 					handlerType = comboHandlerType.getItem(index);
-					page.setPageComplete(page.validatePage());
 				}
 			}
 			@Override
@@ -463,7 +483,6 @@ public class ComponentHelper implements IHelper {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				dataBound = checkDataBound.getSelection();
-				page.setPageComplete(page.validatePage());
 			}
 
 			@Override
@@ -478,7 +497,7 @@ public class ComponentHelper implements IHelper {
 		groupIcon = new Group(container, SWT.SHADOW_ETCHED_IN);
 		groupIcon.setLayout(new GridLayout(3, false));
 		groupIcon.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		Label lblIconImage = new Label(container, SWT.NONE);
+		Label lblIconImage = new Label(groupIcon, SWT.NONE);
 		txtIconPath = new Text(groupIcon, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtIconPath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtIconPath.addModifyListener(new ModifyListener() {
@@ -487,7 +506,7 @@ public class ComponentHelper implements IHelper {
 				iconPath = txtIconPath.getText();
 			}
 		});
-		btnBrowseIcon = new Button(groupIcon, SWT.CHECK);
+		btnBrowseIcon = new Button(groupIcon, SWT.BORDER);
 		btnBrowseIcon.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		btnBrowseIcon.setText("Browse...");
 		btnBrowseIcon.addSelectionListener(new SelectionListener() {
@@ -500,25 +519,19 @@ public class ComponentHelper implements IHelper {
 				fd.setFilterExtensions(filterExt);
 				String filePath = fd.open();
 				if(filePath != null) {
-					File iconFileSource = new File(filePath);
-					File iconFileDest = new File(DesignStudioProjectHelper.getProjectLocation().getPath() 
-										+ File.pathSeparator + "res/images");
+					txtIconPath.setText(filePath);
 					try {
-						Files.copy(iconFileSource.toPath(), iconFileDest.toPath());
-						iconPath = "res/images/" + File.pathSeparator + iconFileSource.getName();
-						Display display = container.getShell().getDisplay();
-						Image iconImage = new Image(display, iconPath);
-						lblIconImage.setImage(iconImage);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						MessageDialog.open(MessageDialog.ERROR, container.getShell(), "Invalid Icon File", 
-											"Selected icon file is not valid. Please choose a different file", 
-											SWT.NONE);
-						iconPath = null;
+						IPath imageFolder = ResourcesPlugin.getWorkspace().getRoot().getLocation().append("images");
+						Files.copy(new File(filePath).toPath(), imageFolder.toFile().toPath());
+						URL fileUrl = ResourcesPlugin.getPlugin().getBundle().getResource("images/" + new File(filePath).getName());
+						ImageDescriptor imgDesc = ImageDescriptor.createFromURL(fileUrl);
+						Image img = imgDesc.createImage();
+						lblIconImage.setImage(img);		
+						lblIconImage.redraw();
+						
+					}catch(Exception e1) {
 						e1.printStackTrace();
 					}
-					
-					
 				}
 			}
 
@@ -535,5 +548,50 @@ public class ComponentHelper implements IHelper {
 		lineSeparator1.setLayoutData(lineSeparatorGridData1);
 
 	}	
+	
+	public boolean validatePage() {
+		if(!isNullOrEmpty(checkCreateComponentFile)) {		
+		
+			return (isNullOrEmpty(txtTitle) &&
+					isNullOrEmpty(txtPackage) &&
+					isNullOrEmpty(txtClass) &&
+					isNullOrEmpty(comboExtends) &&
+					(isNullOrEmpty(checkModeCommon) ||
+					isNullOrEmpty(checkModeMobile)) &&
+					isNullOrEmpty(comboHandlerType) &&
+					isNullOrEmpty(checkDataBound));
+		} else 
+			return true;
+	}
+	
+	private boolean isNullOrEmpty(Control control) {
+		if(control == null)
+			return false;
+		
+		if(control instanceof Text) {
+			return ((Text)control).getText().isEmpty();
+		}
+		
+		if(control instanceof Combo) {
+			int index = ((Combo)control).getSelectionIndex();
+			if(index < 0)
+				return false;
+			String item = ((Combo)control).getItem(index);
+			if(item == null)
+				return false;
+			if(item.isEmpty())
+				return false;
+		}
+		
+		if(control instanceof Button) {			
+			Button btn = (Button)control;
+			
+			if(btn.getStyle() == SWT.CHECK || btn.getStyle() == SWT.RADIO) {
+				return btn.getSelection();
+			}			
+		}
+		
+		return true;
+	}
 	
 }

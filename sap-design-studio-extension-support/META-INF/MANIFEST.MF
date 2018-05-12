@@ -19,3 +19,5 @@ Export-Package: com.armin.sap.ds.ext.plugin,
  com.armin.sap.ds.wizard,
  com.armin.sap.ds.wizard.pages
 Automatic-Module-Name: com.armin.sap.ds.ext.plugin
+Bundle-ClassPath: images/,
+ .

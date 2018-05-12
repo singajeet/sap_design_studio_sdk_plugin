@@ -7,11 +7,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
+
+import com.armin.sap.ds.data.shared.ISharedData;
 import com.armin.sap.ds.support.ExtensionHelper;
 
 public class ExtensionDetailsPage extends WizardPage implements IWizardDetailsPage {
 
 	private ExtensionHelper _helper;
+	ISharedData _data;
 
 	public ExtensionDetailsPage() {
 		super("Extension Details");
@@ -19,10 +22,11 @@ public class ExtensionDetailsPage extends WizardPage implements IWizardDetailsPa
 		_helper = new ExtensionHelper();
 	}
 
-	public ExtensionDetailsPage(String pageName) {
+	public ExtensionDetailsPage(String pageName, ISharedData data) {
 		super(pageName);
 		setPageComplete(false);
-		_helper = new ExtensionHelper();
+		_data = data;
+		_helper = new ExtensionHelper(_data);
 	}
 
 	public ExtensionDetailsPage(String pageName, String title, ImageDescriptor titleImage) {
@@ -46,7 +50,6 @@ public class ExtensionDetailsPage extends WizardPage implements IWizardDetailsPa
 		setMessage(null);
 		setControl(topLevel);
 		_helper.createControl(this);
-		
 	}
 
 	public ExtensionHelper getDetails() {

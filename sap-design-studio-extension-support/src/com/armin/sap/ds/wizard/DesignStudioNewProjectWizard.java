@@ -13,6 +13,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 
+import com.armin.sap.ds.data.shared.ISharedData;
+import com.armin.sap.ds.data.shared.SharedData;
 import com.armin.sap.ds.support.ComponentHelper;
 import com.armin.sap.ds.support.DesignStudioProjectHelper;
 import com.armin.sap.ds.support.ExtensionHelper;
@@ -24,6 +26,7 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 	private WizardNewProjectCreationPage _pageOne;
 	private IWizardPage _pageTwo;
 	private IWizardPage _pageThree;
+	private ISharedData _data;
 	
 	private String PAGE1_NAME = "SAP Design Studio Extension Wizard";
 	private String PAGE1_TITLE = "Project Name and Location";
@@ -45,6 +48,7 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 	
 	public DesignStudioNewProjectWizard() {
 		setWindowTitle(PAGE1_TITLE);
+		_data = new SharedData();
 	}
 
 	@Override
@@ -79,12 +83,12 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 		_pageOne.setDescription(PAGE1_DESCRIPTION);
 		addPage(_pageOne);
 		
-		_pageTwo = new ExtensionDetailsPage(PAGE2_NAME);
+		_pageTwo = new ExtensionDetailsPage(PAGE2_NAME, _data);
 		_pageTwo.setTitle(PAGE2_TITLE);
 		_pageTwo.setDescription(PAGE2_DESCRIPTION);
 		addPage(_pageTwo);
 		
-		_pageThree = new ComponentDetailsPage(PAGE3_NAME);
+		_pageThree = new ComponentDetailsPage(PAGE3_NAME, _data);
 		_pageThree.setTitle(PAGE3_TITLE);
 		_pageThree.setDescription(PAGE3_DESCRIPTION);
 		addPage(_pageThree);

@@ -1,11 +1,5 @@
 package com.armin.sap.ds.support;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -15,12 +9,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.armin.sap.ds.ext.plugin.Activator;
+import com.armin.sap.ds.data.shared.ISharedData;
 import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 
 public class ExtensionHelper implements IHelper {
 	
 	public String EXTENSION_XML_FILE_NAME = "contribution.xml";
+	private ISharedData _data;
+	
+	public ExtensionHelper() {
+		
+	}
+	
+	public ExtensionHelper(ISharedData data) {
+		_data = data;
+	}
 	
 	/**
 	 * The unique id of the extension. 
@@ -121,11 +124,7 @@ public class ExtensionHelper implements IHelper {
 		txtId.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				id = txtId.getText();
-				if(id != null) {
-					IWizardDetailsPage nextPage = (IWizardDetailsPage)page.getNextPage();
-					ComponentHelper compHelper = (ComponentHelper)nextPage.getDetails();
-					compHelper.setPackageName(id);
-				}
+				_data.setData("packageName", id);
 				page.setPageComplete(page.validatePage());
 			}
 		});
@@ -169,12 +168,13 @@ public class ExtensionHelper implements IHelper {
 		lineSeparator1.setLayoutData(lineSeparatorGridData1);
 		//--- Fifth Row
 		Label lblEula = new Label(container, SWT.NONE);
-		lblEula.setText("EULA (End User License Agreement:");
+		lblEula.setText("EULA (End User License Agreement):");
 		GridData gridDataEulaLabel = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataEulaLabel.horizontalSpan = 2;
 		lblEula.setLayoutData(gridDataEulaLabel);
 		txtEula = new Text(container, SWT.MULTI | SWT.BORDER | SWT.WRAP);
 		GridData gridDataEulaText = new GridData();
+		gridDataEulaText.horizontalSpan = 2;
 		gridDataEulaText.horizontalAlignment = SWT.FILL;
 		gridDataEulaText.grabExcessHorizontalSpace = true;
 		gridDataEulaText.verticalAlignment = SWT.FILL;
