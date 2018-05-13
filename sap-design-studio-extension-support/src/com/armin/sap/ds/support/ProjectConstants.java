@@ -39,5 +39,13 @@ public interface ProjectConstants {
 	String EXTENSION_FILE_RELATIVE_PATH = "component.xml";
 	String COMPONENT_CLOSE_TAG = "</component>";
 	String COMPONENT_PLACEHOLDER = "\n ${components} \n";
+	String COMPONENT_PATH = "res/js/";
+	String COMPONENT_PATH_TEMPLATE = "componentPath";
+	String REQUIRE_JS = "requireJs";
+	String CSS_INCLUDE = "cssInclude";
+	String PROPERTIES = "properties";
+	String DEFAULT_VALUES = "defaultValues";
+	String COMPONENT_CSS_PATH = "res/css/";
+	String COMPONENT_CSS_PATH_TEMPLATE = "componentCssPath";
 
 }

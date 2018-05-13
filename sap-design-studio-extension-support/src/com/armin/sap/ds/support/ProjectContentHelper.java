@@ -20,8 +20,6 @@ public class ProjectContentHelper {
 
 	private ExtensionHelper _extensionHelper;
 	private ComponentHelper _componentHelper;
-	private TemplateParser _parser;
-	private Map<String, String> _fieldMap;
 	private IProject _currentProject;
 	private IFile _componentFile;
 	private IFile _extensionFile;
@@ -97,11 +95,11 @@ public class ProjectContentHelper {
 	
 	private void populateComponentNode() {
 		try {
-			_fieldMap = new HashMap<String, String>();
+			Map<String, String> fieldMap = new HashMap<String, String>();
 			//add values for className, title and tooltip placeholders
-			_fieldMap.put(ProjectConstants.CLASS_NAME, _componentHelper.getClassName());
-			_fieldMap.put(ProjectConstants.TITLE, _componentHelper.getTitle());
-			_fieldMap.put(ProjectConstants.TOOLTIP, _componentHelper.getToolTip());
+			fieldMap.put(ProjectConstants.CLASS_NAME, _componentHelper.getClassName());
+			fieldMap.put(ProjectConstants.TITLE, _componentHelper.getTitle());
+			fieldMap.put(ProjectConstants.TOOLTIP, _componentHelper.getToolTip());
 			
 			//if no value provided for icon path, default icon will be used 
 			//available at "res/images/component.png"
@@ -109,7 +107,7 @@ public class ProjectContentHelper {
 			//and the relative path will be used for that icon
 			if(!_componentHelper.getIconPath().isEmpty()) {
 				if(_componentHelper.getIconPath().equals(ProjectConstants.RES_IMAGES_COMPONENT_PNG)) {
-					_fieldMap.put(ProjectConstants.ICON, ProjectConstants.RES_IMAGES_COMPONENT_PNG);
+					fieldMap.put(ProjectConstants.ICON, ProjectConstants.RES_IMAGES_COMPONENT_PNG);
 				} else {
 					IPath p = new Path(_componentHelper.getIconPath());
 					
@@ -118,31 +116,31 @@ public class ProjectContentHelper {
 						IFile iconFile = _currentProject.getFile(ProjectConstants.RES_IMAGES + filename);
 						InputStream imgStream = new FileInputStream(p.toFile().getAbsolutePath());
 						iconFile.create(imgStream, IResource.NONE, null);
-						_fieldMap.put(ProjectConstants.ICON, ProjectConstants.RES_IMAGES + filename);
+						fieldMap.put(ProjectConstants.ICON, ProjectConstants.RES_IMAGES + filename);
 					} else {
-						_fieldMap.put(ProjectConstants.ICON, ProjectConstants.RES_IMAGES_COMPONENT_PNG);
+						fieldMap.put(ProjectConstants.ICON, ProjectConstants.RES_IMAGES_COMPONENT_PNG);
 					}
 				}
 			} else {
-				_fieldMap.put(ProjectConstants.ICON, ProjectConstants.RES_IMAGES_COMPONENT_PNG);
+				fieldMap.put(ProjectConstants.ICON, ProjectConstants.RES_IMAGES_COMPONENT_PNG);
 			}
 			
 			//add value for handler types 
-			_fieldMap.put(ProjectConstants.HANDLER_TYPE, _componentHelper.getHandlerType());
+			fieldMap.put(ProjectConstants.HANDLER_TYPE, _componentHelper.getHandlerType());
 			if(_componentHelper.getMobileMode() && _componentHelper.getCommonsMode())
 			{
-				_fieldMap.put(ProjectConstants.MODES, ProjectConstants.COMMONS_M);
+				fieldMap.put(ProjectConstants.MODES, ProjectConstants.COMMONS_M);
 			} else if (_componentHelper.getMobileMode()) {
-				_fieldMap.put(ProjectConstants.MODES,  ProjectConstants.M);
+				fieldMap.put(ProjectConstants.MODES,  ProjectConstants.M);
 			} else if (_componentHelper.getCommonsMode()) {
-				_fieldMap.put(ProjectConstants.MODES,  ProjectConstants.COMMONS);
+				fieldMap.put(ProjectConstants.MODES,  ProjectConstants.COMMONS);
 			}		
 			
 			//databound
 			if(_componentHelper.isDataBound()) {
-				_fieldMap.put(ProjectConstants.DATABOUND, ProjectConstants.TRUE);
+				fieldMap.put(ProjectConstants.DATABOUND, ProjectConstants.TRUE);
 			} else {
-				_fieldMap.put(ProjectConstants.DATABOUND, "");
+				fieldMap.put(ProjectConstants.DATABOUND, "");
 			}
 			
 			//if path for advance property sheet has been provided, a APS will be generated
@@ -150,31 +148,70 @@ public class ProjectContentHelper {
 			//APS will be added to project only if checkbox is selected for same
 			if(_componentHelper.isAddPropertySheet()) {
 				if(_componentHelper.getPropertySheetPath().isEmpty()) {
-					_fieldMap.put(ProjectConstants.PROPERTY_SHEET_PATH, ProjectConstants.PROPERTY_SHEET_PATH_DEFAULT);
+					fieldMap.put(ProjectConstants.PROPERTY_SHEET_PATH, ProjectConstants.PROPERTY_SHEET_PATH_DEFAULT);
 				} else {
-					_fieldMap.put(ProjectConstants.PROPERTY_SHEET_PATH, ProjectConstants.PROPERTY_SHEET_PATH_ASSIGNMENT + ProjectConstants.DOUBLE_QUOTES + _componentHelper.getPropertySheetPath() + ProjectConstants.DOUBLE_QUOTES);
+					fieldMap.put(ProjectConstants.PROPERTY_SHEET_PATH, ProjectConstants.PROPERTY_SHEET_PATH_ASSIGNMENT + ProjectConstants.DOUBLE_QUOTES + _componentHelper.getPropertySheetPath() + ProjectConstants.DOUBLE_QUOTES);
 				}
 			} else {
-				_fieldMap.put(ProjectConstants.PROPERTY_SHEET_PATH, "");
+				fieldMap.put(ProjectConstants.PROPERTY_SHEET_PATH, "");
 			}
 			
 			//By default, "default" group will be selected for the project and nothing will be rendered
 			//for this selection. A new group can be created and selected for the current project
 			if(!_componentHelper.getGroup().equals(ProjectConstants.DEFAULT)) {
-				_fieldMap.put(ProjectConstants.GROUP, ProjectConstants.DOUBLE_QUOTES + _componentHelper.getGroup() + ProjectConstants.DOUBLE_QUOTES);
+				fieldMap.put(ProjectConstants.GROUP, ProjectConstants.DOUBLE_QUOTES + _componentHelper.getGroup() + ProjectConstants.DOUBLE_QUOTES);
 			} else {
-				_fieldMap.put(ProjectConstants.GROUP, "");
+				fieldMap.put(ProjectConstants.GROUP, "");
 			}
 			
+			String requireJsNodeContent = getRequireJSNodeContent();
+			fieldMap.put(ProjectConstants.REQUIRE_JS, requireJsNodeContent);
+			
+			String cssIncludeContent = getCSSIncludeNodeContent();
+			fieldMap.put(ProjectConstants.CSS_INCLUDE, cssIncludeContent);			
+			
 			//parse and update the contribution.xml file with component definition
-			_parser = new TemplateParser(_fieldMap);
-			_parser.loadTemplate(ProjectConstants.COMPONENT_TEMPLATE);
-			_parser.parse();
-			_parser.mergeToFile(_extensionFile, ProjectConstants.COMPONENTS);
+			TemplateParser parser = new TemplateParser(fieldMap);
+			parser.loadTemplate(ProjectConstants.COMPONENT_TEMPLATE);
+			parser.parse();
+			parser.mergeToFile(_extensionFile, ProjectConstants.COMPONENTS);
 			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private String getRequireJSNodeContent() {
+		Map<String, String> fieldMap = new HashMap<String, String>();
+		
+		if(_componentHelper.getMobileMode() && _componentHelper.getCommonsMode())
+		{
+			fieldMap.put(ProjectConstants.MODES, ProjectConstants.COMMONS_M);
+		} else if (_componentHelper.getMobileMode()) {
+			fieldMap.put(ProjectConstants.MODES,  ProjectConstants.M);
+		} else if (_componentHelper.getCommonsMode()) {
+			fieldMap.put(ProjectConstants.MODES,  ProjectConstants.COMMONS);
+		}
+		
+		fieldMap.put(ProjectConstants.COMPONENT_PATH_TEMPLATE, 
+				ProjectConstants.COMPONENT_PATH + _componentHelper.getClassName());
+		
+		TemplateParser parser = new TemplateParser(fieldMap);
+		parser.loadTemplate("require-js-template");
+		parser.parse();
+		return parser.getCompiledText();
+	}
+	
+	private String getCSSIncludeNodeContent() {
+		Map<String, String> fieldMap = new HashMap<String, String>();
+				
+		fieldMap.put(ProjectConstants.COMPONENT_CSS_PATH_TEMPLATE, 
+				ProjectConstants.COMPONENT_CSS_PATH + _componentHelper.getClassName());
+		
+		TemplateParser parser = new TemplateParser(fieldMap);
+		parser.loadTemplate("css-include-template");
+		parser.parse();
+		return parser.getCompiledText();
 	}
 	
 	/**
@@ -183,24 +220,24 @@ public class ProjectContentHelper {
 	 */
 	private void populateComponentZTLFile() {
 		try {
-			_fieldMap = new HashMap<String, String>();
-			_fieldMap.put(ProjectConstants.DESCRIPTION, _componentHelper.getDescription());
-			_fieldMap.put(ProjectConstants.AUTHOR, "");
-			_fieldMap.put(ProjectConstants.DATE, new Date().toString());
-			_fieldMap.put(ProjectConstants.PACKAGE_NAME, _componentHelper.getPackageName());
-			_fieldMap.put(ProjectConstants.CLASS_NAME, _componentHelper.getClassName());
+			Map<String, String> fieldMap = new HashMap<String, String>();
+			fieldMap.put(ProjectConstants.DESCRIPTION, _componentHelper.getDescription());
+			fieldMap.put(ProjectConstants.AUTHOR, "");
+			fieldMap.put(ProjectConstants.DATE, new Date().toString());
+			fieldMap.put(ProjectConstants.PACKAGE_NAME, _componentHelper.getPackageName());
+			fieldMap.put(ProjectConstants.CLASS_NAME, _componentHelper.getClassName());
 			if(_componentHelper.getClassToExtend().equals(ProjectConstants.NONE)) {
-				_fieldMap.put(ProjectConstants.SUPER_CLASS_NAME, "");
-				_fieldMap.put(ProjectConstants.EXTENDS, "");
+				fieldMap.put(ProjectConstants.SUPER_CLASS_NAME, "");
+				fieldMap.put(ProjectConstants.EXTENDS, "");
 			} else {
-				_fieldMap.put(ProjectConstants.SUPER_CLASS_NAME, _componentHelper.getClassToExtend());
-				_fieldMap.put(ProjectConstants.EXTENDS, _componentHelper.EXTENDS_KEYWORD);
+				fieldMap.put(ProjectConstants.SUPER_CLASS_NAME, _componentHelper.getClassToExtend());
+				fieldMap.put(ProjectConstants.EXTENDS, _componentHelper.EXTENDS_KEYWORD);
 			}
 			
-			_parser = new TemplateParser(_fieldMap);
-			_parser.loadTemplate(ProjectConstants.ZTL_TEMPLATE);
-			_parser.parse();
-			_componentFile.create(_parser.getCompiledTextAsStream(), IResource.NONE, null);
+			TemplateParser parser = new TemplateParser(fieldMap);
+			parser.loadTemplate(ProjectConstants.ZTL_TEMPLATE);
+			parser.parse();
+			_componentFile.create(parser.getCompiledTextAsStream(), IResource.NONE, null);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -213,16 +250,16 @@ public class ProjectContentHelper {
 	 */
 	private void populateSDKExtensionNode() {
 		try {
-			_fieldMap = new HashMap<String, String>();
-			_fieldMap.put(ProjectConstants.ID, _extensionHelper.getId());
-			_fieldMap.put(ProjectConstants.TITLE, _extensionHelper.getTitle());
-			_fieldMap.put(ProjectConstants.VERSION, _extensionHelper.getVersion());
-			_fieldMap.put(ProjectConstants.VENDOR, _extensionHelper.getVendor());
-			_fieldMap.put(ProjectConstants.EULA, _extensionHelper.getEula());
-			_parser = new TemplateParser(_fieldMap);
-			_parser.loadTemplate(ProjectConstants.EXTENSION_TEMPLATE);
-			_parser.parse();
-			_extensionFile.create(_parser.getCompiledTextAsStream(), IResource.NONE, null);
+			Map<String, String> fieldMap = new HashMap<String, String>();
+			fieldMap.put(ProjectConstants.ID, _extensionHelper.getId());
+			fieldMap.put(ProjectConstants.TITLE, _extensionHelper.getTitle());
+			fieldMap.put(ProjectConstants.VERSION, _extensionHelper.getVersion());
+			fieldMap.put(ProjectConstants.VENDOR, _extensionHelper.getVendor());
+			fieldMap.put(ProjectConstants.EULA, _extensionHelper.getEula());
+			TemplateParser parser = new TemplateParser(fieldMap);
+			parser.loadTemplate(ProjectConstants.EXTENSION_TEMPLATE);
+			parser.parse();
+			_extensionFile.create(parser.getCompiledTextAsStream(), IResource.NONE, null);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
