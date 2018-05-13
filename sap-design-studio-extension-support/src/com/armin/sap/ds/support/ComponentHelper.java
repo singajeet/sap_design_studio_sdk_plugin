@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -201,35 +203,15 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 	/**
 	 * property to hold and upload icon path
 	 */
-	private String iconPath;
+	private String iconPath = "res/images/component.png";
 	
 	public String getIconPath() {
 		return iconPath;
 	}
 
 	public void setIconPath(String iconPath) {
-		File f = new File(iconPath);
-		if(f.exists()) {
-			String filename = f.getName();
-			String imagesFolder = DesignStudioProjectHelper.getProjectLocation().getPath() 
-									+ File.pathSeparator + "res/images";
-			String iconPathInImagesFolder = imagesFolder + File.pathSeparator + filename;
-			File iconFileInImagesFolder = new File(iconPathInImagesFolder);
-			if(!iconFileInImagesFolder.exists()) {
-				try {
-					Files.copy(f.toPath(), new File(imagesFolder).toPath());
-					this.iconPath = "res/images" + File.pathSeparator + filename;
-					txtIconPath.setText(this.iconPath);
-					fd.setFileName(f.getName());
-					fd.setFilterPath(f.getParent());
-				} catch (IOException e) {
-					this.iconPath = null;
-					txtIconPath.setText("");					
-					e.printStackTrace();
-				}
-			}
-			
-		}
+		this.iconPath = iconPath;
+		txtIconPath.setText(iconPath);
 	}
 
 	/**
@@ -250,7 +232,6 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 	private boolean addPropertySheet;
 	
 	
-	
 	public boolean isAddPropertySheet() {
 		return addPropertySheet;
 	}
@@ -259,7 +240,7 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 		this.addPropertySheet = addPropertySheet;
 	}
 
-	private String propertySheetPath = "res/AdvancedPropertySheet";
+	private String propertySheetPath = "res/additional_properties_sheet/additional_properties_sheet.html";
 	
 	public String getPropertySheetPath() {
 		return propertySheetPath;
@@ -269,7 +250,7 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 		this.propertySheetPath = propertySheetPath;
 	}
 
-	private String group;
+	private String group = "Default";
 	
 	public String getGroup() {
 		return group;
@@ -302,9 +283,10 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 	private Label lblError;
 	private Button checkAddPropertySheet;
 	private Text txtPropertySheetPath;
+	private Group apsGroup;
 	private Combo comboGroup;
 	private Button btnAddNewGroup;
-	private Group apsGroup;
+	private Group groupGroup;
 	
 	
 	/**
@@ -509,6 +491,7 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 		lblHandlerType.setText("Handler Type:");
 		comboHandlerType = new Combo(container, SWT.READ_ONLY | SWT.BORDER);
 		comboHandlerType.add("Div");
+		comboHandlerType.add("sapui5");
 		comboHandlerType.add("DataSource");
 		comboHandlerType.select(0);
 		comboHandlerType.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -606,6 +589,55 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 			public void modifyText(ModifyEvent e) {			
 				propertySheetPath = txtPropertySheetPath.getText();
 			}
+		});
+		//--- Group Row
+		Label lblGroup = new Label(container, SWT.NONE);
+		lblGroup.setText("Group:");
+		groupGroup = new Group(container, SWT.SHADOW_ETCHED_IN);
+		groupGroup.setLayout(new GridLayout(2, false));
+		groupGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboGroup = new Combo(groupGroup, SWT.READ_ONLY | SWT.BORDER);
+		comboGroup.add("Default");
+		comboGroup.add("sapui5");
+		comboGroup.add("TECHNICAL_COMPONENT");
+		comboGroup.select(0);
+		comboGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboGroup.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int index = comboGroup.getSelectionIndex();
+				if(index >= 0 && index < comboGroup.getItemCount()) {
+					group = comboGroup.getItem(index);
+				}
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			
+			}
+			
+		});
+		btnAddNewGroup = new Button(groupGroup, SWT.BORDER);
+		btnAddNewGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		btnAddNewGroup.setText("Add New...");
+		btnAddNewGroup.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				InputDialog newGroupDialog = new InputDialog(Display.getDefault().getActiveShell(), "New Group",
+						"New Group Name:","", null);
+				newGroupDialog.setBlockOnOpen(true);
+				if(newGroupDialog.open()  == Dialog.OK) {
+					comboGroup.add(newGroupDialog.getValue());
+					int index = comboGroup.indexOf(newGroupDialog.getValue());
+					comboGroup.select(index);
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+			
 		});
 		//--- Separator
 		Label lineSeparator1 = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);

@@ -5,9 +5,10 @@
 			icon="${icon}"
 			handlerType="${handlerType}"
 			modes="${modes}"
-			databound="${databound}"
-			propertySheetPath="${propertySheetPath}"
-			group="${group}">
+			${databound}
+			${propertySheetPath}
+			${group}
+			>
 			
 	<!-- requireJs should go here -->
 	${requireJs}
