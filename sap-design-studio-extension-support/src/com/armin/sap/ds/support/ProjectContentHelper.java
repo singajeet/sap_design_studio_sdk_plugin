@@ -1,12 +1,16 @@
 package com.armin.sap.ds.support;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -22,20 +26,25 @@ public class ProjectContentHelper {
 	private ComponentHelper _componentHelper;
 	private IProject _currentProject;
 	private IFile _componentFile;
-	private IFile _extensionFile;
+	private IFile _extensionFile;	
 	private static ProjectContentHelper _singletonInstance;
 	
-	private ProjectContentHelper() {}
+	private ProjectContentHelper() {		
+		
+	}
 	
 	public static ProjectContentHelper getInstance() {
-		if(_singletonInstance == null)
-			_singletonInstance = new ProjectContentHelper();
+		if(_singletonInstance == null) {
+			_singletonInstance = new ProjectContentHelper();			
+		}
 		return _singletonInstance;
 	}
 	
-	public void setupProjectFiles(ExtensionHelper _extensionHelper, ComponentHelper _componentHelper, IProject project) {
+	public void setupProjectFiles(ExtensionHelper extensionHelper, ComponentHelper componentHelper, IProject project) {
 		
 		_currentProject = project;
+		_extensionHelper = extensionHelper;
+		_componentHelper = componentHelper;
 		
 		IFile componentFile = project.getFile(_componentHelper.COMPONENT_ZTL_FILE_NAME);
 		IFile extensionFile = project.getFile(_extensionHelper.EXTENSION_XML_FILE_NAME);
@@ -43,8 +52,10 @@ public class ProjectContentHelper {
 		_componentFile = componentFile;
 		_extensionFile = extensionFile;
 		
-		if(!extensionFile.exists()) {
+		if(!extensionFile.exists()) {		
+			
 			populateSDKExtensionNode();
+			populateComponentGroup();
 			populateComponentNode();
 		}
 	
@@ -53,46 +64,40 @@ public class ProjectContentHelper {
 		}
 	}
 	
-	public void addNewComponent(ComponentHelper component) {
-		
-		if(component == null)
-			return;
-		
-		_componentHelper = component;
-		
-		InputStream inputStream = null;
+	/**
+	 * Create and populate the contribution.xml file with extension details
+	 * Other sections of this file will be handled by respective function
+	 */
+	private void populateSDKExtensionNode() {
 		try {
-			if(_currentProject.exists(new Path(_extensionHelper.EXTENSION_XML_FILE_NAME))) {
-				
-				IFile file = _currentProject.getFile(_extensionHelper.EXTENSION_XML_FILE_NAME);
-				inputStream = file.getContents();		
-		
-				BufferedReader buf = new BufferedReader(new InputStreamReader(inputStream));
-				StringBuilder sb = new StringBuilder();
-	        
-				String line = buf.readLine();
-				while(line != null) {
-					sb.append(line).append("\n");
-					line = buf.readLine();
-				}
-				
-				int lastComponentTagIndex = sb.lastIndexOf(ProjectConstants.COMPONENT_CLOSE_TAG);
-	        
-				sb.insert(lastComponentTagIndex, ProjectConstants.COMPONENT_PLACEHOLDER);
-				
-				file.delete(true, null);
-				
-				file.create(new ByteArrayInputStream(sb.toString().getBytes()), IResource.NONE, null);
-				
-				populateComponentNode();
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			Map<String, String> fieldMap = new HashMap<String, String>();
+			fieldMap.put(ProjectConstants.ID, _extensionHelper.getId());
+			fieldMap.put(ProjectConstants.TITLE, _extensionHelper.getTitle());
+			fieldMap.put(ProjectConstants.VERSION, _extensionHelper.getVersion());
+			fieldMap.put(ProjectConstants.VENDOR, _extensionHelper.getVendor());
+			fieldMap.put(ProjectConstants.EULA, _extensionHelper.getEula());
+			
+			TemplateParser parser = new TemplateParser(fieldMap);
+			parser.loadTemplate(ProjectConstants.EXTENSION_TEMPLATE);
+			parser.parse();
+			
+			_extensionFile.create(parser.getCompiledTextAsStream(), IResource.NONE, null);
+		} catch (CoreException e) {
 			e.printStackTrace();
 		}
-        
 	}
 	
+	/**
+	 * Create a node of type group and save it to XML extension file
+	 */
+	private void populateComponentGroup() {
+		String id = _componentHelper.getGroup();
+		populateGroup(id, id);
+	}
+	
+	/**
+	 * Populates the Component Node in the XML extension file
+	 */
 	private void populateComponentNode() {
 		try {
 			Map<String, String> fieldMap = new HashMap<String, String>();
@@ -170,6 +175,13 @@ public class ProjectContentHelper {
 			String cssIncludeContent = getCSSIncludeNodeContent();
 			fieldMap.put(ProjectConstants.CSS_INCLUDE, cssIncludeContent);			
 			
+			//default value properties for Height & Width
+			String defaultValues = getDefaultValueContent(ProjectConstants.HEIGHT, "100");
+			defaultValues += ProjectConstants.NEW_LINE;
+			defaultValues += getDefaultValueContent(ProjectConstants.WIDTH, "100");
+			fieldMap.put(ProjectConstants.DEFAULT_VALUES, defaultValues);
+			
+			
 			//parse and update the contribution.xml file with component definition
 			TemplateParser parser = new TemplateParser(fieldMap);
 			parser.loadTemplate(ProjectConstants.COMPONENT_TEMPLATE);
@@ -181,42 +193,8 @@ public class ProjectContentHelper {
 		}
 	}
 	
-	private String getRequireJSNodeContent() {
-		Map<String, String> fieldMap = new HashMap<String, String>();
-		
-		if(_componentHelper.getMobileMode() && _componentHelper.getCommonsMode())
-		{
-			fieldMap.put(ProjectConstants.MODES, ProjectConstants.COMMONS_M);
-		} else if (_componentHelper.getMobileMode()) {
-			fieldMap.put(ProjectConstants.MODES,  ProjectConstants.M);
-		} else if (_componentHelper.getCommonsMode()) {
-			fieldMap.put(ProjectConstants.MODES,  ProjectConstants.COMMONS);
-		}
-		
-		fieldMap.put(ProjectConstants.COMPONENT_PATH_TEMPLATE, 
-				ProjectConstants.COMPONENT_PATH + _componentHelper.getClassName());
-		
-		TemplateParser parser = new TemplateParser(fieldMap);
-		parser.loadTemplate("require-js-template");
-		parser.parse();
-		return parser.getCompiledText();
-	}
-	
-	private String getCSSIncludeNodeContent() {
-		Map<String, String> fieldMap = new HashMap<String, String>();
-				
-		fieldMap.put(ProjectConstants.COMPONENT_CSS_PATH_TEMPLATE, 
-				ProjectConstants.COMPONENT_CSS_PATH + _componentHelper.getClassName());
-		
-		TemplateParser parser = new TemplateParser(fieldMap);
-		parser.loadTemplate("css-include-template");
-		parser.parse();
-		return parser.getCompiledText();
-	}
-	
 	/**
 	 * Creates and populate ZTL file for the current project
-	 * @param componentFile: Instance of contribution.ztl file in the current project
 	 */
 	private void populateComponentZTLFile() {
 		try {
@@ -243,26 +221,187 @@ public class ProjectContentHelper {
 		}
 	}
 	
+	/*********************************************************************************************
+	 * 					UTILITY FUNCTIONS FOR MANAGING PROJECT CONTENT
+	 *********************************************************************************************/
+	
 	/**
-	 * Create and populate the contribution.xml file with extension details
-	 * Other sections of this file will be handled by respective function
-	 * @param extensionFile: Instance of contribution.xml file in the current project
+	 * Add a new "placeholder" tag in the XML extension file "after closing tag" of last node of 
+	 * 	similar node types
+	 * @param fileName: Name of file where this tag needs to be added and saved
+	 * @param afterTag: Closing tag of the last node of similar tag
+	 * @param placeholderTag: The placeholder tag's name
+	 * @return: true if tag created and saved else false
 	 */
-	private void populateSDKExtensionNode() {
+	private boolean addNewTag(String fileName, String afterTag, String placeholderTag) {
+		InputStream inputStream = null;
 		try {
-			Map<String, String> fieldMap = new HashMap<String, String>();
-			fieldMap.put(ProjectConstants.ID, _extensionHelper.getId());
-			fieldMap.put(ProjectConstants.TITLE, _extensionHelper.getTitle());
-			fieldMap.put(ProjectConstants.VERSION, _extensionHelper.getVersion());
-			fieldMap.put(ProjectConstants.VENDOR, _extensionHelper.getVendor());
-			fieldMap.put(ProjectConstants.EULA, _extensionHelper.getEula());
-			TemplateParser parser = new TemplateParser(fieldMap);
-			parser.loadTemplate(ProjectConstants.EXTENSION_TEMPLATE);
-			parser.parse();
-			_extensionFile.create(parser.getCompiledTextAsStream(), IResource.NONE, null);
-		} catch (CoreException e) {
+			if(_currentProject.exists(new Path(fileName))) {
+				
+				IFile file = _currentProject.getFile(fileName);
+				inputStream = file.getContents();		
+		
+				BufferedReader buf = new BufferedReader(new InputStreamReader(inputStream));
+				StringBuilder sb = new StringBuilder();
+	        
+				String line = buf.readLine();
+				while(line != null) {
+					sb.append(line).append("\n");
+					line = buf.readLine();
+				}
+				
+				int lastComponentTagIndex = sb.lastIndexOf(afterTag);
+	        
+				sb.insert(lastComponentTagIndex, placeholderTag);
+				
+				file.delete(true, null);
+				
+				file.create(new ByteArrayInputStream(sb.toString().getBytes()), IResource.NONE, null);
+				
+				return true;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		}
+		return false;
 	}
+	
+	/**
+	 * Sets the current component with the component instance passed args
+	 * @param component
+	 */
+	public void setCurrentComponent(ComponentHelper component) {
+		if(component != null)
+			_componentHelper = component;
+	}
+	
+	/**
+	 * Adds a new component to the current extension file
+	 * @param component
+	 */
+	public void addNewComponent(ComponentHelper component) {
+		
+		if(component == null)
+			return;
+		
+		setCurrentComponent(component);
+		
+		boolean result = addNewTag(_extensionHelper.EXTENSION_XML_FILE_NAME, 
+				ProjectConstants.COMPONENT_CLOSE_TAG, ProjectConstants.COMPONENT_PLACEHOLDER);
+		if(result)
+			populateComponentNode();
+	}
+	
+	/**
+	 * Adds a new Group to the current extension XML file 
+	 * @param id
+	 * @param title
+	 */
+	public void addNewGroup(String id, String title) {
+		if(title == null || id == null)
+			return;
+		
+		boolean result = addNewTag(_extensionHelper.EXTENSION_XML_FILE_NAME,
+				ProjectConstants.GROUP_CLOSE_TAG, ProjectConstants.GROUPS);
+		if(result)
+			populateGroup(id, title);
+	}
+	
+	/**
+	 * Populates the value of group using the group template and save it to 
+	 * current extension XML file
+	 * @param id
+	 * @param title
+	 */
+	private void populateGroup(String id, String title) {		
+		if(id.equalsIgnoreCase(ProjectConstants.DEFAULT) 
+				|| id.equalsIgnoreCase(ProjectConstants.TECHNICAL_COMPONENT)) {
+			return;
+		}
+		Map<String, String> fieldMap = new HashMap<String, String>();
+		fieldMap.put(ProjectConstants.ID, id);
+		fieldMap.put(ProjectConstants.TITLE, title);
+		
+		TemplateParser parser = new TemplateParser(fieldMap);
+		parser.loadTemplate(ProjectConstants.GROUP_TEMPLATE);
+		parser.parse();
+		parser.mergeToFile(_extensionFile, ProjectConstants.GROUPS);
+	}
+	
+	/**
+	 * Returns the "requireJs" node tag populated with values from current component
+	 * @return: Compiled string representing a tag
+	 */
+	private String getRequireJSNodeContent() {
+		Map<String, String> fieldMap = new HashMap<String, String>();
+		
+		if(_componentHelper.getMobileMode() && _componentHelper.getCommonsMode())
+		{
+			fieldMap.put(ProjectConstants.MODES, ProjectConstants.COMMONS_M);
+		} else if (_componentHelper.getMobileMode()) {
+			fieldMap.put(ProjectConstants.MODES,  ProjectConstants.M);
+		} else if (_componentHelper.getCommonsMode()) {
+			fieldMap.put(ProjectConstants.MODES,  ProjectConstants.COMMONS);
+		}
+		
+		fieldMap.put(ProjectConstants.COMPONENT_PATH_TEMPLATE, 
+				ProjectConstants.COMPONENT_PATH + _componentHelper.getClassName());
+		
+		TemplateParser parser = new TemplateParser(fieldMap);
+		parser.loadTemplate(ProjectConstants.REQUIRE_JS_TEMPLATE);
+		parser.parse();
+		return parser.getCompiledText();
+	}
+	
+	/**
+	 * Returns the "cssInclude" node tag populated with values from current component
+	 * @return: Compiled string representing a tag
+	 */
+	private String getCSSIncludeNodeContent() {
+		Map<String, String> fieldMap = new HashMap<String, String>();
+				
+		fieldMap.put(ProjectConstants.COMPONENT_CSS_PATH_TEMPLATE, 
+				ProjectConstants.COMPONENT_CSS_PATH + _componentHelper.getClassName());
+		
+		TemplateParser parser = new TemplateParser(fieldMap);
+		parser.loadTemplate(ProjectConstants.CSS_INCLUDE_TEMPLATE);
+		parser.parse();
+		return parser.getCompiledText();
+	}
+	
+	/**
+	 * Returns the "defaultValue" tag with values passed as argument
+	 * @param property: Name of the property
+	 * @param value: value of property
+	 * @return
+	 */
+	private String getDefaultValueContent(String property, String value) {
+		Map<String, String> fieldMap = new HashMap<String, String>();
+		fieldMap.put(ProjectConstants.PROPERTY, property);
+		fieldMap.put(ProjectConstants.VALUE, value);
+		
+		TemplateParser parser = new TemplateParser(fieldMap);
+		parser.loadTemplate(ProjectConstants.DEFAULT_VALUE_TEMPLATE);
+		parser.parse();
+		return parser.getCompiledText();
+	}
+	
+	/**
+	 * Add a new "defaultValue" tag to the current XML extension file
+	 * @param property: Name of the property
+	 * @param: value of the property
+	 */
+	public void addDefaultValue(String property, String value) {
+		if(property == null || value == null)
+			return;
+		
+		boolean result = addNewTag(_extensionHelper.EXTENSION_XML_FILE_NAME,
+							ProjectConstants.DEFAULT_VALUE_CLOSE_TAG, 
+							ProjectConstants.DEFAULT_VALUES);
+	}
+	
+	
 
 }

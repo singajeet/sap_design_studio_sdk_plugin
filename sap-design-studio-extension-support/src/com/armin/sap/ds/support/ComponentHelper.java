@@ -598,7 +598,6 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 		groupGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboGroup = new Combo(groupGroup, SWT.READ_ONLY | SWT.BORDER);
 		comboGroup.add("Default");
-		comboGroup.add("sapui5");
 		comboGroup.add("TECHNICAL_COMPONENT");
 		comboGroup.select(0);
 		comboGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

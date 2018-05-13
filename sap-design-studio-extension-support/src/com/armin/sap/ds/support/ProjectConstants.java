@@ -47,5 +47,17 @@ public interface ProjectConstants {
 	String DEFAULT_VALUES = "defaultValues";
 	String COMPONENT_CSS_PATH = "res/css/";
 	String COMPONENT_CSS_PATH_TEMPLATE = "componentCssPath";
-
+	String PROPERTY = "property";
+	String VALUE = "value";
+	String REQUIRE_JS_TEMPLATE = "require-js-template";
+	String CSS_INCLUDE_TEMPLATE = "css-include-template";
+	String DEFAULT_VALUE_TEMPLATE = "default-value-template";
+	String HEIGHT = "HEIGHT";
+	String WIDTH = "WIDTH";
+	String NEW_LINE = "\n";
+	String TECHNICAL_COMPONENT = "TECHNICAL_COMPONENT";
+	String GROUP_TEMPLATE = "group-template";
+	String GROUPS = "groups";
+	String GROUP_CLOSE_TAG = "</group>";
+	String DEFAULT_VALUE_CLOSE_TAG = "</defaultValue>";
 }
