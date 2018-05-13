@@ -1,7 +1,10 @@
 package com.armin.sap.ds.support;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,74 +18,131 @@ import org.eclipse.core.runtime.Path;
 
 public class ProjectContentHelper {
 
-	private static ExtensionHelper _extensionHelper;
-	private static ComponentHelper _componentHelper;
-	private static TemplateParser _parser;
-	private static Map<String, String> _fieldMap;
+	private ExtensionHelper _extensionHelper;
+	private ComponentHelper _componentHelper;
+	private TemplateParser _parser;
+	private Map<String, String> _fieldMap;
+	private IProject _currentProject;
+	private IFile _componentFile;
+	private IFile _extensionFile;
+	private static ProjectContentHelper _singletonInstance;
 	
-	public static void setupProjectFiles(ExtensionHelper _extensionHelper, ComponentHelper _componentHelper, IProject project) {
+	private ProjectContentHelper() {}
+	
+	public static ProjectContentHelper getInstance() {
+		if(_singletonInstance == null)
+			_singletonInstance = new ProjectContentHelper();
+		return _singletonInstance;
+	}
+	
+	public void setupProjectFiles(ExtensionHelper _extensionHelper, ComponentHelper _componentHelper, IProject project) {
+		
+		_currentProject = project;
 		
 		IFile componentFile = project.getFile(_componentHelper.COMPONENT_ZTL_FILE_NAME);
 		IFile extensionFile = project.getFile(_extensionHelper.EXTENSION_XML_FILE_NAME);
 		
+		_componentFile = componentFile;
+		_extensionFile = extensionFile;
+		
 		if(!extensionFile.exists()) {
-			populateSDKExtensionNode(extensionFile);
-			populateComponentNode(extensionFile, project);
+			populateSDKExtensionNode();
+			populateComponentNode();
 		}
 	
 		if(!componentFile.exists()) {
-			populateComponentZTLFile(componentFile);
+			populateComponentZTLFile();
 		}
 	}
 	
-	private static void populateComponentNode(IFile extensionFile, IProject project) {
+	public void addNewComponent(ComponentHelper component) {
+		
+		if(component == null)
+			return;
+		
+		_componentHelper = component;
+		
+		InputStream inputStream = null;
+		try {
+			if(_currentProject.exists(new Path(_extensionHelper.EXTENSION_XML_FILE_NAME))) {
+				
+				IFile file = _currentProject.getFile(_extensionHelper.EXTENSION_XML_FILE_NAME);
+				inputStream = file.getContents();		
+		
+				BufferedReader buf = new BufferedReader(new InputStreamReader(inputStream));
+				StringBuilder sb = new StringBuilder();
+	        
+				String line = buf.readLine();
+				while(line != null) {
+					sb.append(line).append("\n");
+					line = buf.readLine();
+				}
+				
+				int lastComponentTagIndex = sb.lastIndexOf(ProjectConstants.COMPONENT_CLOSE_TAG);
+	        
+				sb.insert(lastComponentTagIndex, ProjectConstants.COMPONENT_PLACEHOLDER);
+				
+				file.delete(true, null);
+				
+				file.create(new ByteArrayInputStream(sb.toString().getBytes()), IResource.NONE, null);
+				
+				populateComponentNode();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+	}
+	
+	private void populateComponentNode() {
 		try {
 			_fieldMap = new HashMap<String, String>();
 			//add values for className, title and tooltip placeholders
-			_fieldMap.put("className", _componentHelper.getClassName());
-			_fieldMap.put("title", _componentHelper.getTitle());
-			_fieldMap.put("tooltip", _componentHelper.getToolTip());
+			_fieldMap.put(ProjectConstants.CLASS_NAME, _componentHelper.getClassName());
+			_fieldMap.put(ProjectConstants.TITLE, _componentHelper.getTitle());
+			_fieldMap.put(ProjectConstants.TOOLTIP, _componentHelper.getToolTip());
 			
 			//if no value provided for icon path, default icon will be used 
 			//available at "res/images/component.png"
 			//if value is provided for an icon, icon will be copied to the res/images folder
 			//and the relative path will be used for that icon
 			if(!_componentHelper.getIconPath().isEmpty()) {
-				if(_componentHelper.getIconPath().equals("res/images/component.png")) {
-					_fieldMap.put("icon", "res/images/component.png");
+				if(_componentHelper.getIconPath().equals(ProjectConstants.RES_IMAGES_COMPONENT_PNG)) {
+					_fieldMap.put(ProjectConstants.ICON, ProjectConstants.RES_IMAGES_COMPONENT_PNG);
 				} else {
 					IPath p = new Path(_componentHelper.getIconPath());
 					
 					if(p.toFile().exists()) {
 						String filename = p.toFile().getName();
-						IFile iconFile = project.getFile("res/images/" + filename);
+						IFile iconFile = _currentProject.getFile(ProjectConstants.RES_IMAGES + filename);
 						InputStream imgStream = new FileInputStream(p.toFile().getAbsolutePath());
 						iconFile.create(imgStream, IResource.NONE, null);
-						_fieldMap.put("icon", "res/images/" + filename);
+						_fieldMap.put(ProjectConstants.ICON, ProjectConstants.RES_IMAGES + filename);
 					} else {
-						_fieldMap.put("icon", "res/images/component.png");
+						_fieldMap.put(ProjectConstants.ICON, ProjectConstants.RES_IMAGES_COMPONENT_PNG);
 					}
 				}
 			} else {
-				_fieldMap.put("icon", "res/images/component.png");
+				_fieldMap.put(ProjectConstants.ICON, ProjectConstants.RES_IMAGES_COMPONENT_PNG);
 			}
 			
 			//add value for handler types 
-			_fieldMap.put("handlerType", _componentHelper.getHandlerType());
+			_fieldMap.put(ProjectConstants.HANDLER_TYPE, _componentHelper.getHandlerType());
 			if(_componentHelper.getMobileMode() && _componentHelper.getCommonsMode())
 			{
-				_fieldMap.put("modes", "commons m");
+				_fieldMap.put(ProjectConstants.MODES, ProjectConstants.COMMONS_M);
 			} else if (_componentHelper.getMobileMode()) {
-				_fieldMap.put("modes",  "m");
+				_fieldMap.put(ProjectConstants.MODES,  ProjectConstants.M);
 			} else if (_componentHelper.getCommonsMode()) {
-				_fieldMap.put("modes",  "commons");
+				_fieldMap.put(ProjectConstants.MODES,  ProjectConstants.COMMONS);
 			}		
 			
 			//databound
 			if(_componentHelper.isDataBound()) {
-				_fieldMap.put("databound", "databound=\"true\"");
+				_fieldMap.put(ProjectConstants.DATABOUND, ProjectConstants.TRUE);
 			} else {
-				_fieldMap.put("databound", "");
+				_fieldMap.put(ProjectConstants.DATABOUND, "");
 			}
 			
 			//if path for advance property sheet has been provided, a APS will be generated
@@ -90,27 +150,27 @@ public class ProjectContentHelper {
 			//APS will be added to project only if checkbox is selected for same
 			if(_componentHelper.isAddPropertySheet()) {
 				if(_componentHelper.getPropertySheetPath().isEmpty()) {
-					_fieldMap.put("propertySheetPath", "propertySheetPath=\"res/additional_properties_sheet/additional_properties_sheet.html\"");
+					_fieldMap.put(ProjectConstants.PROPERTY_SHEET_PATH, ProjectConstants.PROPERTY_SHEET_PATH_DEFAULT);
 				} else {
-					_fieldMap.put("propertySheetPath", "propertySheetPath=\"" + _componentHelper.getPropertySheetPath() + "\"");
+					_fieldMap.put(ProjectConstants.PROPERTY_SHEET_PATH, ProjectConstants.PROPERTY_SHEET_PATH_ASSIGNMENT + ProjectConstants.DOUBLE_QUOTES + _componentHelper.getPropertySheetPath() + ProjectConstants.DOUBLE_QUOTES);
 				}
 			} else {
-				_fieldMap.put("propertySheetPath", "");
+				_fieldMap.put(ProjectConstants.PROPERTY_SHEET_PATH, "");
 			}
 			
 			//By default, "default" group will be selected for the project and nothing will be rendered
 			//for this selection. A new group can be created and selected for the current project
-			if(!_componentHelper.getGroup().equals("Default")) {
-				_fieldMap.put("group", "group=\"" + _componentHelper.getGroup() + "\"");
+			if(!_componentHelper.getGroup().equals(ProjectConstants.DEFAULT)) {
+				_fieldMap.put(ProjectConstants.GROUP, ProjectConstants.DOUBLE_QUOTES + _componentHelper.getGroup() + ProjectConstants.DOUBLE_QUOTES);
 			} else {
-				_fieldMap.put("group", "");
+				_fieldMap.put(ProjectConstants.GROUP, "");
 			}
 			
 			//parse and update the contribution.xml file with component definition
 			_parser = new TemplateParser(_fieldMap);
-			_parser.loadTemplate("component-template");
+			_parser.loadTemplate(ProjectConstants.COMPONENT_TEMPLATE);
 			_parser.parse();
-			_parser.mergeToFile(extensionFile, "components");
+			_parser.mergeToFile(_extensionFile, ProjectConstants.COMPONENTS);
 			
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -121,26 +181,26 @@ public class ProjectContentHelper {
 	 * Creates and populate ZTL file for the current project
 	 * @param componentFile: Instance of contribution.ztl file in the current project
 	 */
-	private static void populateComponentZTLFile(IFile componentFile) {
+	private void populateComponentZTLFile() {
 		try {
 			_fieldMap = new HashMap<String, String>();
-			_fieldMap.put("description", _componentHelper.getDescription());
-			_fieldMap.put("author", "");
-			_fieldMap.put("date", new Date().toString());
-			_fieldMap.put("packageName", _componentHelper.getPackageName());
-			_fieldMap.put("className", _componentHelper.getClassName());
-			if(_componentHelper.getClassToExtend().equals("-- None --")) {
-				_fieldMap.put("superClassName", "");
-				_fieldMap.put("extends", "");
+			_fieldMap.put(ProjectConstants.DESCRIPTION, _componentHelper.getDescription());
+			_fieldMap.put(ProjectConstants.AUTHOR, "");
+			_fieldMap.put(ProjectConstants.DATE, new Date().toString());
+			_fieldMap.put(ProjectConstants.PACKAGE_NAME, _componentHelper.getPackageName());
+			_fieldMap.put(ProjectConstants.CLASS_NAME, _componentHelper.getClassName());
+			if(_componentHelper.getClassToExtend().equals(ProjectConstants.NONE)) {
+				_fieldMap.put(ProjectConstants.SUPER_CLASS_NAME, "");
+				_fieldMap.put(ProjectConstants.EXTENDS, "");
 			} else {
-				_fieldMap.put("superClassName", _componentHelper.getClassToExtend());
-				_fieldMap.put("extends", _componentHelper.EXTENDS_KEYWORD);
+				_fieldMap.put(ProjectConstants.SUPER_CLASS_NAME, _componentHelper.getClassToExtend());
+				_fieldMap.put(ProjectConstants.EXTENDS, _componentHelper.EXTENDS_KEYWORD);
 			}
 			
 			_parser = new TemplateParser(_fieldMap);
-			_parser.loadTemplate("ztl-template");
+			_parser.loadTemplate(ProjectConstants.ZTL_TEMPLATE);
 			_parser.parse();
-			componentFile.create(_parser.getCompiledTextAsStream(), IResource.NONE, null);
+			_componentFile.create(_parser.getCompiledTextAsStream(), IResource.NONE, null);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -151,18 +211,18 @@ public class ProjectContentHelper {
 	 * Other sections of this file will be handled by respective function
 	 * @param extensionFile: Instance of contribution.xml file in the current project
 	 */
-	private static void populateSDKExtensionNode(IFile extensionFile) {
+	private void populateSDKExtensionNode() {
 		try {
 			_fieldMap = new HashMap<String, String>();
-			_fieldMap.put("id", _extensionHelper.getId());
-			_fieldMap.put("title", _extensionHelper.getTitle());
-			_fieldMap.put("version", _extensionHelper.getVersion());
-			_fieldMap.put("vendor", _extensionHelper.getVendor());
-			_fieldMap.put("eula", _extensionHelper.getEula());
+			_fieldMap.put(ProjectConstants.ID, _extensionHelper.getId());
+			_fieldMap.put(ProjectConstants.TITLE, _extensionHelper.getTitle());
+			_fieldMap.put(ProjectConstants.VERSION, _extensionHelper.getVersion());
+			_fieldMap.put(ProjectConstants.VENDOR, _extensionHelper.getVendor());
+			_fieldMap.put(ProjectConstants.EULA, _extensionHelper.getEula());
 			_parser = new TemplateParser(_fieldMap);
-			_parser.loadTemplate("extension-template");
+			_parser.loadTemplate(ProjectConstants.EXTENSION_TEMPLATE);
 			_parser.parse();
-			extensionFile.create(_parser.getCompiledTextAsStream(), IResource.NONE, null);
+			_extensionFile.create(_parser.getCompiledTextAsStream(), IResource.NONE, null);
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}

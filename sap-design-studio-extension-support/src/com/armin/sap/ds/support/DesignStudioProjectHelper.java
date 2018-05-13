@@ -46,7 +46,7 @@ public class DesignStudioProjectHelper {
 	}
 
 	private static void addFilesToProjectStructure(IProject project) {			
-		ProjectContentHelper.setupProjectFiles(_extensionHelper, _componentHelper, project);
+		ProjectContentHelper.getInstance().setupProjectFiles(_extensionHelper, _componentHelper, project);
 	}
 
 	private static void addFoldersToProjectStructure(IProject project, String[] paths) throws Exception{
