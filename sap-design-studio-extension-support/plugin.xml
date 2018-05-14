@@ -192,5 +192,32 @@
          </describer>
       </content-type>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.armin.sap.ds.ext.plugin.editors.DesignStudioExtensionEditor"
+            contributorClass="com.armin.sap.ds.ext.plugin.editors.MultiPageEditorContributor"
+            extensions="mpe"
+            icon="icons/sample.png"
+            id="com.armin.sap.ds.ext.plugin.editors.DesignStudioExtensionEditor"
+            name="SAP Design Studio Extension Editor">
+         <contentTypeBinding
+               contentTypeId="com.armin.sap.ds.sdk.contenttype.contribution">
+         </contentTypeBinding>
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.armin.sap.ds.ext.plugin.preferences.DesigStudioExtPreferencePage"
+            id="com.armin.sap.ds.ext.plugin.preferences.DesigStudioExtPreferencePage"
+            name="Design Studio Extesion Preferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.armin.sap.ds.ext.plugin.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>

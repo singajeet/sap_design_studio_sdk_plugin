@@ -5,5 +5,32 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/apache-commons-text-jar-plugin"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.ui.forms_3.7.101.v20170815-1446.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jaxb.branding_1.4.1.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jaxb.core_1.4.101.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jaxb.core.schemagen_1.1.201.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jaxb.eclipselink.branding_1.4.101.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jaxb.eclipselink.core.schemagen_1.2.201.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jaxb.eclipselink.core_1.3.201.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jaxb.eclipselink.ui_1.4.201.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jaxb.ui_1.5.101.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.common.branding_1.4.1.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.common.core_1.5.1.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.common.eclipselink.branding_1.3.101.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.common.eclipselink.core_1.3.201.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.common.ui_1.4.201.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.common.utility_2.4.1.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.doc.user_3.2.101.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jpa.annotate_1.0.101.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jpa.branding_3.4.1.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jpa.core_3.5.1.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jpa.db.ui_2.1.201.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jpa.db_2.2.201.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jpa.gen_2.3.201.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jpa.ui_3.4.201.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jpadiagrameditor.branding_1.2.102.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jpadiagrameditor.doc.user_1.2.102.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jpadiagrameditor.ui_1.2.201.v201803012210.jar"/>
+	<classpathentry kind="lib" path="/home/armin/Softwares/Java/jdk1.8.0_172/lib/tools.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
