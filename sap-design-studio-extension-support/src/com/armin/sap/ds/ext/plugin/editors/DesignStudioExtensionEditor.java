@@ -13,8 +13,8 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FontDialog;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -35,6 +36,7 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
+import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -53,7 +55,6 @@ public class DesignStudioExtensionEditor extends MultiPageEditorPart implements 
 	/** The text editor used in page 0. */
 	private TextEditor editor;
 	
-
 	/** The font chosen in page 1. */
 	private Font font;
 
@@ -72,15 +73,18 @@ public class DesignStudioExtensionEditor extends MultiPageEditorPart implements 
 	 */
 	void createPage0() {
 		try {
-			editor = new TextEditor();
-			int index = addPage(editor, getEditorInput());
-			setPageText(index, editor.getTitle());
-		} catch (PartInitException e) {
+			Composite composite = new Composite(getContainer(), SWT.NONE);
+			composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+					
+			
+			int index = addPage(composite);
+			setPageText(index, "Extension Editor");
+		} catch (Exception e) {
 			ErrorDialog.openError(
 				getSite().getShell(),
 				"Error creating nested text editor",
 				null,
-				e.getStatus());
+				new Status(SWT.ERROR, "com.armin.sap.ds.ext", e.getMessage()));
 		}
 	}
 	/**
