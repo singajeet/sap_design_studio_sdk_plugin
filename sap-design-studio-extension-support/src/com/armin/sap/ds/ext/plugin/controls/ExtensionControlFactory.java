@@ -3,16 +3,23 @@ package com.armin.sap.ds.ext.plugin.controls;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.armin.sap.ds.data.shared.ISharedData;
+import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 import com.armin.sap.ds.xml.Extension;
 
 public class ExtensionControlFactory {
@@ -39,9 +46,26 @@ public class ExtensionControlFactory {
 		}
 	}
 	
-	public void createControl(String key, Composite root, ISharedData data, boolean excludeEula) {
+	public void createControl(String key, Composite root, ISharedData data, IWizardDetailsPage page) {
 		if(!_controlMap.containsKey(key)) {
-			ExtensionControl ctrl = new ExtensionControl(root, data, excludeEula);
+			ExtensionControl ctrl = new ExtensionControl(root, data, page);
+			ctrl.createControl();
+			_controlMap.put(key, ctrl);		
+		}
+	}
+	
+	public void createControl(String key, Composite root, ISharedData data, boolean excludeEula, IWizardDetailsPage page) {
+		if(!_controlMap.containsKey(key)) {
+			ExtensionControl ctrl = new ExtensionControl(root, data, excludeEula, page);
+			ctrl.createControl();
+			_controlMap.put(key, ctrl);		
+		}
+	}
+	
+	public void createControl(String key, Composite root, ISharedData data, boolean excludeEula, Extension model, IWizardDetailsPage page) {
+		if(!_controlMap.containsKey(key)) {
+			ExtensionControl ctrl = new ExtensionControl(root, data, excludeEula, page);
+			ctrl.setModel(model);
 			ctrl.createControl();
 			_controlMap.put(key, ctrl);		
 		}
@@ -111,10 +135,22 @@ public class ExtensionControlFactory {
 		private Composite _parent;
 		private Composite _container;
 		private ISharedData _data;
+		private IWizardDetailsPage _page;
 		
 		public ExtensionControl(Composite root, ISharedData data, boolean excludeEula) {			
 			this(root, data);
 			_excludeEula = excludeEula;
+		}
+		
+		public ExtensionControl(Composite root, ISharedData data, boolean excludeEula, IWizardDetailsPage page) {			
+			this(root, data, page);
+			_excludeEula = excludeEula;
+		}
+		
+		public ExtensionControl(Composite root, ISharedData data, IWizardDetailsPage page) {	
+			_parent = root;
+			_data = data;
+			_page = page;
 		}
 		
 		public ExtensionControl(Composite root, ISharedData data) {	
@@ -123,7 +159,8 @@ public class ExtensionControlFactory {
 		}
 			
 		public void createControl() {
-			_model = new Extension();
+			if(_model == null)
+				_model = new Extension();
 			
 			_container = new Composite(_parent, SWT.NONE);
 			_container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));;
@@ -138,7 +175,9 @@ public class ExtensionControlFactory {
 			txtId.addModifyListener(new ModifyListener() {
 				public void modifyText(ModifyEvent e) {
 					_model.setId(txtId.getText());
-					_data.setData("packageName", txtId.getText());					
+					_data.setData("packageName", txtId.getText());	
+					if(_page != null)
+						_page.setPageComplete(validateControl());
 				}
 			});
 			//--- Second Row
@@ -148,7 +187,9 @@ public class ExtensionControlFactory {
 			txtTitle.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			txtTitle.addModifyListener(new ModifyListener() {
 				public void modifyText(ModifyEvent e) {
-					_model.setTitle(txtTitle.getText());					
+					_model.setTitle(txtTitle.getText());
+					if(_page != null)
+						_page.setPageComplete(validateControl());
 				}
 			});
 			//--- Third Row
@@ -158,7 +199,35 @@ public class ExtensionControlFactory {
 			txtVersion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			txtVersion.addModifyListener(new ModifyListener() {
 				public void modifyText(ModifyEvent e) {
-					_model.setVersion(txtVersion.getText());					
+					_model.setVersion(txtVersion.getText());
+					if(_page != null)
+						_page.setPageComplete(validateControl());
+				}
+			});
+			txtVersion.addFocusListener(new FocusListener() {
+				
+				@Override
+				public void focusLost(FocusEvent e) {					
+					String inputText = txtVersion.getText();
+					boolean isNumeric = inputText.matches("-?\\d+(\\.\\d{1})?");
+					if(!isNumeric) {
+						MessageDialog.open(MessageDialog.ERROR, null, "Invalid Number", "Input should be in form 'xx.x' or 'xx' where x is a digit", SWT.SHEET);
+						txtVersion.setText("");
+						txtVersion.setFocus();
+						return;
+					}
+					if(!inputText.contains(".")) {
+						txtVersion.setText(inputText + ".0");
+						_model.setVersion(txtVersion.getText());
+					}
+					if(_page != null)
+						_page.setPageComplete(validateControl());
+				}
+				
+				@Override
+				public void focusGained(FocusEvent e) {
+					// TODO Auto-generated method stub
+					
 				}
 			});
 			//--- Fourth Row
@@ -168,7 +237,9 @@ public class ExtensionControlFactory {
 			txtVendor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			txtVendor.addModifyListener(new ModifyListener() {
 				public void modifyText(ModifyEvent e) {
-					_model.setVendor(txtVendor.getText());					
+					_model.setVendor(txtVendor.getText());
+					if(_page != null)
+						_page.setPageComplete(validateControl());
 				}
 			});
 			
@@ -207,7 +278,9 @@ public class ExtensionControlFactory {
 			txtEula.setLayoutData(gridDataEulaText);
 			txtEula.addModifyListener(new ModifyListener() {
 				public void modifyText(ModifyEvent e) {
-					_model.setEula(txtEula.getText());					
+					_model.setEula(txtEula.getText());	
+					if(_page != null)
+						_page.setPageComplete(validateControl());
 				}
 			});
 		}
@@ -226,6 +299,37 @@ public class ExtensionControlFactory {
 		}
 		
 		public boolean validateControl() {
+			return isNotNullOrEmpty(txtId) && isNotNullOrEmpty(txtTitle) 
+					&& isNotNullOrEmpty(txtVersion);
+		}
+		
+		private boolean isNotNullOrEmpty(Control control) {
+			if(control == null)
+				return false;
+			
+			if(control instanceof Text) {
+				return !((Text)control).getText().isEmpty();
+			}
+			
+			if(control instanceof Combo) {
+				int index = ((Combo)control).getSelectionIndex();
+				if(index < 0)
+					return false;
+				String item = ((Combo)control).getItem(index);
+				if(item == null)
+					return false;
+				if(item.isEmpty())
+					return false;
+			}
+			
+			if(control instanceof Button) {			
+				Button btn = (Button)control;
+				
+				if(btn.getStyle() == SWT.CHECK || btn.getStyle() == SWT.RADIO) {
+					return !btn.getSelection();
+				}			
+			}
+			
 			return true;
 		}
 	}

@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FontDialog;
-import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -36,10 +36,12 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.editors.text.TextEditor;
-import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
+
+import com.armin.sap.ds.data.shared.ISharedData;
+import com.armin.sap.ds.ext.plugin.controls.ExtensionControlFactory;
 
 /**
  * An example showing how to create a multi-page editor.
@@ -60,6 +62,9 @@ public class DesignStudioExtensionEditor extends MultiPageEditorPart implements 
 
 	/** The text widget used in page 2. */
 	private StyledText text;
+	
+	private ISharedData data;
+	
 	/**
 	 * Creates a multi-page editor example.
 	 */
@@ -75,7 +80,15 @@ public class DesignStudioExtensionEditor extends MultiPageEditorPart implements 
 		try {
 			Composite composite = new Composite(getContainer(), SWT.NONE);
 			composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-					
+			
+			ExtensionControlFactory.getInstance().createControl("ExtensionMultiEditor", composite, data);
+			
+			Label sep1 = new Label(composite, SWT.SEPARATOR);
+			GridData sep1GridData = new GridData(GridData.FILL_HORIZONTAL);
+			sep1GridData.horizontalSpan = 1;
+			sep1.setLayoutData(sep1GridData);
+			
+			
 			
 			int index = addPage(composite);
 			setPageText(index, "Extension Editor");

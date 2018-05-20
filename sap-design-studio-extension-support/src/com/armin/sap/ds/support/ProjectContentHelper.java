@@ -202,7 +202,7 @@ public class ProjectContentHelper {
 			fieldMap.put(ProjectConstants.DESCRIPTION, _componentHelper.getDescription());
 			fieldMap.put(ProjectConstants.AUTHOR, "");
 			fieldMap.put(ProjectConstants.DATE, new Date().toString());
-			fieldMap.put(ProjectConstants.PACKAGE_NAME, _componentHelper.getPackageName());
+			fieldMap.put(ProjectConstants.PACKAGE_NAME, _extensionHelper.getId());
 			fieldMap.put(ProjectConstants.CLASS_NAME, _componentHelper.getClassName());
 			if(_componentHelper.getClassToExtend().equals(ProjectConstants.NONE)) {
 				fieldMap.put(ProjectConstants.SUPER_CLASS_NAME, "");

@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 import com.armin.sap.ds.data.shared.ISharedData;
+import com.armin.sap.ds.ext.plugin.controls.ComponentControlFactory;
 import com.armin.sap.ds.support.ComponentHelper;
 
 public class ComponentDetailsPage extends WizardPage implements IWizardDetailsPage {
@@ -29,8 +30,7 @@ public class ComponentDetailsPage extends WizardPage implements IWizardDetailsPa
 		super(pageName);
 		setPageComplete(false);
 		_data = data;
-		_helper = new ComponentHelper();
-		_data.registerSubscriber(_helper);
+		_helper = new ComponentHelper(_data);		
 	}
 
 	@Override
@@ -57,7 +57,13 @@ public class ComponentDetailsPage extends WizardPage implements IWizardDetailsPa
 
 	@Override
 	public boolean validatePage() {
-		return _helper.validatePage();
+		if(_helper.getTitle() != null && _helper.getClassName() != null && 
+				(_helper.getPackageName() != null || _helper.getId() != null)) {
+			return !_helper.getTitle().isEmpty() && !_helper.getClassName().isEmpty() &&
+					!(_helper.getPackageName().isEmpty() || _helper.getId().isEmpty());
+		} else {
+			return false;
+		}
 	}	
 	
 }

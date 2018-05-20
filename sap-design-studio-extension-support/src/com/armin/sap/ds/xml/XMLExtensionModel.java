@@ -29,8 +29,10 @@ public class XMLExtensionModel {
 		return _rootElement.getValue();
 	}
 	
-	public Group createNewGroup() {
+	public Group createNewGroup(String id, String title) {
 		Group group = _objectFactory.createGroup();
+		group.setId(id);
+		group.setTitle(title);
 		getExtension().group.add(group);
 		return group;
 	}
