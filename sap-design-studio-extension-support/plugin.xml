@@ -210,8 +210,14 @@
          point="org.eclipse.ui.preferencePages">
       <page
             class="com.armin.sap.ds.ext.plugin.preferences.DesigStudioExtPreferencePage"
-            id="com.armin.sap.ds.ext.plugin.preferences.DesigStudioExtPreferencePage"
-            name="Design Studio Extesion Preferences">
+            id="DesigStudioExtPreferencePage"
+            name="SAP DS Extensions">
+      </page>
+      <page
+            category="DesigStudioExtPreferencePage"
+            class="com.armin.sap.ds.ext.plugin.preferences.DesigStudioExtOptionsPage"
+            id="DesignStudioExtOptions"
+            name="Options">
       </page>
    </extension>
    <extension
