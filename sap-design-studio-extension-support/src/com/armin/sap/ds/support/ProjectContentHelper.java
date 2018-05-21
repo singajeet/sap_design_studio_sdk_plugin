@@ -1,17 +1,19 @@
 package com.armin.sap.ds.support;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -19,6 +21,12 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+
+import com.armin.sap.ds.xml.Component;
+import com.armin.sap.ds.xml.Extension;
+import com.armin.sap.ds.xml.ObjectFactory;
 
 public class ProjectContentHelper {
 
@@ -53,14 +61,31 @@ public class ProjectContentHelper {
 		_extensionFile = extensionFile;
 		
 		if(!extensionFile.exists()) {		
+			Extension extModel = _extensionHelper.getModel();
+			Component componentModel = _componentHelper.getModel();
 			
-			populateSDKExtensionNode();
-			populateComponentGroup();
-			populateComponentNode();
+			ObjectFactory _factory = new ObjectFactory();
+			JAXBElement<Extension> _rootElement = _factory.createSdkExtension(extModel);
+			extModel.getComponent().add(componentModel);
+			
+			try {
+				JAXBContext context = JAXBContext.newInstance(Extension.class);
+				Marshaller marshaller = context.createMarshaller();
+				_extensionFile.create(new ByteArrayInputStream("<!-- contribution.xml -->".getBytes()), true, null);
+				
+				marshaller.marshal(_rootElement, _extensionFile.getRawLocation().toFile().getAbsoluteFile());
+				
+			} catch (Exception e) {
+				MessageDialog.open(MessageDialog.ERROR, null, "Error while generating file", e.toString(), SWT.SHEET);
+				e.printStackTrace();
+			}
+//			populateSDKExtensionNode();
+//			populateComponentGroup();
+//			populateComponentNode();
 		}
 	
 		if(!componentFile.exists()) {
-			populateComponentZTLFile();
+//			populateComponentZTLFile();
 		}
 	}
 	

@@ -1,8 +1,5 @@
 package com.armin.sap.ds.support;
 
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -13,11 +10,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
@@ -25,15 +18,14 @@ import org.eclipse.swt.widgets.Text;
 import com.armin.sap.ds.data.shared.ISharedData;
 import com.armin.sap.ds.data.shared.ISharedDataSubscriber;
 import com.armin.sap.ds.ext.plugin.controls.ComponentControlFactory;
-import com.armin.sap.ds.ext.plugin.controls.ComponentControlFactory.ComponentControl;
 import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 import com.armin.sap.ds.xml.Component;
-import com.armin.sap.ds.xml.HandlerTypes;
 import com.armin.sap.ds.xml.UI5Mode;
 
 public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 
 	public String COMPONENT_ZTL_FILE_NAME = "contribution.ztl";
+	@SuppressWarnings("unused")
 	private String INIT_CLASS_TO_EXTEND = "Component";
 	public String EXTENDS_KEYWORD = " extends ";	
 	
@@ -54,6 +46,10 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 	public ComponentHelper(ISharedData data, Component model) {
 		_data = data;
 		_model = model;
+	}
+	
+	public Component getModel() {
+		return _model;
 	}
 	
 	/**
