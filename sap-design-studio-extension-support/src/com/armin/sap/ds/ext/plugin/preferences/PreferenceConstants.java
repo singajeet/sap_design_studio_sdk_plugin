@@ -13,4 +13,9 @@ public class PreferenceConstants {
 
 	public static final String P_STRING = "stringPreference";
 	
+	public static final String GROUPS_LIST = "groups";
+	
+	public static final String DEFAULT_GROUPS = "Default;TECHNICAL_COMPONENT";
+	
+	public static final String PREFERENCES_ID = "com.armin.sap.ds.ext.plugin.preferences";
 }

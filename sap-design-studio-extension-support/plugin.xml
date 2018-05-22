@@ -215,9 +215,9 @@
       </page>
       <page
             category="DesigStudioExtPreferencePage"
-            class="com.armin.sap.ds.ext.plugin.preferences.DesigStudioExtOptionsPage"
-            id="DesignStudioExtOptions"
-            name="Options">
+            class="com.armin.sap.ds.ext.plugin.preferences.DesigStudioExtGroupsPage"
+            id="DesignStudioExtGroups"
+            name="Groups">
       </page>
    </extension>
    <extension
