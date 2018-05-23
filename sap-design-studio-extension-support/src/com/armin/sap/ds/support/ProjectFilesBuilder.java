@@ -15,7 +15,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 
 import com.armin.sap.ds.ext.plugin.Activator;
-import com.armin.sap.ds.ext.plugin.preferences.PreferenceConstants;
+import com.armin.sap.ds.ext.plugin.preferences.Settings;
 import com.armin.sap.ds.xml.Component;
 import com.armin.sap.ds.xml.Extension;
 import com.armin.sap.ds.xml.Group;
@@ -27,7 +27,6 @@ public class ProjectFilesBuilder {
 	
 	private ExtensionHelper _extensionHelper;
 	private ComponentHelper _componentHelper;
-	private IProject _currentProject;
 	private IFile _componentFile;
 	private IFile _extensionFile;
 	private Extension _extensionNode;
@@ -50,15 +49,13 @@ public class ProjectFilesBuilder {
 	
 	public void setupProjectFiles(ExtensionHelper extensionHelper, ComponentHelper componentHelper, IProject project) {
 		
-		_currentProject = project;
-		
 		//Reference to Extension and Component helper classes
 		_extensionHelper = extensionHelper;
 		_componentHelper = componentHelper;
 		
 		//Get reference to contribution.xml and contribution.ztl files
-		_componentFile = project.getFile(_componentHelper.COMPONENT_ZTL_FILE_NAME);
-		_extensionFile = project.getFile(_extensionHelper.EXTENSION_XML_FILE_NAME);
+		_componentFile = project.getFile(Settings.store().get(Settings.FOR.COMPONENT_ZTL_FILE_NAME));
+		_extensionFile = project.getFile(Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME));
 				
 		//Create contribution.xml (extension file) if not already created
 		if(!_extensionFile.exists()) {		
@@ -123,9 +120,8 @@ public class ProjectFilesBuilder {
 					}							
 				}
 				//if not found, check if group exists in the preferences of this plugin
-				//if available then add it under the current extension node
-				IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-				String rawGroups = store.getString(PreferenceConstants.GROUPS_LIST);
+				//if available then add it under the current extension node				
+				String rawGroups = Settings.store().get(Settings.FOR.GROUPS_LIST);
 				String[] groups = null;
 				if(rawGroups != null)
 					groups = rawGroups.split(";");
@@ -167,7 +163,7 @@ public class ProjectFilesBuilder {
 						for(int i=1; i<groups.length; i++) {
 							buf+= ";" + groups[i];
 						}
-						store.setValue(PreferenceConstants.GROUPS_LIST, buf);
+						Settings.store().set(Settings.FOR.GROUPS_LIST, buf);
 					}
 				}
 			} else {

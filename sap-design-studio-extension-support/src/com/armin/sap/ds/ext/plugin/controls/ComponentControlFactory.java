@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -21,6 +22,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.armin.sap.ds.ext.plugin.Activator;
+import com.armin.sap.ds.ext.plugin.preferences.Settings;
 import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 import com.armin.sap.ds.xml.Component;
 import com.armin.sap.ds.xml.HandlerTypes;
@@ -203,7 +206,7 @@ public class ComponentControlFactory {
 						txtClass.setText(clsName);
 						_model.setId(clsName);
 					}	
-					//if(_page != null)
+					if(_page != null)
 						_page.setPageComplete(validateControl());
 					
 				}
@@ -220,7 +223,7 @@ public class ComponentControlFactory {
 						isClassNameModifiedManually = true;
 					}					
 					_model.setId(txtClass.getText() != null ? txtClass.getText() : "");	
-					//if(_page != null)
+					if(_page != null)
 						_page.setPageComplete(validateControl());
 				}
 			});
@@ -232,8 +235,7 @@ public class ComponentControlFactory {
 			txtToolTip.addModifyListener(new ModifyListener() {
 				public void modifyText(ModifyEvent e) {				
 					_model.setTooltip(txtToolTip.getText() != null ? txtToolTip.getText() : "");
-					//if(_page != null)
-						//_page.setPageComplete(validateControl());
+					
 				}
 			});
 			//-- Modes row
@@ -246,6 +248,7 @@ public class ComponentControlFactory {
 			checkModeMobile.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			checkModeMobile.setText(UI5Mode.M.name());
 			checkModeMobile.setSelection(true);
+			_model.getModes().add(UI5Mode.M); //by default M mode is selected
 			checkModeMobile.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -327,9 +330,7 @@ public class ComponentControlFactory {
 					int index = comboHandlerType.getSelectionIndex();
 					if(index >= 0 && index < comboHandlerType.getItemCount()) {
 						_model.setHandlerType(HandlerTypes.valueOf(comboHandlerType.getItem(index)));
-					}
-					//if(_page != null)
-						//_page.setPageComplete(validateControl());
+					}					
 				}
 				@Override
 				public void widgetDefaultSelected(SelectionEvent e) {
@@ -344,9 +345,7 @@ public class ComponentControlFactory {
 			checkDataBound.addSelectionListener(new SelectionListener() {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					_model.setDatabound(checkDataBound.getSelection());
-					//if(_page != null)
-						//_page.setPageComplete(validateControl());
+					_model.setDatabound(checkDataBound.getSelection());					
 				}
 
 				@Override
@@ -366,9 +365,7 @@ public class ComponentControlFactory {
 			txtIconPath.addModifyListener(new ModifyListener() {
 				@Override
 				public void modifyText(ModifyEvent e) {			
-					_model.setIcon(txtIconPath.getText() != null ? txtIconPath.getText() : "");
-					//if(_page != null)
-						//_page.setPageComplete(validateControl());
+					_model.setIcon(txtIconPath.getText() != null ? txtIconPath.getText() : "");					
 				}
 			});
 			btnBrowseIcon = new Button(groupIcon, SWT.BORDER);
@@ -386,9 +383,7 @@ public class ComponentControlFactory {
 					if(filePath != null) {
 						txtIconPath.setText((filePath));
 						_model.setIcon(filePath);
-					}
-					//if(_page != null)
-						//_page.setPageComplete(validateControl());
+					}					
 				}
 
 				@Override
@@ -410,9 +405,7 @@ public class ComponentControlFactory {
 					if(checkAddPropertySheet.getSelection())
 						txtPropertySheetPath.setEnabled(true);
 					else
-						txtPropertySheetPath.setEnabled(false);
-					//if(_page != null)
-						//_page.setPageComplete(validateControl());
+						txtPropertySheetPath.setEnabled(false);					
 				}
 
 				@Override
@@ -422,14 +415,14 @@ public class ComponentControlFactory {
 				
 			});
 			txtPropertySheetPath = new Text(apsGroup, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+			txtPropertySheetPath.setText("res/additional_properties_sheet/additional_properties_page");
+			txtPropertySheetPath.setEnabled(false);
 			txtPropertySheetPath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			txtPropertySheetPath.addModifyListener(new ModifyListener() {
 				@Override
 				public void modifyText(ModifyEvent e) {			
 					if(checkAddPropertySheet.getSelection())
-						_model.setPropertySheetPath(txtPropertySheetPath.getText());
-					//if(_page != null)
-						//_page.setPageComplete(validateControl());
+						_model.setPropertySheetPath(txtPropertySheetPath.getText());					
 				}
 			});
 			//--- Group Row
@@ -439,8 +432,11 @@ public class ComponentControlFactory {
 			groupGroup.setLayout(new GridLayout(2, false));
 			groupGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			comboGroup = new Combo(groupGroup, SWT.READ_ONLY | SWT.BORDER);
-			comboGroup.add("Default");
-			comboGroup.add("TECHNICAL_COMPONENT");
+			String groupStr = Settings.store().get(Settings.FOR.GROUPS_LIST);
+			String[] groups = groupStr.split(";");
+			for(String group : groups) {
+				comboGroup.add(group);
+			}			
 			comboGroup.select(0);
 			comboGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			comboGroup.addSelectionListener(new SelectionListener() {
@@ -449,9 +445,7 @@ public class ComponentControlFactory {
 					int index = comboGroup.getSelectionIndex();
 					if(index >= 0 && index < comboGroup.getItemCount()) {
 						_model.setGroup(comboGroup.getItem(index));
-					}
-					//if(_page != null)
-						//_page.setPageComplete(validateControl());
+					}					
 				}
 				@Override
 				public void widgetDefaultSelected(SelectionEvent e) {
@@ -473,9 +467,9 @@ public class ComponentControlFactory {
 						comboGroup.add(newGroupDialog.getValue());
 						int index = comboGroup.indexOf(newGroupDialog.getValue());
 						comboGroup.select(index);
-					}
-					//if(_page != null)
-						//_page.setPageComplete(validateControl());
+						if(_model.getGroup() == null || _model.getGroup().isEmpty())
+							_model.setGroup(newGroupDialog.getValue());
+					}					
 				}
 
 				@Override
@@ -508,10 +502,7 @@ public class ComponentControlFactory {
 		}
 		
 		
-		public boolean validateControl() {
-			//return isNotNullOrEmpty(txtTitle) && isNotNullOrEmpty(txtClass);
-					//&& (isNotNullOrEmpty(checkModeMobile) || isNotNullOrEmpty(checkModeCommon))
-					//&& isNotNullOrEmpty(checkDataBound) && isNotNullOrEmpty(comboHandlerType);
+		public boolean validateControl() {			
 			if(txtTitle.getText() != null && txtClass.getText() != null) {
 				boolean result = !txtTitle.getText().isEmpty() && !txtClass.getText().isEmpty();
 				if(result) {

@@ -219,6 +219,12 @@
             id="DesignStudioExtGroups"
             name="Groups">
       </page>
+      <page
+            category="DesigStudioExtPreferencePage"
+            class="com.armin.sap.ds.ext.plugin.preferences.DesigStudioExtInheritancePage"
+            id="DesignStudioExtInheritance"
+            name="Inheritance">
+      </page>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

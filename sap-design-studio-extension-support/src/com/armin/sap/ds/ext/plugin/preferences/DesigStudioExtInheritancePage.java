@@ -14,22 +14,23 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.armin.sap.ds.ext.plugin.Activator;
 
-public class DesigStudioExtGroupsPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class DesigStudioExtInheritancePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	private IPreferenceStore store;
-	private GroupListEditor groupListEditor;
-	private Text txtNewGroup;
+	private ParentClassListEditor parentClassListEditor;
+	private Text txtNewParentClass;
 	
-	public DesigStudioExtGroupsPage() {
+	public DesigStudioExtInheritancePage() {
 		super(GRID);
 		store = Activator.getDefault().getPreferenceStore();
 		setPreferenceStore(store);
-		setDescription("SAP Design Studio Groups Settings");
+		setDescription("SAP Design Studio Component's Parent Class");
 	}
-
+	
 	@Override
 	public void init(IWorkbench workbench) {
-		
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -39,19 +40,19 @@ public class DesigStudioExtGroupsPage extends FieldEditorPreferencePage implemen
 		Group groupPanel = new Group(topPanel, SWT.SHADOW_ETCHED_IN);
 		groupPanel.setLayout(new GridLayout(1, false));
 		groupPanel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		txtNewGroup = new Text(groupPanel, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtNewGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtNewParentClass = new Text(groupPanel, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtNewParentClass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		groupListEditor = new GroupListEditor(Settings.FOR.GROUPS_LIST, "Groups: ", groupPanel);
-		addField(groupListEditor);
+		parentClassListEditor = new ParentClassListEditor(Settings.FOR.COMPONENT_PARENT_CLASSES, "Parent Class List: ", groupPanel);
+		addField(parentClassListEditor);
 		
 	}
 	
-	public class GroupListEditor extends ListEditor{
+	public class ParentClassListEditor extends ListEditor{
 
-		public GroupListEditor() {}
+		public ParentClassListEditor() {}
 		
-		public GroupListEditor(String name, String label, Composite parent) {
+		public ParentClassListEditor(String name, String label, Composite parent) {
 			super(name, label, parent);			
 		}
 		
@@ -61,8 +62,8 @@ public class DesigStudioExtGroupsPage extends FieldEditorPreferencePage implemen
 		@Override
 		protected void selectionChanged() {			
 			super.selectionChanged();
-			if(txtNewGroup.getText() != null && !txtNewGroup.getText().isEmpty()) {
-				txtNewGroup.setText("");
+			if(txtNewParentClass.getText() != null && !txtNewParentClass.getText().isEmpty()) {
+				txtNewParentClass.setText("");
 			}
 		}
 
@@ -81,7 +82,7 @@ public class DesigStudioExtGroupsPage extends FieldEditorPreferencePage implemen
 
 		@Override
 		protected String getNewInputObject() {			
-			return txtNewGroup.getText();
+			return txtNewParentClass.getText();
 		}
 
 		@Override
@@ -90,5 +91,6 @@ public class DesigStudioExtGroupsPage extends FieldEditorPreferencePage implemen
 		}
 		
 	}
+
 
 }

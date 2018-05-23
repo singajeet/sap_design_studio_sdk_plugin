@@ -1,5 +1,6 @@
 package com.armin.sap.ds.support;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -17,7 +18,9 @@ import org.eclipse.swt.widgets.Text;
 
 import com.armin.sap.ds.data.shared.ISharedData;
 import com.armin.sap.ds.data.shared.ISharedDataSubscriber;
+import com.armin.sap.ds.ext.plugin.Activator;
 import com.armin.sap.ds.ext.plugin.controls.ComponentControlFactory;
+import com.armin.sap.ds.ext.plugin.preferences.Settings;
 import com.armin.sap.ds.wizard.pages.IWizardDetailsPage;
 import com.armin.sap.ds.xml.Component;
 import com.armin.sap.ds.xml.UI5Mode;
@@ -243,9 +246,13 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 		Label lblExtends = new Label(container, SWT.NONE);
 		lblExtends.setText("Component Inherit From:");
 		comboExtends = new Combo(container, SWT.READ_ONLY | SWT.BORDER);
-		comboExtends.add("Component");
-		comboExtends.add("SdkDataBuffer");
-		comboExtends.select(1); //Select component by default
+		
+		String parentClassStr = Settings.store().get(Settings.FOR.COMPONENT_PARENT_CLASSES);
+		String[] parentClasses = parentClassStr.split(";");
+		for(String parent : parentClasses) {
+			comboExtends.add(parent);
+		}		
+		comboExtends.select(0); //Select component by default
 		comboExtends.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboExtends.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
