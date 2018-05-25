@@ -1,20 +1,22 @@
 package com.armin.sap.ds.support;
 
 import java.io.ByteArrayInputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.text.StringSubstitutor;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 
-import com.armin.sap.ds.ext.plugin.Activator;
 import com.armin.sap.ds.ext.plugin.preferences.Settings;
 import com.armin.sap.ds.xml.Component;
 import com.armin.sap.ds.xml.Extension;
@@ -27,8 +29,9 @@ public class ProjectFilesBuilder {
 	
 	private ExtensionHelper _extensionHelper;
 	private ComponentHelper _componentHelper;
+	private IProject _project;
 	private IFile _componentFile;
-	private IFile _extensionFile;
+	private IFile _extensionFile;	 
 	private Extension _extensionNode;
 	private Component _componentNode;
 	private ObjectFactory _factory;
@@ -48,6 +51,8 @@ public class ProjectFilesBuilder {
 	}
 	
 	public void setupProjectFiles(ExtensionHelper extensionHelper, ComponentHelper componentHelper, IProject project) {
+		
+		_project = project;
 		
 		//Reference to Extension and Component helper classes
 		_extensionHelper = extensionHelper;
@@ -76,7 +81,10 @@ public class ProjectFilesBuilder {
 				//	5. If not available, create a new 'Group' node, add it under 'Extension' node
 				//			and save it under the 'Groups' preferences
 				setupComponentGroupNode();
+				//Insert "RequireJS" node in contribution.xml file and create JS file: res/js/"component_name".js
 				setupRequireJSNode();
+				//Insert "cssInclude" node and create a css file
+				setupCSSIncludeNode();
 			
 				//Marshal/Save XML to contribution.xml file with pretty format
 				JAXBContext context = JAXBContext.newInstance(Extension.class);
@@ -92,6 +100,38 @@ public class ProjectFilesBuilder {
 		}
 	
 		if(!_componentFile.exists()) {
+			String ztlTemplate = Settings.store().get(Settings.FOR.ZTL_TEMPLATE);
+			Map<String, String> fieldMap = new HashMap<String, String>();
+			fieldMap.put("package", _extensionNode.getId());
+			fieldMap.put("class", _componentNode.getId());
+			fieldMap.put("superClass", _componentHelper.getClassToExtend());
+			
+			StringSubstitutor parser = new StringSubstitutor(fieldMap);
+			String content = parser.replace(ztlTemplate);
+			
+			try {
+				_componentFile.create(new ByteArrayInputStream(content.getBytes()), true, null);
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void setupCSSIncludeNode() {
+		//Create cssInclude node		
+		String cssFilePath = "res/css/" + _componentNode.getId() + ".css";		
+		createComponentSupportingFile(cssFilePath, Settings.store().get(Settings.FOR.CSS_TEMPLATE));
+		_componentNode.getCssInclude().add(cssFilePath);
+	}
+
+	
+	private void createComponentSupportingFile(String path, String content) {
+		IFile file = _project.getFile(path);		
+		try {
+			file.create(new ByteArrayInputStream(content.getBytes()), true, null);
+		} catch (CoreException e) {			
+			e.printStackTrace();
 		}
 	}
 	
@@ -100,8 +140,10 @@ public class ProjectFilesBuilder {
 		List<UI5Mode> modes = _componentNode.getModes();
 		//Create requireJS node
 		RequireJSType jsNode = _factory.createRequireJSType();
+		String jsFilePath = "res/js/" + _componentNode.getId();
 		jsNode.getModes().addAll(modes);
-		jsNode.setValue("res/js/" + _componentNode.getId());
+		jsNode.setValue(jsFilePath);
+		createComponentSupportingFile(jsFilePath + ".js", Settings.store().get(Settings.FOR.JS_TEMPLATE));
 		_componentNode.getRequireJs().add(jsNode);		
 	}
 

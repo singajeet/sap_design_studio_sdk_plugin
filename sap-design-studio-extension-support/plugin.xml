@@ -225,6 +225,12 @@
             id="DesignStudioExtInheritance"
             name="Inheritance">
       </page>
+      <page
+            category="DesigStudioExtPreferencePage"
+            class="com.armin.sap.ds.ext.plugin.preferences.DesigStudioExtTemplatesPage"
+            id="DesignStudioExtTemplates"
+            name="Templates">
+      </page>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

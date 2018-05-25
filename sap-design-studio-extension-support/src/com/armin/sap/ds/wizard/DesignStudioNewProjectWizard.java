@@ -75,7 +75,7 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 	}
 	
 	@Override
-	public void addPages() {
+	public void addPages() {		
 		super.addPages();
 		
 		_pageOne = new WizardNewProjectCreationPage(PAGE1_NAME);

@@ -180,6 +180,26 @@ public class ExtensionControlFactory {
 						_page.setPageComplete(validateControl());
 				}
 			});
+			txtId.addFocusListener(new FocusListener() {
+				
+				@Override
+				public void focusLost(FocusEvent e) {
+					String id = txtId.getText();
+					if(!id.matches("[a-zA-Z]+(\\.[a-zA-Z0-9])+")) {
+						MessageDialog.open(MessageDialog.ERROR, null, "Invalid ID", "Only Alphanumeric and .(dot) is allowed. First character should be alphabet only", SWT.SHEET);
+						txtId.setText("");
+						txtId.setFocus();
+						return;
+					}
+					
+				}
+				
+				@Override
+				public void focusGained(FocusEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
 			//--- Second Row
 			Label lblTitle = new Label(_container, SWT.NONE);
 			lblTitle.setText("Extension Title:");

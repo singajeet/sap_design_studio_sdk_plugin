@@ -55,6 +55,18 @@ public class Settings {
 		public static final String EXTENSION_XML_FILE_NAME = "extensionXMLFileName";
 		
 		public static final String DEFAULT_EXTENSION_XML_FILE_NAME = "contribution.xml";
+		
+		public static final String JS_TEMPLATE = "jsTemplate";
+		
+		public static final String DEFAULT_JS_TEMPLATE = "/***** JS File ******/";
+		
+		public static final String CSS_TEMPLATE = "cssTemplate";
+		
+		public static final String DEFAULT_CSS_TEMPLATE = "// CSS Style classes //";
+		
+		public static final String ZTL_TEMPLATE = "ztlTemplate";
+		
+		public static final String DEFAULT_ZTL_TEMPLATE = "class {0}.{1} extends {2} {* \\n /** Add Code Below **/ \\n *}";
 	}
 
 }
