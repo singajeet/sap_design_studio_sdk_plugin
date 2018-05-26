@@ -5,10 +5,10 @@ import java.util.Comparator;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 
-import com.armin.sap.ds.ext.navigator.elements.DesignStudioProjectResAPS;
-import com.armin.sap.ds.ext.navigator.elements.DesignStudioProjectResCSS;
-import com.armin.sap.ds.ext.navigator.elements.DesignStudioProjectResJS;
-import com.armin.sap.ds.ext.navigator.elements.IDesignStudioProjectElement;
+import com.armin.sap.ds.ext.navigator.elements.AdvancedPropertySheetFile;
+import com.armin.sap.ds.ext.navigator.elements.CascadeStyleSheetFile;
+import com.armin.sap.ds.ext.navigator.elements.JavaScriptFile;
+import com.armin.sap.ds.ext.navigator.elements.IProjectElement;
 
 public class CategorySorter extends ViewerComparator {
 
@@ -23,17 +23,17 @@ public class CategorySorter extends ViewerComparator {
 	
 	@Override
     public int compare(Viewer viewer, Object e1, Object e2) {
-        String catName1 = ((IDesignStudioProjectElement)e1).getText();
-        String catName2 = ((IDesignStudioProjectElement)e2).getText();
+        String catName1 = ((IProjectElement)e1).getText();
+        String catName2 = ((IProjectElement)e2).getText();
          
         int result = -1;
-        if (catName1.equals(DesignStudioProjectResJS.NAME)) {
+        if (catName1.equals(JavaScriptFile.NAME)) {
             result = -1;
-        } else if (catName2.equals(DesignStudioProjectResAPS.NAME)) {
+        } else if (catName2.equals(AdvancedPropertySheetFile.NAME)) {
             result = 1;
-        } else if (catName1.equals(DesignStudioProjectResCSS.NAME)) {
+        } else if (catName1.equals(CascadeStyleSheetFile.NAME)) {
             result = -1;
-        } else if (catName1.equals(DesignStudioProjectResJS.NAME)) {
+        } else if (catName1.equals(JavaScriptFile.NAME)) {
             result = 1;
         } // else result == -1
          

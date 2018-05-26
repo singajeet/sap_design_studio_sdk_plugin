@@ -38,7 +38,7 @@
          point="org.eclipse.ui.navigator.navigatorContent">
       <navigatorContent
             contentProvider="com.armin.sap.ds.ext.navigator.provider.ContentProvider"
-            icon="images/nav-square.png"
+            icon="images/nav.png"
             id="com.armin.sap.ds.ext.navigator.content"
             labelProvider="com.armin.sap.ds.ext.navigator.provider.LabelProvider"
             name="%navigatorContent.name">
@@ -53,7 +53,7 @@
             <parentExpression>
                <or>
                   <instanceof
-                        value="com.armin.sap.ds.ext.navigator.elements.DesignStudioProjectRes">
+                        value="com.armin.sap.ds.ext.navigator.elements.ResourceFolder">
                   </instanceof>
                </or>
             </parentExpression>

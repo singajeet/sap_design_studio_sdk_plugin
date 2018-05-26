@@ -8,11 +8,12 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.armin.sap.ds.ext.navigator.elements.DesignStudioProjectParent;
-import com.armin.sap.ds.ext.navigator.elements.IDesignStudioProjectElement;
+import com.armin.sap.ds.ext.navigator.elements.ProjectParent;
+import com.armin.sap.ds.ext.navigator.elements.IProjectElement;
 import com.armin.sap.ds.sdk.project.natures.ProjectNature;
 
 public class ContentProvider implements ITreeContentProvider, IResourceChangeListener {
@@ -35,8 +36,8 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
         if (IWorkspaceRoot.class.isInstance(parentElement)) {
             IProject[] projects = ((IWorkspaceRoot)parentElement).getProjects();
             children = createDesignStudioParents(projects);
-        } else if(IDesignStudioProjectElement.class.isInstance(parentElement)) {
-        	children = ((IDesignStudioProjectElement)parentElement).getChildren();
+        } else if(IProjectElement.class.isInstance(parentElement)) {
+        	children = ((IProjectElement)parentElement).getChildren();
         } 
         else {
             children = NO_CHILDREN;
@@ -50,10 +51,17 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 		
 		List<Object> list = new ArrayList<Object>();
 		for(int i=0; i < projects.length; i++) {
-			Object designStudioProjectParent = createCustomProjectParent(projects[i]);
-			if(designStudioProjectParent != null) {
-				list.add(designStudioProjectParent);
-			}
+			try {
+					if(projects[i].hasNature(ProjectNature.NATURE_ID)){
+						Object designStudioProjectParent = createCustomProjectParent(projects[i]);
+						if(designStudioProjectParent != null) {
+							list.add(designStudioProjectParent);
+						}
+					}
+				} catch (CoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 		
 		result = new Object[list.size()];
@@ -66,7 +74,7 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 		Object result = null;
 		try {
 			if(iProject.getNature(ProjectNature.NATURE_ID) != null) {
-				result = new DesignStudioProjectParent(iProject);
+				result = new ProjectParent(iProject);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -80,8 +88,8 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 		if(IProject.class.isInstance(element)) {
 			parent = ((IProject)element).getWorkspace().getRoot();
 		}
-		else if(IDesignStudioProjectElement.class.isInstance(element)) {
-			parent = ((IDesignStudioProjectElement)element).getParent();
+		else if(IProjectElement.class.isInstance(element)) {
+			parent = ((IProjectElement)element).getParent();
 		}
 		
 		return parent;
@@ -93,28 +101,28 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 		
 		if (IWorkspaceRoot.class.isInstance(element)) {
             hasChildren = ((IWorkspaceRoot)element).getProjects().length > 0;
-        } else if (IDesignStudioProjectElement.class.isInstance(element)) {
-            hasChildren = ((IDesignStudioProjectElement)element).hasChildren();
+        } else if (IProjectElement.class.isInstance(element)) {
+            hasChildren = ((IProjectElement)element).hasChildren();
         }
         // else it is not one of these so return false
          
         return hasChildren;
 	}
 	
-//	private DesignStudioProjectParent[] initializeParent(Object parentElement) {
+//	private ProjectParent[] initializeParent(Object parentElement) {
 //        IProject [] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 //        
-//        List<DesignStudioProjectParent> list = new Vector<DesignStudioProjectParent>();
+//        List<ProjectParent> list = new Vector<ProjectParent>();
 //        for (int i = 0; i < projects.length; i++) {
 //        	try {
 //        		if(projects[i].getNature(ProjectNature.NATURE_ID) != null) {
-//        			list.add(new DesignStudioProjectParent(projects[i]));
+//        			list.add(new ProjectParent(projects[i]));
 //        		}
 //        	}catch(Exception e) {}
 //            
 //        }        
 //        
-//        DesignStudioProjectParent[] result = new DesignStudioProjectParent[list.size()];
+//        ProjectParent[] result = new ProjectParent[list.size()];
 //        list.toArray(result); 
 //        return result;
 //    }

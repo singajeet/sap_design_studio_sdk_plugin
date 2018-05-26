@@ -3,11 +3,12 @@ package com.armin.sap.ds.ext.navigator.elements;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.graphics.Image;
 
-public class DesignStudioProjectResJS implements IDesignStudioProjectElement {
+public class CascadeStyleSheetFile implements IProjectElement {
 
-	public static final String NAME = "JS";
+	public static final String NAME = "CSS";
 	
-	public DesignStudioProjectResJS(IDesignStudioProjectElement parent) {}
+	public CascadeStyleSheetFile(IProjectElement parent) {}
+	
 	
 	@Override
 	public Image getImage() {

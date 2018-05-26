@@ -66,7 +66,7 @@ public class Settings {
 		
 		public static final String ZTL_TEMPLATE = "ztlTemplate";
 		
-		public static final String DEFAULT_ZTL_TEMPLATE = "class {0}.{1} extends {2} {* \\n /** Add Code Below **/ \\n *}";
+		public static final String DEFAULT_ZTL_TEMPLATE = "class ${package}.${class} extends ${parentclass} {* \n /** Add Code Below **/ \n *}";
 	}
 
 }

@@ -253,6 +253,7 @@ public class ComponentHelper implements IHelper, ISharedDataSubscriber {
 			comboExtends.add(parent);
 		}		
 		comboExtends.select(0); //Select component by default
+		classToExtend = comboExtends.getItem(0);
 		comboExtends.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboExtends.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {

@@ -9,6 +9,7 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
@@ -95,6 +96,9 @@ public class DesigStudioExtTemplatesPage extends FieldEditorPreferencePage imple
 			textField = super.getTextControl();
 			if (textField == null) {
 	            textField = new Text(parent, SWT.MULTI | SWT.BORDER);
+	            Point currSize = textField.getSize();
+	            textField.setSize(currSize.x, 150);
+	            
 	            textField.setFont(parent.getFont());
 	            switch (validateStrategy) {
 	            case VALIDATE_ON_KEY_STROKE:

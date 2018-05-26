@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 
-import com.armin.sap.ds.ext.navigator.elements.IDesignStudioProjectElement;
+import com.armin.sap.ds.ext.navigator.elements.IProjectElement;
 
 public class LabelProvider implements ILabelProvider {
 
@@ -37,8 +37,8 @@ public class LabelProvider implements ILabelProvider {
 		System.out.println("LabelProvider.getImage: " + element.getClass().getName());
         Image image = null;
  
-        if (IDesignStudioProjectElement.class.isInstance(element)) {
-            image = ((IDesignStudioProjectElement)element).getImage();
+        if (IProjectElement.class.isInstance(element)) {
+            image = ((IProjectElement)element).getImage();
         }
         // else ignore the element
  
@@ -48,8 +48,8 @@ public class LabelProvider implements ILabelProvider {
 	@Override
 	public String getText(Object element) {
 		String text = "";
-        if (IDesignStudioProjectElement.class.isInstance(element)) {
-            text = ((IDesignStudioProjectElement)element).getText();
+        if (IProjectElement.class.isInstance(element)) {
+            text = ((IProjectElement)element).getText();
         }
  
         return text;

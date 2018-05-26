@@ -1,6 +1,9 @@
 package com.armin.sap.ds.support;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,6 +88,9 @@ public class ProjectFilesBuilder {
 				setupRequireJSNode();
 				//Insert "cssInclude" node and create a css file
 				setupCSSIncludeNode();
+				//Setup icon file in the project
+				setupIconFile();
+								
 			
 				//Marshal/Save XML to contribution.xml file with pretty format
 				JAXBContext context = JAXBContext.newInstance(Extension.class);
@@ -104,7 +110,7 @@ public class ProjectFilesBuilder {
 			Map<String, String> fieldMap = new HashMap<String, String>();
 			fieldMap.put("package", _extensionNode.getId());
 			fieldMap.put("class", _componentNode.getId());
-			fieldMap.put("superClass", _componentHelper.getClassToExtend());
+			fieldMap.put("parentclass", _componentHelper.getClassToExtend());
 			
 			StringSubstitutor parser = new StringSubstitutor(fieldMap);
 			String content = parser.replace(ztlTemplate);
@@ -118,6 +124,22 @@ public class ProjectFilesBuilder {
 		}
 	}
 
+	private void setupIconFile() {
+		String iconPath = _componentNode.getIcon();
+		if(iconPath != null && !iconPath.isEmpty()) {
+			File fsIconFile = new File(iconPath);
+			IFile iconFile = _project.getFile("res/images/" + fsIconFile.getName());
+			try {
+				iconFile.create(new FileInputStream(fsIconFile), true, null);
+				_componentNode.setIcon("res/images/" + fsIconFile.getName());
+			} catch (FileNotFoundException e) {				
+				e.printStackTrace();
+			} catch (CoreException e) {				
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	private void setupCSSIncludeNode() {
 		//Create cssInclude node		
 		String cssFilePath = "res/css/" + _componentNode.getId() + ".css";		

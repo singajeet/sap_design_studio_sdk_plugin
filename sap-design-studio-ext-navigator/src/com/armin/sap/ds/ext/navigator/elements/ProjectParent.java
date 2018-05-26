@@ -1,17 +1,18 @@
 package com.armin.sap.ds.ext.navigator.elements;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.graphics.Image;
 
 import com.armin.sap.ds.ext.navigator.Activator;
 
-public class DesignStudioProjectParent implements IDesignStudioProjectElement {
+public class ProjectParent implements IProjectElement {
 	
 	private IProject _project;
 	private Image _image;
-	private IDesignStudioProjectElement[] _children;
+	private IProjectElement[] _children;
 	 
-    public DesignStudioProjectParent(IProject iProject) {
+    public ProjectParent(IProject iProject) {
         _project = iProject;
     }
  
@@ -21,13 +22,13 @@ public class DesignStudioProjectParent implements IDesignStudioProjectElement {
     
     public Image getImage() {
         if (_image == null) {
-            _image = Activator.getImage("images/project_open.png"); //$NON-NLS-1$
+            _image = Activator.getImage("images/application-javascript.png"); //$NON-NLS-1$
         }
  
         return _image;
     }
     
-    public IDesignStudioProjectElement[] getChildren() {
+    public IProjectElement[] getChildren() {
         if (_children == null) {
             _children = initializeChildren(_project);
         }
@@ -36,36 +37,49 @@ public class DesignStudioProjectParent implements IDesignStudioProjectElement {
         return _children;
     }
     
-    private IDesignStudioProjectElement[] initializeChildren(IProject project) {
-    	IDesignStudioProjectElement[] children = {
-                new DesignStudioProjectRes(this),
-                new DesignStudioProjectMetaInf(this)
-        };
- 
-        return children;
+    private IProjectElement[] initializeChildren(IProject project) {
+    	try {
+    		IProjectElement[] children = new IProjectElement[project.members().length];
+    		
+//    		for(int i=0; i<children.length; i++) {
+//    			
+//    		}
+    		return children;
+    	}catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		return null;
+    	}
+        
     }
 
 	@Override
 	public String getText() {
 		// TODO Auto-generated method stub
-		return null;
+		try {
+			return _project.getDescription().getComment();
+		} catch (CoreException e) {			
+			e.printStackTrace();
+			return "No description found!";
+		}
 	}
 
 	@Override
 	public boolean hasChildren() {
 		// TODO Auto-generated method stub
-		return false;
+		return (_children.length > 0);
 	}
 
 	@Override
 	public IProject getProject() {
 		// TODO Auto-generated method stub
-		return null;
+		return _project;
 	}
 
 	@Override
 	public Object getParent() {
 		// TODO Auto-generated method stub
 		return null;
+		
 	}
 }

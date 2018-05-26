@@ -185,7 +185,7 @@ public class ExtensionControlFactory {
 				@Override
 				public void focusLost(FocusEvent e) {
 					String id = txtId.getText();
-					if(!id.matches("[a-zA-Z]+(\\.[a-zA-Z0-9])+")) {
+					if(!id.matches("^\\p{Alpha}+(\\p{Alnum}*)?((\\.\\p{Alnum})*)?")) {
 						MessageDialog.open(MessageDialog.ERROR, null, "Invalid ID", "Only Alphanumeric and .(dot) is allowed. First character should be alphabet only", SWT.SHEET);
 						txtId.setText("");
 						txtId.setFocus();
