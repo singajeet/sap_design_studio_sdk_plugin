@@ -3,7 +3,7 @@ package com.armin.sap.ds.ext.navigator.elements;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.graphics.Image;
 
-public class ImagesFolder implements IProjectElement {
+public class ImagesFolder extends GenericFolder {
 
 	public ImagesFolder() {
 		// TODO Auto-generated constructor stub
@@ -41,6 +41,18 @@ public class ImagesFolder implements IProjectElement {
 
 	@Override
 	public Object getParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ProjectElementType getType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getName() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -3,7 +3,7 @@ package com.armin.sap.ds.ext.navigator.elements;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.graphics.Image;
 
-public class ResourceFolder implements IProjectElement {
+public class ResourceFolder extends GenericFolder {
 
 	public ResourceFolder(IProjectElement parent) {}
 	
@@ -39,6 +39,18 @@ public class ResourceFolder implements IProjectElement {
 
 	@Override
 	public Object getParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ProjectElementType getType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getName() {
 		// TODO Auto-generated method stub
 		return null;
 	}

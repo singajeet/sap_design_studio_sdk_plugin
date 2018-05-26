@@ -15,4 +15,8 @@ public interface IProjectElement {
     public IProject getProject();
  
     public Object getParent();
+    
+    public ProjectElementType getType();
+    
+    public String getName();
 }

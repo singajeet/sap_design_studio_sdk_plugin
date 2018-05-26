@@ -41,9 +41,45 @@ public class ProjectParent implements IProjectElement {
     	try {
     		IProjectElement[] children = new IProjectElement[project.members().length];
     		
-//    		for(int i=0; i<children.length; i++) {
-//    			
-//    		}
+    		for(int i=0; i<children.length; i++) {
+    			switch (children[i].getType()) {
+					case GENERIC_FOLDER:
+						break;					
+					case IMAGES_FOLDER:
+						break;
+					case CSS_FOLDER:
+						break;
+					case JS_FOLDER:
+						break;
+					case META_INF_FOLDER:
+						break;
+					case RESOURCE_FOLDER:
+						break;
+					case ADVANCED_PROPERTY_SHEET_FILE:
+						break;
+					case BUILD_PROPERTIES_FILE:
+						break;
+					case CASCADE_STYLE_SHEET_FILE:
+						break;
+					case COMPONENT_FILE:
+						break;
+					case EXTENSION_FILE:
+						break;
+					case GENERIC_FILE:
+						break;
+					case JAVASCRIPT_FILE:
+						break;
+					case MANIFEST_FILE:
+						break;
+					case PLUGIN_FILE:
+						break;
+					case TARGET_FILE:
+						break;
+					default:
+						System.out.println("File with unknown type found: " + children[i].getText());
+						break;
+				}
+    		}
     		return children;
     	}catch(Exception e)
     	{
@@ -81,5 +117,17 @@ public class ProjectParent implements IProjectElement {
 		// TODO Auto-generated method stub
 		return null;
 		
+	}
+
+	@Override
+	public ProjectElementType getType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
