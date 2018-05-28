@@ -22,7 +22,9 @@ public class LabelProvider implements ILabelProvider {
 
 	@Override
 	public boolean isLabelProperty(Object element, String property) {
-		// TODO Auto-generated method stub
+		if (IProjectElement.class.isInstance(element)) {
+			return true;
+		}
 		return false;
 	}
 
@@ -34,7 +36,7 @@ public class LabelProvider implements ILabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
-		System.out.println("LabelProvider.getImage: " + element.getClass().getName());
+		//System.out.println("LabelProvider.getImage: " + element.getClass().getName());
         Image image = null;
  
         if (IProjectElement.class.isInstance(element)) {
@@ -49,7 +51,7 @@ public class LabelProvider implements ILabelProvider {
 	public String getText(Object element) {
 		String text = "";
         if (IProjectElement.class.isInstance(element)) {
-            text = ((IProjectElement)element).getText();
+            text = ((IProjectElement)element).getName();
         }
  
         return text;

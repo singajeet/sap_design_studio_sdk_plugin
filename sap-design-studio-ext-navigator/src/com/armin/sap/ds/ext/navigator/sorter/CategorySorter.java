@@ -23,21 +23,10 @@ public class CategorySorter extends ViewerComparator {
 	
 	@Override
     public int compare(Viewer viewer, Object e1, Object e2) {
-        String catName1 = ((IProjectElement)e1).getText();
-        String catName2 = ((IProjectElement)e2).getText();
-         
-        int result = -1;
-        if (catName1.equals(JavaScriptFile.NAME)) {
-            result = -1;
-        } else if (catName2.equals(AdvancedPropertySheetFile.NAME)) {
-            result = 1;
-        } else if (catName1.equals(CascadeStyleSheetFile.NAME)) {
-            result = -1;
-        } else if (catName1.equals(JavaScriptFile.NAME)) {
-            result = 1;
-        } // else result == -1
-         
-        return result;
+        String name1 = ((IProjectElement)e1).getName();
+        String name2 = ((IProjectElement)e2).getName();
+        
+        return String.CASE_INSENSITIVE_ORDER.compare(name1, name2);
     }
 
 }

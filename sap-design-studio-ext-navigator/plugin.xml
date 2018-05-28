@@ -4,6 +4,7 @@
    <extension
          point="org.eclipse.ui.views">
       <view
+      		allowMultiple="false"
             category="com.armin.sap.ds.ext.navigator.category"
             class="org.eclipse.ui.navigator.CommonNavigator"
             icon="images/application-javascript.png"
@@ -17,6 +18,7 @@
    </extension>
    <extension
          point="org.eclipse.ui.navigator.viewer">
+      <viewer viewerId="com.armin.sap.ds.ext.navigator.view" />
       <viewerActionBinding
             viewerId="com.armin.sap.ds.ext.navigator.view">
          <includes>
@@ -28,19 +30,39 @@
       <viewerContentBinding
             viewerId="com.armin.sap.ds.ext.navigator.view">
          <includes>
+            <!--<contentExtension
+                  pattern="org.eclipse.ui.navigator.resourceContent">
+            </contentExtension> -->
+            <contentExtension 
+            		pattern="com.armin.sap.ds.ext.navigator.dsContent" />
+            <!--<contentExtension
+            		pattern="org.eclipse.ui.navigator.resources.filters.*" />
             <contentExtension
-                  pattern="com.armin.sap.ds.ext.navigator.content">
-            </contentExtension>
+            		pattern="com.armin.sap.ds.ext.navigator.filters.*" /> -->
          </includes>
       </viewerContentBinding>
    </extension>
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
+         <!--<commonFilter
+         		id="com.armin.sap.ds.ext.navigator.filters.hidenondsprojects"
+         		name="Hide Non Sap DS projects">
+         				<filterExpression>
+         						<not>
+         								<adapt type="org.eclipse.core.resources.IProject">
+         										<test property="org.eclipse.core.resources.projectNature"
+         												value="com.armin.sap.ds.sdk.project.nature" />
+         								</adapt>
+         						</not>
+         				</filterExpression>
+         		</commonFilter> -->
       <navigatorContent
+      		activeByDefault="true"
             contentProvider="com.armin.sap.ds.ext.navigator.provider.ContentProvider"
             icon="images/nav.png"
-            id="com.armin.sap.ds.ext.navigator.content"
+            id="com.armin.sap.ds.ext.navigator.dsContent"
             labelProvider="com.armin.sap.ds.ext.navigator.provider.LabelProvider"
+            priority="normal"
             name="%navigatorContent.name">
          <triggerPoints>
             <instanceof
@@ -53,7 +75,7 @@
             <parentExpression>
                <or>
                   <instanceof
-                        value="com.armin.sap.ds.ext.navigator.elements.ResourceFolder">
+                        value="com.armin.sap.ds.ext.navigator.elements.ProjectElement">
                   </instanceof>
                </or>
             </parentExpression>

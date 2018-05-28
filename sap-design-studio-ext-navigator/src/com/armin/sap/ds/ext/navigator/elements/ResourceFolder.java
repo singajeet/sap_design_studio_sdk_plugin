@@ -1,58 +1,75 @@
 package com.armin.sap.ds.ext.navigator.elements;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.graphics.Image;
+
+import com.armin.sap.ds.ext.navigator.Activator;
 
 public class ResourceFolder extends GenericFolder {
 
-	public ResourceFolder(IProjectElement parent) {}
+	IProjectElement[] _children;
+	
+	public ResourceFolder(IProjectElement parent) {
+		
+	}
+	
+	public ResourceFolder(IResource resource, IProjectElement parent) {
+		super(resource, parent);
+		initChildren();
+	}
+	
+	
+	/************************** Required to be overridden ********************************/
+	
+	@Override
+	public String getName() {
+		return super.getName();
+	}
 	
 	@Override
 	public Image getImage() {
-		// TODO Auto-generated method stub
-		return null;
+		return Activator.getImage("images/application-javascript.png");
 	}
-
+	
 	@Override
-	public Object[] getChildren() {
-		// TODO Auto-generated method stub
-		return null;
+	public Object[] getElements(Object input) {
+		return getChildren(input);
 	}
-
+	
 	@Override
-	public String getText() {
-		// TODO Auto-generated method stub
-		return null;
+	public Object[] getChildren(Object parent) {
+		return _children;
 	}
-
+	
 	@Override
-	public boolean hasChildren() {
-		// TODO Auto-generated method stub
-		return false;
+	public Object getParent(Object element) {
+		return super.getParent(element);
 	}
-
+	
 	@Override
-	public IProject getProject() {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean hasChildren(Object parent) {				
+		return (_children.length > 0);
 	}
+	
+	/************************************************************************************/
 
-	@Override
-	public Object getParent() {
-		// TODO Auto-generated method stub
-		return null;
+	private void initChildren() {
+		try {
+			IResource[] members = super.getElementAsResource().getProject().members();
+			for(int i=0; i<members.length; i++) {
+				if(members[i].getProjectRelativePath().segmentCount() > 0) {
+					if(members[i].getProjectRelativePath().segment(0).toUpperCase().equals("RES")) {
+						
+					}
+				}
+			}
+		}catch(Exception e) {
+			
+		}
 	}
-
+	
 	@Override
 	public ProjectElementType getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return ProjectElementType.RESOURCE_FOLDER;
 	}
-
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

@@ -1,25 +1,29 @@
 package com.armin.sap.ds.ext.navigator.provider;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.armin.sap.ds.ext.navigator.elements.ProjectParent;
 import com.armin.sap.ds.ext.navigator.elements.IProjectElement;
+import com.armin.sap.ds.ext.navigator.elements.ProjectParent;
 import com.armin.sap.ds.sdk.project.natures.ProjectNature;
 
 public class ContentProvider implements ITreeContentProvider, IResourceChangeListener {
 
 	private static final Object[] NO_CHILDREN = {};
     Viewer _viewer;
+    private Map<String, Object> _wrapperCache = new HashMap<String, Object>();
     
     public ContentProvider() {
     	ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
@@ -35,9 +39,9 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 		Object[] children = null;
         if (IWorkspaceRoot.class.isInstance(parentElement)) {
             IProject[] projects = ((IWorkspaceRoot)parentElement).getProjects();
-            children = createDesignStudioParents(projects);
+            children = createDesignStudioProjects(projects);
         } else if(IProjectElement.class.isInstance(parentElement)) {
-        	children = ((IProjectElement)parentElement).getChildren();
+        	children = ((IProjectElement)parentElement).getChildren(parentElement);
         } 
         else {
             children = NO_CHILDREN;
@@ -46,19 +50,24 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
         return children;
 	}
 
-	private Object[] createDesignStudioParents(IProject[] projects) {
+	private Object[] createDesignStudioProjects(IProject[] projects) {
 		Object[] result = null;
 		
 		List<Object> list = new ArrayList<Object>();
 		for(int i=0; i < projects.length; i++) {
 			try {
-					if(projects[i].hasNature(ProjectNature.NATURE_ID)){
-						Object designStudioProjectParent = createCustomProjectParent(projects[i]);
+					//if(projects[i].hasNature(ProjectNature.NATURE_ID)){
+						Object designStudioProjectParent = _wrapperCache.get(projects[i].getName());
+						if(designStudioProjectParent == null) {
+							designStudioProjectParent = createProjectParent(projects[i]);							
+						}
+								
 						if(designStudioProjectParent != null) {
+							_wrapperCache.put(projects[i].getName(), designStudioProjectParent);
 							list.add(designStudioProjectParent);
 						}
-					}
-				} catch (CoreException e) {
+					//}
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -70,11 +79,11 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 		return result;
 	}
 
-	private Object createCustomProjectParent(IProject iProject) {
+	private Object createProjectParent(IProject project) {
 		Object result = null;
 		try {
-			if(iProject.getNature(ProjectNature.NATURE_ID) != null) {
-				result = new ProjectParent(iProject);
+			if(project.getNature(ProjectNature.NATURE_ID) != null) {
+				result = new ProjectParent(project);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -89,7 +98,7 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 			parent = ((IProject)element).getWorkspace().getRoot();
 		}
 		else if(IProjectElement.class.isInstance(element)) {
-			parent = ((IProjectElement)element).getParent();
+			parent = ((IProjectElement)element).getParent(element);
 		}
 		
 		return parent;
@@ -102,61 +111,32 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 		if (IWorkspaceRoot.class.isInstance(element)) {
             hasChildren = ((IWorkspaceRoot)element).getProjects().length > 0;
         } else if (IProjectElement.class.isInstance(element)) {
-            hasChildren = ((IProjectElement)element).hasChildren();
+            hasChildren = ((IProjectElement)element).hasChildren(element);
         }
         // else it is not one of these so return false
          
         return hasChildren;
 	}
-	
-//	private ProjectParent[] initializeParent(Object parentElement) {
-//        IProject [] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-//        
-//        List<ProjectParent> list = new Vector<ProjectParent>();
-//        for (int i = 0; i < projects.length; i++) {
-//        	try {
-//        		if(projects[i].getNature(ProjectNature.NATURE_ID) != null) {
-//        			list.add(new ProjectParent(projects[i]));
-//        		}
-//        	}catch(Exception e) {}
-//            
-//        }        
-//        
-//        ProjectParent[] result = new ProjectParent[list.size()];
-//        list.toArray(result); 
-//        return result;
-//    }
-	
+
 	@Override
     public void dispose() {
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
-        System.out.println("ContentProvider.dispose"); //$NON-NLS-1$
+        //System.out.println("ContentProvider.dispose"); //$NON-NLS-1$
         // TODO Auto-generated method stub
  
     }
 	
 	@Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-//        if(oldInput != null && newInput != null) {
-//        		System.out
-//                		.println("ContentProvider.inputChanged: old: " + oldInput.getClass().getName() + " new: " + newInput.getClass().getName()); //$NON-NLS-1$ //$NON-NLS-2$
-//        } else if(oldInput != null) {
-//        	System.out
-//    		.println("ContentProvider.inputChanged: old: " + oldInput.getClass().getName());
-//        } else if(newInput != null) {
-//        	System.out
-//    		.println("ContentProvider.inputChanged: new: " + newInput.getClass().getName());
-//        }else {
-//        	System.out.println("No old or new input is passed!");
-//        }
-		_viewer = viewer;
- 
+		_viewer = viewer; 
     }
 
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
-		_viewer.refresh();
-		
+		TreeViewer viewer = (TreeViewer)_viewer;
+		TreePath[] treePaths = viewer.getExpandedTreePaths();
+		viewer.refresh();
+		viewer.setExpandedTreePaths(treePaths);		
 	}
 
 }
