@@ -1,10 +1,13 @@
 package com.armin.sap.ds.ext.navigator.elements;
 
+import java.util.ArrayList;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.swt.graphics.Image;
 
+import com.armin.sap.ds.ext.logs.Logger;
 import com.armin.sap.ds.ext.navigator.Activator;
 
 public class ProjectParent extends ProjectElement {
@@ -75,30 +78,37 @@ public class ProjectParent extends ProjectElement {
 	
 	protected IProjectElement[] initializeChildren(IResource[] members) {
     	try {
-    		IProjectElement[] children = new IProjectElement[members.length];
-    		
-    		for(int i=0;i<members.length;i++) {
-    			System.out.println("Name: " + members[i].getName() + ", Type: " + members[i].getType());
+    		Logger.debug("ProjectParent => CREATE CHILDREN");
+    		ArrayList<IProjectElement> children = new ArrayList<IProjectElement>();
+    		for(int i=0;i<members.length;i++) {    			
     			switch(members[i].getType()) {
     				case IResource.FILE:
-    					children[i] = createFileResource(members[i]);
+    					IProjectElement elefile = createFileResource(members[i]);
+    					if(elefile != null) {
+    						children.add(elefile);
+    					}
     					break;
     				case IResource.FOLDER:
-    					children[i] = createFolderResource(members[i]);
+    					IProjectElement elefolder = createFolderResource(members[i]);
+    					if(elefolder != null) {
+    						children.add(elefolder);
+    					}
     					break;
-    				case IResource.PROJECT:
-    					System.out.println("Current member is a project and will be skipped: " + members[i].getName());
-    					break;
-    				case IResource.ROOT:
-    					System.out.println("Current member is a workspace root and will be skipped: " + members[i].getName());
-    					break;
-    				default:
-    					System.out.println("Unknown resource type found: " + members[i].getName() + " - " + members[i].getType());
-    					break;
+//    				case IResource.PROJECT:
+//    					Logger.debug("Current member is a project and will be skipped: " + members[i].getName());
+//    					break;
+//    				case IResource.ROOT:
+//    					Logger.debug("Current member is a workspace root and will be skipped: " + members[i].getName());
+//    					break;
+//    				default:
+//    					Logger.debug("Unknown resource type found: " + members[i].getName() + " - " + members[i].getType());
+//    					break;
     			}
     		}
-    		
-    		return children;
+    		Logger.debug("ProjectParent => DONE!");
+    		IProjectElement[] childrenArray = new IProjectElement[children.size()];
+    		children.toArray(childrenArray);
+    		return childrenArray;
     	}catch(Exception e)
     	{
     		e.printStackTrace();
@@ -110,64 +120,64 @@ public class ProjectParent extends ProjectElement {
 	private IProjectElement createFolderResource(IResource resource) {
 		
 		IProjectElement element = null;
+		System.out.print("ProjectParent => CreateFolder: " + resource.getName().toUpperCase());
 		switch(resource.getName().toUpperCase()) {
 			case "RES":
 				element = new ResourceFolder(resource, this);
+				Logger.debug("...created!");
 				break;
 			case "META-INF":
-				element = new MetaInfFolder(resource);
-				break;
-			case "JS":
-				element = new JSFolder(resource);
-				break;
-			case "CSS":
-				element = new CSSFolder(resource);
-				break;
-			case "IMAGES":
-				element = new ImagesFolder(resource);
-				break;
+				Logger.debug("...created!");
+				element = new MetaInfFolder(resource, this);
+				break;			
 			default:
-				element = new GenericFolder(resource, this);
-				break;
+				Logger.debug("...skipped!");
 		}
 		return element;
 	}
 
 	private IProjectElement createFileResource(IResource resource) {
 		IProjectElement element = null;
-		
+		System.out.print("ProjectParent => CreateFile: " + resource.getFileExtension().toUpperCase());
 		switch(resource.getFileExtension().toUpperCase()) {
 			case "XML":
 				if(resource.getName().toUpperCase().startsWith("PLUGIN")) {
-					element = new PluginFile(resource);
+					Logger.debug("...created!");
+					element = new PluginFile(resource, this);
 				} else
 				if(resource.getName().toUpperCase().startsWith("CONTRIBUTION")) {
-					element = new ExtensionFile(resource);
+					Logger.debug("...created!");
+					element = new ExtensionFile(resource, this);
 				} else {
-					element = new GenericFile(resource);
+					Logger.debug("...skipped!");
 				}
 				break;
 			case "PROPERTIES":
-				element = new BuildPropertiesFile(resource);
+				Logger.debug("...created!");
+				element = new BuildPropertiesFile(resource, this);
 				break;
 			case "ZTL":
-				element = new ComponentFile(resource);
+				Logger.debug("...created!");
+				element = new ComponentFile(resource, this);
 				break;
-			case "MF":
-				element = new ManifestFile(resource);
-				break;
-			case "HTML":
-				element = new HTMLFile(resource);
-				break;
-			case "JS":				
-				element = new JavaScriptFile(resource);
-				break;
-			case "CSS":
-				element = new CascadeStyleSheetFile(resource);
-				break;
+//			case "MF":
+//				element = new ManifestFile(resource, this);
+//				break;
+//			case "HTML":
+//				element = new HTMLFile(resource, this);
+//				break;
+//			case "JS":				
+//				element = new JavaScriptFile(resource, this);
+//				break;
+//			case "CSS":
+//				element = new CascadeStyleSheetFile(resource, this);
+//				break;
 			case "TARGET":
-				element = new TargetFile(resource);
+				Logger.debug("...created!");
+				element = new TargetFile(resource, this);
 				break;
+			default:
+				Logger.debug("...skipped!");
 		}
 		
 		return element;

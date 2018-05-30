@@ -8,8 +8,8 @@ public class BuildPropertiesFile extends GenericFile {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public BuildPropertiesFile(IResource resource) {
-		super(resource);
+	public BuildPropertiesFile(IResource resource, IProjectElement parent) {
+		super(resource, parent);
 	}
 
 	@Override

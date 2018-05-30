@@ -8,8 +8,8 @@ public class ManifestFile extends GenericFile {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public ManifestFile(IResource resource) {
-		super(resource);
+	public ManifestFile(IResource resource, IProjectElement parent) {
+		super(resource, parent);
 	}
 
 	@Override

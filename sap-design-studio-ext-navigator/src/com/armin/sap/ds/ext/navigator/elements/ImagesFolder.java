@@ -8,8 +8,8 @@ public class ImagesFolder extends GenericFolder {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public ImagesFolder(IResource resource) {
-		super(resource);
+	public ImagesFolder(IResource resource, IProjectElement parent) {
+		super(resource, parent);
 	}
 
 	@Override

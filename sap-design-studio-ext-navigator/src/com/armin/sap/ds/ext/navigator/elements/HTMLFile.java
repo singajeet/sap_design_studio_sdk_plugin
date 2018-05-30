@@ -8,7 +8,7 @@ public class HTMLFile extends GenericFile {
 		// TODO Auto-generated constructor stub
 	}
 
-	public HTMLFile(IResource resource) {
-		super(resource);
+	public HTMLFile(IResource resource, IProjectElement parent) {
+		super(resource, parent);
 	}
 }

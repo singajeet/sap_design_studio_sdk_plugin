@@ -37,7 +37,7 @@ public class ProjectElement implements IProjectElement {
     
     @Override
     public Image getImage() {
-        return Activator.getImage("images/sap_text.png");
+        return Activator.getImage("images/file.png");
     }
     
     @Override
@@ -129,7 +129,7 @@ public class ProjectElement implements IProjectElement {
 					case PROJECT_PARENT:
 						break;
 					default:
-						System.out.println("File with unknown type found: " + children[i].getContent());
+						Logger.debug("File with unknown type found: " + children[i].getContent());
 						break;
 				}
     		}

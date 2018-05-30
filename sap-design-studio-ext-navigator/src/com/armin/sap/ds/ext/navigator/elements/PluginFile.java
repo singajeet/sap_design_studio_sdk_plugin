@@ -8,8 +8,8 @@ public class PluginFile extends GenericFile {
 		// TODO Auto-generated constructor stub
 	}
 
-	public PluginFile(IResource resource) {
-		super(resource);
+	public PluginFile(IResource resource, IProjectElement parent) {
+		super(resource, parent);
 	}
 	
 	@Override

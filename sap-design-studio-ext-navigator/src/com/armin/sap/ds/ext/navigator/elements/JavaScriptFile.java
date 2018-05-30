@@ -4,8 +4,8 @@ import org.eclipse.core.resources.IResource;
 
 public class JavaScriptFile extends GenericFile {
 	
-	public JavaScriptFile(IResource resource) {
-		super(resource);
+	public JavaScriptFile(IResource resource, IProjectElement parent) {
+		super(resource, parent);
 	}
 	
 	@Override

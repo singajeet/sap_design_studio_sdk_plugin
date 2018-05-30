@@ -26,6 +26,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(Settings.FOR.JS_TEMPLATE, Settings.FOR.DEFAULT_JS_TEMPLATE);
 		store.setDefault(Settings.FOR.CSS_TEMPLATE, Settings.FOR.DEFAULT_CSS_TEMPLATE);
 		store.setDefault(Settings.FOR.ZTL_TEMPLATE, Settings.FOR.DEFAULT_ZTL_TEMPLATE);
+		store.setDefault(Settings.FOR.MF_TEMPLATE, Settings.FOR.DEFAULT_MF_TEMPLATE);
 	}
 
 }

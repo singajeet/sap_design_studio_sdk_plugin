@@ -105,6 +105,7 @@ public class ProjectFilesBuilder {
 			}
 		}
 	
+		//setup contribute.ztl file
 		if(!_componentFile.exists()) {
 			String ztlTemplate = Settings.store().get(Settings.FOR.ZTL_TEMPLATE);
 			Map<String, String> fieldMap = new HashMap<String, String>();
@@ -118,9 +119,24 @@ public class ProjectFilesBuilder {
 			try {
 				_componentFile.create(new ByteArrayInputStream(content.getBytes()), true, null);
 			} catch (CoreException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		
+		//prepare manifest file under meta-inf folder
+		IFile manifest = _project.getFile("META-INF/manifest.mf");
+		String mfTemplate = Settings.store().get(Settings.FOR.MF_TEMPLATE);
+		Map<String, String> fieldMap = new HashMap<String, String>();
+		fieldMap.put("ext_title", _extensionNode.getTitle());
+		fieldMap.put("ext_id",  _extensionNode.getId());
+		fieldMap.put("version", _extensionNode.getVersion());
+		fieldMap.put("vendor",  _extensionNode.getVendor());
+		StringSubstitutor parser = new StringSubstitutor(fieldMap);
+		String content = parser.replace(mfTemplate);
+		try {
+			manifest.create(new ByteArrayInputStream(content.getBytes()), true,	null);
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 

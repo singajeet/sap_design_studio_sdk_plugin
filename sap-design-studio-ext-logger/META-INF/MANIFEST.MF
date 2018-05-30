@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Sap-design-studio-ext-logger
+Bundle-SymbolicName: sap-design-studio-ext-logger
+Bundle-Version: 1.0.0.qualifier
+Automatic-Module-Name: sap-design-studio-ext-logger
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: com.armin.sap.ds.ext.logs

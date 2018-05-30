@@ -67,6 +67,16 @@ public class Settings {
 		public static final String ZTL_TEMPLATE = "ztlTemplate";
 		
 		public static final String DEFAULT_ZTL_TEMPLATE = "class ${package}.${class} extends ${parentclass} {* \n /** Add Code Below **/ \n *}";
+		
+		public static final String MF_TEMPLATE = "mfTemplate";
+		
+		public static final String DEFAULT_MF_TEMPLATE = "Manifest-Version: 1.0\n" + 
+															"Bundle-ManifestVersion: 2\n" + 
+															"Bundle-Name: ${ext_title}\n" + 
+															"Bundle-SymbolicName: ${ext_id};singleton:=true\n" + 
+															"Bundle-Version: ${version}\n" + 
+															"Require-Bundle: com.sap.ip.bi.zen.rt.components.sdk\n" + 
+															"Bundle-Vendor: ${vendor}";
 	}
 
 }

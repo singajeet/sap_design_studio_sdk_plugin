@@ -4,8 +4,8 @@ import org.eclipse.core.resources.IResource;
 
 public class AdvancedPropertySheetFile extends GenericFile {
 	
-	public AdvancedPropertySheetFile(IResource resource) {
-		super(resource);
+	public AdvancedPropertySheetFile(IResource resource, IProjectElement parent) {
+		super(resource, parent);
 	}
 	
 	@Override

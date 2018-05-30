@@ -121,7 +121,7 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 	@Override
     public void dispose() {
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
-        //System.out.println("ContentProvider.dispose"); //$NON-NLS-1$
+        //Logger.debug("ContentProvider.dispose"); //$NON-NLS-1$
         // TODO Auto-generated method stub
  
     }

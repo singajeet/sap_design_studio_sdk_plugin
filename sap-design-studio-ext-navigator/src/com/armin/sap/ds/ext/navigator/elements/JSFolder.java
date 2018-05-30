@@ -8,8 +8,8 @@ public class JSFolder extends GenericFolder {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public JSFolder(IResource resource) {
-		super(resource);
+	public JSFolder(IResource resource, IProjectElement parent) {
+		super(resource, parent);
 	}
 
 	@Override

@@ -4,8 +4,8 @@ import org.eclipse.core.resources.IResource;
 
 public class CascadeStyleSheetFile extends GenericFile {
 	
-	public CascadeStyleSheetFile(IResource resource) {
-		super(resource);
+	public CascadeStyleSheetFile(IResource resource, IProjectElement parent) {
+		super(resource, parent);
 	}
 	
 	@Override

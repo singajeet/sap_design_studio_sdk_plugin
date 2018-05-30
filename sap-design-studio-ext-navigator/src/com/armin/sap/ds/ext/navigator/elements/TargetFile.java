@@ -8,8 +8,8 @@ public class TargetFile extends GenericFile {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public TargetFile(IResource resource) {
-		super(resource);
+	public TargetFile(IResource resource, IProjectElement parent) {
+		super(resource, parent);
 	}
 
 	@Override

@@ -18,7 +18,9 @@
    </extension>
    <extension
          point="org.eclipse.ui.navigator.viewer">
-      <viewer viewerId="com.armin.sap.ds.ext.navigator.view" />
+      <viewer
+            popupMenuId="com.armin.sap.ds.ext.navigator.view#PopupMenu"
+            viewerId="com.armin.sap.ds.ext.navigator.view"/>
       <viewerActionBinding
             viewerId="com.armin.sap.ds.ext.navigator.view">
          <includes>
@@ -30,32 +32,13 @@
       <viewerContentBinding
             viewerId="com.armin.sap.ds.ext.navigator.view">
          <includes>
-            <!--<contentExtension
-                  pattern="org.eclipse.ui.navigator.resourceContent">
-            </contentExtension> -->
             <contentExtension 
-            		pattern="com.armin.sap.ds.ext.navigator.dsContent" />
-            <!--<contentExtension
-            		pattern="org.eclipse.ui.navigator.resources.filters.*" />
-            <contentExtension
-            		pattern="com.armin.sap.ds.ext.navigator.filters.*" /> -->
+            		pattern="com.armin.sap.ds.ext.navigator.dsContent" />           
          </includes>
       </viewerContentBinding>
    </extension>
    <extension
-         point="org.eclipse.ui.navigator.navigatorContent">
-         <!--<commonFilter
-         		id="com.armin.sap.ds.ext.navigator.filters.hidenondsprojects"
-         		name="Hide Non Sap DS projects">
-         				<filterExpression>
-         						<not>
-         								<adapt type="org.eclipse.core.resources.IProject">
-         										<test property="org.eclipse.core.resources.projectNature"
-         												value="com.armin.sap.ds.sdk.project.nature" />
-         								</adapt>
-         						</not>
-         				</filterExpression>
-         		</commonFilter> -->
+         point="org.eclipse.ui.navigator.navigatorContent">         
       <navigatorContent
       		activeByDefault="true"
             contentProvider="com.armin.sap.ds.ext.navigator.provider.ContentProvider"
@@ -65,10 +48,19 @@
             priority="normal"
             name="%navigatorContent.name">
          <triggerPoints>
-            <instanceof
-                  value="org.eclipse.core.resources.IWorkspaceRoot">
-            </instanceof>
+         	<!--<or>-->
+           		<!--<instanceof
+                 	 value="org.eclipse.core.resources.IWorkspaceRoot" /> -->
+            	<instanceof
+            		 value="org.eclipse.core.resources.IResource" />
+            	<!--<instanceof
+            			value="com.armin.sap.ds.ext.navigator.elements.ProjectElement" />-->
+            <!--</or>-->
          </triggerPoints>
+         <possibleChildren>
+            <instanceof
+                  value="com.armin.sap.ds.ext.navigator.elements.ProjectElement">
+            </instanceof></possibleChildren>
          <commonSorter
                class="com.armin.sap.ds.ext.navigator.sorter.CategorySorter"
                id="com.armin.sap.ds.ext.navigator.sorter.categorysorter">
@@ -79,7 +71,7 @@
                   </instanceof>
                </or>
             </parentExpression>
-         </commonSorter>
+         </commonSorter>         
       </navigatorContent>
    </extension>
 
