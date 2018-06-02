@@ -77,6 +77,20 @@ public class Settings {
 															"Bundle-Version: ${version}\n" + 
 															"Require-Bundle: com.sap.ip.bi.zen.rt.components.sdk\n" + 
 															"Bundle-Vendor: ${vendor}";
+		
+		public static final String ICON_SIZE = "iconSize";
+		
+		public static final int ICON_SIZE_16x16 = 16;
+		public static final int ICON_SIZE_18x18 = 18;
+		public static final int ICON_SIZE_24x24 = 24;
+		public static final int ICON_SIZE_28x28 = 28;
+		public static final int ICON_SIZE_32x32 = 32;
+		
+		public static final int DEFAULT_ICON_SIZE = ICON_SIZE_24x24;
+		
+		public static final String DESIGN_STUDIO_PATH = "designStudioPath";
+		
+		public static final String DEFAULT_DESIGN_STUDIO_PATH = "";
 	}
 
 }

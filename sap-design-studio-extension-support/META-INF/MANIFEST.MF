@@ -20,11 +20,13 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.13.0",
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.armin.sap.ds.ext.plugin,
+ com.armin.sap.ds.ext.plugin.preferences,
  com.armin.sap.ds.sdk.project.natures,
  com.armin.sap.ds.sdk.project.perspective,
  com.armin.sap.ds.support,
  com.armin.sap.ds.wizard,
- com.armin.sap.ds.wizard.pages
+ com.armin.sap.ds.wizard.pages,
+ com.armin.sap.ds.xml
 Automatic-Module-Name: com.armin.sap.ds.ext.plugin
 Bundle-ClassPath: images/,
  .,

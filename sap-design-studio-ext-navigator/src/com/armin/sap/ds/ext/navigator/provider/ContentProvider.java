@@ -15,8 +15,8 @@ import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.armin.sap.ds.ext.navigator.elements.IProjectElement;
-import com.armin.sap.ds.ext.navigator.elements.ProjectParent;
+import com.armin.sap.ds.ext.navigator.elements.IProjectItemNode;
+import com.armin.sap.ds.ext.navigator.elements.ProjectNode;
 import com.armin.sap.ds.sdk.project.natures.ProjectNature;
 
 public class ContentProvider implements ITreeContentProvider, IResourceChangeListener {
@@ -40,8 +40,8 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
         if (IWorkspaceRoot.class.isInstance(parentElement)) {
             IProject[] projects = ((IWorkspaceRoot)parentElement).getProjects();
             children = createDesignStudioProjects(projects);
-        } else if(IProjectElement.class.isInstance(parentElement)) {
-        	children = ((IProjectElement)parentElement).getChildren(parentElement);
+        } else if(IProjectItemNode.class.isInstance(parentElement)) {
+        	children = ((IProjectItemNode)parentElement).getChildren(parentElement);
         } 
         else {
             children = NO_CHILDREN;
@@ -83,7 +83,7 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 		Object result = null;
 		try {
 			if(project.getNature(ProjectNature.NATURE_ID) != null) {
-				result = new ProjectParent(project);
+				result = new ProjectNode(project);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -97,8 +97,8 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 		if(IProject.class.isInstance(element)) {
 			parent = ((IProject)element).getWorkspace().getRoot();
 		}
-		else if(IProjectElement.class.isInstance(element)) {
-			parent = ((IProjectElement)element).getParent(element);
+		else if(IProjectItemNode.class.isInstance(element)) {
+			parent = ((IProjectItemNode)element).getParent(element);
 		}
 		
 		return parent;
@@ -110,8 +110,8 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 		
 		if (IWorkspaceRoot.class.isInstance(element)) {
             hasChildren = ((IWorkspaceRoot)element).getProjects().length > 0;
-        } else if (IProjectElement.class.isInstance(element)) {
-            hasChildren = ((IProjectElement)element).hasChildren(element);
+        } else if (IProjectItemNode.class.isInstance(element)) {
+            hasChildren = ((IProjectItemNode)element).hasChildren(element);
         }
         // else it is not one of these so return false
          

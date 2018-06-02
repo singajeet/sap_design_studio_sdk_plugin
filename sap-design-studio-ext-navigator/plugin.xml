@@ -7,7 +7,7 @@
       		allowMultiple="false"
             category="com.armin.sap.ds.ext.navigator.category"
             class="org.eclipse.ui.navigator.CommonNavigator"
-            icon="images/application-javascript.png"
+            icon="images/sap_18.png"
             id="com.armin.sap.ds.ext.navigator.view"
             name="%view.name">
       </view>
@@ -42,24 +42,18 @@
       <navigatorContent
       		activeByDefault="true"
             contentProvider="com.armin.sap.ds.ext.navigator.provider.ContentProvider"
-            icon="images/nav.png"
+            icon="images/sap_18.png"
             id="com.armin.sap.ds.ext.navigator.dsContent"
             labelProvider="com.armin.sap.ds.ext.navigator.provider.LabelProvider"
             priority="normal"
             name="%navigatorContent.name">
-         <triggerPoints>
-         	<!--<or>-->
-           		<!--<instanceof
-                 	 value="org.eclipse.core.resources.IWorkspaceRoot" /> -->
+         <triggerPoints>         	
             	<instanceof
-            		 value="org.eclipse.core.resources.IResource" />
-            	<!--<instanceof
-            			value="com.armin.sap.ds.ext.navigator.elements.ProjectElement" />-->
-            <!--</or>-->
+            		 value="org.eclipse.core.resources.IResource" />            	
          </triggerPoints>
          <possibleChildren>
             <instanceof
-                  value="com.armin.sap.ds.ext.navigator.elements.ProjectElement">
+                  value="com.armin.sap.ds.ext.navigator.elements.ProjectItemNode">
             </instanceof></possibleChildren>
          <commonSorter
                class="com.armin.sap.ds.ext.navigator.sorter.CategorySorter"
@@ -67,12 +61,29 @@
             <parentExpression>
                <or>
                   <instanceof
-                        value="com.armin.sap.ds.ext.navigator.elements.ProjectElement">
+                        value="com.armin.sap.ds.ext.navigator.elements.ProjectItemNode">
                   </instanceof>
                </or>
             </parentExpression>
          </commonSorter>         
       </navigatorContent>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            class="com.armin.sap.ds.ext.decorators.DesignStudioLabelDecorator"
+            id="sap-design-studio-ext-navigator.decorator"
+            label="com.armin.sap.ds.ext.decorators.label"
+            lightweight="false"
+            location="BOTTOM_RIGHT"
+            objectClass="org.eclipse.core.resources.IResource"
+            state="false">
+         <enablement>
+            <objectClass
+                  name="com.armin.sap.ds.ext.navigator.elements.IProjectItemNode">
+            </objectClass>
+         </enablement>
+      </decorator>
+   </extension>
 </plugin>
