@@ -16,3 +16,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.armin.sap.ds.ext.navigator,
  com.armin.sap.ds.ext.navigator.provider,
  com.armin.sap.ds.ext.navigator.sorter
+Import-Package: org.eclipse.ui.actions

@@ -32,7 +32,7 @@ public interface ProjectConstants {
 	String HANDLER_TYPE = "handlerType";
 	String ICON = "icon";
 	String RES_IMAGES = "res/images/";
-	String RES_IMAGES_COMPONENT_PNG = "res/images/component.png";
+	String RES_IMAGES_COMPONENT_PNG = "res/images/component_28x28.png";
 	String TOOLTIP = "tooltip";
 	String TITLE = "title";
 	String CLASS_NAME = "className";

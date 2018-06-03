@@ -18,5 +18,6 @@ public enum ProjectItemType {
 	PLUGIN_FILE,
 	TARGET_FILE,
 	PROJECT_PARENT,
+	GROUP_NODE,
 	UNKNOWN
 }

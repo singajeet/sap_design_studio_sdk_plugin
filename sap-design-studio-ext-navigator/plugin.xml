@@ -4,11 +4,12 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-      		allowMultiple="false"
+            allowMultiple="false"
             category="com.armin.sap.ds.ext.navigator.category"
             class="org.eclipse.ui.navigator.CommonNavigator"
             icon="images/sap_18.png"
             id="com.armin.sap.ds.ext.navigator.view"
+            inject="true"
             name="%view.name">
       </view>
       <category
@@ -19,16 +20,16 @@
    <extension
          point="org.eclipse.ui.navigator.viewer">
       <viewer
-            popupMenuId="com.armin.sap.ds.ext.navigator.view#PopupMenu"
-            viewerId="com.armin.sap.ds.ext.navigator.view"/>
-      <viewerActionBinding
             viewerId="com.armin.sap.ds.ext.navigator.view">
-         <includes>
-            <actionExtension
-                  pattern="org.eclipse.ui.navigator.resources.*">
-            </actionExtension>
-         </includes>
-      </viewerActionBinding>
+         <popupMenu
+               id="com.armin.sap.ds.ext.navigator.view#PopupMenu">
+            <insertionPoint
+                  name="group.new">
+            </insertionPoint>
+            <insertionPoint
+                  name="group.build">
+            </insertionPoint></popupMenu>
+      </viewer>      
       <viewerContentBinding
             viewerId="com.armin.sap.ds.ext.navigator.view">
          <includes>
@@ -36,6 +37,17 @@
             		pattern="com.armin.sap.ds.ext.navigator.dsContent" />           
          </includes>
       </viewerContentBinding>
+      <viewerActionBinding
+            viewerId="com.armin.sap.ds.ext.navigator.view">
+         <includes>
+            <actionExtension
+                  pattern="com.armin.sap.ds.ext.popup.actionproviders.DesignStudioNewAction">
+            </actionExtension>
+            <actionExtension
+                  pattern="com.armin.sap.ds.ext.popup.actionproviders.DesignStudioRefreshAction">
+            </actionExtension>
+         </includes>
+      </viewerActionBinding>
    </extension>
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">         
@@ -48,8 +60,14 @@
             priority="normal"
             name="%navigatorContent.name">
          <triggerPoints>         	
-            	<instanceof
-            		 value="org.eclipse.core.resources.IResource" />            	
+             <or>
+                <instanceof
+                      value="com.armin.sap.ds.ext.navigator.elements.ProjectItemNode">
+                </instanceof>
+                <instanceof
+                      value="org.eclipse.core.resources.IResource">
+                </instanceof>
+             </or>            	
          </triggerPoints>
          <possibleChildren>
             <instanceof
@@ -67,6 +85,45 @@
             </parentExpression>
          </commonSorter>         
       </navigatorContent>
+      <actionProvider
+            class="com.armin.sap.ds.ext.popup.actionproviders.DesignStudioNewActionProvider"
+            id="com.armin.sap.ds.ext.popup.actionproviders.DesignStudioNewAction">
+         <enablement>
+            <or>
+               <adapt
+                     type="java.util.Collection">
+                  <count
+                        value="0">
+                  </count>
+               </adapt>
+               <instanceof
+                     value="com.armin.sap.ds.ext.navigator.elements.IProjectItemNode">
+               </instanceof>
+            </or>
+         </enablement>
+      </actionProvider>
+      <actionProvider
+            class="com.armin.sap.ds.ext.popup.actionproviders.DesignStudioRefreshActionProvider"
+            id="com.armin.sap.ds.ext.popup.actionproviders.DesignStudioRefreshAction">
+         <enablement>
+            <or>
+               <adapt
+                     type="java.util.Collection">
+                  <count
+                        value="0">
+                  </count>
+               </adapt>
+               <instanceof
+                     value="com.armin.sap.ds.ext.navigator.elements.IProjectItemNode">
+               </instanceof>
+            </or>
+         </enablement>
+      </actionProvider>
+      <commonWizard
+            type="new"
+            wizardId="com.armin.sap.ds.sdk.project.wizard">
+         <enablement></enablement>
+      </commonWizard>
    </extension>
    <extension
          point="org.eclipse.ui.decorators">
@@ -74,16 +131,127 @@
             adaptable="true"
             class="com.armin.sap.ds.ext.decorators.DesignStudioLabelDecorator"
             id="sap-design-studio-ext-navigator.decorator"
-            label="com.armin.sap.ds.ext.decorators.label"
-            lightweight="false"
-            location="BOTTOM_RIGHT"
-            objectClass="org.eclipse.core.resources.IResource"
-            state="false">
+            label="SAP Design Studio Extension Decorator"
+            lightweight="true"
+            location="BOTTOM_RIGHT"            
+            state="true">
          <enablement>
             <objectClass
-                  name="com.armin.sap.ds.ext.navigator.elements.IProjectItemNode">
+                  name="com.armin.sap.ds.ext.navigator.elements.ProjectItemNode">
             </objectClass>
          </enablement>
       </decorator>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            description="Add a new extension to the current project"
+            id="com.armin.sap.ds.ext.navigator.commands.newextension"
+            name="Extension">
+      </command>
+      <command
+            description="Add a new group to the current selected extension"
+            id="com.armin.sap.ds.ext.navigator.commands.newgroup"
+            name="Group">
+      </command>
+      <command
+            description="Add a new component to the current selected group"
+            id="com.armin.sap.ds.ext.navigator.commands.newcomponent"
+            name="Component">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.armin.sap.ds.ext.navigator.commands.NewExtensionCommand"
+            commandId="com.armin.sap.ds.ext.navigator.commands.newextension">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.ext.navigator.elements.ProjectNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.armin.sap.ds.ext.navigator.commands.NewGroupCommand"
+            commandId="com.armin.sap.ds.ext.navigator.commands.newgroup">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.ext.navigator.elements.ExtensionNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.armin.sap.ds.ext.navigator.commands.NewComponentCommand"
+            commandId="com.armin.sap.ds.ext.navigator.commands.newcomponent">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.ext.navigator.elements.GroupNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:common.new.menu?after=additions">
+         <command
+               commandId="com.armin.sap.ds.ext.navigator.commands.newextension"
+               label="Extension"
+               style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.armin.sap.ds.ext.navigator.commands.newgroup"
+               label="Group"
+               style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.armin.sap.ds.ext.navigator.commands.newcomponent"
+               label="Component"
+               style="push">
+            <visibleWhen
+                  checkEnabled="true">
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="com.armin.sap.ds.ext.navigator.commands.newextension"
+            icon="images/extension_28x28.png">
+      </image>
+      <image
+            commandId="com.armin.sap.ds.ext.navigator.commands.newgroup"
+            icon="images/group_28x28.png">
+      </image>
+      <image
+            commandId="com.armin.sap.ds.ext.navigator.commands.newcomponent"
+            icon="images/component_28x28.png">
+      </image>
    </extension>
 </plugin>

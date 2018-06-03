@@ -54,7 +54,7 @@ public class ProjectNode extends ProjectItemNode {
 	
 	@Override
 	public Image getImage() {
-		Image image = Activator.getImage("images/txtonly_16x16.ico");
+		Image image = Activator.getImage("images/project_28x28.png");
 		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
 		return new Image(Display.getCurrent(), imgData);

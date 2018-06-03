@@ -11,32 +11,33 @@
             category="com.armin.sap.ds.category"
             class="com.armin.sap.ds.wizard.DesignStudioNewProjectWizard"
             finalPerspective="com.armin.sap.ds.sdk.project.perspective"
-            icon="images/sap_text.png"
+            descriptionImage="images/project_28x28.png"
+            icon="images/project_28x28.png"
             id="com.armin.sap.ds.sdk.project.wizard"
             name="%wizard.name">
       </wizard>
       <wizard
             category="com.armin.sap.ds.category"
             class="com.armin.sap.ds.wizard.ExtensionNewFileWizard"
-            descriptionImage="images/text-xml.png"
-            icon="images/text-xml_16x16.png"
-            id="com.armin.sap.ds.sdk.project.wizard.contributionfile"
-            name="Contribution File">
+            descriptionImage="images/extension_28x28.png"
+            icon="images/extension_28x28.png"
+            id="com.armin.sap.ds.sdk.project.wizard.extension"
+            name="Extension">
       </wizard>
       <wizard
             category="com.armin.sap.ds.category"
             class="com.armin.sap.ds.wizard.ComponentNewFileWizard"
-            descriptionImage="images/text-x-script.png"
-            icon="images/text-x-script.png"
-            id="com.armin.sap.ds.sdk.project.wizard.ztlfile"
-            name="ZTL File">
+            descriptionImage="images/component_28x28.png"
+            icon="images/component_28x28.png"
+            id="com.armin.sap.ds.sdk.project.wizard.component"
+            name="Component">
       </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.armin.sap.ds.sdk.project.perspective.PerspectiveFactory"
-            icon="images/sap_text.png"
+            icon="images/sap_18.png"
             id="com.armin.sap.ds.sdk.project.perspective"
             name="%perspective.name">
       </perspective>
@@ -49,8 +50,18 @@
                id="com.armin.sap.ds.ext.navigator.view"
                minimized="false"
                relationship="left"
-               relative="org.eclipse.ui.editorss">
+               relative="org.eclipse.ui.editorss"
+               visible="true">
          </view>
+         <newWizardShortcut
+               id="com.armin.sap.ds.sdk.project.wizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="com.armin.sap.ds.sdk.project.wizard.contributionfile">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="com.armin.sap.ds.sdk.project.wizard.ztlfile">
+         </newWizardShortcut>
       </perspectiveExtension>
    </extension>
    <extension
@@ -65,7 +76,7 @@
    <extension
          point="org.eclipse.ui.ide.projectNatureImages">
       <image
-            icon="images/project_open.png"
+            icon="images/project.ico"
             id="com.armin.sap.ds.sdk.project.natureimage"
             natureId="com.armin.sap.ds.sdk.project.natures">
       </image>
@@ -198,7 +209,7 @@
             class="com.armin.sap.ds.ext.plugin.editors.DesignStudioExtensionEditor"
             contributorClass="com.armin.sap.ds.ext.plugin.editors.MultiPageEditorContributor"
             extensions="mpe"
-            icon="icons/sample.png"
+            icon="images/extension.png"
             id="com.armin.sap.ds.ext.plugin.editors.DesignStudioExtensionEditor"
             name="SAP Design Studio Extension Editor">
          <contentTypeBinding
@@ -237,5 +248,80 @@
       <initializer
             class="com.armin.sap.ds.ext.plugin.preferences.PreferenceInitializer">
       </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="com.armin.sap.ds.ext.ui.toolbar.id">
+            <command
+                  commandId="org.eclipse.ui.newWizard"
+                  icon="images/project.ico"
+                  label="SAP Design Studio Extension Project Wizard..."
+                  style="push"
+                  tooltip="Build new Sap Design Studio Extension Project using wizard">
+               <parameter
+                     name="newWizardId"
+                     value="com.armin.sap.ds.sdk.project.wizard">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeWorkbenchWindow.activePerspective">
+                     <equals
+                           value="com.armin.sap.ds.sdk.project.perspective">
+                     </equals>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="org.eclipse.ui.newWizard"
+                  icon="images/extension.png"
+                  label="Extension"
+                  style="push">
+               <parameter
+                     name="newWizardId"
+                     value="com.armin.sap.ds.sdk.project.wizard.extension">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeWorkbenchWindow.activePerspective">
+                     <equals
+                           value="com.armin.sap.ds.sdk.project.perspective">
+                     </equals>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="org.eclipse.ui.newWizard"
+                  icon="images/component.png"
+                  label="Component"
+                  style="push">
+               <parameter
+                     name="newWizardId"
+                     value="com.armin.sap.ds.sdk.project.wizard.component">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeWorkbenchWindow.activePerspective">
+                     <equals
+                           value="com.armin.sap.ds.sdk.project.perspective">
+                     </equals>
+                  </with>
+               </visibleWhen>
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="toolbar:org.eclipse.ui.main.toolbar"
+            label="SAP Design Studio Extension Toolbar Commands">
+      </actionSet>
    </extension>
 </plugin>
