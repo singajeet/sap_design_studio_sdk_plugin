@@ -14,9 +14,17 @@ public class ProjectItemNode implements IProjectItemNode {
 	private String _name;
 	private String _description;
 	
+	protected Image _image;
+	
 	public ProjectItemNode()
 	{
 		
+	}
+	
+	public ProjectItemNode(String message, IProjectItemNode parent)
+	{
+		_name = message;
+		_parent = parent;
 	}
 	
     public ProjectItemNode(IResource resource, IProjectItemNode parent) {
@@ -37,17 +45,18 @@ public class ProjectItemNode implements IProjectItemNode {
     
     @Override
     public Image getImage() {
-        return Activator.getImage("images/file.png");
+        _image = Activator.getImage("images/file_obj.png");
+        return _image;
     }
     
     @Override
     public Object[] getElements(Object input) {
-    	return null;
+    	return getChildren(input);
     }
     
     @Override
     public Object[] getChildren(Object parent) {
-        return null;
+        return new Object[0];
     }
     
 	@Override
@@ -90,6 +99,20 @@ public class ProjectItemNode implements IProjectItemNode {
 	public String getTooltip() {		
 		return _description;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#finalize()
+	 */
+	@Override
+	protected void finalize() throws Throwable {
+		if(_image != null) {
+			_image.dispose();
+			_image = null;
+		}
+		super.finalize();
+	}
+	
+	
 	
 	/*
 	 for(int i=0; i<children.length; i++) {

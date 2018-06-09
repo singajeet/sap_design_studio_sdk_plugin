@@ -5,9 +5,6 @@ import java.util.Comparator;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 
-import com.armin.sap.ds.ext.navigator.elements.AdvancedPropertySheetNode;
-import com.armin.sap.ds.ext.navigator.elements.CascadeStyleSheetNode;
-import com.armin.sap.ds.ext.navigator.elements.JavaScriptNode;
 import com.armin.sap.ds.ext.navigator.elements.IProjectItemNode;
 
 public class CategorySorter extends ViewerComparator {

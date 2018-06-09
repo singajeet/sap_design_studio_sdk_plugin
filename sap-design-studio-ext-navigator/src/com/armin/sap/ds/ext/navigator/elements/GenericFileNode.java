@@ -22,6 +22,7 @@ public class GenericFileNode extends ProjectItemNode {
 	
 	@Override
     public Image getImage() {
-        return Activator.getImage("images/file.png");
+        _image = Activator.getImage("images/file.png");
+        return _image;
     }
 }

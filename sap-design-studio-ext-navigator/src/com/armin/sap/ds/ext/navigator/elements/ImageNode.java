@@ -1,40 +1,40 @@
 package com.armin.sap.ds.ext.navigator.elements;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Display;
 
-import com.armin.sap.ds.ext.navigator.Activator;
 import com.armin.sap.ds.ext.plugin.preferences.Settings;
 import com.armin.sap.ds.xml.Component;
 
-public class CascadeStyleSheetNode extends GenericFileNode {
-	
-	private String _name;	
-	private String _path;	
-	private IResource _extensionResource;
+public class ImageNode extends GenericFolderNode {
+
+	private Component _model;
+	private String _name;
 	private IProjectItemNode _parent;
+	private IResource _extensionResource, _imageResource;
 	
-	public CascadeStyleSheetNode(String path, IResource extensionResource, IProjectItemNode parent) {
-		_path = path;
-		_extensionResource = extensionResource;
-		_parent = parent;		
-		Path osPath = new Path(path);
-		_name = osPath.toFile().getName();
+	public ImageNode() {
+		// TODO Auto-generated constructor stub
 	}
 	
-	public CascadeStyleSheetNode(Component model, IResource resource, IProjectItemNode parent) {
+	public ImageNode(IResource imageResource, IResource extensionResource, IProjectItemNode parent) {
+		super(extensionResource, parent);
+		
+		_name = imageResource.getName();
+		_imageResource = imageResource;
+		_extensionResource = extensionResource;
+	}
+	
+	public ImageNode(Component model, IResource resource, IProjectItemNode parent) {
 		super(resource, parent);
 	}
-	
+
 	@Override
 	public ProjectItemType getType() {
-		return ProjectItemType.CASCADE_STYLE_SHEET_FILE;
+		return ProjectItemType.IMAGE;
 	}
 	
 	/**************************
@@ -48,11 +48,12 @@ public class CascadeStyleSheetNode extends GenericFileNode {
 
 	@Override
 	public Image getImage() {
-		Image image = Activator.getImage("images/file_obj.png");
+		
+		String imagePath = _imageResource.getLocation().toFile().getAbsolutePath();
+		System.out.println("Image Path: " + imagePath);
 		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
-		ImageData imgData = image.getImageData().scaledTo(size, size);
+		ImageData imgData = new ImageData(imagePath).scaledTo(size, size);		
 		_image = new Image(Display.getCurrent(), imgData);
-		image.dispose();
 		return _image;
 	}
 
@@ -72,8 +73,7 @@ public class CascadeStyleSheetNode extends GenericFileNode {
 	}
 
 	@Override
-	public boolean hasChildren(Object parent) {		
+	public boolean hasChildren(Object parent) {
 		return false;
-	}	
-	
+	}
 }

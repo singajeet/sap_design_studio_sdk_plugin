@@ -3,45 +3,38 @@ package com.armin.sap.ds.ext.navigator.elements;
 import java.util.ArrayList;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.pde.core.build.IBuildEntry;
+import org.eclipse.pde.core.build.IBuildModel;
+import org.eclipse.pde.core.plugin.IPluginModelBase;
+import org.eclipse.pde.core.plugin.PluginRegistry;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.ext.navigator.Activator;
 import com.armin.sap.ds.ext.plugin.preferences.Settings;
-import com.armin.sap.ds.xml.Component;
 
-public class ComponentNode extends GenericFileNode {
+public class PropertyNode extends ProjectItemNode {
 
 	private String _name;
-	private IProjectItemNode[] _children;
 	private IResource _extensionResource;
 	private IProjectItemNode _parent;
-	private Component _model;
-
-	public ComponentNode() {
+	private IBuildEntry _entry;
+	private IProjectItemNode[] _children;
+	
+	public PropertyNode() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ComponentNode(Component model, IResource extensionResource, IProjectItemNode parent) {
-		_model = model;
-		_name = _model.getTitle();
+	public PropertyNode(IBuildEntry entry, IResource extensionResource, IProjectItemNode parent) {
+		_entry = entry;
 		_extensionResource = extensionResource;
 		_parent = parent;
+		_name = entry.getName();
 		_children = initializeChildren(extensionResource);
 	}
-
-	public ComponentNode(IResource resource, IProjectItemNode parent) {
-		super(resource, parent);
-	}
-
-	@Override
-	public ProjectItemType getType() {
-		return ProjectItemType.COMPONENT_FILE;
-	}
-
+	
 	/**************************
 	 * Required to be overridden
 	 ********************************/
@@ -53,7 +46,7 @@ public class ComponentNode extends GenericFileNode {
 
 	@Override
 	public Image getImage() {
-		Image image = Activator.getImage("images/component_28x28.png");
+		Image image = Activator.getImage("images/property_28x28.png");
 		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
 		_image = new Image(Display.getCurrent(), imgData);
@@ -87,26 +80,20 @@ public class ComponentNode extends GenericFileNode {
 		try {
 			ArrayList<IProjectItemNode> children = new ArrayList<IProjectItemNode>();
 			
-			String aps = _model.getPropertySheetPath();
-			if(aps != null && !aps.isEmpty()) {								
-				IProjectItemNode apsNode = new AdvancedPropertySheetNode(aps, _model, extensionResource, _parent);
-				children.add(apsNode);
+			String[] valueTokens = _entry.getTokens();			
+			for(int i=0;i<valueTokens.length;i++) {
+				IProjectItemNode token = new PropertyValueNode(valueTokens[i], extensionResource, this);
+				children.add(token);
 			}
-			
-			IProjectItemNode css = new CascadeStyleSheetCollectionNode(_model.getCssInclude(), extensionResource, _parent);
-			children.add(css);
-			
-			IProjectItemNode images = new ImagesFolderNode(_model, extensionResource, _parent);
-			children.add(images);
 			
 			IProjectItemNode[] childrenArray = new IProjectItemNode[children.size()];
 			children.toArray(childrenArray);
 			return childrenArray;
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return new IProjectItemNode[]{ new ProjectItemNode("Error while searching images, css or APS nodes: " + e.getMessage(), this) };
-		}
-
+			return null;
+		}		
 	}
 
 }

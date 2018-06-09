@@ -24,9 +24,9 @@ public class ExtensionNode extends GenericFileNode {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public ExtensionNode(IResource resource, IProjectItemNode parent) {
-		super(resource, parent);
-		_children = initializeChildren(resource);
+	public ExtensionNode(IResource extensionResource, IProjectItemNode parent) {
+		super(extensionResource, parent);
+		_children = initializeChildren(extensionResource);
 	}
 
 	@Override
@@ -46,7 +46,9 @@ public class ExtensionNode extends GenericFileNode {
 		Image image = Activator.getImage("images/extension_28x28.png");
 		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
-		return new Image(Display.getCurrent(), imgData);
+		_image = new Image(Display.getCurrent(), imgData);
+		image.dispose();
+		return _image;
     }
 	
 	@Override
@@ -71,10 +73,10 @@ public class ExtensionNode extends GenericFileNode {
 	
 	/************************************************************************************/
 
-	protected IProjectItemNode[] initializeChildren(IResource member) {
+	protected IProjectItemNode[] initializeChildren(IResource extensionResource) {
     	try {
 	    		//Logger.debug("Extension => CREATE CHILDREN");
-	    		Extension extensionModel = ProjectFilesReader.getInstance().getExtensionModel(member);
+	    		Extension extensionModel = ProjectFilesReader.getInstance().getExtensionModel(extensionResource);
 	    		_name = extensionModel.getTitle();
 	    		List<Component> components = extensionModel.getComponent();
 	    		List<Group> groups = extensionModel.getGroup();
@@ -83,7 +85,7 @@ public class ExtensionNode extends GenericFileNode {
 	    		if(groups.size() > 0) {
 		    		for(int i=0;i<groups.size();i++) {
 		    			Group group = groups.get(i);
-		    			IProjectItemNode groupNode = new GroupNode(group, components, member, this);
+		    			IProjectItemNode groupNode = new GroupNode(group, components, extensionResource, this);
 		    			children.add(groupNode);
 		    		}
 	    		} else {
@@ -91,17 +93,22 @@ public class ExtensionNode extends GenericFileNode {
 	    			group.setId("default");
 	    			group.setTitle("Default");
 	    			group.setTooltip("Default Group");
-	    			IProjectItemNode groupNode = new GroupNode(group, components, member, this);
+	    			IProjectItemNode groupNode = new GroupNode(group, components, extensionResource, this);
 	    			children.add(groupNode);
 	    		}
 	    		
 	    		IProjectItemNode[] childrenArray = new IProjectItemNode[children.size()];
+	    		
+	    		if(children.size() <= 0) {
+	    				return new IProjectItemNode[] { new ProjectItemNode("No groups or components found!", this)};
+	    		}
+	    		
 	    		children.toArray(childrenArray);
 	    		return childrenArray;
     	}catch(Exception e)
     	{
     		e.printStackTrace();
-    		return null;
+    		return new IProjectItemNode[]{ new ProjectItemNode("Error while searching groups: " + e.getMessage(), this) };
     	}
         
     }

@@ -8,8 +8,6 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
-
-import com.armin.sap.ds.ext.logs.Logger;
 import com.armin.sap.ds.ext.navigator.Activator;
 import com.armin.sap.ds.ext.plugin.preferences.Settings;
 
@@ -57,7 +55,9 @@ public class ProjectNode extends ProjectItemNode {
 		Image image = Activator.getImage("images/project_28x28.png");
 		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
-		return new Image(Display.getCurrent(), imgData);
+		_image = new Image(Display.getCurrent(), imgData);
+		image.dispose();
+		return _image;
 	}
 	
 	@Override
@@ -82,19 +82,24 @@ public class ProjectNode extends ProjectItemNode {
 	
 	/************************************************************************************/
 	
-	protected IProjectItemNode[] initializeChildren(IResource[] members) {
+	protected IProjectItemNode[] initializeChildren(IResource[] resources) {
     	try {
     		//Logger.debug("ProjectNode => CREATE CHILDREN");
     		ArrayList<IProjectItemNode> children = new ArrayList<IProjectItemNode>();
     		String extension_file_name = Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME);
-    		for(int i=0;i<members.length;i++) {    			
-    			if(members[i].getName().toUpperCase().equals(extension_file_name.toUpperCase())) {
-    				IProjectItemNode extensionNode = new ExtensionNode(members[i], this);
+    		for(int i=0;i<resources.length;i++) {    			
+    			if(resources[i].getName().toUpperCase().equals(extension_file_name.toUpperCase())) {
+    				IProjectItemNode extensionNode = new ExtensionNode(resources[i], this);
     				if(extensionNode != null) {
     					children.add(extensionNode);
     				}
     			}    			
     		}
+    		
+    		if(children.size() <= 0) {
+				return new IProjectItemNode[] { new ProjectItemNode("No extensions found!", this) };
+			}
+    		
     		//Logger.debug("ProjectNode => DONE!");
     		IProjectItemNode[] childrenArray = new IProjectItemNode[children.size()];
     		children.toArray(childrenArray);
@@ -102,7 +107,7 @@ public class ProjectNode extends ProjectItemNode {
     	}catch(Exception e)
     	{
     		e.printStackTrace();
-    		return null;
+    		return new IProjectItemNode[]{ new ProjectItemNode("Error while searching images, css or APS nodes: " + e.getMessage(), this) };
     	}
         
     }	

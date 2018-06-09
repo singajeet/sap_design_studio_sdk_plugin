@@ -21,14 +21,6 @@
          point="org.eclipse.ui.navigator.viewer">
       <viewer
             viewerId="com.armin.sap.ds.ext.navigator.view">
-         <popupMenu
-               id="com.armin.sap.ds.ext.navigator.view#PopupMenu">
-            <insertionPoint
-                  name="group.new">
-            </insertionPoint>
-            <insertionPoint
-                  name="group.build">
-            </insertionPoint></popupMenu>
       </viewer>      
       <viewerContentBinding
             viewerId="com.armin.sap.ds.ext.navigator.view">
@@ -36,18 +28,7 @@
             <contentExtension 
             		pattern="com.armin.sap.ds.ext.navigator.dsContent" />           
          </includes>
-      </viewerContentBinding>
-      <viewerActionBinding
-            viewerId="com.armin.sap.ds.ext.navigator.view">
-         <includes>
-            <actionExtension
-                  pattern="com.armin.sap.ds.ext.popup.actionproviders.DesignStudioNewAction">
-            </actionExtension>
-            <actionExtension
-                  pattern="com.armin.sap.ds.ext.popup.actionproviders.DesignStudioRefreshAction">
-            </actionExtension>
-         </includes>
-      </viewerActionBinding>
+      </viewerContentBinding>      
    </extension>
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">         
@@ -85,45 +66,6 @@
             </parentExpression>
          </commonSorter>         
       </navigatorContent>
-      <actionProvider
-            class="com.armin.sap.ds.ext.popup.actionproviders.DesignStudioNewActionProvider"
-            id="com.armin.sap.ds.ext.popup.actionproviders.DesignStudioNewAction">
-         <enablement>
-            <or>
-               <adapt
-                     type="java.util.Collection">
-                  <count
-                        value="0">
-                  </count>
-               </adapt>
-               <instanceof
-                     value="com.armin.sap.ds.ext.navigator.elements.IProjectItemNode">
-               </instanceof>
-            </or>
-         </enablement>
-      </actionProvider>
-      <actionProvider
-            class="com.armin.sap.ds.ext.popup.actionproviders.DesignStudioRefreshActionProvider"
-            id="com.armin.sap.ds.ext.popup.actionproviders.DesignStudioRefreshAction">
-         <enablement>
-            <or>
-               <adapt
-                     type="java.util.Collection">
-                  <count
-                        value="0">
-                  </count>
-               </adapt>
-               <instanceof
-                     value="com.armin.sap.ds.ext.navigator.elements.IProjectItemNode">
-               </instanceof>
-            </or>
-         </enablement>
-      </actionProvider>
-      <commonWizard
-            type="new"
-            wizardId="com.armin.sap.ds.sdk.project.wizard">
-         <enablement></enablement>
-      </commonWizard>
    </extension>
    <extension
          point="org.eclipse.ui.decorators">
@@ -144,114 +86,338 @@
    </extension>
    <extension
          point="org.eclipse.ui.commands">
-      <command
-            description="Add a new extension to the current project"
-            id="com.armin.sap.ds.ext.navigator.commands.newextension"
-            name="Extension">
-      </command>
-      <command
-            description="Add a new group to the current selected extension"
-            id="com.armin.sap.ds.ext.navigator.commands.newgroup"
-            name="Group">
-      </command>
-      <command
-            description="Add a new component to the current selected group"
-            id="com.armin.sap.ds.ext.navigator.commands.newcomponent"
-            name="Component">
-      </command>
+      <category
+            id="com.armin.sap.ds.commands.category"
+            name="Design Studio Commands">
+      </category>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
-      <handler
-            class="com.armin.sap.ds.ext.navigator.commands.NewExtensionCommand"
-            commandId="com.armin.sap.ds.ext.navigator.commands.newextension">
-         <enabledWhen>
-            <with
-                  variable="selection">
-               <iterate
-                     ifEmpty="false">
-                  <instanceof
-                        value="com.armin.sap.ds.ext.navigator.elements.ProjectNode">
-                  </instanceof>
-               </iterate>
-            </with>
-         </enabledWhen>
-      </handler>
-      <handler
-            class="com.armin.sap.ds.ext.navigator.commands.NewGroupCommand"
-            commandId="com.armin.sap.ds.ext.navigator.commands.newgroup">
-         <enabledWhen>
-            <with
-                  variable="selection">
-               <iterate
-                     ifEmpty="false">
-                  <instanceof
-                        value="com.armin.sap.ds.ext.navigator.elements.ExtensionNode">
-                  </instanceof>
-               </iterate>
-            </with>
-         </enabledWhen>
-      </handler>
-      <handler
-            class="com.armin.sap.ds.ext.navigator.commands.NewComponentCommand"
-            commandId="com.armin.sap.ds.ext.navigator.commands.newcomponent">
-         <enabledWhen>
-            <with
-                  variable="selection">
-               <iterate
-                     ifEmpty="false">
-                  <instanceof
-                        value="com.armin.sap.ds.ext.navigator.elements.GroupNode">
-                  </instanceof>
-               </iterate>
-            </with>
-         </enabledWhen>
-      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
+         <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="com.armin.sap.ds.ext.ui.toolbar.id">
+            <command
+                  commandId="org.eclipse.ui.newWizard"
+                  icon="images/project_28x28.png"
+                  label="ToolBar: SAP Design Studio Extension Project Wizard..."
+                  style="push"
+                  tooltip="ToolBar: Build new Sap Design Studio Extension Project using wizard">
+               <parameter
+                     name="newWizardId"
+                     value="com.armin.sap.ds.sdk.project.wizard">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeWorkbenchWindow.activePerspective">
+                     <equals
+                           value="com.armin.sap.ds.sdk.project.perspective">
+                     </equals>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="org.eclipse.ui.newWizard"
+                  icon="images/extension_28x28.png"
+                  label="ToolBar: Extension"
+                  style="push"
+                  tooltip="ToolBar: Create a new extension under selected project">
+               <parameter
+                     name="newWizardId"
+                     value="com.armin.sap.ds.sdk.project.wizard.extension">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeWorkbenchWindow.activePerspective">
+                     <equals
+                           value="com.armin.sap.ds.sdk.project.perspective">
+                     </equals>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="org.eclipse.ui.newWizard"
+                  icon="images/component_28x28.png"
+                  label="ToolBar: Component"
+                  style="push"
+                  tooltip="ToolBar: Create a new component under selected extension">
+               <parameter
+                     name="newWizardId"
+                     value="com.armin.sap.ds.sdk.project.wizard.component">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeWorkbenchWindow.activePerspective">
+                     <equals
+                           value="com.armin.sap.ds.sdk.project.perspective">
+                     </equals>
+                  </with>
+               </visibleWhen>
+            </command>
+         </toolbar>
+      </menuContribution>
       <menuContribution
             allPopups="false"
-            locationURI="popup:common.new.menu?after=additions">
+            locationURI="popup:com.armin.sap.ds.ext.navigator.view?after=additions">
+         <menu
+               label="New">
+            <command
+                  commandId="org.eclipse.ui.newWizard"
+                  icon="images/extension_28x28.png"
+                  label="Extension"
+                  style="push">
+               <parameter
+                     name="newWizardId"
+                     value="com.armin.sap.ds.sdk.project.wizard.extension">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeWorkbenchWindow.activePerspective">
+                     <equals
+                           value="com.armin.sap.ds.sdk.project.perspective">
+                     </equals>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="org.eclipse.ui.newWizard"
+                  icon="images/component_28x28.png"
+                  label="Component"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeWorkbenchWindow.activePerspective">
+                     <equals
+                           value="com.armin.sap.ds.sdk.project.perspective">
+                     </equals>
+                  </with>
+               </visibleWhen>
+               <parameter
+                     name="newWizardId"
+                     value="com.armin.sap.ds.sdk.project.wizard.component">
+               </parameter>
+            </command>
+         </menu>
+         <separator
+               name="sap-design-studio-ext-navigator.separator2">
+         </separator>
          <command
-               commandId="com.armin.sap.ds.ext.navigator.commands.newextension"
-               label="Extension"
+               commandId="org.eclipse.ui.navigate.openResource"
+               label="Open File..."
                style="push">
             <visibleWhen
-                  checkEnabled="true">
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
             </visibleWhen>
          </command>
          <command
-               commandId="com.armin.sap.ds.ext.navigator.commands.newgroup"
-               label="Group"
+               commandId="org.eclipse.ui.project.openProject"
+               label="Open Project..."
                style="push">
             <visibleWhen
-                  checkEnabled="true">
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
             </visibleWhen>
          </command>
          <command
-               commandId="com.armin.sap.ds.ext.navigator.commands.newcomponent"
-               label="Component"
+               commandId="org.eclipse.e4.ui.importer.openDirectory"
+               label="Open Projects from File System..."
                style="push">
             <visibleWhen
-                  checkEnabled="true">
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <separator
+               name="sap-design-studio-ext-navigator.separator3">
+         </separator>
+         <command
+               commandId="org.eclipse.ui.edit.cut"
+               label="Cut"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.copy"
+               label="Copy"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.paste"
+               label="Paste"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.delete"
+               label="Delete"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <separator
+               name="sap-design-studio-ext-navigator.separator4">
+         </separator>
+         <command
+               commandId="org.eclipse.ui.file.import"
+               label="Import..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.file.export"
+               label="Export..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <separator
+               name="sap-design-studio-ext-navigator.separator5">
+         </separator>
+         <command
+               commandId="org.eclipse.ui.file.refresh"
+               label="Refresh"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.file.close"
+               label="Close"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.project.closeProject"
+               label="Close Project"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.project.closeUnrelatedProjects"
+               label="Close Unrelated Projects"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <separator
+               name="sap-design-studio-ext-navigator.separator6">
+         </separator>
+         <command
+               commandId="org.eclipse.ui.file.properties"
+               label="Properties"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
             </visibleWhen>
          </command>
       </menuContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commandImages">
-      <image
-            commandId="com.armin.sap.ds.ext.navigator.commands.newextension"
-            icon="images/extension_28x28.png">
-      </image>
-      <image
-            commandId="com.armin.sap.ds.ext.navigator.commands.newgroup"
-            icon="images/group_28x28.png">
-      </image>
-      <image
-            commandId="com.armin.sap.ds.ext.navigator.commands.newcomponent"
-            icon="images/component_28x28.png">
-      </image>
    </extension>
 </plugin>

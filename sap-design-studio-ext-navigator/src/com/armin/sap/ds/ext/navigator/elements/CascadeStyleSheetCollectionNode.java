@@ -1,10 +1,9 @@
 package com.armin.sap.ds.ext.navigator.elements;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
@@ -13,35 +12,30 @@ import com.armin.sap.ds.ext.navigator.Activator;
 import com.armin.sap.ds.ext.plugin.preferences.Settings;
 import com.armin.sap.ds.xml.Component;
 
-public class ComponentNode extends GenericFileNode {
-
-	private String _name;
+public class CascadeStyleSheetCollectionNode extends GenericFileNode {
+	
+	private String _name = "Style Sheets (CSS)";	
+	private List<String> _styleSheets;
 	private IProjectItemNode[] _children;
 	private IResource _extensionResource;
 	private IProjectItemNode _parent;
-	private Component _model;
-
-	public ComponentNode() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public ComponentNode(Component model, IResource extensionResource, IProjectItemNode parent) {
-		_model = model;
-		_name = _model.getTitle();
+	
+	public CascadeStyleSheetCollectionNode(List<String> styleSheets, IResource extensionResource, IProjectItemNode parent) {
+		_styleSheets = styleSheets;
 		_extensionResource = extensionResource;
-		_parent = parent;
+		_parent = parent;		
 		_children = initializeChildren(extensionResource);
 	}
-
-	public ComponentNode(IResource resource, IProjectItemNode parent) {
+	
+	public CascadeStyleSheetCollectionNode(Component model, IResource resource, IProjectItemNode parent) {
 		super(resource, parent);
 	}
-
+	
 	@Override
 	public ProjectItemType getType() {
-		return ProjectItemType.COMPONENT_FILE;
+		return ProjectItemType.CASCADE_STYLE_SHEET_FILE;
 	}
-
+	
 	/**************************
 	 * Required to be overridden
 	 ********************************/
@@ -53,7 +47,7 @@ public class ComponentNode extends GenericFileNode {
 
 	@Override
 	public Image getImage() {
-		Image image = Activator.getImage("images/component_28x28.png");
+		Image image = Activator.getImage("images/css_28x28.png");
 		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
 		_image = new Image(Display.getCurrent(), imgData);
@@ -86,27 +80,25 @@ public class ComponentNode extends GenericFileNode {
 	protected IProjectItemNode[] initializeChildren(IResource extensionResource) {
 		try {
 			ArrayList<IProjectItemNode> children = new ArrayList<IProjectItemNode>();
-			
-			String aps = _model.getPropertySheetPath();
-			if(aps != null && !aps.isEmpty()) {								
-				IProjectItemNode apsNode = new AdvancedPropertySheetNode(aps, _model, extensionResource, _parent);
-				children.add(apsNode);
+						
+			for(int i=0;i<_styleSheets.size(); i++) {
+				IProjectItemNode sheet = new CascadeStyleSheetNode(_styleSheets.get(i), extensionResource, this);
+				children.add(sheet);
 			}
 			
-			IProjectItemNode css = new CascadeStyleSheetCollectionNode(_model.getCssInclude(), extensionResource, _parent);
-			children.add(css);
-			
-			IProjectItemNode images = new ImagesFolderNode(_model, extensionResource, _parent);
-			children.add(images);
+			if(children.size() <= 0) {
+				return new IProjectItemNode[] { new ProjectItemNode("No style sheets found!", this) };
+			}
 			
 			IProjectItemNode[] childrenArray = new IProjectItemNode[children.size()];
 			children.toArray(childrenArray);
 			return childrenArray;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new IProjectItemNode[]{ new ProjectItemNode("Error while searching images, css or APS nodes: " + e.getMessage(), this) };
+			return new IProjectItemNode[]{ new ProjectItemNode("Error while searching css: " + e.getMessage(), this) };
 		}
 
 	}
 
+	
 }

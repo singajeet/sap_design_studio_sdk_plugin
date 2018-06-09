@@ -26,11 +26,11 @@ public class GroupNode extends GenericFileNode {
 		// TODO Auto-generated constructor stub
 	}
 
-	public GroupNode(Group group, List<Component> components, IResource resource, IProjectItemNode parent) {
-		super(resource, parent);
+	public GroupNode(Group group, List<Component> components, IResource extensionResource, IProjectItemNode parent) {
+		super(extensionResource, parent);
 		_components = components;
 		_group = group;
-		_children = initializeChildren(resource);
+		_children = initializeChildren(extensionResource);
 	}
 	
 	@Override
@@ -51,7 +51,9 @@ public class GroupNode extends GenericFileNode {
 		Image image = Activator.getImage("images/group_28x28.png");
 		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
-		return new Image(Display.getCurrent(), imgData);
+		_image = new Image(Display.getCurrent(), imgData);
+		image.dispose();
+		return _image;
     }
 	
 	@Override
@@ -76,7 +78,7 @@ public class GroupNode extends GenericFileNode {
 	
 	/************************************************************************************/
 
-	protected IProjectItemNode[] initializeChildren(IResource member) {
+	protected IProjectItemNode[] initializeChildren(IResource extensionResource) {
     	try {
 	    		ArrayList<IProjectItemNode> children = new ArrayList<IProjectItemNode>();
 	    		
@@ -87,10 +89,14 @@ public class GroupNode extends GenericFileNode {
 	    				groupName = component.getGroup();
 	    			
 	    			if(groupName.equals(_group.getTitle())) {
-	    				IProjectItemNode componentNode = new ComponentNode(component, member, this);
+	    				IProjectItemNode componentNode = new ComponentNode(component, extensionResource, this);
 	    				children.add(componentNode);
 	    			}
 	    		}
+	    		
+	    		if(children.size() <= 0) {
+					return new IProjectItemNode[] { new ProjectItemNode("No components found!", this) };
+				}
 	    		
 	    		IProjectItemNode[] childrenArray = new IProjectItemNode[children.size()];
 	    		children.toArray(childrenArray);
@@ -98,7 +104,7 @@ public class GroupNode extends GenericFileNode {
     	}catch(Exception e)
     	{
     		e.printStackTrace();
-    		return null;
+    		return new IProjectItemNode[]{ new ProjectItemNode("Error while searching components: " + e.getMessage(), this) };
     	}
         
     }
