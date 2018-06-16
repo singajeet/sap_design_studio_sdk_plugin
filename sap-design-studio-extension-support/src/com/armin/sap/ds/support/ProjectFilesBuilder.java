@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -30,51 +31,44 @@ import com.armin.sap.ds.xml.UI5Mode;
 
 public class ProjectFilesBuilder {
 	
-	private ExtensionHelper _extensionHelper;
-	private ComponentHelper _componentHelper;
-	private IProject _project;
-	private IFile _componentFile;
-	private IFile _extensionFile;	 
-	private Extension _extensionNode;
-	private Component _componentNode;
 	private ObjectFactory _factory;
-	private JAXBElement<Extension> _rootElement;
 	private static ProjectFilesBuilder _singletonInstance;
 	
 	
 	private ProjectFilesBuilder() {
 		_factory = new ObjectFactory();
+		
 	}
 	
 	public static ProjectFilesBuilder getInstance() {
 		if(_singletonInstance == null) {
 			_singletonInstance = new ProjectFilesBuilder();			
-		}
+		}		
 		return _singletonInstance;
-	}
+	}	
 	
-	public void setupProjectFiles(ExtensionHelper extensionHelper, ComponentHelper componentHelper, IProject project) {
-		
-		_project = project;
-		
-		//Reference to Extension and Component helper classes
-		_extensionHelper = extensionHelper;
-		_componentHelper = componentHelper;
-		
+	public void setupExtensionFiles(ExtensionHelper extensionHelper, ComponentHelper componentHelper, IProject project, List<JAXBElement<Extension>> extensions) {
+		IFile componentFile = null;
+		IFile extensionFile = null;
+		Extension extensionNode = null;
+		Component componentNode = null;
+		JAXBElement<Extension> rootElement = null;
+				
 		//Get reference to contribution.xml and contribution.ztl files
-		_componentFile = project.getFile(Settings.store().get(Settings.FOR.COMPONENT_ZTL_FILE_NAME));
-		_extensionFile = project.getFile(Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME));
+		componentFile = project.getFile(extensionHelper.getId() + "/" + Settings.store().get(Settings.FOR.COMPONENT_ZTL_FILE_NAME));
+		extensionFile = project.getFile(extensionHelper.getId() + "/" + Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME));
 				
 		//Create contribution.xml (extension file) if not already created
-		if(!_extensionFile.exists()) {		
+		if(!extensionFile.exists()) {		
 			try {
 				//Get Extension and component nodes from project wizard
-				_extensionNode = _extensionHelper.getModel();
-				_componentNode = _componentHelper.getModel();
+				extensionNode = extensionHelper.getModel();
+				componentNode = componentHelper.getModel();
 				
 				//Create SDKExtension element and add current component node to it
-				_rootElement = _factory.createSdkExtension(_extensionNode);
-				_extensionNode.getComponent().add(_componentNode);
+				rootElement = _factory.createSdkExtension(extensionNode);
+				extensions.add(rootElement);
+				extensionNode.getComponent().add(componentNode);
 				
 				//Process the groups related to components available in current extension
 				//	1. Get group id/name from the current 'Component' node
@@ -83,54 +77,57 @@ public class ProjectFilesBuilder {
 				//	4. If available, create a 'Group' node and add it under 'Extension' node
 				//	5. If not available, create a new 'Group' node, add it under 'Extension' node
 				//			and save it under the 'Groups' preferences
-				setupComponentGroupNode();
+				setupComponentGroupNode(componentNode, extensionNode, _factory);
 				//Insert "RequireJS" node in contribution.xml file and create JS file: res/js/"component_name".js
-				setupRequireJSNode();
+				setupRequireJSNode(project, componentNode, extensionNode, _factory);
 				//Insert "cssInclude" node and create a css file
-				setupCSSIncludeNode();
+				setupCSSIncludeNode(componentNode, project, extensionNode);
 				//Setup icon file in the project
-				setupIconFile();
+				setupIconFile(project, componentNode, extensionNode);
 								
-			
-				//Marshal/Save XML to contribution.xml file with pretty format
-				JAXBContext context = JAXBContext.newInstance(Extension.class);
-				Marshaller marshaller = context.createMarshaller();
-				_extensionFile.create(new ByteArrayInputStream("<!-- contribution.xml -->".getBytes()), true, null);
-				marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-				marshaller.marshal(_rootElement, _extensionFile.getRawLocation().toFile().getAbsoluteFile());
+				saveExtension(extensionFile, rootElement);			
 				
 			} catch (Exception e) {
 				MessageDialog.open(MessageDialog.ERROR, null, "Error while generating file", e.toString(), SWT.SHEET);
 				e.printStackTrace();
 			}
 		}
-	
+		
 		//setup contribute.ztl file
-		if(!_componentFile.exists()) {
+		saveComponent(componentFile, extensionNode, componentNode, componentHelper);
+		
+		//prepare manifest file under meta-inf folder
+		IFile manifest = project.getFile(extensionNode.getId() + "/META-INF/manifest.mf");
+		saveManifest(manifest, extensionNode);
+	}
+	
+	private void saveComponent(IFile componentFile, Extension extensionNode, 
+			Component componentNode, ComponentHelper componentHelper) {
+		if(!componentFile.exists()) {
 			String ztlTemplate = Settings.store().get(Settings.FOR.ZTL_TEMPLATE);
 			Map<String, String> fieldMap = new HashMap<String, String>();
-			fieldMap.put("package", _extensionNode.getId());
-			fieldMap.put("class", _componentNode.getId());
-			fieldMap.put("parentclass", _componentHelper.getClassToExtend());
+			fieldMap.put("package", extensionNode.getId());
+			fieldMap.put("class", componentNode.getId());
+			fieldMap.put("parentclass", componentHelper.getClassToExtend());
 			
 			StringSubstitutor parser = new StringSubstitutor(fieldMap);
 			String content = parser.replace(ztlTemplate);
 			
 			try {
-				_componentFile.create(new ByteArrayInputStream(content.getBytes()), true, null);
+				componentFile.create(new ByteArrayInputStream(content.getBytes()), true, null);
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		//prepare manifest file under meta-inf folder
-		IFile manifest = _project.getFile("META-INF/manifest.mf");
+	}
+	
+	private void saveManifest(IFile manifest, Extension extensionNode) {
 		String mfTemplate = Settings.store().get(Settings.FOR.MF_TEMPLATE);
 		Map<String, String> fieldMap = new HashMap<String, String>();
-		fieldMap.put("ext_title", _extensionNode.getTitle());
-		fieldMap.put("ext_id",  _extensionNode.getId());
-		fieldMap.put("version", _extensionNode.getVersion());
-		fieldMap.put("vendor",  _extensionNode.getVendor());
+		fieldMap.put("ext_title", extensionNode.getTitle());
+		fieldMap.put("ext_id",  extensionNode.getId());
+		fieldMap.put("version", extensionNode.getVersion());
+		fieldMap.put("vendor",  extensionNode.getVendor());
 		StringSubstitutor parser = new StringSubstitutor(fieldMap);
 		String content = parser.replace(mfTemplate);
 		try {
@@ -139,15 +136,32 @@ public class ProjectFilesBuilder {
 			e.printStackTrace();
 		}
 	}
+	
+	private void saveExtension(IFile extensionFile, JAXBElement<Extension> rootElement) {
+		//Marshal/Save XML to contribution.xml file with pretty format
+		JAXBContext context;
+		Marshaller marshaller;
+		try {
+			context = JAXBContext.newInstance(Extension.class);
+			marshaller = context.createMarshaller();
+			extensionFile.create(new ByteArrayInputStream("<!-- contribution.xml -->".getBytes()), true, null);
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			marshaller.marshal(rootElement, extensionFile.getRawLocation().toFile().getAbsoluteFile());
+		} catch (JAXBException | CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 
-	private void setupIconFile() {
-		String iconPath = _componentNode.getIcon();
+	private void setupIconFile(IProject project, Component componentNode, Extension extensionNode) {
+		String iconPath = componentNode.getIcon();
 		if(iconPath != null && !iconPath.isEmpty()) {
 			File fsIconFile = new File(iconPath);
-			IFile iconFile = _project.getFile("res/images/" + fsIconFile.getName());
+			IFile iconFile = project.getFile(extensionNode.getId() + "/res/images/" + fsIconFile.getName());
 			try {
 				iconFile.create(new FileInputStream(fsIconFile), true, null);
-				_componentNode.setIcon("res/images/" + fsIconFile.getName());
+				componentNode.setIcon(extensionNode.getId() + "/res/images/" + fsIconFile.getName());
 			} catch (FileNotFoundException e) {				
 				e.printStackTrace();
 			} catch (CoreException e) {				
@@ -156,16 +170,16 @@ public class ProjectFilesBuilder {
 		}
 	}
 	
-	private void setupCSSIncludeNode() {
+	private void setupCSSIncludeNode(Component componentNode, IProject project, Extension extension) {
 		//Create cssInclude node		
-		String cssFilePath = "res/css/" + _componentNode.getId() + ".css";		
-		createComponentSupportingFile(cssFilePath, Settings.store().get(Settings.FOR.CSS_TEMPLATE));
-		_componentNode.getCssInclude().add(cssFilePath);
+		String cssFilePath = extension.getId() + "/res/css/" + componentNode.getId() + ".css";		
+		createComponentSupportingFile(project, cssFilePath, Settings.store().get(Settings.FOR.CSS_TEMPLATE));
+		componentNode.getCssInclude().add(cssFilePath);
 	}
 
 	
-	private void createComponentSupportingFile(String path, String content) {
-		IFile file = _project.getFile(path);		
+	private void createComponentSupportingFile(IProject project, String path, String content) {
+		IFile file = project.getFile(path);		
 		try {
 			file.create(new ByteArrayInputStream(content.getBytes()), true, null);
 		} catch (CoreException e) {			
@@ -173,27 +187,27 @@ public class ProjectFilesBuilder {
 		}
 	}
 	
-	private void setupRequireJSNode() {
+	private void setupRequireJSNode(IProject project, Component componentNode, Extension extensionNode, ObjectFactory factory) {
 		//Get the mode from the component
-		List<UI5Mode> modes = _componentNode.getModes();
+		List<UI5Mode> modes = componentNode.getModes();
 		//Create requireJS node
-		RequireJSType jsNode = _factory.createRequireJSType();
-		String jsFilePath = "res/js/" + _componentNode.getId();
+		RequireJSType jsNode = factory.createRequireJSType();
+		String jsFilePath = extensionNode.getId() + "/res/js/" + componentNode.getId();
 		jsNode.getModes().addAll(modes);
 		jsNode.setValue(jsFilePath);
-		createComponentSupportingFile(jsFilePath + ".js", Settings.store().get(Settings.FOR.JS_TEMPLATE));
-		_componentNode.getRequireJs().add(jsNode);		
+		createComponentSupportingFile(project, jsFilePath + ".js", Settings.store().get(Settings.FOR.JS_TEMPLATE));
+		componentNode.getRequireJs().add(jsNode);		
 	}
 
-	public void setupComponentGroupNode() {
+	public void setupComponentGroupNode(Component componentNode, Extension extensionNode, ObjectFactory factory) {
 		//Check if there is an group attribute in component and create new group if it don't exists
-		String groupName = _componentNode.getGroup();
+		String groupName = componentNode.getGroup();
 		if(groupName != null) {
 			if(!groupName.equals("Default") && !groupName.equals("TECHNICAL_COMPONENT")) {
 				Group group = null;
 				
 				//check whether the group is already added in the current extension node
-				for(Group g : _extensionNode.getGroup()) {
+				for(Group g : extensionNode.getGroup()) {
 					if(g.getId().equals(groupName)) {
 						group = g;
 						break;
@@ -211,12 +225,12 @@ public class ProjectFilesBuilder {
 				if(group == null) {	
 					for(String g : groups) {
 						if(g.equals(groupName)) {
-							group = _factory.createGroup();
+							group = factory.createGroup();
 							group.setId(g);
 							group.setTitle(g);
 							group.setTooltip("Group assigned to component");
 							group.setVisible(true);
-							_extensionNode.getGroup().add(group);
+							extensionNode.getGroup().add(group);
 							break;
 						}
 					}
@@ -224,12 +238,12 @@ public class ProjectFilesBuilder {
 				
 				//if group is still not available in list too, add same to extension and custom list
 				if(group == null) {
-					group = _factory.createGroup();
+					group = factory.createGroup();
 					group.setId(groupName);
 					group.setTitle(groupName);
 					group.setTooltip("Group assigned to component");
 					group.setVisible(true);
-					_extensionNode.getGroup().add(group);
+					extensionNode.getGroup().add(group);
 					//add new group to preferences also
 					
 					if(ArrayUtils.isNotEmpty(groups)) {
@@ -249,7 +263,7 @@ public class ProjectFilesBuilder {
 			} else {
 			
 				if(groupName.equals("Default")) {
-					_componentNode.setGroup(null);
+					componentNode.setGroup(null);
 				}
 			}
 		}

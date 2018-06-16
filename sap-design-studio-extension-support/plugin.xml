@@ -99,6 +99,7 @@
       <content-type
             base-type="org.eclipse.core.runtime.xml"
             file-extensions="xml"
+            file-names="contribution.xml"
             id="com.armin.sap.ds.sdk.contenttype.contribution"
             name="%content-type.name"
             priority="normal">
@@ -113,6 +114,7 @@
       <content-type
             base-type="org.eclipse.core.runtime.xml"
             file-extensions="xml"
+            file-names="plugin.xml"
             id="com.armin.sap.ds.sdk.contenttype.plugin"
             name="%content-type.name.0"
             priority="normal">
@@ -127,6 +129,7 @@
       <content-type
             base-type="com.armin.sap.ds.files.properties"
             file-extensions="properties"
+            file-names="build.properties"
             id="com.armin.sap.ds.sdk.contenttype.build"
             name="%content-type.name.1"
             priority="normal">
@@ -137,6 +140,7 @@
       <content-type
             base-type="com.armin.sap.ds.files.ztl"
             file-extensions="ztl"
+            file-names="contribution.ztl"
             id="com.armin.sap.ds.sdk.contenttype.ztl"
             name="%content-type.name.2"
             priority="normal">
@@ -147,6 +151,7 @@
       <content-type
             base-type="org.eclipse.core.runtime.xml"
             file-extensions="target"
+            file-names="build.target"
             id="com.armin.sap.ds.sdk.contenttype.target"
             name="%content-type.name.3"
             priority="normal">
@@ -161,6 +166,7 @@
       <content-type
             base-type="org.eclipse.core.runtime.xml"
             file-extensions="html"
+            file-names="additional_properties_sheet.html"
             id="com.armin.sap.ds.sdk.contenttype.aps.html"
             name="%content-type.name.4"
             priority="normal">
@@ -175,6 +181,7 @@
       <content-type
             base-type="com.armin.sap.ds.files.aps.js"
             file-extensions="js"
+            file-names="additional_properties_sheet.js"
             id="com.armin.sap.ds.sdk.contenttype.aps.js"
             name="%content-type.name.5"
             priority="normal">
@@ -206,12 +213,13 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.armin.sap.ds.ext.plugin.editors.DesignStudioExtensionEditor"
-            contributorClass="com.armin.sap.ds.ext.plugin.editors.MultiPageEditorContributor"
-            extensions="mpe"
-            icon="images/extension.png"
-            id="com.armin.sap.ds.ext.plugin.editors.DesignStudioExtensionEditor"
-            name="SAP Design Studio Extension Editor">
+            class="com.armin.sap.ds.ext.plugin.editors.ExtensionEditor"
+            default="true"
+            extensions="xml"
+            filenames="contribution.xml"
+            icon="images/extension_28x28.png"
+            id="com.armin.sap.ds.ext.plugin.editors.extension"
+            name="Extensions &amp; Components Details">
          <contentTypeBinding
                contentTypeId="com.armin.sap.ds.sdk.contenttype.contribution">
          </contentTypeBinding>
@@ -248,5 +256,8 @@
       <initializer
             class="com.armin.sap.ds.ext.plugin.preferences.PreferenceInitializer">
       </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
    </extension>   
 </plugin>

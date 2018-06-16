@@ -184,13 +184,13 @@ public class ExtensionControlFactory {
 				
 				@Override
 				public void focusLost(FocusEvent e) {
-					String id = txtId.getText();
-					if(!id.matches("^\\p{Alpha}+(\\p{Alnum}*)?((\\.\\p{Alnum})*)?")) {
-						MessageDialog.open(MessageDialog.ERROR, null, "Invalid ID", "Only Alphanumeric and .(dot) is allowed. First character should be alphabet only", SWT.SHEET);
-						txtId.setText("");
-						txtId.setFocus();
-						return;
-					}
+//					String id = txtId.getText();
+//					if(!id.matches("^[a-zA-Z]+(\\.[a-zA-Z0-9])*")) {
+//						MessageDialog.open(MessageDialog.ERROR, null, "Invalid ID", "Only Alphanumeric and .(dot) is allowed. First character should be alphabet only", SWT.SHEET);
+//						txtId.setText("");
+//						txtId.setFocus();
+//						return;
+//					}
 					
 				}
 				
@@ -229,7 +229,7 @@ public class ExtensionControlFactory {
 				@Override
 				public void focusLost(FocusEvent e) {					
 					String inputText = txtVersion.getText();
-					boolean isNumeric = inputText.matches("-?\\d+(\\.\\d{1})?");
+					boolean isNumeric = inputText.matches("\\d+(\\.\\d{1})?");
 					if(!isNumeric) {
 						MessageDialog.open(MessageDialog.ERROR, null, "Invalid Number", "Input should be in form 'xx.x' or 'xx' where x is a digit", SWT.SHEET);
 						txtVersion.setText("");

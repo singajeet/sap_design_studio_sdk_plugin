@@ -5,7 +5,7 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry excluding="com/armin/sap/ds/support/ProjectContentHelper.java" kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/apache-commons-text-jar-plugin"/>
-	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.ui.forms_3.7.101.v20170815-1446.jar"/>
+	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.ui.forms_3.7.101.v20170815-1446.jar" sourcepath="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.ui.forms.source_3.7.101.v20170815-1446.jar"/>
 	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jaxb.branding_1.4.1.v201803012210.jar"/>
 	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jaxb.core_1.4.101.v201803012210.jar"/>
 	<classpathentry kind="lib" path="/home/armin/eclipse/oxygen/eclipse/plugins/org.eclipse.jpt.jaxb.core.schemagen_1.1.201.v201803012210.jar"/>

@@ -1,6 +1,10 @@
 package com.armin.sap.ds.support;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.JAXBElement;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
@@ -10,53 +14,94 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.armin.sap.ds.sdk.project.natures.ProjectNature;
+import com.armin.sap.ds.xml.Extension;
 
 public class DesignStudioProjectHelper {
 	
-	private static ExtensionHelper _extensionHelper;
-	private static ComponentHelper _componentHelper;
+	private ExtensionHelper _extensionHelper;
+	private ComponentHelper _componentHelper;
+	private IProject _project;
+	private List<JAXBElement<Extension>> _extensions;
+	
+	private static DesignStudioProjectHelper _singleton;
+	
+	private DesignStudioProjectHelper() {
+		_extensions = new ArrayList<JAXBElement<Extension>>();
+	}
+	
+	public static DesignStudioProjectHelper get() {
+		if(_singleton == null) {
+			_singleton = new DesignStudioProjectHelper();
+		}
 		
-	public static IProject createProject(String projectName, URI location, ExtensionHelper extensionHelper, ComponentHelper componentHelper) {		
+		return _singleton;
+	}
+		
+	public IProject getCurrentProject() {
+		return _project;
+	}
+	
+	public List<JAXBElement<Extension>> getExtensionList(){
+		return _extensions;
+	}
+	
+	public ExtensionHelper getCurrentExtensionHelper() {
+		return _extensionHelper;
+	}
+	
+	public ComponentHelper getCurrentComponentHelper() {
+		return _componentHelper;
+	}
+	
+	public IProject createProject(String projectName, URI location, ExtensionHelper extensionHelper, ComponentHelper componentHelper) {		
 		
 		_extensionHelper = extensionHelper;
 		_componentHelper = componentHelper;
 		
-		IProject project = createBaseProject(projectName, location);
-		
 		try {
-			addNature(project);
-			
-			String[] folderPaths = { 
-					"META-INF",
-					"res/js",
-					"res/css",
-					"res/images",
-					"res/additional_properties_sheet"
-			};
-			
-			addFoldersToProjectStructure(project, folderPaths);
-			addFilesToProjectStructure(project);
-			
+			_project = createBaseProject(projectName, location);			
+			addNature(_project);			
+			createExtension(extensionHelper, componentHelper);			
 		}catch(Exception e) {
 			e.printStackTrace();
-			project = null;
+			_project = null;
 		}
 		
-		return project;
+		return _project;
+	}
+	
+	public void createExtension(ExtensionHelper extensionHelper, ComponentHelper componentHelper) throws Exception {
+		_extensionHelper = extensionHelper;
+		_componentHelper = componentHelper;
+		
+		String[] folderPaths = { 
+				extensionHelper.getId() + "/META-INF",
+				extensionHelper.getId() + "/res/js",
+				extensionHelper.getId() + "/res/css",
+				extensionHelper.getId() + "/res/images",
+				extensionHelper.getId() + "/res/additional_properties_sheet"
+		};
+		
+		addFoldersToProjectStructure(_project, folderPaths);
+		addFilesToProjectStructure(_project);
+	}
+	
+	public IProject getProject() {
+		return _project;		
 	}
 
-	private static void addFilesToProjectStructure(IProject project) {			
-		ProjectFilesBuilder.getInstance().setupProjectFiles(_extensionHelper, _componentHelper, project);
+	private void addFilesToProjectStructure(IProject project) {			
+		ProjectFilesBuilder.getInstance().setupExtensionFiles(_extensionHelper, _componentHelper, project, _extensions);
 	}
 
-	private static void addFoldersToProjectStructure(IProject project, String[] paths) throws Exception{
+	private void addFoldersToProjectStructure(IProject project, String[] paths) throws Exception{
 		for(String path: paths) {
 			IFolder etcFolders = project.getFolder(path);
 			createFolder(etcFolders);
 		}
 	}
 
-	private static void addNature(IProject project) throws Exception{
+	private void addNature(IProject project) throws Exception{
 		if(!project.hasNature(ProjectNature.NATURE_ID)) {
 			IProjectDescription description = project.getDescription();
 			String[] prevNatures = description.getNatureIds();

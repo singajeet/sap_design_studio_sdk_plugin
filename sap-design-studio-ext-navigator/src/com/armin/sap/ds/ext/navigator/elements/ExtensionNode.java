@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Display;
 import com.armin.sap.ds.ext.navigator.Activator;
 import com.armin.sap.ds.ext.navigator.helper.ProjectFilesReader;
 import com.armin.sap.ds.ext.plugin.preferences.Settings;
+import com.armin.sap.ds.support.DesignStudioProjectHelper;
 import com.armin.sap.ds.xml.Component;
 import com.armin.sap.ds.xml.Extension;
 import com.armin.sap.ds.xml.Group;
@@ -18,7 +19,8 @@ import com.armin.sap.ds.xml.Group;
 public class ExtensionNode extends GenericFileNode {
 
 	private IProjectItemNode[] _children;
-	private String _name;	
+	private String _name; 
+	private Extension _model;
 	
 	public ExtensionNode() {
 		// TODO Auto-generated constructor stub
@@ -36,11 +38,15 @@ public class ExtensionNode extends GenericFileNode {
 	
 	/************************** Required to be overridden ********************************/
 	
+	public Extension getExtension() {
+		return _model;
+	}
+	
 	@Override
 	public String getName() {
 		return _name;
 	}
-	
+		
 	@Override
     public Image getImage() {
 		Image image = Activator.getImage("images/extension_28x28.png");
@@ -74,12 +80,13 @@ public class ExtensionNode extends GenericFileNode {
 	/************************************************************************************/
 
 	protected IProjectItemNode[] initializeChildren(IResource extensionResource) {
-    	try {
+    	try {    			
 	    		//Logger.debug("Extension => CREATE CHILDREN");
-	    		Extension extensionModel = ProjectFilesReader.getInstance().getExtensionModel(extensionResource);
-	    		_name = extensionModel.getTitle();
-	    		List<Component> components = extensionModel.getComponent();
-	    		List<Group> groups = extensionModel.getGroup();
+	    		Extension _model = ProjectFilesReader.getInstance().getExtensionModel(extensionResource);
+	    		_name = _model.getTitle();
+	    		
+	    		List<Component> components = _model.getComponent();
+	    		List<Group> groups = _model.getGroup();
 	    		ArrayList<IProjectItemNode> children = new ArrayList<IProjectItemNode>();
 	    		
 	    		if(groups.size() > 0) {

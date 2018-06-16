@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
+
 import com.armin.sap.ds.ext.navigator.Activator;
 import com.armin.sap.ds.ext.plugin.preferences.Settings;
 
@@ -17,21 +18,14 @@ public class ProjectNode extends ProjectItemNode {
 	private IProject _project;
 	private IProjectItemNode[] _children;
 	private String _name;
-	private String _description;
-	
 	public ProjectNode() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public ProjectNode(IProject project) {
 		_project = project;
 		_parent = (IWorkspaceRoot)project.getParent();
 		_name = project.getName();
-		try {
-			_description = project.getDescription().getComment();
-		}catch(Exception e) {
-			
-		}
 		
 		try {
 			if (_children == null) {
@@ -84,14 +78,12 @@ public class ProjectNode extends ProjectItemNode {
 	
 	protected IProjectItemNode[] initializeChildren(IResource[] resources) {
     	try {
-    		//Logger.debug("ProjectNode => CREATE CHILDREN");
     		ArrayList<IProjectItemNode> children = new ArrayList<IProjectItemNode>();
-    		String extension_file_name = Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME);
     		for(int i=0;i<resources.length;i++) {    			
-    			if(resources[i].getName().toUpperCase().equals(extension_file_name.toUpperCase())) {
-    				IProjectItemNode extensionNode = new ExtensionNode(resources[i], this);
-    				if(extensionNode != null) {
-    					children.add(extensionNode);
+    			if(resources[i].getType() == IResource.FOLDER) {
+    				IProjectItemNode packageNode = new ExtensionCollectionNode(resources[i], this);
+    				if(packageNode != null) {
+    					children.add(packageNode);
     				}
     			}    			
     		}
@@ -100,14 +92,13 @@ public class ProjectNode extends ProjectItemNode {
 				return new IProjectItemNode[] { new ProjectItemNode("No extensions found!", this) };
 			}
     		
-    		//Logger.debug("ProjectNode => DONE!");
     		IProjectItemNode[] childrenArray = new IProjectItemNode[children.size()];
     		children.toArray(childrenArray);
     		return childrenArray;
     	}catch(Exception e)
     	{
     		e.printStackTrace();
-    		return new IProjectItemNode[]{ new ProjectItemNode("Error while searching images, css or APS nodes: " + e.getMessage(), this) };
+    		return new IProjectItemNode[]{ new ProjectItemNode("Error while creating package node: " + e.getMessage(), this) };
     	}
         
     }	

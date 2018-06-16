@@ -68,7 +68,8 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 		ExtensionHelper extensionDetails = ((ExtensionDetailsPage)_pageTwo).getDetails();
 		ComponentHelper componentDetails = ((ComponentDetailsPage)_pageThree).getDetails();
 		
-		DesignStudioProjectHelper.createProject(name, location, extensionDetails, componentDetails);
+		DesignStudioProjectHelper helper = DesignStudioProjectHelper.get();
+		helper.createProject(name, location, extensionDetails, componentDetails);
 		
 		BasicNewProjectResourceWizard.updatePerspective(_configurationElement);
 		return true;

@@ -7,19 +7,17 @@ Bundle-Activator: com.armin.sap.ds.ext.plugin.Activator
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.13.0",
  org.eclipse.ui.ide;bundle-version="3.13.1",
  org.eclipse.core.resources;bundle-version="3.12.0",
- org.eclipse.ui.navigator;bundle-version="3.7.0",
- org.eclipse.ui.navigator.resources;bundle-version="3.6.1",
  org.eclipse.ui;bundle-version="3.109.0",
  apache-commons-text-jar-plugin;bundle-version="1.0.0",
- org.eclipse.jface.text,
- org.eclipse.ui.editors,
  org.eclipse.core.databinding,
- org.eclipse.core.databinding.observable,
  org.eclipse.jface.databinding,
- org.eclipse.jface
+ org.eclipse.core.databinding.beans,
+ org.eclipse.core.databinding.property,
+ org.eclipse.ui.forms;bundle-version="3.7.101"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.armin.sap.ds.ext.plugin,
+ com.armin.sap.ds.ext.plugin.editors,
  com.armin.sap.ds.ext.plugin.preferences,
  com.armin.sap.ds.sdk.project.natures,
  com.armin.sap.ds.sdk.project.perspective,

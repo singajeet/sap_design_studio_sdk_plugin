@@ -90,6 +90,12 @@
             id="com.armin.sap.ds.commands.category"
             name="Design Studio Commands">
       </category>
+      <command
+            categoryId="com.armin.sap.ds.commands.category"
+            defaultHandler="com.armin.sap.ds.ext.navigator.commands.OpenExtensionCommand"
+            id="com.armin.sap.ds.commands.extension.open"
+            name="Open Extension">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -104,7 +110,7 @@
             <command
                   commandId="org.eclipse.ui.newWizard"
                   icon="images/project_28x28.png"
-                  label="ToolBar: SAP Design Studio Extension Project Wizard..."
+                  label="SAP Design Studio Extension Project Wizard..."
                   style="push"
                   tooltip="ToolBar: Build new Sap Design Studio Extension Project using wizard">
                <parameter
@@ -124,7 +130,7 @@
             <command
                   commandId="org.eclipse.ui.newWizard"
                   icon="images/extension_28x28.png"
-                  label="ToolBar: Extension"
+                  label="Extension"
                   style="push"
                   tooltip="ToolBar: Create a new extension under selected project">
                <parameter
@@ -144,7 +150,7 @@
             <command
                   commandId="org.eclipse.ui.newWizard"
                   icon="images/component_28x28.png"
-                  label="ToolBar: Component"
+                  label="Component"
                   style="push"
                   tooltip="ToolBar: Create a new component under selected extension">
                <parameter
@@ -210,6 +216,20 @@
          <separator
                name="sap-design-studio-ext-navigator.separator2">
          </separator>
+         <command
+               commandId="com.armin.sap.ds.commands.extension.open"
+               label="Open"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.sdk.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
          <command
                commandId="org.eclipse.ui.navigate.openResource"
                label="Open File..."

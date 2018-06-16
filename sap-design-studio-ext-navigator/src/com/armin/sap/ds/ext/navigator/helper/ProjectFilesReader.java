@@ -35,7 +35,7 @@ public class ProjectFilesReader {
 			
 			if(resource.exists()) {
 				IPath extensionFilePath = resource.getLocation();
-				Object rawObject = unmarshaller.unmarshal(extensionFilePath.toFile());
+				Object rawObject = unmarshaller.unmarshal(extensionFilePath.append("contribution.xml").toFile());
 				return (Extension)rawObject;
 			}
 		} catch (JAXBException e) {			

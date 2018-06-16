@@ -3,8 +3,6 @@ package com.armin.sap.ds.ext.navigator.elements;
 import java.util.ArrayList;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
@@ -17,7 +15,6 @@ public class ComponentNode extends GenericFileNode {
 
 	private String _name;
 	private IProjectItemNode[] _children;
-	private IResource _extensionResource;
 	private IProjectItemNode _parent;
 	private Component _model;
 
@@ -28,7 +25,6 @@ public class ComponentNode extends GenericFileNode {
 	public ComponentNode(Component model, IResource extensionResource, IProjectItemNode parent) {
 		_model = model;
 		_name = _model.getTitle();
-		_extensionResource = extensionResource;
 		_parent = parent;
 		_children = initializeChildren(extensionResource);
 	}
@@ -96,8 +92,8 @@ public class ComponentNode extends GenericFileNode {
 			IProjectItemNode css = new CascadeStyleSheetCollectionNode(_model.getCssInclude(), extensionResource, _parent);
 			children.add(css);
 			
-			IProjectItemNode images = new ImagesFolderNode(_model, extensionResource, _parent);
-			children.add(images);
+//			IProjectItemNode images = new ImagesFolderNode(_model, extensionResource, _parent);
+//			children.add(images);
 			
 			IProjectItemNode[] childrenArray = new IProjectItemNode[children.size()];
 			children.toArray(childrenArray);

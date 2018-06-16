@@ -11,8 +11,6 @@ import com.armin.sap.ds.xml.Component;
 
 public class AdvancedPropertySheetNode extends GenericFileNode {
 	
-	private String _apsPath;
-	private Component _model;
 	private static final String _name = "Advanced Property Sheet";	
 	private IProjectItemNode _parent;
 	private IProjectItemNode[] _children;
@@ -23,8 +21,6 @@ public class AdvancedPropertySheetNode extends GenericFileNode {
 	
 	public AdvancedPropertySheetNode(String apsPath, Component model, IResource resource, IProjectItemNode parent) {
 		super(resource, parent);
-		_apsPath = apsPath;
-		_model = model;
 		
 	}
 	

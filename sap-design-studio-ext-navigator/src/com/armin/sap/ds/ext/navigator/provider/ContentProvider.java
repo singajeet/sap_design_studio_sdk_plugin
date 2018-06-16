@@ -56,19 +56,16 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 		List<Object> list = new ArrayList<Object>();
 		for(int i=0; i < projects.length; i++) {
 			try {
-					//if(projects[i].hasNature(ProjectNature.NATURE_ID)){
-						Object designStudioProjectParent = _wrapperCache.get(projects[i].getName());
-						if(designStudioProjectParent == null) {
-							designStudioProjectParent = createProjectParent(projects[i]);							
-						}
-								
-						if(designStudioProjectParent != null) {
-							_wrapperCache.put(projects[i].getName(), designStudioProjectParent);
-							list.add(designStudioProjectParent);
-						}
-					//}
+					Object designStudioProjectParent = _wrapperCache.get(projects[i].getName());
+					if(designStudioProjectParent == null) {
+						designStudioProjectParent = createProjectParent(projects[i]);							
+					}
+							
+					if(designStudioProjectParent != null) {
+						_wrapperCache.put(projects[i].getName(), designStudioProjectParent);
+						list.add(designStudioProjectParent);
+					}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}
@@ -113,17 +110,13 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
         } else if (IProjectItemNode.class.isInstance(element)) {
             hasChildren = ((IProjectItemNode)element).hasChildren(element);
         }
-        // else it is not one of these so return false
          
         return hasChildren;
 	}
 
 	@Override
     public void dispose() {
-		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
-        //Logger.debug("ContentProvider.dispose"); //$NON-NLS-1$
-        // TODO Auto-generated method stub
- 
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);        
     }
 	
 	@Override

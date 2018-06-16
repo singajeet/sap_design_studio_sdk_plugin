@@ -7,14 +7,12 @@ Bundle-Activator: com.armin.sap.ds.ext.navigator.Activator
 Require-Bundle: org.eclipse.ui;bundle-version="3.109.0",
  org.eclipse.core.runtime;bundle-version="3.13.0",
  org.eclipse.core.resources;bundle-version="3.12.0",
- org.eclipse.ui.navigator;bundle-version="3.7.0",
- org.eclipse.ui.navigator.resources;bundle-version="3.6.1",
  com.armin.sap.ds.ext.plugin;bundle-version="1.0.0",
  org.eclipse.pde.core;bundle-version="3.11.101"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: sap-design-studio-ext-navigator
 Bundle-ActivationPolicy: lazy
 Export-Package: com.armin.sap.ds.ext.navigator,
+ com.armin.sap.ds.ext.navigator.elements,
  com.armin.sap.ds.ext.navigator.provider,
  com.armin.sap.ds.ext.navigator.sorter
-Import-Package: org.eclipse.ui.actions

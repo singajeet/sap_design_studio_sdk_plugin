@@ -2,24 +2,21 @@ package com.armin.sap.ds.ext.navigator.elements;
 
 import java.util.ArrayList;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.ext.navigator.Activator;
 import com.armin.sap.ds.ext.plugin.preferences.Settings;
+import com.armin.sap.ds.support.DesignStudioProjectHelper;
 import com.armin.sap.ds.xml.Component;
 
 public class ImagesFolderNode extends GenericFolderNode {
 
-	private static final String PATH ="res/images/";
-	private Component _model;
+	private static final String PATH = DesignStudioProjectHelper.get().getCurrentExtensionHelper().getId() + "/res/images/";
 	private static final String _name = "Images";
 	private IProjectItemNode _parent;
 	private IProjectItemNode[] _children;
@@ -34,7 +31,6 @@ public class ImagesFolderNode extends GenericFolderNode {
 	
 	public ImagesFolderNode(Component model, IResource resource, IProjectItemNode parent) {
 		super(resource, parent);
-		_model = model;
 		_parent = parent;
 		_children = initializeChildren(resource);
 	}
