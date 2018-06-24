@@ -1,0 +1,65 @@
+package com.armin.sap.ds.builder.wizard.pages;
+
+import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
+
+import com.armin.sap.ds.builder.common.ComponentHelper;
+import com.armin.sap.ds.builder.shared.ISharedData;
+
+
+public class ComponentDetailsPage extends WizardPage implements IWizardDetailsPage {
+
+	private ComponentHelper _helper;
+	private ISharedData _data;
+	
+	public ComponentDetailsPage() {
+		super("Component Details");
+		setPageComplete(false);
+		_helper = new ComponentHelper();
+	}
+	
+	public ComponentDetailsPage(String pageName, ISharedData data) {
+		super(pageName);
+		setPageComplete(false);
+		_data = data;
+		_helper = new ComponentHelper(_data);		
+	}
+
+	@Override
+	public void createControl(Composite parent) {
+		initializeDialogUnits(parent);
+		Composite topLevel = new Composite(parent, SWT.NONE);
+		topLevel.setLayout(new GridLayout());
+		topLevel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL
+				| GridData.HORIZONTAL_ALIGN_FILL));
+		topLevel.setFont(parent.getFont());
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(topLevel,
+				"com.armin.sap.ds.sdk.help." + "new_file_wizard_page_context"); //$NON-NLS-1$
+		
+		setErrorMessage(null);
+		setMessage(null);
+		setControl(topLevel);
+		_helper.createControl(this);
+	}
+	
+	public ComponentHelper getDetails() {
+		
+		return _helper;
+	}
+
+	@Override
+	public boolean validatePage() {
+		if(_helper.getTitle() != null && _helper.getClassName() != null && 
+				(_helper.getPackageName() != null || _helper.getId() != null)) {
+			return !_helper.getTitle().isEmpty() && !_helper.getClassName().isEmpty() &&
+					!(_helper.getPackageName().isEmpty() || _helper.getId().isEmpty());
+		} else {
+			return false;
+		}
+	}	
+	
+}
