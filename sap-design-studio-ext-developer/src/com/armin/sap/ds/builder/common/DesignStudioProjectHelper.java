@@ -15,12 +15,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.armin.sap.ds.builder.DesignStudioProjectNature;
 import com.armin.sap.ds.builder.project.models.Extension;
+import com.armin.sap.ds.builder.project.models.IModel;
 
 
 public class DesignStudioProjectHelper {
 	
-	private ExtensionHelper _extensionHelper;
-	private ComponentHelper _componentHelper;
+	private IModel _extensionModel;
+	private IModel _componentModel;
 	private IProject _project;
 	private Map<String, JAXBElement<Extension>> _extensions;
 	
@@ -46,23 +47,23 @@ public class DesignStudioProjectHelper {
 		return _extensions;
 	}
 	
-	public ExtensionHelper getCurrentExtensionHelper() {
-		return _extensionHelper;
+	public IModel getCurrentExtensionHelper() {
+		return _extensionModel;
 	}
 	
-	public ComponentHelper getCurrentComponentHelper() {
-		return _componentHelper;
+	public IModel getCurrentComponentHelper() {
+		return _componentModel;
 	}
 	
-	public IProject createProject(String projectName, URI location, ExtensionHelper extensionHelper, ComponentHelper componentHelper) {		
+	public IProject createProject(String projectName, URI location, IModel extensionModel, IModel componentModel) {		
 		
-		_extensionHelper = extensionHelper;
-		_componentHelper = componentHelper;
+		_extensionModel = extensionModel;
+		_componentModel = componentModel;
 		
 		try {
 			_project = createBaseProject(projectName, location);			
 			addNature(_project);			
-			createExtension(extensionHelper, componentHelper);			
+			createExtension(extensionModel, componentModel);			
 		}catch(Exception e) {
 			e.printStackTrace();
 			_project = null;
@@ -71,16 +72,16 @@ public class DesignStudioProjectHelper {
 		return _project;
 	}
 	
-	public void createExtension(ExtensionHelper extensionHelper, ComponentHelper componentHelper) throws Exception {
-		_extensionHelper = extensionHelper;
-		_componentHelper = componentHelper;
+	public void createExtension(IModel extensionModel, IModel componentModel) throws Exception {
+		_extensionModel = extensionModel;
+		_componentModel = componentModel;
 		
 		String[] folderPaths = { 
-				extensionHelper.getId() + "/META-INF",
-				extensionHelper.getId() + "/res/js",
-				extensionHelper.getId() + "/res/css",
-				extensionHelper.getId() + "/res/images",
-				extensionHelper.getId() + "/res/additional_properties_sheet"
+				extensionModel.getId() + "/META-INF",
+				extensionModel.getId() + "/res/js",
+				extensionModel.getId() + "/res/css",
+				extensionModel.getId() + "/res/images",
+				extensionModel.getId() + "/res/additional_properties_sheet"
 		};
 		
 		addFoldersToProjectStructure(_project, folderPaths);
@@ -92,7 +93,7 @@ public class DesignStudioProjectHelper {
 	}
 
 	private void addFilesToProjectStructure(IProject project) {			
-		ProjectFilesBuilder.getInstance().setupExtensionFiles(_extensionHelper, _componentHelper, project, _extensions);
+		ProjectFilesBuilder.getInstance().setupExtensionFiles(_extensionModel, _componentModel, project, _extensions);
 	}
 
 	private void addFoldersToProjectStructure(IProject project, String[] paths) throws Exception{

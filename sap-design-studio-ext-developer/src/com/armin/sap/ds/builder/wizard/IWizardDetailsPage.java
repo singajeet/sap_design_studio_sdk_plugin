@@ -1,12 +1,12 @@
-package com.armin.sap.ds.builder.wizard.pages;
+package com.armin.sap.ds.builder.wizard;
 
 import org.eclipse.jface.wizard.IWizardPage;
 
-import com.armin.sap.ds.builder.common.IHelper;
+import com.armin.sap.ds.builder.project.models.IModel;
 
 
 public interface IWizardDetailsPage extends IWizardPage {
 	boolean validatePage();
 	void setPageComplete(boolean status);
-	IHelper getDetails();
+	IModel getModel();
 }

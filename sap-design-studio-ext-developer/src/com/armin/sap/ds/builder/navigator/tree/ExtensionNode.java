@@ -66,7 +66,7 @@ public class ExtensionNode extends GenericFileNode {
 	
 	@Override
 	public String getName() {
-		return ((Extension)_item).getTitle();
+		return ((Extension)_item).getId() + " - (" + ((Extension)_item).getTitle() + ")";
 	}
 		
 	@Override

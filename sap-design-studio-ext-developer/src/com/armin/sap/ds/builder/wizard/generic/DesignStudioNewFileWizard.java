@@ -1,4 +1,4 @@
-package com.armin.sap.ds.builder.wizards;
+package com.armin.sap.ds.builder.wizard.generic;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -15,8 +15,6 @@ import java.io.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.ide.IDE;
 
-import com.armin.sap.ds.builder.wizard.pages.DesignStudioNewProjectWizardPage;
-
 /**
  * This is a sample new wizard. Its role is to create a new file 
  * resource in the provided container. If the container resource
@@ -28,14 +26,14 @@ import com.armin.sap.ds.builder.wizard.pages.DesignStudioNewProjectWizardPage;
  * be able to open it.
  */
 
-public class DesignStudioNewProjectWizard extends Wizard implements INewWizard {
-	private DesignStudioNewProjectWizardPage page;
+public class DesignStudioNewFileWizard extends Wizard implements INewWizard {
+	private DesignStudioNewFileWizardPage page;
 	private ISelection selection;
 
 	/**
-	 * Constructor for DesignStudioNewProjectWizard.
+	 * Constructor for DesignStudioNewFileWizard.
 	 */
-	public DesignStudioNewProjectWizard() {
+	public DesignStudioNewFileWizard() {
 		super();
 		setNeedsProgressMonitor(true);
 	}
@@ -45,7 +43,7 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard {
 	 */
 	@Override
 	public void addPages() {
-		page = new DesignStudioNewProjectWizardPage(selection);
+		page = new DesignStudioNewFileWizardPage(selection);
 		addPage(page);
 	}
 

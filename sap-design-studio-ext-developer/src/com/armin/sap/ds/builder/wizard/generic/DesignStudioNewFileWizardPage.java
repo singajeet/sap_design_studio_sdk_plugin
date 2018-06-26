@@ -1,4 +1,4 @@
-package com.armin.sap.ds.builder.wizard.pages;
+package com.armin.sap.ds.builder.wizard.generic;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
@@ -26,7 +26,7 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
  * OR with the extension that matches the expected one (mpe).
  */
 
-public class DesignStudioNewProjectWizardPage extends WizardPage {
+public class DesignStudioNewFileWizardPage extends WizardPage {
 	private Text containerText;
 
 	private Text fileText;
@@ -38,7 +38,7 @@ public class DesignStudioNewProjectWizardPage extends WizardPage {
 	 * 
 	 * @param pageName
 	 */
-	public DesignStudioNewProjectWizardPage(ISelection selection) {
+	public DesignStudioNewFileWizardPage(ISelection selection) {
 		super("wizardPage");
 		setTitle("Multi-page Editor File");
 		setDescription("This wizard creates a new file with *.mpe extension that can be opened by a multi-page editor.");
