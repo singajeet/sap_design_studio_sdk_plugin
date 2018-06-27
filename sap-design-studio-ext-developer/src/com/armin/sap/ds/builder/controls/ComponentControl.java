@@ -1,5 +1,8 @@
 package com.armin.sap.ds.builder.controls;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
@@ -25,6 +28,7 @@ import com.armin.sap.ds.builder.project.models.UI5Mode;
 
 public class ComponentControl extends Composite {
 
+	private List<IComponentChangedListener> _listeners;
 	private Component _model;
 	
 	private Text txtTitle;
@@ -50,11 +54,13 @@ public class ComponentControl extends Composite {
 	
 	public ComponentControl(Composite parent, int style) {
 		super(parent, style);
+		_listeners = new ArrayList<IComponentChangedListener>();
 		_model = new Component();
 	}
 	
 	public ComponentControl(Composite parent, int style, Component model) {		
 		this(parent, style);
+		_listeners = new ArrayList<IComponentChangedListener>();
 		_model = model;
 		this.createControl();
 	}
@@ -168,7 +174,7 @@ public class ComponentControl extends Composite {
 					txtClass.setText(clsName);
 					_model.setId(clsName);
 				}	
-				
+				validateControl();				
 			}
 		});
 		//--- Class Name Row
@@ -183,6 +189,7 @@ public class ComponentControl extends Composite {
 					isClassNameModifiedManually = true;
 				}					
 				_model.setId(txtClass.getText() != null ? txtClass.getText() : "");
+				validateControl();
 			}
 		});
 		//--- Tooltip Row
@@ -449,6 +456,17 @@ public class ComponentControl extends Composite {
 
 	}
 	
+	public void addComponentChangedListener(IComponentChangedListener listener) {
+		if(listener != null)
+			_listeners.add(listener);
+	}
+	
+	private void notifyAllListeners(boolean isValid) {
+		for(IComponentChangedListener listener : _listeners) {
+			listener.OnComponentChanged(isValid);
+		}
+	}
+	
 	private boolean has(UI5Mode mode) {
 		for(UI5Mode ele : _model.getModes()) {
 			if(ele.name().equals(mode.name())) {
@@ -462,12 +480,10 @@ public class ComponentControl extends Composite {
 	public boolean validateControl() {			
 		if(txtTitle.getText() != null && txtClass.getText() != null) {
 			boolean result = !txtTitle.getText().isEmpty() && !txtClass.getText().isEmpty();
-			if(result) {
-				return true;
-			} else {
-				return false;
-			}
+			notifyAllListeners(result);
+			return result;
 		} else {
+			notifyAllListeners(false);
 			return false;
 		}
 	}

@@ -312,7 +312,7 @@
       </wizard>
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
-            class="com.armin.sap.ds.builder.wizard.extension.ExtensionNewFileWizard"
+            class="com.armin.sap.ds.builder.wizard.extension.ExtensionWizard"
             descriptionImage="images/extension_28x28.png"
             icon="images/extension_28x28.png"
             id="com.armin.sap.ds.builder.wizards.new_extension_wizard"
@@ -320,7 +320,7 @@
       </wizard>
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
-            class="com.armin.sap.ds.builder.wizard.component.ComponentNewFileWizard"
+            class="com.armin.sap.ds.builder.wizard.component.ComponentWizard"
             descriptionImage="images/component_28x28.png"
             icon="images/component_28x28.png"
             id="com.armin.sap.ds.builder.wizards.new_component_wizard"
@@ -328,7 +328,7 @@
       </wizard>
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
-            class="com.armin.sap.ds.builder.wizard.group.NewGroupWizard"
+            class="com.armin.sap.ds.builder.wizard.group.GroupWizard"
             descriptionImage="images/group_28x28.png"
             icon="images/group_28x28.png"
             id="com.armin.sap.ds.builder.wizards.new_group_wizard"

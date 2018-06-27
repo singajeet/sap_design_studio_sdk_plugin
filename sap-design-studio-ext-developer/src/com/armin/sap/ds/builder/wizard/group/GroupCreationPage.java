@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
-import com.armin.sap.ds.builder.common.IHelper;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 import com.armin.sap.ds.builder.project.models.Extension;
@@ -19,20 +18,20 @@ import com.armin.sap.ds.builder.project.models.IModel;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
 
 
-public class NewGroupWizardPage extends WizardNewFileCreationPage implements IWizardDetailsPage {
+public class GroupCreationPage extends WizardNewFileCreationPage implements IWizardDetailsPage {
 
 	Text _selectedExtension;
 	Text _newGroupName;
 	IStructuredSelection _selection;
 	
-	public NewGroupWizardPage(String pageName, IStructuredSelection selection) {
+	public GroupCreationPage(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
 		setTitle("Design Studio Group");
 		setDescription("This wizard helps in creating new group to categorize SDK components");
 		this._selection = selection;
 	}
 	
-	public NewGroupWizardPage(IStructuredSelection selection) {
+	public GroupCreationPage(IStructuredSelection selection) {
 		super("New Design Studio Group", selection);
 		setTitle("Design Studio Group");
 		setDescription("This wizard helps in creating new group to categorize SDK components");

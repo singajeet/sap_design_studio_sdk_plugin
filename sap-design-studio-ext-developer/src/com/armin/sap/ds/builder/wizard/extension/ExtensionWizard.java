@@ -1,23 +1,22 @@
-package com.armin.sap.ds.builder.wizard.group;
+package com.armin.sap.ds.builder.wizard.extension;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
 
-import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
-import com.armin.sap.ds.builder.wizard.extension.ExtensionNewFileCreationPage;
 
-public class NewGroupWizard extends Wizard implements INewWizard {
+public class ExtensionWizard extends Wizard implements INewWizard {
 
 	private IWorkbench _workbench;
 	private IStructuredSelection _selection;
-	private IWizardDetailsPage _pageOne;
+	private WizardNewFileCreationPage _pageOne;
 	
-	public NewGroupWizard() {
-		setWindowTitle("New Group");
+	public ExtensionWizard() {
+		setWindowTitle("New Extension File");
 	}
 
 	@Override
@@ -25,7 +24,7 @@ public class NewGroupWizard extends Wizard implements INewWizard {
 		_workbench = workbench;
 	    _selection = selection;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.Wizard#addPages()
 	 */
@@ -33,21 +32,21 @@ public class NewGroupWizard extends Wizard implements INewWizard {
 	public void addPages() {
 		super.addPages();
 		
-		_pageOne = new NewGroupWizardPage(_selection);
+		_pageOne = new ExtensionCreationPage(_selection);
 		addPage(_pageOne);
 	}
 
 	@Override
 	public boolean performFinish() {
 		boolean result = false;
-		//IFile file = _pageOne.createNewFile();
+		IFile file = _pageOne.createNewFile();
 		
-//		if(file != null)
-//			result = true;
+		if(file != null)
+			result = true;
 			
 		if(result) {
 			try {
-				//IDE.openEditor(_workbench.getActiveWorkbenchWindow().getActivePage(), file);
+				IDE.openEditor(_workbench.getActiveWorkbenchWindow().getActivePage(), file);
 			}catch(Exception e) {
 				e.printStackTrace();
 			}

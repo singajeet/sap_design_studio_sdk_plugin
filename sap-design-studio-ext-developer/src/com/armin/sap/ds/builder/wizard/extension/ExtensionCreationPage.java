@@ -1,22 +1,21 @@
-package com.armin.sap.ds.builder.wizard.component;
+package com.armin.sap.ds.builder.wizard.extension;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
-import com.armin.sap.ds.builder.common.IHelper;
 import com.armin.sap.ds.builder.project.models.IModel;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
 
 
-public class ComponentNewFileCreationPage extends WizardNewFileCreationPage implements IWizardDetailsPage {
+public class ExtensionCreationPage extends WizardNewFileCreationPage implements IWizardDetailsPage {
 
-	public ComponentNewFileCreationPage(String pageName, IStructuredSelection selection) {
+	public ExtensionCreationPage(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
 		// TODO Auto-generated constructor stub
 	}
 	
-	public ComponentNewFileCreationPage(IStructuredSelection selection) {
-		super("Component Details", selection);
+	public ExtensionCreationPage(IStructuredSelection selection) {
+		super("Extension Details", selection);
 		// TODO Auto-generated constructor stub
 	}
 	

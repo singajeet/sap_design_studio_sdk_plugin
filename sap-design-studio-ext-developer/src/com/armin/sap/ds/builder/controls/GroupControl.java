@@ -1,22 +1,25 @@
 package com.armin.sap.ds.builder.controls;
 
-import org.eclipse.swt.widgets.Composite;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.armin.sap.ds.builder.project.models.Group;
-
-import org.eclipse.swt.layout.GridData;
 
 public class GroupControl extends Composite {
 	private Text txtExtensionId;
 	private Text txtGroupId;
 	private Text txtGroupName;
 	private Group _model;
+	private List<IGroupChangedListener> _listeners;
 	
 	/**
 	 * Create the composite.
@@ -26,6 +29,7 @@ public class GroupControl extends Composite {
 	public GroupControl(Composite parent, int style, Group model) {
 		this(parent, style);
 		_model = model;
+		_listeners = new ArrayList<IGroupChangedListener>();
 	}
 
 	/**
@@ -37,6 +41,7 @@ public class GroupControl extends Composite {
 		super(parent, SWT.BORDER);
 		
 		_model = new Group();
+		_listeners = new ArrayList<IGroupChangedListener>();
 		
 		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.marginBottom = 5;
@@ -65,7 +70,8 @@ public class GroupControl extends Composite {
 			public void modifyText(ModifyEvent e) {
 				if(_model != null) {
 					_model.setId(txtGroupId.getText());
-				}				
+				}		
+				validateControl();
 			}
 			
 		});
@@ -83,7 +89,8 @@ public class GroupControl extends Composite {
 				if(_model != null) {
 					_model.setName(txtGroupName.getText());
 					_model.setTitle(txtGroupName.getText());
-				}				
+				}
+				validateControl();
 			}
 			
 		});
@@ -126,6 +133,23 @@ public class GroupControl extends Composite {
 	
 	public String getGroupName() {
 		return this.txtGroupName.getText();
+	}
+	
+	public boolean validateControl() {
+		boolean isValid = !txtGroupName.getText().isEmpty() && !txtGroupId.getText().isEmpty();
+		notifyAllListeners(isValid);
+		return isValid;
+	}
+	
+	public void addGroupChangedListener(IGroupChangedListener listener) {
+		if(listener != null)
+			_listeners.add(listener);
+	}
+	
+	private void notifyAllListeners(boolean isValid) {
+		for(IGroupChangedListener listener : _listeners) {
+			listener.OnGroupChanged(isValid);
+		}
 	}
 
 	@Override

@@ -1,5 +1,8 @@
 package com.armin.sap.ds.builder.controls;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -32,15 +35,18 @@ public class ExtensionControl extends Composite {
 	
 	private Composite _parent;
 	private Composite _container;
+	private List<IExtensionChangedListener> _listeners;
 	
 	public ExtensionControl(Composite parent, int style) {
 		super(parent, style);
 		_model = new Extension();
+		_listeners = new ArrayList<IExtensionChangedListener>();
 	}
 
 	public ExtensionControl(Composite parent, int style, Extension model) {
 		super(parent, style);
 		_model = model;
+		_listeners = new ArrayList<IExtensionChangedListener>();
 	}
 	
 	public void setSharedData(ISharedData data) {
@@ -135,6 +141,7 @@ public class ExtensionControl extends Composite {
 		txtId.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				_model.setId(txtId.getText());
+				validateControl();
 				if(_sharedData != null) {
 					_sharedData.setData("packageName", txtId.getText());
 				}
@@ -160,7 +167,8 @@ public class ExtensionControl extends Composite {
 		txtTitle.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtTitle.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				_model.setTitle(txtTitle.getText());				
+				_model.setTitle(txtTitle.getText());
+				validateControl();
 			}
 		});
 		//--- Third Row
@@ -170,7 +178,8 @@ public class ExtensionControl extends Composite {
 		txtVersion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtVersion.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				_model.setVersion(txtVersion.getText());				
+				_model.setVersion(txtVersion.getText());
+				validateControl();
 			}
 		});
 		txtVersion.addFocusListener(new FocusListener() {
@@ -188,7 +197,7 @@ public class ExtensionControl extends Composite {
 				if(!inputText.contains(".")) {
 					txtVersion.setText(inputText + ".0");
 					_model.setVersion(txtVersion.getText());
-				}				
+				}
 			}
 			
 			@Override
@@ -245,16 +254,24 @@ public class ExtensionControl extends Composite {
 	
 	public void setModel(Extension model) {
 		_model = model;
-//		txtId.setText(_model.getId());
-//		txtTitle.setText(_model.getTitle());
-//		txtVersion.setText(_model.getVersion());
-//		txtVendor.setText(_model.getVendor());
-//		txtEula.setText(_model.getEula());
+	}
+	
+	public void addExtensionChangedListener(IExtensionChangedListener listener) {
+		if(listener != null)
+			_listeners.add(listener);
+	}
+	
+	private void notifyAllListeners(boolean isValid) {
+		for(IExtensionChangedListener listener : _listeners) {
+			listener.OnExtensionChanged(isValid);
+		}
 	}
 	
 	public boolean validateControl() {
-		return isNotNullOrEmpty(txtId) && isNotNullOrEmpty(txtTitle) 
+		boolean isValid = isNotNullOrEmpty(txtId) && isNotNullOrEmpty(txtTitle) 
 				&& isNotNullOrEmpty(txtVersion);
+		notifyAllListeners(isValid);
+		return isValid;
 	}
 	
 	private boolean isNotNullOrEmpty(Control control) {

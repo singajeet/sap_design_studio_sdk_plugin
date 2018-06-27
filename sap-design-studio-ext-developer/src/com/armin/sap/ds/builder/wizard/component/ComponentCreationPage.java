@@ -1,14 +1,12 @@
-package com.armin.sap.ds.builder.wizard.project;
+package com.armin.sap.ds.builder.wizard.component;
 
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -18,24 +16,24 @@ import org.eclipse.swt.widgets.Text;
 
 import com.armin.sap.ds.builder.controls.ComponentControl;
 import com.armin.sap.ds.builder.controls.IComponentChangedListener;
+import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.project.models.Component;
 import com.armin.sap.ds.builder.project.models.ComponentExtended;
 import com.armin.sap.ds.builder.project.models.IModel;
-import com.armin.sap.ds.builder.shared.ISharedData;
-import com.armin.sap.ds.builder.shared.ISharedDataSubscriber;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
 
 
-public class DesignStudioNewProjectComponentPage extends WizardPage implements IWizardDetailsPage, ISharedDataSubscriber {
+public class ComponentCreationPage extends WizardPage implements IWizardDetailsPage {
 
-	private ISharedData _data;
+	//Id of selected Extension Model is also considered as package name for child component models
+	private String _componentPackage;
+	private IStructuredSelection _selection;
+		
 	private Composite container;
-	private Composite topContainer;
 	private Text txtPackage;
 	private Text txtDescription;
-	private Combo comboExtends;
-	private Button checkCreateComponentFile;	
+	private Combo comboExtends;		
 	private ComponentControl componentCtl;
 	
 	public String COMPONENT_ZTL_FILE_NAME = "contribution.ztl";
@@ -44,25 +42,27 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 	public String EXTENDS_KEYWORD = " extends ";	
 	
 	private Component _model;
+	private ExtensionNode _parentTreeNode;
 	
-
-	public DesignStudioNewProjectComponentPage() {
-		super("Component Details");
-		setPageComplete(false);
-		_model = new ComponentExtended();
-	}
-	
-	public DesignStudioNewProjectComponentPage(String pageName, ISharedData data) {
+	public ComponentCreationPage(String pageName, IStructuredSelection selection) {
 		super(pageName);
 		setPageComplete(false);
-		_data = data;		
-		_data.registerSubscriber(this);
 		_model = new ComponentExtended();
 	}
 	
+	public ComponentCreationPage(IStructuredSelection selection) {
+		super("Component Details");
+		_selection = selection;
+		setPageComplete(false);
+		_model = new ComponentExtended();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.dialogs.WizardNewFileCreationPage#createControl(org.eclipse.swt.widgets.Composite)
+	 */
 	@Override
 	public void createControl(Composite parent) {
-		initializeDialogUnits(parent);
+		// TODO Auto-generated method stub		
 		Composite topLevel = new Composite(parent, SWT.NONE);
 		topLevel.setLayout(new GridLayout());
 		topLevel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL
@@ -73,41 +73,13 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 		setMessage(null);
 		setControl(topLevel);
 		createCompositeChildControls();
+		initialize();
 	}
 	
 	private void createCompositeChildControls() {
 		Composite area = (Composite) this.getControl();
 		
-		topContainer = new Composite(area, SWT.NONE);
-		topContainer.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		GridLayout topLayout = new GridLayout(1, false);
-		topContainer.setLayout(topLayout);
-		
-		//--- Checkbox to ask if component file is required or not
-		checkCreateComponentFile = new Button(topContainer, SWT.CHECK);
-		GridData checkBoxGridData = new GridData();
-		checkBoxGridData.horizontalAlignment = GridData.FILL;
-		
-		checkCreateComponentFile.setLayoutData(checkBoxGridData);
-		checkCreateComponentFile.setText("Create component contribution file (.ztl) for this extension");
-		checkCreateComponentFile.setSelection(true);
-		checkCreateComponentFile.addSelectionListener(new SelectionListener() {
-			public void widgetSelected(SelectionEvent event) {
-				if(checkCreateComponentFile.getSelection()) {
-					enableControls(true);
-				} else {
-					enableControls(false);
-				}
-			}
-			
-			public void widgetDefaultSelected(SelectionEvent event) {
-				
-			}
-		});
-		
-		((ComponentExtended)_model).setComponentFileCreationEnabled(true);
-		
-		container = new Composite(topContainer, SWT.NONE);
+		container = new Composite(area, SWT.NONE);
 		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		GridLayout layout = new GridLayout(2, false);
 		container.setLayout(layout);
@@ -117,8 +89,7 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 		lblPackage.setText("Component Package Name:");
 		txtPackage = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtPackage.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		txtPackage.setEnabled(false); 
-		
+		txtPackage.setEnabled(false); 		
 		
 		//--- Super Class Row
 		Label lblExtends = new Label(container, SWT.NONE);
@@ -165,41 +136,48 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 		
 		componentCtl.addComponentChangedListener(new IComponentChangedListener() {
 			@Override
-			public void OnComponentChanged(boolean isValid) {
-				setPageComplete(isValid);
-			}
+			public void OnComponentChanged(boolean isValid) {				
+					setPageComplete(isValid);
+			}			
 		});
-	}
-	
-	/**
-	 * A private function to enable or disable wizard components based on the 
-	 * parameter passed to this function.
-	 * 
-	 * @param state		<code>true</code> or <code>false</code> to enable or
-	 * 					disable the components
-	 */
-	private void enableControls(boolean state) {
-		container.setVisible(state);
-		((ComponentExtended)_model).setComponentFileCreationEnabled(state);
-	}
-	
-	@Override
-	public void onSharedDataChanged(String key, Object value) {
-		if(key.equals("packageName")) {
-			txtPackage.setText((String)value);		
-			((ComponentExtended)_model).setPackageName((String)value);
-		}
+
 	}
 
+
+	private void initialize() {
+		if(_selection != null && _selection.isEmpty() == false 
+				&& _selection instanceof IStructuredSelection ) {
+			if(_selection.size() > 1)
+				return;
+			if(_selection.size() <= 0)
+				return;
+			Object selectedObj = _selection.getFirstElement();
+			if(selectedObj instanceof ExtensionNode) {
+				_componentPackage = ((ExtensionNode)selectedObj).getExtension().getId();
+				_parentTreeNode = (ExtensionNode)selectedObj;
+				txtPackage.setText(_componentPackage);				
+			}
+		}
+	}
+	
+	public ExtensionNode getParentExtensionTreeNode() {
+		return _parentTreeNode;
+	}
+	
+	public String getPackageName() {
+		return _componentPackage;
+	}
+	
 	@Override
 	public boolean validatePage() {
 		boolean isValid = componentCtl.validateControl();
 		setPageComplete(isValid);
 		return isValid;
-	}	
-	
+	}
+
 	@Override
-	public IModel getModel() {
+	public IModel getModel() {		
 		return _model;
 	}
+
 }
