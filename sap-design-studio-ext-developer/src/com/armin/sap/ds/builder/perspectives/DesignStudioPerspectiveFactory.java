@@ -50,6 +50,7 @@ public class DesignStudioPerspectiveFactory implements IPerspectiveFactory {
 				IPageLayout.LEFT,
 				0.25f,
 				factory.getEditorArea());
+		topLeft.addView("com.armin.sap.ds.builder.project.navigator.view");
 		topLeft.addView(IPageLayout.ID_RES_NAV);
 		topLeft.addView("org.eclipse.jdt.junit.ResultView"); //NON-NLS-1
 		
@@ -69,6 +70,8 @@ public class DesignStudioPerspectiveFactory implements IPerspectiveFactory {
 		factory.addActionSet(JavaUI.ID_ACTION_SET);
 		factory.addActionSet(JavaUI.ID_ELEMENT_CREATION_ACTION_SET);
 		factory.addActionSet(IPageLayout.ID_NAVIGATE_ACTION_SET); //NON-NLS-1
+		factory.addActionSet("com.armin.sap.ds.builder.commands.addremove.nature");
+		factory.addActionSet("com.armin.sap.ds.builder.commands.base");
 	}
 
 	private void addPerspectiveShortcuts() {
@@ -81,6 +84,10 @@ public class DesignStudioPerspectiveFactory implements IPerspectiveFactory {
 		factory.addNewWizardShortcut("org.eclipse.team.cvs.ui.newProjectCheckout");//NON-NLS-1
 		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");//NON-NLS-1
 		factory.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");//NON-NLS-1
+		factory.addNewWizardShortcut("com.armin.sap.ds.builder.wizards.new_project_wizard");
+		factory.addNewWizardShortcut("com.armin.sap.ds.builder.wizards.new_extension_wizard");
+		factory.addNewWizardShortcut("com.armin.sap.ds.builder.wizards.new_component_wizard");
+		factory.addNewWizardShortcut("com.armin.sap.ds.builder.wizards.new_group_wizard");
 	}
 
 	private void addViewShortcuts() {
@@ -94,6 +101,7 @@ public class DesignStudioPerspectiveFactory implements IPerspectiveFactory {
 		factory.addShowViewShortcut(IPageLayout.ID_RES_NAV);
 		factory.addShowViewShortcut(IPageLayout.ID_PROBLEM_VIEW);
 		factory.addShowViewShortcut(IPageLayout.ID_OUTLINE);
+		factory.addShowViewShortcut("com.armin.sap.ds.builder.views.default");
 	}
 
 }

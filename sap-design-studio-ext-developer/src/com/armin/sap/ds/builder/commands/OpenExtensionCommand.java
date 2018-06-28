@@ -24,12 +24,6 @@ import com.armin.sap.ds.builder.editors.IReusableDSEditor;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 
-//import com.armin.sap.ds.ext.navigator.elements.ExtensionCollectionNode;
-//import com.armin.sap.ds.ext.navigator.elements.IProjectItemNode;
-//import com.armin.sap.ds.ext.plugin.editors.ExtensionEditor;
-//import com.armin.sap.ds.ext.plugin.editors.ExtensionEditorInput;
-//import com.armin.sap.ds.ext.plugin.editors.IReusableDSEditor;
-
 public class OpenExtensionCommand extends AbstractHandler {
 
 	public static final String ID = "com.armin.sap.ds.builder.commands.extension.open";
@@ -99,7 +93,7 @@ public class OpenExtensionCommand extends AbstractHandler {
 		if(!found) {
 			try {
 				switch(selectObj.getClass().getName()){
-					case "com.armin.sap.ds.ext.navigator.elements.ExtensionCollectionNode":
+					case "com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode":
 						page.openEditor(input, ExtensionEditor.ID);
 						break;
 					default:

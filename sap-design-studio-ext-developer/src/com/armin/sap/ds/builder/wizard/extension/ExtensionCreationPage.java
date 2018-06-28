@@ -8,6 +8,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.armin.sap.ds.builder.controls.ExtensionControl;
+import com.armin.sap.ds.builder.controls.IExtensionChangedListener;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
 import com.armin.sap.ds.builder.project.models.Extension;
 import com.armin.sap.ds.builder.project.models.IModel;
@@ -78,8 +79,16 @@ public class ExtensionCreationPage extends WizardPage implements IWizardDetailsP
 	}
 
 	private void createCompositeChildControls() {
-		// TODO Auto-generated method stub
-		
+		Composite area = (Composite)this.getControl();
+		extensionCtl = new ExtensionControl(area, SWT.NONE, _model);
+		extensionCtl.addExtensionChangedListener(new IExtensionChangedListener() {
+			
+			@Override
+			public void OnExtensionChanged(boolean isValid) {
+				setPageComplete(isValid);
+			}
+		});
+	
 	}
 
 	public ExtensionCollectionNode getParentExtensionCollectionTreeNode() {

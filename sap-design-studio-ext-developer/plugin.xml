@@ -43,9 +43,9 @@
             id="com.armin.sap.ds.builder.base.commands.category">
       </category>
       <command
-            name="Base Command"
             categoryId="com.armin.sap.ds.builder.base.commands.category"
-            id="com.armin.sap.ds.builder.commands.base">
+            id="com.armin.sap.ds.builder.commands.base"
+            name="Base Command">
       </command>
    </extension>
    <extension
@@ -233,7 +233,7 @@
             label="Resource Decorator"
             icon="icons/sample_decorator.gif"
             state="true"
-            id="sap-design-studio-ext-builder.decorator">
+            id="com.armin.sap.ds.builder.project.item.decorator">
          <enablement>
             <and>
                <objectClass
@@ -254,12 +254,12 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            name="SAP Design Studio Extension Editor"
+            class="com.armin.sap.ds.builder.editors.ExtensionEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             extensions="xml"
             icon="images/extension_28x28.png"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
-            class="com.armin.sap.ds.builder.editors.DesignStudioTextEditor"
-            id="com.armin.sap.ds.builder.editors.extension_editor">
+            id="com.armin.sap.ds.builder.editors.extension_editor"
+            name="SAP Design Studio Extension Editor">
       </editor>
       <editor
             name="Design Studio Component Editor"
@@ -268,6 +268,13 @@
             contributorClass="com.armin.sap.ds.builder.editors.ComponentEditorContributor"
             class="com.armin.sap.ds.builder.editors.ComponentEditor"
             id="com.armin.sap.ds.builder.editors.component_editor">
+      </editor>
+      <editor
+            class="com.armin.sap.ds.builder.editors.DesignStudioTextEditor"
+            default="false"
+            icon="images/project_28x28.png"
+            id="com.armin.sap.ds.builder.editors.text_editor"
+            name="SAP Design Studio Default Text Editor">
       </editor>
    </extension>
    <extension

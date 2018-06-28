@@ -11,24 +11,30 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
+import com.armin.sap.ds.builder.controls.GroupControl;
+import com.armin.sap.ds.builder.controls.IGroupChangedListener;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 import com.armin.sap.ds.builder.project.models.Extension;
+import com.armin.sap.ds.builder.project.models.Group;
 import com.armin.sap.ds.builder.project.models.IModel;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
 
 
 public class GroupCreationPage extends WizardNewFileCreationPage implements IWizardDetailsPage {
 
-	Text _selectedExtension;
-	Text _newGroupName;
-	IStructuredSelection _selection;
+	private IStructuredSelection _selection;
+	private GroupControl groupCtl;
+	private Group _model;
+	private ExtensionNode _parentExtensionTreeNode;
 	
 	public GroupCreationPage(String pageName, IStructuredSelection selection) {
 		super(pageName, selection);
 		setTitle("Design Studio Group");
 		setDescription("This wizard helps in creating new group to categorize SDK components");
 		this._selection = selection;
+		_model = new Group();
+		setPageComplete(false);
 	}
 	
 	public GroupCreationPage(IStructuredSelection selection) {
@@ -36,45 +42,37 @@ public class GroupCreationPage extends WizardNewFileCreationPage implements IWiz
 		setTitle("Design Studio Group");
 		setDescription("This wizard helps in creating new group to categorize SDK components");
 		this._selection = selection;
+		_model = new Group();
+		setPageComplete(false);
 	}
 	
 	@Override
 	public void createControl(Composite parent) {
-		Composite container = new Composite(parent, SWT.NULL);
-		GridLayout layout = new GridLayout();
-		container.setLayout(layout);
-		layout.numColumns = 2;
+		Composite topLevel = new Composite(parent, SWT.NONE);
+		topLevel.setLayout(new GridLayout());
+		topLevel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL
+				| GridData.HORIZONTAL_ALIGN_FILL));
+		topLevel.setFont(parent.getFont());
 		
-		Label label = new Label(container, SWT.NULL);
-		label.setText("&Extension:");
-
-		_selectedExtension = new Text(container, SWT.BORDER | SWT.SINGLE);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		_selectedExtension.setLayoutData(gd);
-		_selectedExtension.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				
-			}
-		});
-		
-		Label groupLabel = new Label(container, SWT.NULL);
-		groupLabel.setText("Group Name: ");
-		
-		_newGroupName = new Text(container, SWT.BORDER | SWT.SINGLE);
-		GridData gdGroup = new GridData(GridData.FILL_HORIZONTAL);
-		_newGroupName.setLayoutData(gdGroup);
-		_newGroupName.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				
-			}
-		});
-		
-		initialize();
-		setControl(container);
+		setErrorMessage(null);
+		setMessage(null);
+		setControl(topLevel);
+		createCompositeChildControls();
+		initialize();	
 	}
 	
+	private void createCompositeChildControls() {
+		Composite area = (Composite)this.getControl();
+		groupCtl = new GroupControl(area, SWT.NONE, _model);
+		groupCtl.addGroupChangedListener(new IGroupChangedListener() {
+			
+			@Override
+			public void OnGroupChanged(boolean isValid) {
+				setPageComplete(isValid);
+			}
+		});
+	}
+
 	/**
 	 * Tests if the current workbench selection is a suitable container to use.
 	 */
@@ -88,23 +86,25 @@ public class GroupCreationPage extends WizardNewFileCreationPage implements IWiz
 			Object obj = ssel.getFirstElement();
 			if (obj instanceof ExtensionNode) {
 				IProjectItemNode item = (ExtensionNode)obj;
-				_selectedExtension.setText(item.getModel().getId() + "(" + ((Extension)item.getModel()).getTitle() + ")");
-				//containerText.setText(container.getFullPath().toString());
+				_parentExtensionTreeNode = (ExtensionNode)obj;
+				groupCtl.setExtensionId(item.getModel().getId());
 			}
 		}
 		
 	}
 
+	public ExtensionNode getParentExtensionTreeNode() {
+		return _parentExtensionTreeNode;
+	}
 		
 	@Override
 	public boolean validatePage() {
-		return false;
+		return groupCtl.validateControl();
 	}
 
 	@Override
 	public IModel getModel() {
-		// TODO Auto-generated method stub
-		return null;
+		return _model;
 	}
 
 }

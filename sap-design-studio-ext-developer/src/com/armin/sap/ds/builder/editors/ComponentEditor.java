@@ -44,6 +44,8 @@ import org.eclipse.ui.ide.IDE;
  */
 public class ComponentEditor extends MultiPageEditorPart implements IResourceChangeListener{
 
+	public static final String ID = "com.armin.sap.ds.builder.editors.component_editor";
+	
 	/** The text editor used in page 0. */
 	private TextEditor editor;
 

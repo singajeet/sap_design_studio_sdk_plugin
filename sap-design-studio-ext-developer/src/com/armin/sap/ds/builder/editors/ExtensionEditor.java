@@ -60,7 +60,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 		}
 	}
 	
-	public static final String ID = "com.armin.sap.ds.ext.plugin.editors.extension";
+	public static final String ID = "com.armin.sap.ds.builder.editors.extension_editor";
 	private Text textProjectName;
 	private Text textProjectLocation;
 	private Text textProjectModificationDate;
@@ -197,17 +197,17 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 		IToolBarManager formToolBar = frmExtensions.getToolBarManager();
 		
 		addNewExtension = new CreateNewExtensionAction();
-		addNewExtension.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.armin.sap.ds.ext.plugin", "images/new.png"));
+		addNewExtension.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "images/new.png"));
 		addNewExtension.setText("New");
 		formToolBar.add(addNewExtension);
 		
 		saveExtension = new SaveExtensionAction();
-		saveExtension.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.armin.sap.ds.ext.plugin", "images/save.png"));
+		saveExtension.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "images/save.png"));
 		saveExtension.setText("Save");
 		formToolBar.add(saveExtension);
 		
 		deleteExtension = new DeleteExtensionAction();
-		deleteExtension.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.armin.sap.ds.ext.plugin", "images/candy_x_46x46.png"));
+		deleteExtension.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "images/candy_x_46x46.png"));
 		deleteExtension.setText("Delete");
 		formToolBar.add(deleteExtension);
 		
