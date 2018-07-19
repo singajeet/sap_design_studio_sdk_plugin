@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.armin.sap.ds.builder.project.models.Extension;
+import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.shared.ISharedData;
 
 public class ExtensionControl extends Composite {
@@ -33,7 +33,6 @@ public class ExtensionControl extends Composite {
 	
 	private ISharedData _sharedData;
 	
-	private Composite _parent;
 	private Composite _container;
 	private List<IExtensionChangedListener> _listeners;
 	
@@ -41,12 +40,14 @@ public class ExtensionControl extends Composite {
 		super(parent, style);
 		_model = new Extension();
 		_listeners = new ArrayList<IExtensionChangedListener>();
+		this.createControl();
 	}
 
 	public ExtensionControl(Composite parent, int style, Extension model) {
 		super(parent, style);
 		_model = model;
 		_listeners = new ArrayList<IExtensionChangedListener>();
+		this.createControl();
 	}
 	
 	public void setSharedData(ISharedData data) {
@@ -127,9 +128,8 @@ public class ExtensionControl extends Composite {
 	}
 
 	public void createControl() {
-		
-		_container = new Composite(_parent, SWT.NONE);
-		_container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));;
+		_container = new Composite(this.getParent(), SWT.NONE);
+		_container.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));;
 		GridLayout layout = new GridLayout(2, false);
 		_container.setLayout(layout);
 		
@@ -137,7 +137,7 @@ public class ExtensionControl extends Composite {
 		Label lblId = new Label(_container, SWT.NONE);
 		lblId.setText("Extension Id:");
 		txtId = new Text(_container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtId.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtId.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtId.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				_model.setId(txtId.getText());
@@ -164,7 +164,7 @@ public class ExtensionControl extends Composite {
 		Label lblTitle = new Label(_container, SWT.NONE);
 		lblTitle.setText("Extension Title:");
 		txtTitle = new Text(_container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtTitle.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtTitle.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtTitle.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				_model.setTitle(txtTitle.getText());
@@ -175,7 +175,7 @@ public class ExtensionControl extends Composite {
 		Label lblVersion = new Label(_container, SWT.NONE);
 		lblVersion.setText("Version:");
 		txtVersion = new Text(_container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtVersion.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtVersion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtVersion.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				_model.setVersion(txtVersion.getText());
@@ -210,7 +210,7 @@ public class ExtensionControl extends Composite {
 		Label lblVendor = new Label(_container, SWT.NONE);
 		lblVendor.setText("Vendor Name:");
 		txtVendor = new Text(_container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtVendor.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtVendor.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtVendor.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				_model.setVendor(txtVendor.getText());				
@@ -224,17 +224,18 @@ public class ExtensionControl extends Composite {
 	private void createEULAControl(Composite container) {
 		//--- Separator
 		Label lineSeparator1 = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
-		GridData lineSeparatorGridData1 = new GridData(GridData.FILL_HORIZONTAL);
+		GridData lineSeparatorGridData1 = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		lineSeparatorGridData1.horizontalSpan = 2;
 		lineSeparator1.setLayoutData(lineSeparatorGridData1);
 		//--- Fifth Row
 		Label lblEula = new Label(container, SWT.NONE);
 		lblEula.setText("EULA (End User License Agreement):");
-		GridData gridDataEulaLabel = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gridDataEulaLabel = new GridData(SWT.FILL, SWT.TOP, true, false);		
 		gridDataEulaLabel.horizontalSpan = 2;
 		lblEula.setLayoutData(gridDataEulaLabel);
 		txtEula = new Text(container, SWT.MULTI | SWT.BORDER | SWT.WRAP);
 		GridData gridDataEulaText = new GridData();
+		gridDataEulaText.minimumHeight = 50;
 		gridDataEulaText.horizontalSpan = 2;
 		gridDataEulaText.horizontalAlignment = SWT.FILL;
 		gridDataEulaText.grabExcessHorizontalSpace = true;
@@ -302,5 +303,8 @@ public class ExtensionControl extends Composite {
 		}
 		
 		return true;
+	}
+	public Composite get_container() {
+		return _container;
 	}
 }

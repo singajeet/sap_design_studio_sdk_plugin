@@ -1,0 +1,37 @@
+# mtPaint layers
+1
+2
+open_extension_16x16.png
+Background
+1
+0
+0
+0
+-1
+100
+extension_16x16.png
+extension
+1
+0
+0
+0
+-1
+100
+openFolder.gif
+
+1
+0
+6
+1
+9
+100
+# mtPaint animation
+1
+100
+frames
+f
+10
+0
+0
+0
+0

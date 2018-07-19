@@ -9,9 +9,9 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.models.PossibleValueType;
+import com.armin.sap.ds.builder.api.models.Property;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.project.models.PossibleValueType;
-import com.armin.sap.ds.builder.project.models.Property;
 
 public class PropertyNode extends ProjectItemNode {
 
@@ -39,25 +39,25 @@ public class PropertyNode extends ProjectItemNode {
 		return _image;
 	}
 
-	@Override
-	public Object[] getElements(Object input) {
-		return getChildren(input);
-	}
-
-	@Override
-	public Object[] getChildren(Object parent) {
-		return _children.toArray();
-	}
-
-	@Override
-	public Object getParent(Object element) {
-		return _parent;
-	}
-
-	@Override
-	public boolean hasChildren(Object parent) {		
-		return (_children.size() > 0);
-	}
+//	@Override
+//	public Object[] getElements(Object input) {
+//		return getChildren(input);
+//	}
+//
+//	@Override
+//	public Object[] getChildren(Object parent) {
+//		return _children.toArray();
+//	}
+//
+//	@Override
+//	public Object getParent(Object element) {
+//		return _parent;
+//	}
+//
+//	@Override
+//	public boolean hasChildren(Object parent) {		
+//		return (_children.size() > 0);
+//	}
 
 	/************************************************************************************/
 
@@ -71,7 +71,7 @@ public class PropertyNode extends ProjectItemNode {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			children.add(new ProjectItemNode("Error while creating property node: " + e.getMessage(), this));
+			children.add(new ErrorNode("Error while creating property node: " + e.getMessage(), this));
 		}	
 		return children;
 	}

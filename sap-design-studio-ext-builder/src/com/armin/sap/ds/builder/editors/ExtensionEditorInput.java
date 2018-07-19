@@ -2,50 +2,42 @@ package com.armin.sap.ds.builder.editors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
+import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 
 public class ExtensionEditorInput implements IEditorInput {
 
-	private IResource[] _extensions;
 	private IProject _project;
+	private IProjectItemNode _node;
 	
 	public ExtensionEditorInput() {
 		
 	}
 	
-	public ExtensionEditorInput(IProject project) {
-		_project = project;
-	}
-	
-	public ExtensionEditorInput(IResource[] extensions) {
-		_extensions = extensions;
+	public ExtensionEditorInput(IProjectItemNode node) {
+		_node = node;
+		_project = _node.getProject();
 	}
 	
 	public IProject getProject() {
 		return _project;
 	}
 	
-	public IResource[] getExtensions() {
-		return _extensions;
+	public IProjectItemNode getTreeNode() {
+		return _node;
 	}
 	
 	@Override
 	public <T> T getAdapter(Class<T> adapter) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public boolean exists() {
-		if(_extensions != null)
-			return true;
-		else
-			return false;
 	}
 
 	@Override
@@ -68,6 +60,11 @@ public class ExtensionEditorInput implements IEditorInput {
 	public String getToolTipText() {
 		// TODO Auto-generated method stub
 		return "Collection of extensions defined under this project";
+	}
+
+	@Override
+	public boolean exists() {
+		return (_node != null);
 	}
 
 }

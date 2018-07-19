@@ -16,7 +16,7 @@ public class ProjectNode extends ProjectItemNode {
 
 	private IWorkspaceRoot _parent;
 	private IProject _project;
-	private IProjectItemNode[] _children;
+	//private IProjectItemNode[] _children;
 	private String _name;
 	
 	public ProjectNode(IProject project) { 
@@ -26,10 +26,7 @@ public class ProjectNode extends ProjectItemNode {
 		_name = project.getName();
 		
 		try {
-			if (_children == null) {
-	            _children = initializeChildren(_project.members());
-	        }
-			
+			_children = initializeChildren(_project.members());	        
 		}catch(Exception e) {
 			e.printStackTrace();			
 		}
@@ -52,36 +49,37 @@ public class ProjectNode extends ProjectItemNode {
 		return _image;
 	}
 	
-	@Override
-	public IProject getProject() {
-		return _project;
-	}
+//	@Override
+//	public IProject getProject() {
+//		return _project;
+//	}
 	
-	@Override
-	public Object[] getElements(Object input) {
-		return getChildren(input);
-	}
+//	@Override
+//	public Object[] getElements(Object input) {
+//		return getChildren(input);
+//	}
 	
-	@Override
-	public Object[] getChildren(Object parent) {
-		return _children;
-	}
+//	@Override
+//	public Object[] getChildren(Object parent) {
+//		return _children.toArray();
+//	}
 	
-	@Override
-	public Object getParent(Object element) {
-		return _parent;
-	}
+//	@Override
+//	public Object getParent(Object element) {
+//		return _parent;
+//	}
 	
-	@Override
-	public boolean hasChildren(Object parent) {				
-		return (_children.length > 0);
-	}
+//	@Override
+//	public boolean hasChildren(Object parent) {				
+//		return (_children.size() > 0);
+//	}
 	
 	/************************************************************************************/
 	
-	protected IProjectItemNode[] initializeChildren(IResource[] resources) {
+	protected ArrayList<IProjectItemNode> initializeChildren(IResource[] resources) {
+		ArrayList<IProjectItemNode> children = new ArrayList<IProjectItemNode>();
     	try {
-    		ArrayList<IProjectItemNode> children = new ArrayList<IProjectItemNode>();
+    		
     		ArrayList<IResource> extensionFolders = new ArrayList<IResource>();
     		
     		for(int i=0;i<resources.length;i++) {    			
@@ -90,22 +88,19 @@ public class ProjectNode extends ProjectItemNode {
     			}    			
     		}
     		
-    		IProjectItemNode extCollectionNode = new ExtensionCollectionNode(this.getProject(), extensionFolders, this);
-    		children.add(extCollectionNode);
-    		
-    		if(children.size() <= 0) {
-				return new IProjectItemNode[] { new ProjectItemNode("No extensions found!", this) };
+    		if(extensionFolders.size() <= 0) {
+				children.add(new InfoNode("No extensions found!", this));
+			} else {
+				IProjectItemNode extCollectionNode = new ExtensionCollectionNode(this.getProject(), extensionFolders, this);
+				children.add(extCollectionNode);
 			}
     		
-    		IProjectItemNode[] childrenArray = new IProjectItemNode[children.size()];
-    		children.toArray(childrenArray);
-    		return childrenArray;
     	}catch(Exception e)
     	{
     		e.printStackTrace();
-    		return new IProjectItemNode[]{ new ProjectItemNode("Error while creating package node: " + e.getMessage(), this) };
+    		children.add(new ErrorNode("Error while creating package node: " + e.getMessage(), this));
     	}
-        
+        return children;
     }	
 	
 	@Override

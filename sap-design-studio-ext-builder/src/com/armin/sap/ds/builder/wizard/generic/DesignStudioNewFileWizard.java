@@ -15,6 +15,8 @@ import java.io.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.ide.IDE;
 
+import com.armin.sap.ds.builder.Activator;
+
 /**
  * This is a sample new wizard. Its role is to create a new file 
  * resource in the provided container. If the container resource
@@ -136,7 +138,7 @@ public class DesignStudioNewFileWizard extends Wizard implements INewWizard {
 
 	private void throwCoreException(String message) throws CoreException {
 		IStatus status =
-			new Status(IStatus.ERROR, "sap-design-studio-ext-builder", IStatus.OK, message, null);
+			new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.OK, message, null);
 		throw new CoreException(status);
 	}
 

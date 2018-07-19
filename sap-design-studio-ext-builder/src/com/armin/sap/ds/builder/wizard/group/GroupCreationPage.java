@@ -1,27 +1,22 @@
 package com.armin.sap.ds.builder.wizard.group;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
+import com.armin.sap.ds.builder.api.models.Group;
+import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.controls.GroupControl;
 import com.armin.sap.ds.builder.controls.IGroupChangedListener;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
-import com.armin.sap.ds.builder.project.models.Extension;
-import com.armin.sap.ds.builder.project.models.Group;
-import com.armin.sap.ds.builder.project.models.IModel;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
 
 
-public class GroupCreationPage extends WizardNewFileCreationPage implements IWizardDetailsPage {
+public class GroupCreationPage extends WizardPage implements IWizardDetailsPage {
 
 	private IStructuredSelection _selection;
 	private GroupControl groupCtl;
@@ -29,7 +24,7 @@ public class GroupCreationPage extends WizardNewFileCreationPage implements IWiz
 	private ExtensionNode _parentExtensionTreeNode;
 	
 	public GroupCreationPage(String pageName, IStructuredSelection selection) {
-		super(pageName, selection);
+		super(pageName);
 		setTitle("Design Studio Group");
 		setDescription("This wizard helps in creating new group to categorize SDK components");
 		this._selection = selection;
@@ -37,8 +32,11 @@ public class GroupCreationPage extends WizardNewFileCreationPage implements IWiz
 		setPageComplete(false);
 	}
 	
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public GroupCreationPage(IStructuredSelection selection) {
-		super("New Design Studio Group", selection);
+		super("New Design Studio Group");
 		setTitle("Design Studio Group");
 		setDescription("This wizard helps in creating new group to categorize SDK components");
 		this._selection = selection;
@@ -64,6 +62,7 @@ public class GroupCreationPage extends WizardNewFileCreationPage implements IWiz
 	private void createCompositeChildControls() {
 		Composite area = (Composite)this.getControl();
 		groupCtl = new GroupControl(area, SWT.NONE, _model);
+		groupCtl.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1));
 		groupCtl.addGroupChangedListener(new IGroupChangedListener() {
 			
 			@Override

@@ -70,8 +70,7 @@ public class DesignStudioPerspectiveFactory implements IPerspectiveFactory {
 		factory.addActionSet(JavaUI.ID_ACTION_SET);
 		factory.addActionSet(JavaUI.ID_ELEMENT_CREATION_ACTION_SET);
 		factory.addActionSet(IPageLayout.ID_NAVIGATE_ACTION_SET); //NON-NLS-1
-		factory.addActionSet("com.armin.sap.ds.builder.commands.addremove.nature");
-		factory.addActionSet("com.armin.sap.ds.builder.commands.base");
+		factory.addActionSet("com.armin.sap.ds.builder.commands.toggle.nature");		
 	}
 
 	private void addPerspectiveShortcuts() {

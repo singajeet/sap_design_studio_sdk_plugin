@@ -9,9 +9,9 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.models.Component;
+import com.armin.sap.ds.builder.api.models.Group;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.project.models.Component;
-import com.armin.sap.ds.builder.project.models.Group;
 
 public class GroupNode extends GenericFileNode {
 
@@ -30,7 +30,7 @@ public class GroupNode extends GenericFileNode {
 	
 	@Override
 	public String getName() {
-		return ((Group)_item).getTitle();
+		return ((Group)_item).getTitle().toUpperCase();
 	}
 	
 	@Override
@@ -43,25 +43,30 @@ public class GroupNode extends GenericFileNode {
 		return _image;
     }
 	
-	@Override
-	public Object[] getElements(Object input) {
-		return getChildren(input);
+	
+	public void addComponent(Component component) {
+		
 	}
 	
-	@Override
-	public Object[] getChildren(Object parent) {
-		return _children.toArray();
-	}
-	
-	@Override
-	public Object getParent(Object element) {
-		return _parent;
-	}
-	
-	@Override
-	public boolean hasChildren(Object parent) {				
-		return (_children.size() > 0);
-	}
+//	@Override
+//	public Object[] getElements(Object input) {
+//		return getChildren(input);
+//	}
+//	
+//	@Override
+//	public Object[] getChildren(Object parent) {
+//		return _children.toArray();
+//	}
+//	
+//	@Override
+//	public Object getParent(Object element) {
+//		return _parent;
+//	}
+//	
+//	@Override
+//	public boolean hasChildren(Object parent) {				
+//		return (_children.size() > 0);
+//	}
 	
 	/************************************************************************************/
 
@@ -72,9 +77,9 @@ public class GroupNode extends GenericFileNode {
 	    		
 	    		for(int i=0;i<components.size();i++) {
 	    			Component component = components.get(i);
-	    			String groupName = "Default";
+	    			String groupName = "DEFAULT";
 	    			if(component.getGroup() != null && !component.getGroup().isEmpty())
-	    				groupName = component.getGroup();
+	    				groupName = component.getGroup().toUpperCase();
 	    			
 	    			if(groupName.equals(this.getName())) {
 	    				IProjectItemNode componentNode = new ComponentNode(this.getProject(), component, this);
@@ -83,14 +88,14 @@ public class GroupNode extends GenericFileNode {
 	    		}
 	    		
 	    		if(children.size() <= 0) {
-					children.add( new ProjectItemNode("No components found!", this));
+					children.add( new InfoNode("No components found!", this));
 				}
 	    		
 	    		
     	}catch(Exception e)
     	{
     		e.printStackTrace();
-    		children.add(new ProjectItemNode("Error while searching components: " + e.getMessage(), this));
+    		children.add(new ErrorNode("Error while searching components: " + e.getMessage(), this));
     	}
     	return children;
     }

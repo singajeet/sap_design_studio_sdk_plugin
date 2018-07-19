@@ -1,34 +1,55 @@
 package com.armin.sap.ds.builder.wizard.extension;
 
-import java.lang.reflect.InvocationTargetException;
-
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 
+import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
-import com.armin.sap.ds.builder.project.models.Extension;
-import com.armin.sap.ds.builder.project.models.IModel;
+import com.armin.sap.ds.builder.service.IProjectService;
+import com.armin.sap.ds.builder.service.ProjectService;
 
 
 public class ExtensionWizard extends Wizard implements INewWizard {
 
 	private IStructuredSelection _selection;
 	private WizardPage _pageOne;
+	private ExtensionCollectionNode _parentTreeNode;
+	private IProjectService _projectService;
 	
 	public ExtensionWizard() {
-		setWindowTitle("New Extension File");
+		setWindowTitle("New Extension");
+		_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
+		if(_projectService == null) {
+			_projectService = new ProjectService();
+		}
 	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {	
 	    _selection = selection;
+	    
+	    if(_selection != null && _selection.isEmpty() == false 
+				&& _selection instanceof IStructuredSelection ) {
+			if(_selection.size() > 1)
+				return;
+			if(_selection.size() <= 0)
+				return;
+			Object selectedObj = _selection.getFirstElement();
+			if(selectedObj instanceof ExtensionCollectionNode) {				
+				_parentTreeNode = (ExtensionCollectionNode)selectedObj;								
+			}
+		}
 	}
 
 	/* (non-Javadoc)
@@ -44,49 +65,36 @@ public class ExtensionWizard extends Wizard implements INewWizard {
 
 	@Override
 	public boolean performFinish() {
-		IRunnableWithProgress op = new IRunnableWithProgress() {
+		IModel extension = ((ExtensionCreationPage)_pageOne).getModel();
+		IProject project = _parentTreeNode.getProject();
+		
+		WorkspaceJob job = new WorkspaceJob("Create a new extension") {
 			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException {
+			public IStatus runInWorkspace(IProgressMonitor monitor) {
 				try {
-					doFinish(monitor);
-				}catch(CoreException e) {
-					throw new InvocationTargetException(e);
+					monitor.beginTask("Creating extension - " + ((ExtensionCreationPage)_pageOne).getModel().getId(), 2);
+					
+					_projectService.addNewExtension(extension, project);
+					
+					monitor.worked(1);
+					monitor.setTaskName("Extension [" + extension.getId() + "] created and added to extension collection...");					
+					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					monitor.worked(1);
+					
+					return Status.OK_STATUS;
+				}catch(Exception e) {
+					e.printStackTrace();
+					MessageDialog.openError(getShell(), "Error", e.getMessage());
 				}finally {
 					monitor.done();
 				}				
+				return Status.CANCEL_STATUS;
 			}			
 		};
 		
-		try {
-			getContainer().run(true, true, op);
-		}catch (InterruptedException e) {
-			return false;
-		} catch (InvocationTargetException e) {
-			Throwable realException = e.getTargetException();
-			MessageDialog.openError(getShell(), "Error", realException.getMessage());
-			return false;
-		}
-		
+		job.setRule(project);
+		job.schedule();		
 		return true;
 	}
 	
-	private void doFinish(IProgressMonitor monitor) throws CoreException {
-		monitor.beginTask("Creating extension - " + ((ExtensionCreationPage)_pageOne).getModel().getId(), 2);
-		
-		IModel extension = ((ExtensionCreationPage)_pageOne).getModel();
-		ExtensionCollectionNode parentNode = ((ExtensionCreationPage)_pageOne).getParentExtensionCollectionTreeNode();
-		
-		monitor.worked(1);
-		monitor.setTaskName("Adding extension [" + extension.getId() + "] to extension collection [" + parentNode.getName() + "]...");
-		
-		try {
-			//Update the extension collection node in visual tree to reflect new extension node
-			parentNode.addExtension((Extension)extension);			
-		}catch(Exception e) {
-			e.printStackTrace();		
-		}
-		
-		monitor.worked(1);
-	}
-
 }

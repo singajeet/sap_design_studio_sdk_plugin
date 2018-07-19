@@ -14,13 +14,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import com.armin.sap.ds.builder.api.models.Component;
+import com.armin.sap.ds.builder.api.models.ComponentExtended;
+import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.controls.ComponentControl;
 import com.armin.sap.ds.builder.controls.IComponentChangedListener;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.project.models.Component;
-import com.armin.sap.ds.builder.project.models.ComponentExtended;
-import com.armin.sap.ds.builder.project.models.IModel;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
 
 
@@ -43,15 +43,25 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 	
 	private Component _model;
 	private ExtensionNode _parentTreeNode;
+	private Composite topLevel;
+	private Composite composite_top;
+	private Composite composite_bottom;
 	
 	public ComponentCreationPage(String pageName, IStructuredSelection selection) {
 		super(pageName);
+		setDescription("Provide details below for the default component");
+		setTitle("Component Details");
 		setPageComplete(false);
 		_model = new ComponentExtended();
 	}
 	
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public ComponentCreationPage(IStructuredSelection selection) {
 		super("Component Details");
+		setDescription("Provide details below for the default component");
+		setTitle("Component Details");
 		_selection = selection;
 		setPageComplete(false);
 		_model = new ComponentExtended();
@@ -63,10 +73,10 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 	@Override
 	public void createControl(Composite parent) {
 		// TODO Auto-generated method stub		
-		Composite topLevel = new Composite(parent, SWT.NONE);
+		topLevel = new Composite(parent, SWT.NONE);
 		topLevel.setLayout(new GridLayout());
-		topLevel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL
-				| GridData.HORIZONTAL_ALIGN_FILL));
+		topLevel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true)); //GridData.VERTICAL_ALIGN_FILL
+				//| GridData.HORIZONTAL_ALIGN_FILL));
 		topLevel.setFont(parent.getFont());
 		
 		setErrorMessage(null);
@@ -80,21 +90,24 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 		Composite area = (Composite) this.getControl();
 		
 		container = new Composite(area, SWT.NONE);
+		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		GridLayout layout = new GridLayout(2, false);
-		container.setLayout(layout);
+		
+		composite_top = new Composite(container, SWT.NONE);
+		composite_top.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
+		composite_top.setLayout(new GridLayout(2, false));
 		
 		//--- Package Name Row
-		Label lblPackage = new Label(container, SWT.NONE);
+		Label lblPackage = new Label(composite_top, SWT.NONE);
 		lblPackage.setText("Component Package Name:");
-		txtPackage = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtPackage.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtPackage = new Text(composite_top, SWT.NONE);
+		txtPackage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtPackage.setEnabled(false); 		
 		
 		//--- Super Class Row
-		Label lblExtends = new Label(container, SWT.NONE);
+		Label lblExtends = new Label(composite_top, SWT.NONE);
 		lblExtends.setText("Component Inherit From:");
-		comboExtends = new Combo(container, SWT.READ_ONLY | SWT.BORDER);
+		comboExtends = new Combo(composite_top, SWT.READ_ONLY | SWT.BORDER);
 		
 		String parentClassStr = Settings.store().get(Settings.FOR.COMPONENT_PARENT_CLASSES);
 		String[] parentClasses = parentClassStr.split(";");
@@ -103,7 +116,7 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 		}		
 		comboExtends.select(0); //Select component by default
 		((ComponentExtended)_model).setClassToExtend(comboExtends.getItem(0));
-		comboExtends.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboExtends.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		comboExtends.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				int index = comboExtends.getSelectionIndex();
@@ -111,15 +124,16 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 			}
 		});
 		//--- Description Row
-		Label lblDescription = new Label(container, SWT.NONE);
+		Label lblDescription = new Label(composite_top, SWT.NONE);
+		lblDescription.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
 		lblDescription.setText("Description");
-		txtDescription = new Text(container, SWT.MULTI | SWT.BORDER | SWT.WRAP);
+		txtDescription = new Text(composite_top, SWT.MULTI | SWT.BORDER | SWT.WRAP);
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = SWT.FILL;
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.verticalAlignment = SWT.FILL;
 		gridData.grabExcessVerticalSpace = true;
-		gridData.minimumHeight = 100;
+		gridData.minimumHeight = 50;
 		txtDescription.setLayoutData(gridData);
 		txtDescription.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -127,17 +141,29 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 			}
 		});
 		
-		if(_model == null) {
-			componentCtl = new ComponentControl(container, SWT.NONE);			
-			_model = componentCtl.getModel();
-		} else {
-			componentCtl = new ComponentControl(container, SWT.NONE, _model);
-		}
+		composite_bottom = new Composite(container, SWT.NONE);
+		GridLayout gl_composite_bottom = new GridLayout(1, false);
+		gl_composite_bottom.verticalSpacing = 0;
+		gl_composite_bottom.marginWidth = 0;
+		gl_composite_bottom.marginHeight = 0;
+		gl_composite_bottom.horizontalSpacing = 0;
+		composite_bottom.setLayout(gl_composite_bottom);
+		composite_bottom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		componentCtl = new ComponentControl(composite_bottom, SWT.NONE, _model);
+		componentCtl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridLayout gl_componentCtl = new GridLayout(1, false);
+		gl_componentCtl.verticalSpacing = 0;
+		gl_componentCtl.marginWidth = 0;
+		gl_componentCtl.marginHeight = 0;
+		gl_componentCtl.horizontalSpacing = 0;
+		componentCtl.setLayout(gl_componentCtl);
 		
 		componentCtl.addComponentChangedListener(new IComponentChangedListener() {
 			@Override
-			public void OnComponentChanged(boolean isValid) {				
-					setPageComplete(isValid);
+			public void OnComponentChanged(boolean isValid) {	
+				_model = componentCtl.getModel();
+				setPageComplete(isValid);
 			}			
 		});
 
@@ -167,6 +193,7 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 	public String getPackageName() {
 		return _componentPackage;
 	}
+	
 	
 	@Override
 	public boolean validatePage() {

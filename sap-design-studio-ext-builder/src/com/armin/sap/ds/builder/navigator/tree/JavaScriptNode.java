@@ -48,20 +48,20 @@ public class JavaScriptNode extends GenericFileNode {
 		return _image;
 	}
 
-	@Override
-	public Object[] getElements(Object input) {
-		return getChildren(input);
-	}
-
-	@Override
-	public Object[] getChildren(Object parent) {
-		return new Object[0];
-	}
-
-	@Override
-	public Object getParent(Object element) {
-		return this.getParent(element);
-	}
+//	@Override
+//	public Object[] getElements(Object input) {
+//		return getChildren(input);
+//	}
+//
+//	@Override
+//	public Object[] getChildren(Object parent) {
+//		return new Object[0];
+//	}
+//
+//	@Override
+//	public Object getParent(Object element) {
+//		return this.getParent(element);
+//	}
 
 	@Override
 	public boolean hasChildren(Object parent) {		

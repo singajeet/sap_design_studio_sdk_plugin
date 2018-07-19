@@ -10,20 +10,21 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.common.DesignStudioProjectHelper;
 import com.armin.sap.ds.builder.preferences.Settings;
+import com.armin.sap.ds.builder.service.ProjectService;
 
 public class ImagesFolderNode extends GenericFolderNode {
 
-	private static final String PATH = DesignStudioProjectHelper.get().getCurrentExtensionHelper().getId() + "/res/images/";
+	//private static final String PATH = ProjectService.get().getExtensionModel().getId() + "/res/images/";
 	private static final String NAME = "Images";
 	
 	public ImagesFolderNode(IProject project, String imagesFolder, IProjectItemNode parent) {
 		super(project, imagesFolder, parent);
-		if(imagesFolder != null) {
-			_children = initializeChildren(imagesFolder);
+		if(imagesFolder != null) {			
+			_children = initializeChildren(imagesFolder + "/res/images/");
 		} else {
-			_children = initializeChildren(PATH);
+			_children = new ArrayList<IProjectItemNode>();
+			_children.add(new ProjectItemNode("-- No images available! --", this));
 		}
 	}
 
@@ -51,25 +52,25 @@ public class ImagesFolderNode extends GenericFolderNode {
 		return _image;
 	}
 
-	@Override
-	public Object[] getElements(Object input) {
-		return getChildren(input);
-	}
-
-	@Override
-	public Object[] getChildren(Object parent) {
-		return _children.toArray();
-	}
-
-	@Override
-	public Object getParent(Object element) {
-		return super.getParent(element);
-	}
-
-	@Override
-	public boolean hasChildren(Object parent) {
-		return (_children.size() > 0);
-	}
+//	@Override
+//	public Object[] getElements(Object input) {
+//		return getChildren(input);
+//	}
+//
+//	@Override
+//	public Object[] getChildren(Object parent) {
+//		return _children.toArray();
+//	}
+//
+//	@Override
+//	public Object getParent(Object element) {
+//		return super.getParent(element);
+//	}
+//
+//	@Override
+//	public boolean hasChildren(Object parent) {
+//		return (_children.size() > 0);
+//	}
 	
 	/************************************************************************************/
 
@@ -78,7 +79,7 @@ public class ImagesFolderNode extends GenericFolderNode {
 		try {			
 			
 			IProject project = this.getProject();
-			IFolder imageFolder = project.getFolder(PATH);
+			IFolder imageFolder = project.getFolder(path);
 			
 			IResource[] imageFiles = imageFolder.members();
 			
@@ -88,11 +89,11 @@ public class ImagesFolderNode extends GenericFolderNode {
 			}
 			
 			if(children.size() <= 0) {
-				children.add(new ProjectItemNode("No images found!", this));
+				children.add(new InfoNode("No images found!", this));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			children.add(new ProjectItemNode("Error while searching images: " + e.getMessage(), this));
+			children.add(new ErrorNode("Error while searching images: " + e.getMessage(), this));
 		}
 		return children;
 

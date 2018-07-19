@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.*;
+
+import com.armin.sap.ds.builder.Activator;
+
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.jface.action.*;
@@ -173,7 +176,7 @@ public class DesignStudioDefaultView extends ViewPart {
 	viewer.setLabelProvider(new ViewLabelProvider());
 
 		// Create the help context id for the viewer's control
-		workbench.getHelpSystem().setHelp(viewer.getControl(), "sap-design-studio-ext-builder.viewer");
+		workbench.getHelpSystem().setHelp(viewer.getControl(), Activator.PLUGIN_ID + ".viewer");
 		getSite().setSelectionProvider(viewer);
 		makeActions();
 		hookContextMenu();

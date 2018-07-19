@@ -7,38 +7,43 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.armin.sap.ds.builder.api.models.Extension;
+import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.controls.ExtensionControl;
 import com.armin.sap.ds.builder.controls.IExtensionChangedListener;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
-import com.armin.sap.ds.builder.project.models.Extension;
-import com.armin.sap.ds.builder.project.models.IModel;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
 
 
 public class ExtensionCreationPage extends WizardPage implements IWizardDetailsPage {
 
-	private IStructuredSelection _selection;
 	private Extension _model;
-	private ExtensionCollectionNode _parentTreeNode;
-	private ExtensionControl extensionCtl;
+	private ExtensionControl extensionControl;
+	private Composite topLevel;
+	private IStructuredSelection _selection;
 	
 	public ExtensionCreationPage(String pageName, IStructuredSelection selection) {
 		super(pageName);
+		setDescription("Creates an additional extension under selected extension collection");
+		setTitle("Extension Details");
 		setPageComplete(false);
-		_selection = selection;
 		_model = new Extension();
 	}
 	
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public ExtensionCreationPage(IStructuredSelection selection) {
 		super("Extension Details");
+		setDescription("Creates an additional extension under selected extension collection");
+		setTitle("Extension Details");
 		setPageComplete(false);
-		_selection = selection;
 		_model = new Extension();
 	}
 	
 	@Override
 	public boolean validatePage() {
-		boolean isValid = extensionCtl.validateControl();
+		boolean isValid = extensionControl.validateControl();
 		setPageComplete(isValid);
 		return isValid;
 	}
@@ -50,15 +55,20 @@ public class ExtensionCreationPage extends WizardPage implements IWizardDetailsP
 
 	@Override
 	public void createControl(Composite parent) {
-		Composite topLevel = new Composite(parent, SWT.NONE);
-		topLevel.setLayout(new GridLayout());
-		topLevel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL
-				| GridData.HORIZONTAL_ALIGN_FILL));
+		initializeDialogUnits(parent);
+		topLevel = new Composite(parent, SWT.NONE);		
 		topLevel.setFont(parent.getFont());
 		
 		setErrorMessage(null);
 		setMessage(null);
 		setControl(topLevel);
+		
+		GridData topLevelLayoutData = new GridData();
+		topLevelLayoutData.horizontalAlignment = GridData.FILL_HORIZONTAL;
+		//topLevelLayoutData.verticalAlignment = GridData.FILL_VERTICAL;
+		topLevel.setLayoutData(topLevelLayoutData);
+		topLevel.setLayout(new GridLayout(1, false));
+		
 		createCompositeChildControls();
 		initialize();		
 	}
@@ -71,28 +81,39 @@ public class ExtensionCreationPage extends WizardPage implements IWizardDetailsP
 			if(_selection.size() <= 0)
 				return;
 			Object selectedObj = _selection.getFirstElement();
-			if(selectedObj instanceof ExtensionCollectionNode) {				
-				_parentTreeNode = (ExtensionCollectionNode)selectedObj;								
+			if(selectedObj instanceof ExtensionCollectionNode) {								
 			}
 		}
 		
 	}
 
 	private void createCompositeChildControls() {
-		Composite area = (Composite)this.getControl();
-		extensionCtl = new ExtensionControl(area, SWT.NONE, _model);
-		extensionCtl.addExtensionChangedListener(new IExtensionChangedListener() {
+		if(_model == null) {
+			extensionControl = new ExtensionControl(topLevel, SWT.NONE);		
+			extensionControl.setLayout(new GridLayout(1, false));
+			extensionControl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 2));
 			
-			@Override
-			public void OnExtensionChanged(boolean isValid) {
-				setPageComplete(isValid);
-			}
-		});
-	
-	}
-
-	public ExtensionCollectionNode getParentExtensionCollectionTreeNode() {
-		return _parentTreeNode;
+			extensionControl.addExtensionChangedListener(new IExtensionChangedListener() {
+				
+				@Override
+				public void OnExtensionChanged(boolean isValid) {
+					setPageComplete(isValid);
+					_model = extensionControl.getModel();
+				}
+			});
+		} else {
+			extensionControl = new ExtensionControl(topLevel, SWT.NONE, _model);		
+			extensionControl.setLayout(new GridLayout(1, false));
+			extensionControl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 2));
+			
+			extensionControl.addExtensionChangedListener(new IExtensionChangedListener() {
+				
+				@Override
+				public void OnExtensionChanged(boolean isValid) {
+					setPageComplete(isValid);
+				}
+			});
+		}
 	}
 
 }

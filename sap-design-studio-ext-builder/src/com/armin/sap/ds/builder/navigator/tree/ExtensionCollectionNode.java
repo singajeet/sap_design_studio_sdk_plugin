@@ -9,24 +9,29 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.common.ProjectFilesReader;
+import com.armin.sap.ds.builder.api.models.Extension;
+import com.armin.sap.ds.builder.api.models.ResourceModel;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.project.models.Extension;
-import com.armin.sap.ds.builder.project.models.ResourceModel;
+import com.armin.sap.ds.builder.service.IProjectFilesReaderService;
+import com.armin.sap.ds.builder.service.ProjectFilesReaderService;
 
 public class ExtensionCollectionNode extends ProjectItemNode {
 
 	private static final String NAME = "Extensions";	
-	ArrayList<IResource> _extensionFolders;
+	private ArrayList<IResource> _extensionFolders;
+	private IProjectFilesReaderService _service;
 	
 	public ExtensionCollectionNode(IProject project, ArrayList<IResource> extensionFolders, IProjectItemNode parent) {
 		super(project, parent);
-		_extensionFolders = extensionFolders;		
-		if (_children == null) {
-			_children = initializeChildren(_extensionFolders);
-        }
+		_extensionFolders = extensionFolders;
+		_service = PlatformUI.getWorkbench().getService(IProjectFilesReaderService.class);
+		if(_service == null) {
+			_service = new ProjectFilesReaderService();
+		}
+		_children = initializeChildren(_extensionFolders);        
 		_item = new ResourceModel();
 	}
 
@@ -75,7 +80,7 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 	public void addExtension(IResource resource) {
 		if(resource != null) {
 			if(!exists(resource)) {
-				Extension extension = ProjectFilesReader.getInstance().getExtensionModel(resource);
+				Extension extension = _service.getExtensionModel(resource);
 				IProjectItemNode extNode = new ExtensionNode(super.getProject(), extension, this);
 				_children.add(extNode);
 			}
@@ -160,9 +165,9 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 		return NAME;
 	}
 	
-	public IProject getProject() {
-		return super.getProject();
-	}
+//	public IProject getProject() {
+//		return super.getProject();
+//	}
 	
 	public List<IProjectItemNode> getExtensions(){
 		return _children;
@@ -170,7 +175,7 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 	
 	@Override
 	public Image getImage() {
-		Image image = Activator.getImage("images/extension_collection_28x28.png");
+		Image image = Activator.getImage("images/extension_collection_16x16.png");
 		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
 		_image = new Image(Display.getCurrent(), imgData);
@@ -178,25 +183,25 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 		return _image;
 	}
 	
-	@Override
-	public Object[] getElements(Object input) {
-		return getChildren(input);
-	}
+//	@Override
+//	public Object[] getElements(Object input) {
+//		return getChildren(input);
+//	}
 	
-	@Override
-	public Object[] getChildren(Object parent) {
-		return _children.toArray();
-	}
+//	@Override
+//	public Object[] getChildren(Object parent) {
+//		return _children.toArray();
+//	}
 	
-	@Override
-	public Object getParent(Object element) {
-		return super.getParent(element);
-	}
-	
-	@Override
-	public boolean hasChildren(Object parent) {				
-		return (_children.size() > 0);
-	}
+//	@Override
+//	public Object getParent(Object element) {
+//		return super.getParent(element);
+//	}
+//	
+//	@Override
+//	public boolean hasChildren(Object parent) {				
+//		return (_children.size() > 0);
+//	}
 	
 	public IResource[] getExtensionsAsResources() throws CoreException {
 		return (IResource[]) _extensionFolders.toArray();
@@ -211,19 +216,19 @@ public class ExtensionCollectionNode extends ProjectItemNode {
     		
     		for(IResource resource : extResources) {
     			if(resource.getType() == IResource.FOLDER) {
-    				Extension extension = ProjectFilesReader.getInstance().getExtensionModel(resource);
-    				IProjectItemNode extNode = new ExtensionNode(super.getProject(), extension, this);
+    				Extension extension = _service.getExtensionModel(resource);
+    				IProjectItemNode extNode = new ExtensionNode(this.getProject(), extension, this);
     				_children.add(extNode);
     			}
     		}
     		    		
     		if(_children.size() <= 0) {
-				_children.add(new ProjectItemNode("No extensions found!", this));
+				_children.add(new InfoNode("No extensions found!", this));
 			}
     	}catch(Exception e)
     	{
     		e.printStackTrace();    		
-    		_children.add(new ProjectItemNode("Error while searching images, css or APS nodes: " + e.getMessage(), this));    		
+    		_children.add(new ErrorNode("Error while searching images, css or APS nodes: " + e.getMessage(), this));    		
     	}
     	return _children;
     }	

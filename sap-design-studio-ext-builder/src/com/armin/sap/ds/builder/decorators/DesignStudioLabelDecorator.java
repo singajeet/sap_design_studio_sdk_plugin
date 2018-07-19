@@ -7,7 +7,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.themes.IThemeManager;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
+import com.armin.sap.ds.builder.navigator.tree.ProjectItemType;
 
 public class DesignStudioLabelDecorator implements ILightweightLabelDecorator {
 
@@ -44,25 +46,18 @@ public class DesignStudioLabelDecorator implements ILightweightLabelDecorator {
 		
 		if(element instanceof IProjectItemNode) {
 			IProjectItemNode ele = (IProjectItemNode)element;
-			decoration.addSuffix(" [" + ele.getType().name() + " ]");
+			
 			if(color != null)
 				decoration.setForegroundColor(color);
 			
-//			if(ele.getType() == ProjectItemType.EXTENSION_FILE) {
-//				decoration.addSuffix(" [Extension] ");	
-//				if(color != null)
-//					decoration.setForegroundColor(color);					
-//
-//			}else if(ele.getType() == ProjectItemType.COMPONENT_FILE) {
-//				decoration.addSuffix(" [Component] ");
-//				if(color != null)
-//					decoration.setForegroundColor(color);
-//				
-//			} else if(ele.getType() == ProjectItemType.GROUP_NODE) {
-//				decoration.addSuffix(" [Group]");
-//				if(color != null)
-//					decoration.setForegroundColor(color);
-//			}
+			if(ele.getType() == ProjectItemType.EXTENSION_COLLECTION) {
+				ExtensionCollectionNode extensions = (ExtensionCollectionNode)ele;
+				decoration.addSuffix(" [ " + extensions.getExtensions().size() + " Extension(s) ]");	
+				if(color != null)
+					decoration.setForegroundColor(color);					
+			} else {
+				decoration.addSuffix(" [" + ele.getType().name() + " ]");
+			}
 		}
 	}
 

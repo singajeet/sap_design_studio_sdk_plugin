@@ -6,8 +6,8 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.models.PossibleValueType;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.project.models.PossibleValueType;
 
 public class PropertyValueNode extends ProjectItemNode {
 	
@@ -36,24 +36,24 @@ public class PropertyValueNode extends ProjectItemNode {
 		return _image;
 	}
 
-	@Override
-	public Object[] getElements(Object input) {
-		return getChildren(input);
-	}
-
-	@Override
-	public Object[] getChildren(Object parent) {
-		return _children.toArray();
-	}
-
-	@Override
-	public Object getParent(Object element) {
-		return _parent;
-	}
+//	@Override
+//	public Object[] getElements(Object input) {
+//		return getChildren(input);
+//	}
+//
+//	@Override
+//	public Object[] getChildren(Object parent) {
+//		return _children.toArray();
+//	}
+//
+//	@Override
+//	public Object getParent(Object element) {
+//		return _parent;
+//	}
 
 	@Override
 	public boolean hasChildren(Object parent) {		
-		return _children.size() > 0;
+		return false;
 	}
 
 

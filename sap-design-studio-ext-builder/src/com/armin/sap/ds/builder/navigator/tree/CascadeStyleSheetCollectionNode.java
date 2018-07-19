@@ -42,7 +42,7 @@ public class CascadeStyleSheetCollectionNode extends ProjectItemNode {
 
 	@Override
 	public Image getImage() {
-		Image image = Activator.getImage("images/css_28x28.png");
+		Image image = Activator.getImage("images/css_16x16.png");
 		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
 		_image = new Image(Display.getCurrent(), imgData);
@@ -50,25 +50,25 @@ public class CascadeStyleSheetCollectionNode extends ProjectItemNode {
 		return _image;
 	}
 
-	@Override
-	public Object[] getElements(Object input) {
-		return getChildren(input);
-	}
-
-	@Override
-	public Object[] getChildren(Object parent) {
-		return _children.toArray();
-	}
-
-	@Override
-	public Object getParent(Object element) {
-		return super.getParent(element);
-	}
-
-	@Override
-	public boolean hasChildren(Object parent) {		
-		return (_children.size() > 0);
-	}
+//	@Override
+//	public Object[] getElements(Object input) {
+//		return getChildren(input);
+//	}
+//
+//	@Override
+//	public Object[] getChildren(Object parent) {
+//		return _children.toArray();
+//	}
+//
+//	@Override
+//	public Object getParent(Object element) {
+//		return super.getParent(element);
+//	}
+//
+//	@Override
+//	public boolean hasChildren(Object parent) {		
+//		return (_children.size() > 0);
+//	}
 	
 	public void addItem(String styleSheetPath) {
 		if(styleSheetPath != null) {
@@ -115,13 +115,13 @@ public class CascadeStyleSheetCollectionNode extends ProjectItemNode {
 			}
 			
 			if(children.size() <= 0) {
-				IProjectItemNode node = new ProjectItemNode("No style sheets found!", this);
+				IProjectItemNode node = new InfoNode("No style sheets found!", this);
 				children.add(node);
 			}					
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			IProjectItemNode node = new ProjectItemNode("Error while searching css: " + e.getMessage(), this);
+			IProjectItemNode node = new ErrorNode("Error while searching css: " + e.getMessage(), this);
 			children.add(node);
 		}
 		

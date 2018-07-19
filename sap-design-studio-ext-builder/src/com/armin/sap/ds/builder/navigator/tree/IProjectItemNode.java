@@ -7,7 +7,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.graphics.Image;
 
-import com.armin.sap.ds.builder.project.models.IModel;
+import com.armin.sap.ds.builder.api.models.IModel;
 
 public interface IProjectItemNode {
 	public Image getImage();
@@ -48,7 +48,11 @@ public interface IProjectItemNode {
     
 	public void removeItem(String id);
 	
+	public IProjectItemNode findItem(String id);
+	
 	public boolean exists(String id);
+	
+	public boolean exists(String id, boolean ignorecase);
 	
 	public boolean exists(IProjectItemNode item);
 	

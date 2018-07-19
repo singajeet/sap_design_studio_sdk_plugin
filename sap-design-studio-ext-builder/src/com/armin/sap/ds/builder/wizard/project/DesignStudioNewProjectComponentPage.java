@@ -16,22 +16,23 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import com.armin.sap.ds.builder.api.models.Component;
+import com.armin.sap.ds.builder.api.models.ComponentExtended;
+import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.controls.ComponentControl;
 import com.armin.sap.ds.builder.controls.IComponentChangedListener;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.project.models.Component;
-import com.armin.sap.ds.builder.project.models.ComponentExtended;
-import com.armin.sap.ds.builder.project.models.IModel;
 import com.armin.sap.ds.builder.shared.ISharedData;
 import com.armin.sap.ds.builder.shared.ISharedDataSubscriber;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
+import org.eclipse.swt.custom.ScrolledComposite;
 
 
 public class DesignStudioNewProjectComponentPage extends WizardPage implements IWizardDetailsPage, ISharedDataSubscriber {
 
 	private ISharedData _data;
-	private Composite container;
-	private Composite topContainer;
+	private Composite middleSection;
+	private Composite topSection;
 	private Text txtPackage;
 	private Text txtDescription;
 	private Combo comboExtends;
@@ -44,16 +45,25 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 	public String EXTENDS_KEYWORD = " extends ";	
 	
 	private Component _model;
+	private Composite baseContainer;
+	private Composite bottomSection;
 	
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public DesignStudioNewProjectComponentPage() {
 		super("Component Details");
+		setDescription("Provide details below for the default component");
+		setTitle("Component Details");
 		setPageComplete(false);
 		_model = new ComponentExtended();
 	}
 	
 	public DesignStudioNewProjectComponentPage(String pageName, ISharedData data) {
 		super(pageName);
+		setDescription("Provide details below for the default component");
+		setTitle("Component Details");
 		setPageComplete(false);
 		_data = data;		
 		_data.registerSubscriber(this);
@@ -63,31 +73,31 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 	@Override
 	public void createControl(Composite parent) {
 		initializeDialogUnits(parent);
-		Composite topLevel = new Composite(parent, SWT.NONE);
-		topLevel.setLayout(new GridLayout());
-		topLevel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_FILL
-				| GridData.HORIZONTAL_ALIGN_FILL));
-		topLevel.setFont(parent.getFont());
-		
+		baseContainer = new Composite(parent, SWT.NONE);
+		baseContainer.setLayout(new GridLayout(1, false));
+		baseContainer.setFont(parent.getFont());
+			
 		setErrorMessage(null);
 		setMessage(null);
-		setControl(topLevel);
 		createCompositeChildControls();
+		setControl(baseContainer);
 	}
 	
 	private void createCompositeChildControls() {
-		Composite area = (Composite) this.getControl();
 		
-		topContainer = new Composite(area, SWT.NONE);
-		topContainer.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
-		GridLayout topLayout = new GridLayout(1, false);
-		topContainer.setLayout(topLayout);
+		//################### START - TOP SECTION ##########################
+		topSection = new Composite(baseContainer, SWT.NONE);
+		topSection.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		GridLayout topSectionLayout = new GridLayout(1, false);
+		topSectionLayout.verticalSpacing = 0;
+		topSectionLayout.marginWidth = 0;
+		topSectionLayout.marginHeight = 0;
+		topSection.setLayout(topSectionLayout);
 		
 		//--- Checkbox to ask if component file is required or not
-		checkCreateComponentFile = new Button(topContainer, SWT.CHECK);
+		checkCreateComponentFile = new Button(topSection, SWT.CHECK);
 		GridData checkBoxGridData = new GridData();
-		checkBoxGridData.horizontalAlignment = GridData.FILL;
-		
+		checkBoxGridData.horizontalAlignment = GridData.FILL;		
 		checkCreateComponentFile.setLayoutData(checkBoxGridData);
 		checkCreateComponentFile.setText("Create component contribution file (.ztl) for this extension");
 		checkCreateComponentFile.setSelection(true);
@@ -106,25 +116,25 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 		});
 		
 		((ComponentExtended)_model).setComponentFileCreationEnabled(true);
+		//################## END - TOP SECTION ##############################
 		
-		container = new Composite(topContainer, SWT.NONE);
-		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		GridLayout layout = new GridLayout(2, false);
-		container.setLayout(layout);
+		//################## START - MIDDLE SECTION #########################
+		middleSection = new Composite(baseContainer, SWT.NONE);
+		middleSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		GridLayout middleSectionLayout = new GridLayout(2, false);
+		middleSection.setLayout(middleSectionLayout);
 		
 		//--- Package Name Row
-		Label lblPackage = new Label(container, SWT.NONE);
+		Label lblPackage = new Label(middleSection, SWT.NONE);
 		lblPackage.setText("Component Package Name:");
-		txtPackage = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtPackage = new Text(middleSection, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtPackage.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtPackage.setEnabled(false); 
-		
-		
+				
 		//--- Super Class Row
-		Label lblExtends = new Label(container, SWT.NONE);
+		Label lblExtends = new Label(middleSection, SWT.NONE);
 		lblExtends.setText("Component Inherit From:");
-		comboExtends = new Combo(container, SWT.READ_ONLY | SWT.BORDER);
-		
+		comboExtends = new Combo(middleSection, SWT.READ_ONLY | SWT.BORDER);
 		String parentClassStr = Settings.store().get(Settings.FOR.COMPONENT_PARENT_CLASSES);
 		String[] parentClasses = parentClassStr.split(";");
 		for(String parent : parentClasses) {
@@ -139,33 +149,40 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 				((ComponentExtended)_model).setClassToExtend(comboExtends.getItem(index));
 			}
 		});
+		
 		//--- Description Row
-		Label lblDescription = new Label(container, SWT.NONE);
+		Label lblDescription = new Label(middleSection, SWT.NONE);
+		lblDescription.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
 		lblDescription.setText("Description");
-		txtDescription = new Text(container, SWT.MULTI | SWT.BORDER | SWT.WRAP);
-		GridData gridData = new GridData();
-		gridData.horizontalAlignment = SWT.FILL;
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.verticalAlignment = SWT.FILL;
-		gridData.grabExcessVerticalSpace = true;
-		gridData.minimumHeight = 100;
-		txtDescription.setLayoutData(gridData);
+		txtDescription = new Text(middleSection, SWT.MULTI | SWT.BORDER | SWT.WRAP);
+		GridData txtDescriptionGridData = new GridData();
+		txtDescriptionGridData.verticalAlignment = SWT.FILL;
+		txtDescriptionGridData.grabExcessVerticalSpace = true;
+		txtDescriptionGridData.horizontalAlignment = SWT.FILL;
+		txtDescriptionGridData.grabExcessHorizontalSpace = true;
+		//txtDescriptionGridData.verticalAlignment = SWT.FILL;
+		//txtDescriptionGridData.grabExcessVerticalSpace = true;
+		txtDescriptionGridData.minimumHeight = 100;
+		txtDescription.setLayoutData(txtDescriptionGridData);
 		txtDescription.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				((ComponentExtended)_model).setDescription(txtDescription.getText());
 			}
 		});
 		
-		if(_model == null) {
-			componentCtl = new ComponentControl(container, SWT.NONE);			
-			_model = componentCtl.getModel();
-		} else {
-			componentCtl = new ComponentControl(container, SWT.NONE, _model);
-		}
+		//################## END - MIDDLE SECTION #########################
 		
+		//################## START - BOTTOM SECTION #########################
+		bottomSection = new Composite(baseContainer, SWT.BORDER);
+		bottomSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridLayout bottomSectionLayout = new GridLayout(1, false);		
+		bottomSection.setLayout(bottomSectionLayout);
+		componentCtl = new ComponentControl(bottomSection, SWT.NONE, _model);
+				
 		componentCtl.addComponentChangedListener(new IComponentChangedListener() {
 			@Override
 			public void OnComponentChanged(boolean isValid) {
+				_model = componentCtl.getModel();
 				setPageComplete(isValid);
 			}
 		});
@@ -179,7 +196,8 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 	 * 					disable the components
 	 */
 	private void enableControls(boolean state) {
-		container.setVisible(state);
+		middleSection.setVisible(state);
+		bottomSection.setVisible(state);
 		((ComponentExtended)_model).setComponentFileCreationEnabled(state);
 	}
 	

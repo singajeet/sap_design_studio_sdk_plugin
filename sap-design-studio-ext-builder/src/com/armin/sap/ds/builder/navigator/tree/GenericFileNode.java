@@ -9,8 +9,8 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.models.ResourceModel;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.project.models.ResourceModel;
 
 public class GenericFileNode extends ProjectItemNode {
 
@@ -55,23 +55,23 @@ public class GenericFileNode extends ProjectItemNode {
 		return _image;
 	}
 
-	@Override
-	public Object[] getElements(Object input) {
-		return getChildren(input);
-	}
-
-	@Override
-	public Object[] getChildren(Object parent) {
-		return _children.toArray();
-	}
-
-	@Override
-	public Object getParent(Object element) {
-		return super.getParent(element);
-	}
-
-	@Override
-	public boolean hasChildren(Object parent) {
-		return (_children.size() > 0);
-	}
+//	@Override
+//	public Object[] getElements(Object input) {
+//		return getChildren(input);
+//	}
+//
+//	@Override
+//	public Object[] getChildren(Object parent) {
+//		return _children.toArray();
+//	}
+//
+//	@Override
+//	public Object getParent(Object element) {
+//		return super.getParent(element);
+//	}
+//
+//	@Override
+//	public boolean hasChildren(Object parent) {
+//		return (_children.size() > 0);
+//	}
 }

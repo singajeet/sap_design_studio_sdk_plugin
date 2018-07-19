@@ -10,6 +10,11 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -79,8 +84,13 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 	private Object createProjectParent(IProject project) {
 		Object result = null;
 		try {
-			if(project.getNature(DesignStudioProjectNature.NATURE_ID) != null) {
-				result = new ProjectNode(project);
+			if(project.isAccessible()) {
+				if(!project.isOpen()) {
+					project.open(null);
+				}
+				if(project.getNature(DesignStudioProjectNature.NATURE_ID) != null) {
+					result = new ProjectNode(project);
+				}
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -126,10 +136,27 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
-		TreeViewer viewer = (TreeViewer)_viewer;
-		TreePath[] treePaths = viewer.getExpandedTreePaths();
-		viewer.refresh();
-		viewer.setExpandedTreePaths(treePaths);		
+		WorkspaceJob job = new WorkspaceJob("Refresh navigation tree") {
+			
+			public IStatus runInWorkspace(IProgressMonitor monitor) {
+				
+				try {
+					
+					TreeViewer viewer = (TreeViewer)_viewer;
+					TreePath[] treePaths = viewer.getExpandedTreePaths();
+					viewer.refresh();
+					viewer.setExpandedTreePaths(treePaths);	
+					return Status.OK_STATUS;
+				}catch(Exception e) {
+					e.printStackTrace();
+					MessageDialog.openError(_viewer.getControl().getShell(), "Error", e.getMessage());
+				}
+				return Status.CANCEL_STATUS;
+			}
+		};
+		
+		job.setRule(event.getResource());
+		job.schedule();
 	}
 
 }

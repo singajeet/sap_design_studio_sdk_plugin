@@ -3,7 +3,7 @@
 <plugin>
 
    <extension
-         id="com.armin.sap.ds.project.builder"
+         id="com.armin.sap.ds.builder.ID"
          name="SAP Design Studio Extension Project Builder"
          point="org.eclipse.core.resources.builders">
       <builder
@@ -14,16 +14,16 @@
       </builder>
    </extension>
    <extension
-         id="com.armin.sap.ds.builder.project.nature"
+         id="com.armin.sap.ds.builder.nature.ID"
          name="SAP Design Studio Project Nature"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="com.armin.sap.ds.builder.DesignStudioProjectNature">
+               class="com.armin.sap.ds.builder.DesignStudioProjectNature">               
          </run>
       </runtime>
       <builder
-            id="com.armin.sap.ds.project.builder">
+            id="com.armin.sap.ds.builder.ID">
       </builder>
    </extension>
    <extension
@@ -33,29 +33,27 @@
             id="com.armin.sap.ds.builder.project.commands.category">
       </category>
       <command
-            name="Add/Remove Design Studio Project Nature"
-            defaultHandler="com.armin.sap.ds.builder.commands.handlers.AddRemoveDesignStudioProjectNatureHandler"
+            name="Toggle Design Studio Project Nature"
+            defaultHandler="com.armin.sap.ds.builder.commands.handlers.ToggleProjectNatureHandler"
             categoryId="com.armin.sap.ds.builder.project.commands.category"
-            id="com.armin.sap.ds.builder.commands.addremove.nature">
+            id="com.armin.sap.ds.builder.commands.toggle.nature">
       </command>
-      <category
-            name="SAP Design Studio Base Commands"
-            id="com.armin.sap.ds.builder.base.commands.category">
-      </category>
       <command
-            categoryId="com.armin.sap.ds.builder.base.commands.category"
-            id="com.armin.sap.ds.builder.commands.base"
-            name="Base Command">
+            categoryId="com.armin.sap.ds.builder.project.commands.category"
+            defaultHandler="com.armin.sap.ds.builder.commands.handlers.OpenExtensionHandler"
+            id="com.armin.sap.ds.builder.commands.extension.open"
+            name="Open Extension">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
+            locationURI="menu:org.eclipse.ui.projectConfigure?after=additions">
          <command
-               commandId="com.armin.sap.ds.builder.commands.addremove.nature"
-               icon="images/project_28x28.png"
-               label="Disable SAP Design Studio Extension builder"
+               commandId="com.armin.sap.ds.builder.commands.toggle.nature"
+               disabledIcon="images/project_16x16_disabled.png"
+               icon="images/project_16x16.png"
+               label="Toggle SAP Design Studio Nature"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -68,7 +66,7 @@
                      <adapt
                            type="org.eclipse.core.resources.IProject">
                         <test
-                              value="com.armin.sap.ds.builder.nature.id"
+                              value="com.armin.sap.ds.builder.nature.ID"
                               property="org.eclipse.core.resources.projectNature">
                         </test>
                      </adapt>
@@ -76,10 +74,381 @@
                </with>
             </visibleWhen>
          </command>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="com.armin.sap.ds.builder.toolbars.base_toolbar">
+            <command
+                  commandId="com.armin.sap.ds.builder.commands.toggle.nature"
+                  disabledIcon="images/project_16x16_disabled.png"
+                  icon="images/project_16x16.png"
+                  tooltip="Toggles SAP Design Studio Nature of an project">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate>
+                        <adapt
+                              type="org.eclipse.core.resources.IProject">
+                           <test
+                                 property="org.eclipse.core.resources.projectNature"
+                                 value="com.armin.sap.ds.builder.nature.ID">
+                           </test>
+                        </adapt>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <separator
+                  name="sap-design-studio-ext-builder.separator1">
+            </separator>
+            <command
+                  commandId="com.armin.sap.ds.builder.commands.extension.open"
+                  icon="images/open_extension_16x16.png"
+                  label="Open Extensions"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+         </toolbar>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:com.armin.sap.ds.builder.project.navigator.view?after=additions">
+         <menu
+               label="New">
+            <command
+                  commandId="org.eclipse.ui.newWizard"
+                  disabledIcon="images/extension_16x16_disabled.png"
+                  icon="images/extension_16x16.png"
+                  label="Extension"
+                  style="push">
+               <parameter
+                     name="newWizardId"
+                     value="com.armin.sap.ds.builder.wizards.new_extension_wizard">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="org.eclipse.ui.newWizard"
+                  disabledIcon="images/component_16x16_disabled.png"
+                  icon="images/component_16x16.png"
+                  label="Component"
+                  style="push">
+               <parameter
+                     name="newWizardId"
+                     value="com.armin.sap.ds.builder.wizards.new_component_wizard">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="org.eclipse.ui.newWizard"
+                  disabledIcon="images/group_16x16_disabled.png"
+                  icon="images/group_16x16.png"
+                  label="Group"
+                  style="push">
+               <parameter
+                     name="newWizardId"
+                     value="com.armin.sap.ds.builder.wizards.new_group_wizard">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+         </menu>
+         <separator
+               name="com.armin.sap.ds.builder.separator.new-open">
+         </separator>
          <command
-               commandId="com.armin.sap.ds.builder.commands.base"
-               icon="images/project_28x28.png"
-               label="Enable SAP Design Studio Extension builder"
+               commandId="com.armin.sap.ds.builder.commands.extension.open"
+               icon="images/extension_16x16.png"
+               disabledIcon="images/extension_16x16_disabled.png"
+               label="Open Extensions"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.navigate.openResource"
+               label="Open File..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.builder.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.project.openProject"
+               icon="images/project_16x16.png"
+               disabledIcon="images/project_16x16_disabled.png"
+               label="Open Project..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <test
+                              property="org.eclipse.core.resources.projectNature"
+                              value="com.armin.sap.ds.builder.nature.ID">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <separator
+               name="sap-design-studio-ext-navigator.separator3">
+         </separator>
+         <command
+               commandId="org.eclipse.ui.edit.cut"
+               label="Cut"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.builder.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.copy"
+               label="Copy"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.builder.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.paste"
+               label="Paste"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.builder.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.delete"
+               label="Delete"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.builder.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <separator
+               name="sap-design-studio-ext-navigator.separator4">
+         </separator>
+         <command
+               commandId="org.eclipse.ui.file.import"
+               label="Import..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.builder.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.file.export"
+               label="Export..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.builder.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <separator
+               name="sap-design-studio-ext-navigator.separator5">
+         </separator>
+         <command
+               commandId="org.eclipse.ui.file.refresh"
+               label="Refresh"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.builder.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>true
+         <command
+               commandId="org.eclipse.ui.file.close"
+               label="Close"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.builder.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.project.closeProject"
+               label="Close Project"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.builder.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.project.closeUnrelatedProjects"
+               label="Close Unrelated Projects"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.builder.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <separator
+               name="sap-design-studio-ext-navigator.separator6">
+         </separator>
+         <command
+               commandId="org.eclipse.ui.file.properties"
+               label="Properties"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeWorkbenchWindow.activePerspective">
+                  <equals
+                        value="com.armin.sap.ds.builder.project.perspective">
+                  </equals>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.armin.sap.ds.builder.commands.toggle.nature"
+               disabledIcon="images/project_16x16_disabled.png"
+               icon="images/project_16x16.png"
+               label="Toggle SAP Design Studio Nature"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -91,12 +460,10 @@
                   <iterate>
                      <adapt
                            type="org.eclipse.core.resources.IProject">
-                        <not>
-                           <test
-                                 value="com.armin.sap.ds.builder.nature.id"
-                                 property="org.eclipse.core.resources.projectNature">
-                           </test>
-                        </not>
+                        <test
+                              property="org.eclipse.core.resources.projectNature"
+                              value="com.armin.sap.ds.builder.nature.ID">
+                        </test>
                      </adapt>
                   </iterate>
                </with>
@@ -104,27 +471,30 @@
          </command>
       </menuContribution>
       <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               icon="images/project_28x28.png"
-               label="Basic Menu"
-               mnemonic="M">
-            <command
-                  commandId="com.armin.sap.ds.builder.commands.base"
-                  mnemonic="S">
-            </command>
-         </menu>
-      </menuContribution>
-      <menuContribution
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="com.armin.sap.ds.builder.toolbars.base_toolbar">
-            <command
-                  commandId="com.armin.sap.ds.builder.commands.base"
-                  icon="images/project_28x28.png"
-                  tooltip="Base Command">
-            </command>
-         </toolbar>
+            allPopups="false"
+            locationURI="menu:file?after=additions">
+         <command
+               commandId="com.armin.sap.ds.builder.commands.extension.open"
+               disabledIcon="images/extension_16x16_disabled.png"
+               icon="images/extension_16x16.png"
+               label="Open Extensions"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -145,7 +515,8 @@
             class="org.eclipse.ui.navigator.CommonNavigator"
             icon="images/sap_18.png"
             id="com.armin.sap.ds.builder.project.navigator.view"
-            name="SAP Design Studio Project Navigator">
+            name="SAP Design Studio Project Navigator"
+            inject="true">
       </view>
       <category
             name="SAP Design Studio"
@@ -162,34 +533,25 @@
    </extension>
    <extension
          point="org.eclipse.ui.navigator.viewer">
-      <viewerActionBinding
-            viewerId="com.armin.sap.ds.builder.project.navigator.view">
-         <includes>
-            <actionExtension
-                  pattern="com.armin.sap.ds.builder.project.navigator.action">
-            </actionExtension>
-         </includes>
-      </viewerActionBinding>
       <viewerContentBinding
             viewerId="com.armin.sap.ds.builder.project.navigator.view">
          <includes>
             <contentExtension
-                  pattern="org.eclipse.ui.navigator.resourceContent">
+                  pattern="com.armin.sap.ds.builder.project.navigator.dscontent">
             </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resources.filters.*">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resources.linkHelper">
-            </contentExtension>
-            <contentExtension
-                  pattern="org.eclipse.ui.navigator.resources.workingSets">
-            </contentExtension>
-            <contentExtension
-                  pattern="com.armin.sap.ds.builder.project.navigator.ds_content">
-            </contentExtension>
+            <actionExtension
+                  pattern="com.armin.sap.ds.builder.project.navigator.dsaction">
+            </actionExtension>            
          </includes>
       </viewerContentBinding>
+      <viewerActionBinding
+            viewerId="com.armin.sap.ds.builder.project.navigator.view">
+         <includes>
+            <actionExtension
+                  pattern="org.eclipse.ui.navigator.resources.*">
+            </actionExtension>
+         </includes>
+      </viewerActionBinding>
    </extension>
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
@@ -197,22 +559,29 @@
             activeByDefault="true"
             contentProvider="com.armin.sap.ds.builder.navigator.providers.ContentProvider"
             icon="images/sap_18.png"
-            id="com.armin.sap.ds.builder.project.navigator.ds_content"
+            id="com.armin.sap.ds.builder.project.navigator.dscontent"
             labelProvider="com.armin.sap.ds.builder.navigator.providers.LabelProvider"
-            name="Design Studio Navigator Content">
+            priority="normal"
+            name="Design Studio Navigator Content">         
+         <triggerPoints>
+            <or>
+               <instanceof
+                     value="org.eclipse.core.resources.IResource">
+               </instanceof>
+            	<instanceof
+	                  value="com.armin.sap.ds.builder.navigator.tree.ProjectItemNode">
+	            </instanceof>
+            </or>	            
+         </triggerPoints>
+         <possibleChildren>
+            <instanceof
+                  value="com.armin.sap.ds.builder.navigator.tree.ProjectItemNode">
+            </instanceof>
+         </possibleChildren>
       </navigatorContent>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="org.eclipse.ui.resourcePerspective">
-         <view
-               ratio="0.5"
-               relative="org.eclipse.ui.navigator.ProjectExplorer"
-               relationship="stack"
-               id="com.armin.sap.ds.builder.project.navigator.view">
-         </view>
-      </perspectiveExtension>
       <perspectiveExtension
             targetID="com.armin.sap.ds.builder.project.perspective">
          <view
@@ -227,13 +596,14 @@
    <extension
          point="org.eclipse.ui.decorators">
       <decorator
+            adaptable="true"
+            class="com.armin.sap.ds.builder.decorators.DesignStudioLabelDecorator"
+            icon="icons/sample_decorator.gif"
+            id="com.armin.sap.ds.builder.project.item.decorator"
+            label="Resource Decorator"
             lightweight="true"
             location="TOP_LEFT"
-            adaptable="true"
-            label="Resource Decorator"
-            icon="icons/sample_decorator.gif"
-            state="true"
-            id="com.armin.sap.ds.builder.project.item.decorator">
+            state="false">
          <enablement>
             <and>
                <objectClass
@@ -246,6 +616,32 @@
                   <objectClass
                         name="org.eclipse.core.resources.IFile">
                   </objectClass>
+                  <objectClass
+                        name="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                  </objectClass>
+               </or>
+            </and>
+         </enablement>
+      </decorator>
+      <decorator
+            icon="icons/sample_decorator.gif"
+            id="com.armin.sap.ds.builder.label.decorator"
+            label="Design Studio Label Decorator">
+         <enablement>
+            <and>
+               <objectClass
+                     name="org.eclipse.core.resources.IResource">
+               </objectClass>
+               <or>
+                  <objectClass
+                        name="org.eclipse.core.resources.IProject">
+                  </objectClass>
+                  <objectClass
+                        name="org.eclipse.core.resources.IFile">
+                  </objectClass>
+                  <objectClass
+                        name="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                  </objectClass>
                </or>
             </and>
          </enablement>
@@ -255,39 +651,42 @@
          point="org.eclipse.ui.editors">
       <editor
             class="com.armin.sap.ds.builder.editors.ExtensionEditor"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            contributorClass="com.armin.sap.ds.builder.editors.ExtensionEditorContributor"
+            default="true"
             extensions="xml"
             icon="images/extension_28x28.png"
             id="com.armin.sap.ds.builder.editors.extension_editor"
             name="SAP Design Studio Extension Editor">
+         <contentTypeBinding
+               contentTypeId="com.armin.sap.ds.builder.contenttype.extension">
+         </contentTypeBinding>
       </editor>
       <editor
-            name="Design Studio Component Editor"
+            class="com.armin.sap.ds.builder.editors.ComponentEditor"
+            contributorClass="com.armin.sap.ds.builder.editors.ComponentEditorContributor"
+            default="true"
             extensions="ztl"
             icon="images/component_28x28.png"
-            contributorClass="com.armin.sap.ds.builder.editors.ComponentEditorContributor"
-            class="com.armin.sap.ds.builder.editors.ComponentEditor"
-            id="com.armin.sap.ds.builder.editors.component_editor">
+            id="com.armin.sap.ds.builder.editors.component_editor"
+            name="Design Studio Component Editor">
+         <contentTypeBinding
+               contentTypeId="com.armin.sap.ds.sdk.contenttype.ztl">
+         </contentTypeBinding>
       </editor>
       <editor
-            class="com.armin.sap.ds.builder.editors.DesignStudioTextEditor"
-            default="false"
+            class="com.armin.sap.ds.builder.editors.DesignStudioGenericEditor"
             icon="images/project_28x28.png"
-            id="com.armin.sap.ds.builder.editors.text_editor"
-            name="SAP Design Studio Default Text Editor">
+            id="com.armin.sap.ds.builder.editors.generic_editor"
+            name="SAP Design Studio Generic Editor">
       </editor>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
-      <handler
-            commandId="com.armin.sap.ds.builder.commands.base"
-            class="com.armin.sap.ds.builder.commands.handlers.BaseCommandHandler">
-      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="com.armin.sap.ds.builder.commands.base"
+            commandId="com.armin.sap.ds.builder.commands.toggle.nature"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+6"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
@@ -306,16 +705,18 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <category
-            name="SAP Design Studio Extension"
+            name="SAP Design Studio Wizards"
             id="com.armin.sap.ds.builder.wizards.category">
       </category>
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
             class="com.armin.sap.ds.builder.wizard.project.DesignStudioNewProjectWizard"
+            descriptionImage="images/project_28x28.png"
             finalPerspective="com.armin.sap.ds.builder.project.perspective"
             icon="images/project_28x28.png"
             id="com.armin.sap.ds.builder.wizards.new_project_wizard"
-            name="SAP Design Studio Extension Project Wizard">
+            name="SAP Design Studio Extension Project Wizard"
+            project="true">
       </wizard>
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
@@ -324,6 +725,10 @@
             icon="images/extension_28x28.png"
             id="com.armin.sap.ds.builder.wizards.new_extension_wizard"
             name="SAP Design Studio Extension">
+         <selection
+               class="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode"
+               name="SAP Design Studio ExtensionCollection">
+         </selection>
       </wizard>
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
@@ -332,6 +737,10 @@
             icon="images/component_28x28.png"
             id="com.armin.sap.ds.builder.wizards.new_component_wizard"
             name="SAP Design Studio Component">
+         <selection
+               class="com.armin.sap.ds.builder.navigator.tree.ExtensionNode"
+               name="SAP Design Studio Extension">
+         </selection>
       </wizard>
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
@@ -340,6 +749,10 @@
             icon="images/group_28x28.png"
             id="com.armin.sap.ds.builder.wizards.new_group_wizard"
             name="SAP Design Studio Group">
+         <selection
+               class="com.armin.sap.ds.builder.navigator.tree.ExtensionNode"
+               name="SAP Design Studio Extension">
+         </selection>
       </wizard>
    </extension>
    <extension
@@ -356,7 +769,25 @@
       <page
             name="SAP Design Studio Extension Builder"
             class="com.armin.sap.ds.builder.preferences.DesignStudioPreferencePage"
-            id="com.armin.sap.ds.builder.preferences.DesignStudioPreferencePage">
+            id="com.armin.sap.ds.builder.preferences.design_studio_preferences">
+      </page>
+      <page
+            category="com.armin.sap.ds.builder.preferences.design_studio_preferences"
+            class="com.armin.sap.ds.builder.preferences.DesigStudioExtGroupsPage"
+            id="com.armin.sap.ds.builder.preferences.design_studio_group_preferences"
+            name="Groups">
+      </page>
+      <page
+            category="com.armin.sap.ds.builder.preferences.design_studio_preferences"
+            class="com.armin.sap.ds.builder.preferences.DesigStudioExtInheritancePage"
+            id="com.armin.sap.ds.builder.preferences.design_studio_inheritance_preferences"
+            name="Inheritance">
+      </page>
+      <page
+            category="com.armin.sap.ds.builder.preferences.design_studio_preferences"
+            class="com.armin.sap.ds.builder.preferences.DesigStudioExtTemplatesPage"
+            id="com.armin.sap.ds.builder.preferences.design_studio_template_preferences"
+            name="Templates">
       </page>
    </extension>
    <extension
@@ -384,6 +815,150 @@
       <contexts
             file="contexts.xml">
       </contexts>
+   </extension>
+   <extension
+         id="com.armin.sap.ds.builder.contenttype"
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            file-extensions="xml"
+            file-names="contribution.xml"
+            id="com.armin.sap.ds.builder.contenttype.extension"
+            name="%content-type.name"
+            priority="normal">
+         <describer
+               class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber2">
+            <parameter
+                  name="element"
+                  value="sdkExtension">
+            </parameter>
+         </describer>
+      </content-type>
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            file-extensions="xml"
+            file-names="plugin.xml"
+            id="com.armin.sap.ds.builder.contenttype.plugin"
+            name="%content-type.name.0"
+            priority="normal">
+         <describer
+               class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber2">
+            <parameter
+                  name="element"
+                  value="plugin">
+            </parameter>
+         </describer>
+      </content-type>
+      <content-type
+            base-type="com.armin.sap.ds.files.properties"
+            file-extensions="properties"
+            file-names="build.properties"
+            id="com.armin.sap.ds.builder.contenttype.build"
+            name="%content-type.name.1"
+            priority="normal">
+         <describer
+               class="com.armin.sap.ds.builder.describer.PropertiesDescriber">
+         </describer>
+      </content-type>
+      <content-type
+            base-type="com.armin.sap.ds.files.ztl"
+            file-extensions="ztl"
+            file-names="contribution.ztl"
+            id="com.armin.sap.ds.builder.contenttype.ztl"
+            name="%content-type.name.2"
+            priority="normal">
+         <describer
+               class="com.armin.sap.ds.builder.describer.ZtlDescriber">
+         </describer>
+      </content-type>
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            file-extensions="target"
+            file-names="build.target"
+            id="com.armin.sap.ds.builder.contenttype.target"
+            name="%content-type.name.3"
+            priority="normal">
+         <describer
+               class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber2">
+            <parameter
+                  name="element"
+                  value="target">
+            </parameter>
+         </describer>
+      </content-type>
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            file-extensions="html"
+            file-names="additional_properties_sheet.html"
+            id="com.armin.sap.ds.builder.contenttype.aps.html"
+            name="%content-type.name.4"
+            priority="normal">
+         <describer
+               class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber2">
+            <parameter
+                  name="element"
+                  value="html">
+            </parameter>
+         </describer>
+      </content-type>
+      <content-type
+            base-type="com.armin.sap.ds.files.aps.js"
+            file-extensions="js"
+            file-names="additional_properties_sheet.js"
+            id="com.armin.sap.ds.builder.contenttype.aps.js"
+            name="%content-type.name.5"
+            priority="normal">
+         <describer
+               class="com.armin.sap.ds.builder.describer.APSJsDescriber">
+         </describer>
+      </content-type>
+      <content-type
+            base-type="com.armin.sap.ds.files.css"
+            file-extensions="css"
+            id="com.armin.sap.ds.builder.contenttype.css"
+            name="%content-type.name.6"
+            priority="normal">
+         <describer
+               class="com.armin.sap.ds.builder.describer.CssDescriber">
+         </describer>
+      </content-type>
+      <content-type
+            base-type="com.armin.sap.ds.files.js"
+            file-extensions="js"
+            id="com.armin.sap.ds.builder.contenttype.js"
+            name="%content-type.name.8"
+            priority="normal">
+         <describer
+               class="com.armin.sap.ds.builder.describer.JsDescriber">
+         </describer>
+      </content-type>
+   </extension>
+   <extension
+         point="org.eclipse.ui.services">
+      <serviceFactory
+            factoryClass="com.armin.sap.ds.builder.service.factory.ProjectServiceFactory">
+         <service
+               serviceClass="com.armin.sap.ds.builder.service.IProjectService">
+         </service>
+      </serviceFactory>
+      <serviceFactory
+            factoryClass="com.armin.sap.ds.builder.service.factory.ProjectFilesBuilderServiceFactory">
+         <service
+               serviceClass="com.armin.sap.ds.builder.service.IProjectFilesBuilderService"></service>
+      </serviceFactory>
+      <serviceFactory
+            factoryClass="com.armin.sap.ds.builder.service.factory.ProjectFilesReaderServiceFactory">
+         <service
+               serviceClass="com.armin.sap.ds.builder.service.IProjectFilesReaderService">
+         </service>
+      </serviceFactory>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="sap_ds_sdk_extensions_generator_plugin"
+            name="SAP DS SDK Extensions Generator Plugin">
+      </product>
    </extension>
 
 </plugin>

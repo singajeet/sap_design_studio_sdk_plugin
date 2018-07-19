@@ -2,6 +2,7 @@ package com.armin.sap.ds.builder.wizard.group;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -11,10 +12,10 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
+import com.armin.sap.ds.builder.api.models.Group;
+import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.GroupNode;
-import com.armin.sap.ds.builder.project.models.Group;
-import com.armin.sap.ds.builder.project.models.IModel;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
 
 public class GroupWizard extends Wizard implements INewWizard {
@@ -83,7 +84,9 @@ public class GroupWizard extends Wizard implements INewWizard {
 			//Update the extension node in visual tree to reflect new group node
 			GroupNode groupItem = new GroupNode(parentNode.getProject(), (Group)group, parentNode);
 			parentNode.getExtension().getGroup().add((Group)group);
-			parentNode.addItem(groupItem);			
+			parentNode.addItem(groupItem);
+			
+			parentNode.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
 		}catch(Exception e) {
 			e.printStackTrace();		
 		}

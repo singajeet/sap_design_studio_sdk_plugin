@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.armin.sap.ds.builder.project.models.Group;
+import com.armin.sap.ds.builder.api.models.Group;
 
 public class GroupControl extends Composite {
 	private Text txtExtensionId;
@@ -28,8 +28,7 @@ public class GroupControl extends Composite {
 	 */
 	public GroupControl(Composite parent, int style, Group model) {
 		this(parent, style);
-		_model = model;
-		_listeners = new ArrayList<IGroupChangedListener>();
+		_model = model;				
 	}
 
 	/**

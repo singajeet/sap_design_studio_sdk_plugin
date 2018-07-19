@@ -41,7 +41,7 @@ public class CascadeStyleSheetNode extends GenericFileNode {
 
 	@Override
 	public Image getImage() {
-		Image image = Activator.getImage("images/stylesheet_28x28.gif");
+		Image image = Activator.getImage("images/stylesheet_16x16.gif");
 		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
 		_image = new Image(Display.getCurrent(), imgData);
@@ -49,20 +49,20 @@ public class CascadeStyleSheetNode extends GenericFileNode {
 		return _image;
 	}
 
-	@Override
-	public Object[] getElements(Object input) {
-		return getChildren(input);
-	}
-
-	@Override
-	public Object[] getChildren(Object parent) {
-		return new Object[0];
-	}
-
-	@Override
-	public Object getParent(Object element) {
-		return this.getParent(element);
-	}
+//	@Override
+//	public Object[] getElements(Object input) {
+//		return getChildren(input);
+//	}
+//
+//	@Override
+//	public Object[] getChildren(Object parent) {
+//		return new Object[0];
+//	}
+//
+//	@Override
+//	public Object getParent(Object element) {
+//		return this.getParent(element);
+//	}
 
 	@Override
 	public boolean hasChildren(Object parent) {		

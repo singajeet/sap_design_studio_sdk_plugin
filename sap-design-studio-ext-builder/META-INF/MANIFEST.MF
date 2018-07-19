@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SAP Design Studio Extension Project Builder
-Bundle-SymbolicName: sap-design-studio-ext-builder;singleton:=true
+Bundle-SymbolicName: com.armin.sap.ds.builder;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.armin.sap.ds.builder.Activator
 Bundle-Vendor: Armin
@@ -17,9 +17,21 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wb.runtime.lib;bundle-version="1.9.1",
  org.eclipse.wb.core.java;bundle-version="1.9.1",
  org.eclipse.wb.core.ui;bundle-version="1.9.1",
- org.eclipse.wb.swt;bundle-version="1.9.1"
+ org.eclipse.wb.swt;bundle-version="1.9.1",
+ org.apache.commons.lang3;bundle-version="3.1.0",
+ org.apache.xmlrpc;bundle-version="3.0.0",
+ javax.xml;bundle-version="1.3.4",
+ javax-xml-bind-plugin;bundle-version="1.0.0",
+ apache-commons-text-jar-plugin;bundle-version="1.0.0",
+ org.eclipse.ui.navigator;bundle-version="3.7.0",
+ org.eclipse.core.databinding,
+ org.eclipse.core.databinding.observable,
+ org.eclipse.jface.databinding,
+ org.eclipse.core.databinding,
+ org.eclipse.core.databinding.observable,
+ org.eclipse.core.databinding
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Automatic-Module-Name: sap-design-studio-ext-builder
+Automatic-Module-Name: com.armin.sap.ds.builder
 Bundle-ActivationPolicy: lazy
 Export-Package: com.armin.sap.ds.builder;
   uses:="org.osgi.framework,
@@ -30,9 +42,9 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.core.resources,
    org.eclipse.ui.plugin",
  com.armin.sap.ds.builder.actions;uses:="org.eclipse.ui.actions,org.eclipse.jface.action,org.eclipse.jface.resource",
- com.armin.sap.ds.builder.commands;uses:="org.eclipse.core.commands",
+ com.armin.sap.ds.builder.api.common;uses:="com.armin.sap.ds.builder.project.models,org.eclipse.core.resources",
+ com.armin.sap.ds.builder.api.models;uses:="org.eclipse.core.resources,javax.xml.bind",
  com.armin.sap.ds.builder.commands.handlers;uses:="org.eclipse.core.commands",
- com.armin.sap.ds.builder.common;uses:="com.armin.sap.ds.builder.project.models,org.eclipse.core.resources",
  com.armin.sap.ds.builder.context,
  com.armin.sap.ds.builder.controls;uses:="com.armin.sap.ds.builder.shared,com.armin.sap.ds.builder.project.models,org.eclipse.swt.widgets",
  com.armin.sap.ds.builder.decorators;uses:="org.eclipse.jface.viewers",
@@ -63,7 +75,6 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.jface.preference,
    org.eclipse.swt.widgets,
    org.eclipse.core.runtime.preferences",
- com.armin.sap.ds.builder.project.models;uses:="org.eclipse.core.resources,javax.xml.bind",
  com.armin.sap.ds.builder.properties;uses:="org.eclipse.swt.widgets,org.eclipse.ui.dialogs",
  com.armin.sap.ds.builder.shared,
  com.armin.sap.ds.builder.sorter;uses:="org.eclipse.jface.viewers",
@@ -115,3 +126,10 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.swt.widgets,
    org.eclipse.jface.wizard,
    org.eclipse.jface.viewers"
+Bundle-ClassPath: .,
+ org.pushingpixels.trident_1.2.0.v20100204-1500.jar,
+ org.pushingpixels.trident_1.2.0.v20100204-1500.jar,
+ org.eclipse.e4.xwt_0.9.1.SNAPSHOT.jar,
+ org.pushingpixels.trident_1.2.0.v20100204-1500.jar,
+ org.eclipse.e4.xwt_0.9.1.SNAPSHOT.jar,
+ org.eclipse.e4.xwt.forms_0.9.1.SNAPSHOT.jar

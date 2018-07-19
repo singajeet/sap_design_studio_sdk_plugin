@@ -10,8 +10,8 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.project.models.Component;
 
 public class ComponentNode extends ProjectItemNode {
 
@@ -44,7 +44,7 @@ public class ComponentNode extends ProjectItemNode {
 
 	@Override
 	public Image getImage() {
-		Image image = Activator.getImage("images/component_28x28.png");
+		Image image = Activator.getImage("images/component_16x16.png");
 		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
 		_image = new Image(Display.getCurrent(), imgData);
@@ -52,25 +52,25 @@ public class ComponentNode extends ProjectItemNode {
 		return _image;
 	}
 
-	@Override
-	public Object[] getElements(Object input) {
-		return getChildren(input);
-	}
+//	@Override
+//	public Object[] getElements(Object input) {
+//		return getChildren(input);
+//	}
 
-	@Override
-	public Object[] getChildren(Object parent) {
-		return _children.toArray();
-	}
+//	@Override
+//	public Object[] getChildren(Object parent) {
+//		return _children.toArray();
+//	}
 
-	@Override
-	public Object getParent(Object element) {
-		return super.getParent(element);
-	}
-
-	@Override
-	public boolean hasChildren(Object parent) {		
-		return (_children.size() > 0);
-	}
+//	@Override
+//	public Object getParent(Object element) {
+//		return super.getParent(element);
+//	}
+//
+//	@Override
+//	public boolean hasChildren(Object parent) {		
+//		return (_children.size() > 0);
+//	}
 
 	/************************************************************************************/
 
@@ -87,11 +87,14 @@ public class ComponentNode extends ProjectItemNode {
 			IProjectItemNode css = new CascadeStyleSheetCollectionNode(this.getProject(), component.getCssInclude(), this);
 			children.add(css);
 			
-			IProjectItemNode images = new ImagesFolderNode(this.getProject(), "", this);
+			GroupNode groupNode = (GroupNode)this.getParent(this);
+			ExtensionNode extensionNode = (ExtensionNode)groupNode.getParent(groupNode);
+			
+			IProjectItemNode images = new ImagesFolderNode(this.getProject(), extensionNode.getExtension().getId(), this);
 			children.add(images);
 			
 			//Sub folders under this "res" folder
-			String resPath = ((ExtensionNode)super.getParent(this)).getExtension().getId() + "/res";
+			String resPath = extensionNode.getExtension().getId() + "/res";
 			IFolder resFolder = this.getProject().getFolder(resPath);
 			if(resFolder.exists()) {
 				for(IResource folder : resFolder.members()) {
@@ -111,7 +114,7 @@ public class ComponentNode extends ProjectItemNode {
 			return children;
 		} catch (Exception e) {
 			e.printStackTrace();
-			children.add(new ProjectItemNode("Error while searching images, css or APS nodes: " + e.getMessage(), this));
+			children.add(new ErrorNode("Error while searching images, css or APS nodes: " + e.getMessage(), this));
 			return children;
 		}
 

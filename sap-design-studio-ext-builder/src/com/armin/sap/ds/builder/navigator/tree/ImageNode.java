@@ -8,8 +8,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
+import com.armin.sap.ds.builder.api.models.ResourceModel;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.project.models.ResourceModel;
 
 public class ImageNode extends GenericFileNode {
 
@@ -66,25 +66,27 @@ public class ImageNode extends GenericFileNode {
 		String imagePath = _imageFileName == null ? (_imagePath) : (_imagePath + "/" + _imageFileName);
 		System.out.println("Image Path: " + imagePath);
 		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
-		ImageData imgData = new ImageData(imagePath).scaledTo(size, size);		
+		IResource imageResource = this.getProject().findMember(imagePath);
+		
+		ImageData imgData = new ImageData(imageResource.getLocation().toFile().getAbsolutePath()).scaledTo(size, size);		
 		_image = new Image(Display.getCurrent(), imgData);
 		return _image;
 	}
 
-	@Override
-	public Object[] getElements(Object input) {
-		return getChildren(input);
-	}
-
-	@Override
-	public Object[] getChildren(Object parent) {
-		return new Object[0];
-	}
-
-	@Override
-	public Object getParent(Object element) {
-		return super.getParent(element);
-	}
+//	@Override
+//	public Object[] getElements(Object input) {
+//		return getChildren(input);
+//	}
+//
+//	@Override
+//	public Object[] getChildren(Object parent) {
+//		return new Object[0];
+//	}
+//
+//	@Override
+//	public Object getParent(Object element) {
+//		return super.getParent(element);
+//	}
 
 	@Override
 	public boolean hasChildren(Object parent) {

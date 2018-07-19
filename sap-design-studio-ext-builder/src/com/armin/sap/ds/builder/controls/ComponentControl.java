@@ -21,10 +21,10 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.armin.sap.ds.builder.api.models.Component;
+import com.armin.sap.ds.builder.api.models.HandlerTypes;
+import com.armin.sap.ds.builder.api.models.UI5Mode;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.project.models.Component;
-import com.armin.sap.ds.builder.project.models.HandlerTypes;
-import com.armin.sap.ds.builder.project.models.UI5Mode;
 
 public class ComponentControl extends Composite {
 
@@ -51,15 +51,18 @@ public class ComponentControl extends Composite {
 	private Button btnAddNewGroup;
 	private Group groupGroup;
 	protected boolean isClassNameModifiedManually = false;
+	private Composite composite;
+	private Composite container;
 	
 	public ComponentControl(Composite parent, int style) {
 		super(parent, style);
 		_listeners = new ArrayList<IComponentChangedListener>();
 		_model = new Component();
+		this.createControl();
 	}
 	
 	public ComponentControl(Composite parent, int style, Component model) {		
-		this(parent, style);
+		super(parent, style);
 		_listeners = new ArrayList<IComponentChangedListener>();
 		_model = model;
 		this.createControl();
@@ -147,22 +150,27 @@ public class ComponentControl extends Composite {
 	}
 
 	private void createControl() {
-		Composite container = this;
+		container = new Composite(this.getParent(), SWT.NONE);
+		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
 		if(_model == null)
 			_model = new Component();
+		GridLayout gl_container = new GridLayout(1, false);
+		container.setLayout(gl_container);
+		
+		composite = new Composite(container, SWT.NONE);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1));
+		composite.setLayout(new GridLayout(2, false));
 		
 		//--- Separator
-		Label lineSeparator2 = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
-		GridData lineSeparatorGridData2 = new GridData(GridData.FILL_HORIZONTAL);
-		lineSeparatorGridData2.horizontalSpan = 2;
-		lineSeparator2.setLayoutData(lineSeparatorGridData2);
+		Label lineSeparator2 = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL | SWT.CENTER);
+		lineSeparator2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		
 		//--- Title Row
-		Label lblTitle = new Label(container, SWT.NONE);
+		Label lblTitle = new Label(composite, SWT.NONE);
 		lblTitle.setText("Component Title:");
-		txtTitle = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtTitle.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtTitle = new Text(composite, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtTitle.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		txtTitle.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				_model.setTitle(txtTitle.getText() != null ? txtTitle.getText() : "");
@@ -178,10 +186,10 @@ public class ComponentControl extends Composite {
 			}
 		});
 		//--- Class Name Row
-		Label lblClass = new Label(container, SWT.NONE);
+		Label lblClass = new Label(composite, SWT.NONE);
 		lblClass.setText("Component Class Name[Id]:");
-		txtClass = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtClass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtClass = new Text(composite, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtClass.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		txtClass.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				//validateField(txtClass, "txtClass");
@@ -193,26 +201,25 @@ public class ComponentControl extends Composite {
 			}
 		});
 		//--- Tooltip Row
-		Label lblTooltip = new Label(container, SWT.NONE);
+		Label lblTooltip = new Label(composite, SWT.NONE);
 		lblTooltip.setText("Component Tooltip:");
-		txtToolTip = new Text(container, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtToolTip.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txtToolTip = new Text(composite, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+		txtToolTip.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		txtToolTip.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {				
 				_model.setTooltip(txtToolTip.getText() != null ? txtToolTip.getText() : "");
 			}
 		});
 		//-- Modes row
-		Label lblMode = new Label(container, SWT.NONE);
+		Label lblMode = new Label(composite, SWT.NONE);
 		lblMode.setText("Component Mode:");
-		groupModes = new Group(container, SWT.SHADOW_ETCHED_IN);
+		groupModes = new Group(composite, SWT.SHADOW_ETCHED_IN);
+		groupModes.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		groupModes.setLayout(new GridLayout(2, true));
-		groupModes.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		checkModeMobile = new Button(groupModes, SWT.CHECK);
 		checkModeMobile.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		checkModeMobile.setText(UI5Mode.M.name());
 		checkModeMobile.setSelection(true);
-		_model.getModes().add(UI5Mode.M); //by default M mode is selected
 		checkModeMobile.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -279,15 +286,11 @@ public class ComponentControl extends Composite {
 			}
 		});
 		//--- HandlerType Row
-		Label lblHandlerType = new Label(container, SWT.NONE);
+		Label lblHandlerType = new Label(composite, SWT.NONE);
 		lblHandlerType.setText("Handler Type:");
-		comboHandlerType = new Combo(container, SWT.READ_ONLY | SWT.BORDER);
-		for(HandlerTypes handler : HandlerTypes.values())
-		{
-			comboHandlerType.add(handler.name());
-		}
+		comboHandlerType = new Combo(composite, SWT.READ_ONLY | SWT.BORDER);
+		comboHandlerType.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		comboHandlerType.select(0);
-		comboHandlerType.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboHandlerType.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -303,9 +306,9 @@ public class ComponentControl extends Composite {
 			
 		});
 		//--- DataBound Row
-		Label lblDataBound = new Label(container, SWT.NONE);
+		Label lblDataBound = new Label(composite, SWT.NONE);
 		lblDataBound.setText("Is DataBound:");
-		checkDataBound = new Button(container, SWT.CHECK);
+		checkDataBound = new Button(composite, SWT.CHECK);
 		checkDataBound.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -319,11 +322,11 @@ public class ComponentControl extends Composite {
 			
 		});
 		//--- Icon Row
-		Label lblIcon = new Label(container, SWT.NONE);
+		Label lblIcon = new Label(composite, SWT.NONE);
 		lblIcon.setText("Component Icon:");
-		groupIcon = new Group(container, SWT.SHADOW_ETCHED_IN);
+		groupIcon = new Group(composite, SWT.SHADOW_ETCHED_IN);
+		groupIcon.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		groupIcon.setLayout(new GridLayout(3, false));
-		groupIcon.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));			
 		txtIconPath = new Text(groupIcon, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtIconPath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txtIconPath.addModifyListener(new ModifyListener() {
@@ -335,6 +338,7 @@ public class ComponentControl extends Composite {
 		btnBrowseIcon = new Button(groupIcon, SWT.BORDER);
 		btnBrowseIcon.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		btnBrowseIcon.setText("Browse...");
+		new Label(groupIcon, SWT.NONE);
 		btnBrowseIcon.addSelectionListener(new SelectionListener() {
 
 			@Override
@@ -357,11 +361,11 @@ public class ComponentControl extends Composite {
 			
 		});
 		//--- Add PropertySheet Row
-		Label lblPropertySheet = new Label(container, SWT.NONE);
+		Label lblPropertySheet = new Label(composite, SWT.NONE);
 		lblPropertySheet.setText("Add Property Sheet:");
-		apsGroup = new Group(container, SWT.SHADOW_ETCHED_IN);
+		apsGroup = new Group(composite, SWT.SHADOW_ETCHED_IN);
+		apsGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		apsGroup.setLayout(new GridLayout(2, false));
-		apsGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		checkAddPropertySheet = new Button(apsGroup, SWT.CHECK);
 		checkAddPropertySheet.addSelectionListener(new SelectionListener() {
 			@Override
@@ -390,17 +394,12 @@ public class ComponentControl extends Composite {
 			}
 		});
 		//--- Group Row
-		Label lblGroup = new Label(container, SWT.NONE);
+		Label lblGroup = new Label(composite, SWT.NONE);
 		lblGroup.setText("Group:");
-		groupGroup = new Group(container, SWT.SHADOW_ETCHED_IN);
+		groupGroup = new Group(composite, SWT.SHADOW_ETCHED_IN);
+		groupGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		groupGroup.setLayout(new GridLayout(2, false));
-		groupGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboGroup = new Combo(groupGroup, SWT.READ_ONLY | SWT.BORDER);
-		String groupStr = Settings.store().get(Settings.FOR.GROUPS_LIST);
-		String[] groups = groupStr.split(";");
-		for(String group : groups) {
-			comboGroup.add(group);
-		}			
 		comboGroup.select(0);
 		comboGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		comboGroup.addSelectionListener(new SelectionListener() {
@@ -443,16 +442,22 @@ public class ComponentControl extends Composite {
 			
 		});
 		//--- Separator
-		Label lineSeparator1 = new Label(container, SWT.SEPARATOR | SWT.HORIZONTAL);
-		GridData lineSeparatorGridData1 = new GridData(GridData.FILL_HORIZONTAL);
-		lineSeparatorGridData1.horizontalSpan = 2;
-		lineSeparator1.setLayoutData(lineSeparatorGridData1);
+		Label lineSeparator1 = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
+		lineSeparator1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		//--- Error Label
-		lblError = new Label(container, SWT.NONE);
-		GridData lblErrorGridData = new GridData(GridData.FILL_HORIZONTAL);
-		lblErrorGridData.horizontalSpan = 2;
-		lblError.setLayoutData(lblErrorGridData);
+		lblError = new Label(composite, SWT.WRAP);
+		lblError.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		lblError.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_RED));
+		_model.getModes().add(UI5Mode.M);
+		for(HandlerTypes handler : HandlerTypes.values())
+		{
+			comboHandlerType.add(handler.name());
+		}
+		String groupStr = Settings.store().get(Settings.FOR.GROUPS_LIST);
+		String[] groups = groupStr.split(";");
+		for(String group : groups) {
+			comboGroup.add(group);
+		}
 
 	}
 	
@@ -486,5 +491,8 @@ public class ComponentControl extends Composite {
 			notifyAllListeners(false);
 			return false;
 		}
+	}
+	public Composite getContainer() {
+		return container;
 	}
 }

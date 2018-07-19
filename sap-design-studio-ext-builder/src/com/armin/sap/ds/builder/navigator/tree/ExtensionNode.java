@@ -11,15 +11,15 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.models.Component;
+import com.armin.sap.ds.builder.api.models.Extension;
+import com.armin.sap.ds.builder.api.models.Group;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.project.models.Component;
-import com.armin.sap.ds.builder.project.models.Extension;
-import com.armin.sap.ds.builder.project.models.Group;
 
 public class ExtensionNode extends GenericFileNode {
 
 	private IProjectItemNode _parent;
-	private IProjectItemNode[] _children;
+	//private IProjectItemNode[] _children;
 	
 	public ExtensionNode(IProject project, Extension extension, IProjectItemNode parent) {
 		super(project, parent);
@@ -42,7 +42,7 @@ public class ExtensionNode extends GenericFileNode {
 	
 	public Group getGroup(String name) {
 		for(Group group : ((Extension)_item).getGroup()) {
-			if(group.getTitle().equals(name)) {
+			if(group.getTitle().toUpperCase().equals(name.toUpperCase())) {
 				return group;
 			}
 		}
@@ -62,6 +62,79 @@ public class ExtensionNode extends GenericFileNode {
 		return null;
 	}
 	
+	
+	
+	public void addComponent(Component component) throws Exception{
+		if(this._item != null) {
+			if(!this.exists(component)) {
+				Extension extension = ((Extension)this._item); 
+				
+				//Add the new "Component" model to the current "Extension" model
+				//The tree node for the new "Component" model will be added automatically
+				//under an group, once the "Group" information is processed in following steps 
+				extension.getComponent().add(component);
+				
+				//if group is not blank
+				if(component.getGroup() != null && !component.getGroup().isEmpty()) {
+					String groupName = component.getGroup().toUpperCase();
+					boolean groupFound = false;
+					
+					//Search for the "Group" model under the current "Extension" model object
+					for(Group group : extension.getGroup()) {
+						if(group.getId().toUpperCase().equals(groupName)) {
+							groupFound = true;
+						}
+					}
+					
+					//If no such group exists under current "Extension", new model will be created
+					//and added to the current "Extension" model as its child and to the extension 
+					//tree node as well
+					if(!groupFound) {
+						Group groupModel = new Group();
+						groupModel.setId(groupName);
+						groupModel.setName(groupName);
+						groupModel.setTitle(groupName);
+						
+						//Added to Extension's group attribute available in its Model 
+						extension.getGroup().add(groupModel);
+						
+						//Add same to the Tree Node to be shown in Project Navigator
+						IProjectItemNode groupNode = new GroupNode(this.getProject(), groupModel, this);
+						
+						//This will also add the Component as TreeNode under this GroupNode in Navigator
+						//Tree, if the Component's group name attribute is same as this group's name
+						_children.add(groupNode);
+						
+					} else {
+						//if group is available under current extension model object
+						if(this.exists(groupName, true)) {
+							GroupNode groupNode = (GroupNode)this.findItem(groupName);
+							//Add Component as TreeNode under this Group's TreeNode object 
+							groupNode.addComponent(component);
+						} else {
+							throw new Exception("Inconsistent Navigator Tree: Group [" + groupName + "] exists under current "
+										+ "Extension's Model (" + this.getName() + ") but same is not"
+										+ " available under Navigator Tree");
+						}
+					}
+					
+					
+				} else {
+	    			Group group = new Group();
+	    			group.setId("DEFAULT");
+	    			group.setTitle("DEFAULT");
+	    			group.setTooltip("Default Group");
+	    			
+	    			//This will also add the Component as TreeNode under this GroupNode in Navigator
+					//Tree, if the Component's group name attribute is same as this group's name
+	    			IProjectItemNode groupNode = new GroupNode(this.getProject(), group, this);
+	    			_children.add(groupNode);
+	    		}
+				
+			}
+		}
+	}
+	
 	/************************** Required to be overridden ********************************/
 	
 	@Override
@@ -79,32 +152,33 @@ public class ExtensionNode extends GenericFileNode {
 		return _image;
     }
 	
-	@Override
-	public Object[] getElements(Object input) {
-		return getChildren(input);
-	}
+//	@Override
+//	public Object[] getElements(Object input) {
+//		return getChildren(input);
+//	}
 	
-	@Override
-	public Object[] getChildren(Object parent) {
-		return _children;
-	}
+//	@Override
+//	public Object[] getChildren(Object parent) {
+//		return _children.toArray();
+//	}
 	
-	@Override
-	public Object getParent(Object element) {
-		return _parent;
-	}
-	
-	@Override
-	public boolean hasChildren(Object parent) {				
-		return (_children.length > 0);
-	}
+//	@Override
+//	public Object getParent(Object element) {
+//		return _parent;
+//	}
+//	
+//	@Override
+//	public boolean hasChildren(Object parent) {				
+//		return (_children.size() > 0);
+//	}
 	
 	/************************************************************************************/
 
-	protected IProjectItemNode[] initializeChildren(Extension extension) {
-    	try {    			
+	protected ArrayList<IProjectItemNode> initializeChildren(Extension extension) {
+		ArrayList<IProjectItemNode> children = new ArrayList<IProjectItemNode>();
+		
+		try {    			
 	    		List<Group> groups = extension.getGroup();
-	    		ArrayList<IProjectItemNode> children = new ArrayList<IProjectItemNode>();
 	    		
 	    		if(groups.size() > 0) {
 		    		for(int i=0;i<groups.size();i++) {
@@ -114,8 +188,8 @@ public class ExtensionNode extends GenericFileNode {
 		    		}
 	    		} else {
 	    			Group group = new Group();
-	    			group.setId("default");
-	    			group.setTitle("Default");
+	    			group.setId("DEFAULT");
+	    			group.setTitle("DEFAULT");
 	    			group.setTooltip("Default Group");
 	    			IProjectItemNode groupNode = new GroupNode(this.getProject(), group, this);
 	    			children.add(groupNode);
@@ -148,21 +222,12 @@ public class ExtensionNode extends GenericFileNode {
 						}
 					}
 				}
-	    		
-	    		IProjectItemNode[] childrenArray = new IProjectItemNode[children.size()];
-	    		
-	    		if(children.size() <= 0) {
-	    				return new IProjectItemNode[] { new ProjectItemNode("No groups or components found!", this)};
-	    		}
-	    		
-	    		children.toArray(childrenArray);
-	    		return childrenArray;
     	}catch(Exception e)
     	{
     		e.printStackTrace();
-    		return new IProjectItemNode[]{ new ProjectItemNode("Error while searching groups: " + e.getMessage(), this) };
+    		children.add(new ErrorNode("Error while searching groups: " + e.getMessage(), this));
     	}
-        
+        return children;
     }
 
 }

@@ -44,9 +44,11 @@ import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.actions.CreateNewExtensionAction;
 import com.armin.sap.ds.builder.actions.DeleteExtensionAction;
 import com.armin.sap.ds.builder.actions.SaveExtensionAction;
-import com.armin.sap.ds.builder.common.DesignStudioProjectHelper;
+import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
-import com.armin.sap.ds.builder.project.models.Extension;
+import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
+import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
+import com.armin.sap.ds.builder.service.ProjectService;
 
 public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEditor {
 	
@@ -82,6 +84,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 	@Override
 	public void setInput(IEditorInput input) {
 		super.setInput(input);
+		this._input = (ExtensionEditorInput)input;
 		firePropertyChange(IWorkbenchPartConstants.PROP_INPUT);
 	}
 	
@@ -194,8 +197,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 		frmExtensions.setText("Extensions");
 		frmExtensions.getBody().setLayout(new GridLayout(3, false));
 		
-		IToolBarManager formToolBar = frmExtensions.getToolBarManager();
-		
+		IToolBarManager formToolBar = frmExtensions.getToolBarManager();		
 		addNewExtension = new CreateNewExtensionAction();
 		addNewExtension.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "images/new.png"));
 		addNewExtension.setText("New");
@@ -223,7 +225,11 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 		listExtensions.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Extension selectedExtension = (Extension)e.data;
+				IProjectItemNode node = _input.getTreeNode();
+				int selectedItems = listViewerExtensions.getList().getSelectionIndex();
+				String key = listViewerExtensions.getList().getItem(selectedItems);
+				ExtensionNode selectedExtensionNode = (ExtensionNode)((ExtensionCollectionNode)node.getParent(this)).findItem(key);
+				Extension selectedExtension = selectedExtensionNode.getExtension();
 				textExtensionId.setText(selectedExtension.getId());
 				textExtensionTitle.setText(selectedExtension.getTitle());
 				textExtensionVendor.setText(selectedExtension.getVendor());
@@ -322,13 +328,9 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 				if(this.getEditorInput() != null) {
 					_input = (ExtensionEditorInput)this.getEditorInput();
 					_projectInput = _input.getProject();										
-				}				
+						
+					ExtensionNode node = (ExtensionNode)_input.getTreeNode();
 				
-				IProject currentProject = DesignStudioProjectHelper.get().getProject();
-				
-				if(currentProject.getName().equals(_projectInput.getName())) {
-					Map<String, JAXBElement<Extension>> map = DesignStudioProjectHelper.get().getExtensionsMap();
-					
 					String projectLocation = textProjectLocation.getText();
 					String projectModificationDate = textProjectModificationDate.getText();
 					
@@ -340,20 +342,23 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 					
 					int selectionIndex = listExtensions.getSelectionIndex();
 					String key = listExtensions.getItem(selectionIndex);
-					
+					ExtensionNode selectedExtensionNode = null;
 					if(selectionIndex >= 0) {
-						Extension selectedExtension = map.get(key).getValue();
+						selectedExtensionNode = (ExtensionNode)((ExtensionCollectionNode)node.getParent(this)).findItem(key);
+						Extension selectedExtension = selectedExtensionNode.getExtension();
 						if(selectedExtension.getId().equals(extensionsId)) {
 							selectedExtension.setTitle(extensionTitle);
 							selectedExtension.setVendor(extensionVendor);
 							selectedExtension.setVersion(extensionVersion);
 							selectedExtension.setEula(extensionEula);
-						}
-					}
-					this.setInput(new ExtensionEditorInput(currentProject));
+						
+					
+					this.setInput(new ExtensionEditorInput(selectedExtensionNode));
 					this.setDirty(false);
 					this.firePropertyChange(Editor.EDITOR_DATA_CHANGED);
+					}
 				}
+			}
 			
 		}catch(Exception e) {
 			MessageDialog.openError(this.getSite().getShell(), 
@@ -401,17 +406,19 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 	@Override
 	public void showData() {
 		ExtensionEditorInput ip = (ExtensionEditorInput)this.getEditorInput();
-		 _projectInput = ip.getProject();
-		 IProject currentProject = DesignStudioProjectHelper.get().getProject();
+		_projectInput = ip.getProject();
 		
-		if(currentProject.getName().equals(_projectInput.getName())) {
-			Map<String, JAXBElement<Extension>> map = DesignStudioProjectHelper.get().getExtensionsMap();
+		ExtensionCollectionNode nodes = null;
+		if(ip.getTreeNode() instanceof ExtensionCollectionNode) {
+			nodes = (ExtensionCollectionNode)ip.getTreeNode();
+		}
 			
-			textProjectName.setText(currentProject.getName());
-			textProjectLocation.setText(currentProject.getLocation().toString());
-			textProjectModificationDate.setText(new Date(currentProject.getModificationStamp()).toLocaleString());
-			
-			Extension ext = (Extension)map.values().toArray()[0];			
+		textProjectName.setText(_projectInput.getName());
+		textProjectLocation.setText(_projectInput.getLocation().toString());
+		textProjectModificationDate.setText(new Date(_projectInput.getModificationStamp()).toLocaleString());
+		
+		if(nodes != null) {
+			Extension ext = (Extension)(nodes.getExtensions().get(0).getModel());			
 			textExtensionId.setText(ext.getId());
 			textExtensionTitle.setText(ext.getTitle());
 			textExtensionVendor.setText(ext.getVendor());
@@ -420,8 +427,8 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 			
 			listExtensions.removeAll();
 			
-			for(String key : map.keySet()) {
-				listExtensions.add(key);
+			for(IProjectItemNode item : nodes.getExtensions()) {
+				listExtensions.add(item.getName());
 			}
 			
 			this.setDirty(false);

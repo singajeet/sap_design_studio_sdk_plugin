@@ -13,9 +13,9 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.models.IModel;
+import com.armin.sap.ds.builder.api.models.ResourceModel;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.project.models.IModel;
-import com.armin.sap.ds.builder.project.models.ResourceModel;
 
 public class ProjectItemNode implements IProjectItemNode {
 	
@@ -52,6 +52,9 @@ public class ProjectItemNode implements IProjectItemNode {
 	
 	public ProjectItemNode(String msg, IProjectItemNode parent) {
     	_parent = parent;
+    	_project = parent.getProject();
+    	_item = new ResourceModel();    	
+    	_children = new ArrayList<IProjectItemNode>();
     	this._item.setName(msg);
     	this._item.setId(msg);
     }
@@ -224,6 +227,20 @@ public class ProjectItemNode implements IProjectItemNode {
 			}
 		}
 	}
+	
+	@Override
+	public IProjectItemNode findItem(String id) {
+		if(id != null) {
+			if(exists(id)) {
+				for(IProjectItemNode node : _children) {
+					if(node.getModel().getId().equals(id)) {
+						return node;
+					}
+				}
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public boolean exists(String id) {
@@ -235,6 +252,20 @@ public class ProjectItemNode implements IProjectItemNode {
 		return false;
 	}
 
+	@Override
+	public boolean exists(String id, boolean ignorecase) {		
+		for(IProjectItemNode node : _children) {
+			if(ignorecase) {
+				if(node.getModel().getId().equalsIgnoreCase(id)) {
+					return true;
+				}
+			} else {
+				return exists(id);
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public boolean exists(IProjectItemNode item) {
 		return exists(item.getModel().getId());
