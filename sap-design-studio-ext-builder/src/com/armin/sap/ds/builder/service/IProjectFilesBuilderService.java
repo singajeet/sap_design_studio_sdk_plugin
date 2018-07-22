@@ -1,25 +1,21 @@
 package com.armin.sap.ds.builder.service;
 
-import java.util.Map;
-
 import javax.xml.bind.JAXBElement;
 
 import org.eclipse.core.resources.IProject;
 
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.IModel;
-import com.armin.sap.ds.builder.api.models.ObjectFactory;
 
 public interface IProjectFilesBuilderService {
 
-	void saveExtension(IModel extensionModel, IProject project, Map<String, JAXBElement<Extension>> extensions);
+	JAXBElement<Extension> saveExtension(IModel extensionModel, IProject project);
 
-	void saveComponent(IModel componentModel, IModel extensionModel, IProject project);
+	JAXBElement<Extension> saveComponent(IModel componentModel, IModel extensionModel, IProject project, JAXBElement<Extension> rootElement);
 
-	void setupAllFiles(IModel extensionModel, IModel componentModel, IProject project,
-			Map<String, JAXBElement<Extension>> extensions);
+	JAXBElement<Extension> setupAllFiles(IModel extensionModel, IModel componentModel, IProject project);
 
-	void updateExtension(IModel componentModel, IModel extensionModel, IProject project,
-			Map<String, JAXBElement<Extension>> extensions);
-	public void setupComponentGroupNode(IModel componentNode, IModel extensionNode, ObjectFactory factory);
+	JAXBElement<Extension> updateExtension(IModel componentModel, IModel extensionModel, IProject project, JAXBElement<Extension> rootElement);
+	
+	JAXBElement<Extension> buildAndSaveGroup(String groupName, IModel extensionNode, IProject project, JAXBElement<Extension> rootElement);
 }

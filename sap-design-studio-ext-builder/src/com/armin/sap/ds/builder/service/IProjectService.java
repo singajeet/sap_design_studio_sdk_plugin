@@ -24,5 +24,6 @@ public interface IProjectService {
 	public void addNewComponent(IModel componentModel, IModel extensionModel, IProject project) throws Exception;
 	public void addNewComponent(IModel componentModel, String extId) throws Exception;
 	public void addNewComponent(IModel componentModel, String extensionId, IProject project) throws Exception;
+	public void addNewGroup(String groupName, IModel extensionNode, IProject project);
 	public Extension getExtension(String id);
 }

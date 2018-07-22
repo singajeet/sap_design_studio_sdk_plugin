@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.DesignStudioProjectNature;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
@@ -141,11 +142,14 @@ public class ContentProvider implements ITreeContentProvider, IResourceChangeLis
 			public IStatus runInWorkspace(IProgressMonitor monitor) {
 				
 				try {
-					
-					TreeViewer viewer = (TreeViewer)_viewer;
-					TreePath[] treePaths = viewer.getExpandedTreePaths();
-					viewer.refresh();
-					viewer.setExpandedTreePaths(treePaths);	
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							TreeViewer viewer = (TreeViewer)_viewer;
+							TreePath[] treePaths = viewer.getExpandedTreePaths();
+							viewer.refresh();
+							viewer.setExpandedTreePaths(treePaths);	
+						}
+					});
 					return Status.OK_STATUS;
 				}catch(Exception e) {
 					e.printStackTrace();

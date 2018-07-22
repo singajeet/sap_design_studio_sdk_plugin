@@ -1,35 +1,65 @@
 package com.armin.sap.ds.builder.wizard.group;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 
+import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Group;
 import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.GroupNode;
+import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
+import com.armin.sap.ds.builder.service.IProjectService;
+import com.armin.sap.ds.builder.service.ProjectService;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
 
 public class GroupWizard extends Wizard implements INewWizard {
 
 	private IStructuredSelection _selection;
 	private IWizardDetailsPage _pageOne;
+	private IProjectService _projectService;
+	private ILog logger;
+	private IProjectItemNode _parentTreeNode;
 	
 	public GroupWizard() {
 		setWindowTitle("New Group");
+		_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
+		if(_projectService == null) {
+			_projectService = new ProjectService();
+		}
+		logger = Activator.getDefault().getLog();
+		logger.log(new Status(IStatus.OK, this.getClass().getName(), "Object created"));
 	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		_selection = selection;
+		
+		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Init() started"));
+	    
+	    if(_selection != null && _selection.isEmpty() == false 
+				&& _selection instanceof IStructuredSelection ) {
+			if(_selection.size() > 1)
+				return;
+			if(_selection.size() <= 0)
+				return;
+			Object selectedObj = _selection.getFirstElement();
+			if(selectedObj instanceof ExtensionNode) {				
+				_parentTreeNode = (ExtensionNode)selectedObj;							
+				logger.log(new Status(IStatus.INFO, this.getClass().getName(), 
+						"Selected object is of type: ExtensionNode with ID=" + _parentTreeNode.getName()));
+			}
+		}
+	    logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Init() completed"));
 	}
 	
 	/* (non-Javadoc)
@@ -45,53 +75,53 @@ public class GroupWizard extends Wizard implements INewWizard {
 
 	@Override
 	public boolean performFinish() {
-		IRunnableWithProgress op = new IRunnableWithProgress() {
+		logger.log(new Status(IStatus.OK, this.getClass().getName(), "PerformFinish() started"));
+		
+		IModel group = ((GroupCreationPage)_pageOne).getModel();
+		ExtensionNode parentNode = (ExtensionNode)_parentTreeNode;
+		
+		WorkspaceJob job = new WorkspaceJob("Create new group") {
 			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException {
+			public IStatus runInWorkspace(IProgressMonitor monitor) {
 				try {
-					doFinish(monitor);
-				}catch(CoreException e) {
-					throw new InvocationTargetException(e);
+					logger.log(new Status(IStatus.OK, this.getClass().getName(), "RunInWorkspace() started"));
+					
+					monitor.beginTask("Creating group - " + group.getId(), 2);
+					
+					monitor.worked(1);
+					monitor.setTaskName("Adding group [" + group.getId() + "] to extension [" + parentNode.getModel().getId() + "]...");
+					logger.log(new Status(IStatus.OK, this.getClass().getName(), "Adding group [" + group.getId() + "] to extension [" + parentNode.getModel().getId() + "]"));
+					try {
+						//Update the extension node in visual tree to reflect new group node
+						GroupNode groupItem = new GroupNode(parentNode.getProject(), (Group)group, parentNode);
+						//parentNode.getExtension().getGroup().add((Group)group);
+						parentNode.addItem(groupItem);
+						monitor.worked(1);
+						
+						_projectService.addNewGroup(group.getId(), parentNode.getModel(), parentNode.getProject());
+						
+						parentNode.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
+						logger.log(new Status(IStatus.OK, this.getClass().getName(), "RunInWorkspace() completed"));
+						return Status.OK_STATUS;
+					}catch(Exception e) {
+						e.printStackTrace();	
+						logger.log(new Status(IStatus.OK, this.getClass().getName(), "Error creating group: " + e.getMessage()));
+						return Status.CANCEL_STATUS;
+					}
+				}catch(Exception e) {
+					e.printStackTrace();
+					logger.log(new Status(IStatus.OK, this.getClass().getName(), "Error creating group: " + e.getMessage()));
+					return Status.CANCEL_STATUS;
 				}finally {
 					monitor.done();
 				}				
 			}			
 		};
 		
-		try {
-			getContainer().run(true, true, op);
-		}catch (InterruptedException e) {
-			return false;
-		} catch (InvocationTargetException e) {
-			Throwable realException = e.getTargetException();
-			MessageDialog.openError(getShell(), "Error", realException.getMessage());
-			return false;
-		}
-		
+		job.setRule(parentNode.getProject());
+		job.schedule();
+		logger.log(new Status(IStatus.OK, this.getClass().getName(), "WorkspaceJob scheduled"));
+		logger.log(new Status(IStatus.OK, this.getClass().getName(), "PerformFinish() completed"));
 		return true;
 	}
-	
-	private void doFinish(IProgressMonitor monitor) throws CoreException {
-		monitor.beginTask("Creating group - " + ((GroupCreationPage)_pageOne).getModel().getId(), 2);
-		
-		IModel group = ((GroupCreationPage)_pageOne).getModel();
-		ExtensionNode parentNode = ((GroupCreationPage)_pageOne).getParentExtensionTreeNode();
-		
-		monitor.worked(1);
-		monitor.setTaskName("Adding group [" + group.getId() + "] to extension [" + parentNode.getModel().getId() + "]...");
-		
-		try {
-			//Update the extension node in visual tree to reflect new group node
-			GroupNode groupItem = new GroupNode(parentNode.getProject(), (Group)group, parentNode);
-			parentNode.getExtension().getGroup().add((Group)group);
-			parentNode.addItem(groupItem);
-			
-			parentNode.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		}catch(Exception e) {
-			e.printStackTrace();		
-		}
-		
-		monitor.worked(1);
-	}
-
 }

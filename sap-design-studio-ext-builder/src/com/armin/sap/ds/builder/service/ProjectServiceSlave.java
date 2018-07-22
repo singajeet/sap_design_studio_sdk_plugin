@@ -89,4 +89,9 @@ public class ProjectServiceSlave implements IProjectService {
 		return _parentService.getExtension(id);		
 	}
 
+	@Override
+	public void addNewGroup(String groupName, IModel extensionNode, IProject project) {
+		_parentService.addNewGroup(groupName, extensionNode, project);		
+	}
+
 }

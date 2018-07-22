@@ -51,24 +51,24 @@ public class ProjectFilesBuilderServiceSlave implements IProjectFilesBuilderServ
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#saveExtension(com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
-	public void saveExtension(IModel extensionModel, IProject project, Map<String, JAXBElement<Extension>> extensions) {
-		_parentService.saveExtension(extensionModel, project, extensions);
+	public JAXBElement<Extension> saveExtension(IModel extensionModel, IProject project) {
+		return _parentService.saveExtension(extensionModel, project);
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#saveComponent(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject)
 	 */
 	@Override
-	public void saveComponent(IModel componentModel, IModel extensionModel, IProject project) {
-		_parentService.saveComponent(componentModel, extensionModel, project);
+	public JAXBElement<Extension> saveComponent(IModel componentModel, IModel extensionModel, IProject project, JAXBElement<Extension> root) {
+		return _parentService.saveComponent(componentModel, extensionModel, project, root);
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#setupAllFiles(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
-	public void setupAllFiles(IModel extensionModel, IModel componentModel, IProject project, Map<String, JAXBElement<Extension>> extensions) {
-		_parentService.setupAllFiles(extensionModel, componentModel, project, extensions);
+	public JAXBElement<Extension> setupAllFiles(IModel extensionModel, IModel componentModel, IProject project) {
+		return _parentService.setupAllFiles(extensionModel, componentModel, project);
 	}
 	
 	
@@ -76,14 +76,14 @@ public class ProjectFilesBuilderServiceSlave implements IProjectFilesBuilderServ
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#updateExtension(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
-	public void updateExtension(IModel componentModel, IModel extensionModel, IProject project, Map<String, JAXBElement<Extension>> extensions) {
-		_parentService.updateExtension(componentModel, extensionModel, project, extensions);
+	public JAXBElement<Extension> updateExtension(IModel componentModel, IModel extensionModel, IProject project, JAXBElement<Extension> root) {
+		return _parentService.updateExtension(componentModel, extensionModel, project, root);
 	}
 
 	@Override
-	public void setupComponentGroupNode(IModel componentNode, IModel extensionNode, ObjectFactory factory) {
+	public JAXBElement<Extension> buildAndSaveGroup(String groupName, IModel extensionNode, IProject project, JAXBElement<Extension> root) {
 		// TODO Auto-generated method stub
-		_parentService.setupComponentGroupNode(componentNode, extensionNode, factory);
+		return _parentService.buildAndSaveGroup(groupName, extensionNode, project, root);
 	}
 	
 }

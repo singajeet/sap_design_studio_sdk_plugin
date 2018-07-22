@@ -12,8 +12,7 @@ public class Activator extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "com.armin.sap.ds.builder"; //$NON-NLS-1$
 
 	// The shared instance
-	private static Activator plugin;
-	
+	private static Activator plugin;	
 	/**
 	 * The constructor
 	 */
@@ -30,8 +29,7 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public static Image getImage(String imagePath) {
-		System.out.println("ACTIVATOR: " + imagePath);
-        ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, imagePath);
+		ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, imagePath);
         Image image = imageDescriptor.createImage();
  
         return image;
@@ -53,5 +51,6 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static Activator getDefault() {
 		return plugin;
-	}
+	}	
+	
 }
