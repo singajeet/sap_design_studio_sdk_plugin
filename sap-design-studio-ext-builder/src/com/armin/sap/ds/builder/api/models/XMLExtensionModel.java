@@ -20,7 +20,7 @@ public class XMLExtensionModel extends AbstractModel {
 	}
 
 	
-	public JAXBElement createNewSDKExtension() {
+	public JAXBElement<Extension> createNewSDKExtension() {
 		Extension ext = _objectFactory.createExtension();
 		_rootElement = _objectFactory.createSdkExtension(ext);
 		return _rootElement;

@@ -1,9 +1,6 @@
 package com.armin.sap.ds.builder.editors;
 
 import java.util.Date;
-import java.util.Map;
-
-import javax.xml.bind.JAXBElement;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,7 +45,6 @@ import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
-import com.armin.sap.ds.builder.service.ProjectService;
 
 public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEditor {
 	
@@ -323,7 +319,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
-				String projectName = textProjectName.getText();
+				textProjectName.getText();
 				
 				if(this.getEditorInput() != null) {
 					_input = (ExtensionEditorInput)this.getEditorInput();
@@ -331,8 +327,8 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 						
 					ExtensionNode node = (ExtensionNode)_input.getTreeNode();
 				
-					String projectLocation = textProjectLocation.getText();
-					String projectModificationDate = textProjectModificationDate.getText();
+					textProjectLocation.getText();
+					textProjectModificationDate.getText();
 					
 					String extensionsId = textExtensionId.getText();
 					String extensionTitle = textExtensionTitle.getText();
@@ -403,6 +399,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 				textExtensionVersion, licenseText, listExtensions};
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void showData() {
 		ExtensionEditorInput ip = (ExtensionEditorInput)this.getEditorInput();
@@ -436,7 +433,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 	}
 	
 	public String getExtensionInfo() {
-		ExtensionEditorInput ip = (ExtensionEditorInput)this.getEditorInput();
+		this.getEditorInput();
 //		ExtensionCollectionNode pkg = ip.getExtensions();
 //		
 //		if(pkg == null)

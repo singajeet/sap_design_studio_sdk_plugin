@@ -61,37 +61,37 @@ public class ProjectServiceSlave implements IProjectService {
 		return _parentService.createProject(projectName, location, extensionModel, componentModel);
 	}
 	
-	public void addNewExtension(IModel extensionModel) throws Exception{
-		_parentService.addNewExtension(extensionModel);
+	public IModel addNewExtension(IModel extensionModel) throws Exception{
+		return _parentService.addNewExtension(extensionModel);
 	}
 	
-	public void addNewExtension(IModel extensionModel, IProject project) throws Exception{
-		_parentService.addNewExtension(extensionModel, project);
+	public IModel addNewExtension(IModel extensionModel, IProject project) throws Exception{
+		return _parentService.addNewExtension(extensionModel, project);
 	}
 	
-	public void addNewComponent(IModel componentModel, IModel extensionModel) throws Exception{
-		_parentService.addNewComponent(componentModel, extensionModel);
+	public IModel addNewComponent(IModel componentModel, IModel extensionModel) throws Exception{
+		return _parentService.addNewComponent(componentModel, extensionModel);
 	}
 	
-	public void addNewComponent(IModel componentModel, IModel extensionModel, IProject project) throws Exception{
-		_parentService.addNewComponent(componentModel, extensionModel, project);
+	public IModel addNewComponent(IModel componentModel, IModel extensionModel, IProject project) throws Exception{
+		return _parentService.addNewComponent(componentModel, extensionModel, project);
 	}
 	
-	public void addNewComponent(IModel componentModel, String extId) throws Exception{
-		addNewComponent(componentModel, this.getExtension(extId));
+	public IModel addNewComponent(IModel componentModel, String extId) throws Exception{
+		return addNewComponent(componentModel, this.getExtension(extId));
 	}
 	
-	public void addNewComponent(IModel componentModel, String extensionId, IProject project) throws Exception{
-		addNewComponent(componentModel, this.getExtension(extensionId), project);
+	public IModel addNewComponent(IModel componentModel, String extensionId, IProject project) throws Exception{
+		return addNewComponent(componentModel, this.getExtension(extensionId), project);
 	}
 
-	public Extension getExtension(String id){
+	public IModel getExtension(String id){
 		return _parentService.getExtension(id);		
 	}
 
 	@Override
-	public void addNewGroup(String groupName, IModel extensionNode, IProject project) {
-		_parentService.addNewGroup(groupName, extensionNode, project);		
+	public IModel addNewGroup(String groupName, IModel extensionNode, IProject project) {
+		return _parentService.addNewGroup(groupName, extensionNode, project);		
 	}
 
 }

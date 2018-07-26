@@ -1,6 +1,5 @@
 package com.armin.sap.ds.builder.editors;
 
-import org.eclipse.jdt.ui.ISharedImages;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
@@ -12,9 +11,6 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.EditorActionBarContributor;
 import org.eclipse.ui.texteditor.ITextEditor;
 
@@ -49,9 +45,7 @@ public class ExtensionEditorContributor extends EditorActionBarContributor {
 		
 		if (actionBars != null) {
 
-			FormPage editor = (part instanceof FormPage) ? (FormPage) part : null;
-
-//			actionBars.setGlobalActionHandler(
+			//			actionBars.setGlobalActionHandler(
 //				ActionFactory.DELETE.getId(),
 //				getAction(editor, ITextEditorActionConstants.DELETE));
 //			actionBars.setGlobalActionHandler(
@@ -81,6 +75,7 @@ public class ExtensionEditorContributor extends EditorActionBarContributor {
 			actionBars.updateActionBars();			
 		}
 	}
+	@SuppressWarnings("deprecation")
 	private void createActions() {
 		closeEditor = new Action() {
 			public void run() {

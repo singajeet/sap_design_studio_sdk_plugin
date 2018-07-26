@@ -1,5 +1,6 @@
 package com.armin.sap.ds.builder.wizard.group;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.ILog;
@@ -16,7 +17,6 @@ import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Group;
 import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
-import com.armin.sap.ds.builder.navigator.tree.GroupNode;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
@@ -79,6 +79,7 @@ public class GroupWizard extends Wizard implements INewWizard {
 		
 		IModel group = ((GroupCreationPage)_pageOne).getModel();
 		ExtensionNode parentNode = (ExtensionNode)_parentTreeNode;
+		IProject project = parentNode.getProject();
 		
 		WorkspaceJob job = new WorkspaceJob("Create new group") {
 			@Override
@@ -86,19 +87,17 @@ public class GroupWizard extends Wizard implements INewWizard {
 				try {
 					logger.log(new Status(IStatus.OK, this.getClass().getName(), "RunInWorkspace() started"));
 					
-					monitor.beginTask("Creating group - " + group.getId(), 2);
-					
-					monitor.worked(1);
-					monitor.setTaskName("Adding group [" + group.getId() + "] to extension [" + parentNode.getModel().getId() + "]...");
-					logger.log(new Status(IStatus.OK, this.getClass().getName(), "Adding group [" + group.getId() + "] to extension [" + parentNode.getModel().getId() + "]"));
 					try {
-						//Update the extension node in visual tree to reflect new group node
-						GroupNode groupItem = new GroupNode(parentNode.getProject(), (Group)group, parentNode);
-						//parentNode.getExtension().getGroup().add((Group)group);
-						parentNode.addItem(groupItem);
+						IModel groupModel = _pageOne.getModel();
+						monitor.beginTask("Creating group - " + group.getId(), 2);
+						
+						monitor.setTaskName("Adding group [" + group.getId() + "] to extension [" + parentNode.getModel().getId() + "]...");
+						_projectService.addNewGroup(groupModel.getId(), parentNode.getModel(), project);
 						monitor.worked(1);
 						
-						_projectService.addNewGroup(group.getId(), parentNode.getModel(), parentNode.getProject());
+						logger.log(new Status(IStatus.OK, this.getClass().getName(), "Adding group [" + group.getId() + "] to extension [" + parentNode.getModel().getId() + "]"));
+						parentNode.addGroup((Group)group);
+						monitor.worked(1);
 						
 						parentNode.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);
 						logger.log(new Status(IStatus.OK, this.getClass().getName(), "RunInWorkspace() completed"));

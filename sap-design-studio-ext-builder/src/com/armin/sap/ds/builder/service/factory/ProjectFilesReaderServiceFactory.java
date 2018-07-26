@@ -14,6 +14,7 @@ public class ProjectFilesReaderServiceFactory extends AbstractServiceFactory {
 		// TODO Auto-generated constructor stub
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object create(Class serviceInterface, IServiceLocator parentLocator, IServiceLocator locator) {
 		if(!IProjectFilesReaderService.class.equals(serviceInterface))

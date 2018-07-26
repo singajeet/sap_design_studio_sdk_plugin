@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Component;
+import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.Group;
 import com.armin.sap.ds.builder.preferences.Settings;
 
@@ -44,36 +45,38 @@ public class GroupNode extends GenericFileNode {
     }
 	
 	
-	public void addComponent(Component component) {
-		
+	public void addComponent(Component component) throws Exception{
+		if(!exists(component)) {
+			
+			//check if provided component is a valid model under this group's parent (i.e., 
+			//component model should exists under extension model's "Component" property.
+			ExtensionNode _parent = (ExtensionNode)this.getParent(this);
+			Extension extension = _parent.getExtension();
+			
+			boolean found = false;
+			for(Component comp : extension.getComponent()) {
+				if(comp.getId().toUpperCase().equals(component.getId().toUpperCase())) {
+					found = true;
+				}
+			}
+			if(found) {
+				IProjectItemNode node = new ComponentNode(this.getProject(), component, this);
+				_children.add(node);
+			} else {
+				throw new Exception("Failed while adding new Component node. Reason: Unable to find Component model with [Id=" + component.getId() 
+										+ "] under Extension model [Id=" + extension.getId() + "]");
+				
+			}
+		}
 	}
 	
-//	@Override
-//	public Object[] getElements(Object input) {
-//		return getChildren(input);
-//	}
-//	
-//	@Override
-//	public Object[] getChildren(Object parent) {
-//		return _children.toArray();
-//	}
-//	
-//	@Override
-//	public Object getParent(Object element) {
-//		return _parent;
-//	}
-//	
-//	@Override
-//	public boolean hasChildren(Object parent) {				
-//		return (_children.size() > 0);
-//	}
 	
 	/************************************************************************************/
 
 	protected ArrayList<IProjectItemNode> initializeChildren(Group group) {
 		ArrayList<IProjectItemNode> children = new ArrayList<IProjectItemNode>();
     	try {	
-	    		List<Component> components = ((ExtensionNode)this.getParent(this)).getComponents();
+	    		List<Component> components = ((ExtensionNode)this.getParent(this)).getExtension().getComponent();
 	    		
 	    		for(int i=0;i<components.size();i++) {
 	    			Component component = components.get(i);

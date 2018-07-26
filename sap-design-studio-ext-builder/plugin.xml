@@ -180,7 +180,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                              value="com.armin.sap.ds.builder.navigator.tree.GroupNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -242,15 +242,6 @@
                commandId="org.eclipse.ui.navigate.openResource"
                label="Open File..."
                style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeWorkbenchWindow.activePerspective">
-                  <equals
-                        value="com.armin.sap.ds.builder.project.perspective">
-                  </equals>
-               </with>
-            </visibleWhen>
          </command>
          <command
                commandId="org.eclipse.ui.project.openProject"
@@ -285,57 +276,21 @@
                commandId="org.eclipse.ui.edit.cut"
                label="Cut"
                style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeWorkbenchWindow.activePerspective">
-                  <equals
-                        value="com.armin.sap.ds.builder.project.perspective">
-                  </equals>
-               </with>
-            </visibleWhen>
          </command>
          <command
                commandId="org.eclipse.ui.edit.copy"
                label="Copy"
                style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeWorkbenchWindow.activePerspective">
-                  <equals
-                        value="com.armin.sap.ds.builder.project.perspective">
-                  </equals>
-               </with>
-            </visibleWhen>
          </command>
          <command
                commandId="org.eclipse.ui.edit.paste"
                label="Paste"
                style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeWorkbenchWindow.activePerspective">
-                  <equals
-                        value="com.armin.sap.ds.builder.project.perspective">
-                  </equals>
-               </with>
-            </visibleWhen>
          </command>
          <command
                commandId="org.eclipse.ui.edit.delete"
                label="Delete"
                style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeWorkbenchWindow.activePerspective">
-                  <equals
-                        value="com.armin.sap.ds.builder.project.perspective">
-                  </equals>
-               </with>
-            </visibleWhen>
          </command>
          <separator
                name="sap-design-studio-ext-navigator.separator4">
@@ -344,29 +299,11 @@
                commandId="org.eclipse.ui.file.import"
                label="Import..."
                style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeWorkbenchWindow.activePerspective">
-                  <equals
-                        value="com.armin.sap.ds.builder.project.perspective">
-                  </equals>
-               </with>
-            </visibleWhen>
          </command>
          <command
                commandId="org.eclipse.ui.file.export"
                label="Export..."
                style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeWorkbenchWindow.activePerspective">
-                  <equals
-                        value="com.armin.sap.ds.builder.project.perspective">
-                  </equals>
-               </with>
-            </visibleWhen>
          </command>
          <separator
                name="sap-design-studio-ext-navigator.separator5">
@@ -375,57 +312,21 @@
                commandId="org.eclipse.ui.file.refresh"
                label="Refresh"
                style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeWorkbenchWindow.activePerspective">
-                  <equals
-                        value="com.armin.sap.ds.builder.project.perspective">
-                  </equals>
-               </with>
-            </visibleWhen>
          </command>true
          <command
                commandId="org.eclipse.ui.file.close"
                label="Close"
                style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeWorkbenchWindow.activePerspective">
-                  <equals
-                        value="com.armin.sap.ds.builder.project.perspective">
-                  </equals>
-               </with>
-            </visibleWhen>
          </command>
          <command
                commandId="org.eclipse.ui.project.closeProject"
                label="Close Project"
                style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeWorkbenchWindow.activePerspective">
-                  <equals
-                        value="com.armin.sap.ds.builder.project.perspective">
-                  </equals>
-               </with>
-            </visibleWhen>
          </command>
          <command
                commandId="org.eclipse.ui.project.closeUnrelatedProjects"
                label="Close Unrelated Projects"
                style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeWorkbenchWindow.activePerspective">
-                  <equals
-                        value="com.armin.sap.ds.builder.project.perspective">
-                  </equals>
-               </with>
-            </visibleWhen>
          </command>
          <separator
                name="sap-design-studio-ext-navigator.separator6">
@@ -450,24 +351,6 @@
                icon="images/project_16x16.png"
                label="Toggle SAP Design Studio Nature"
                style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="selection">
-                  <count
-                        value="1">
-                  </count>
-                  <iterate>
-                     <adapt
-                           type="org.eclipse.core.resources.IProject">
-                        <test
-                              property="org.eclipse.core.resources.projectNature"
-                              value="com.armin.sap.ds.builder.nature.ID">
-                        </test>
-                     </adapt>
-                  </iterate>
-               </with>
-            </visibleWhen>
          </command>
       </menuContribution>
       <menuContribution
@@ -494,6 +377,11 @@
                   </iterate>
                </with>
             </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.file.refresh"
+               label="Refresh"
+               style="push">
          </command>
       </menuContribution>
    </extension>
@@ -738,8 +626,8 @@
             id="com.armin.sap.ds.builder.wizards.new_component_wizard"
             name="SAP Design Studio Component">
          <selection
-               class="com.armin.sap.ds.builder.navigator.tree.ExtensionNode"
-               name="SAP Design Studio Extension">
+               class="com.armin.sap.ds.builder.navigator.tree.GroupNode"
+               name="SAP Design Studio Group">
          </selection>
       </wizard>
       <wizard

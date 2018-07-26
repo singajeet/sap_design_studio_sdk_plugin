@@ -30,6 +30,7 @@ public class DesignStudioPerspectiveFactory implements IPerspectiveFactory {
 		addViewShortcuts();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void addViews() {
 		// Creates the overall folder layout. 
 		// Note that each new Folder uses a percentage of the remaining EditorArea.
@@ -89,6 +90,7 @@ public class DesignStudioPerspectiveFactory implements IPerspectiveFactory {
 		factory.addNewWizardShortcut("com.armin.sap.ds.builder.wizards.new_group_wizard");
 	}
 
+	@SuppressWarnings("deprecation")
 	private void addViewShortcuts() {
 		factory.addShowViewShortcut("org.eclipse.ant.ui.views.AntView"); //NON-NLS-1
 		factory.addShowViewShortcut("org.eclipse.team.ccvs.ui.AnnotateView"); //NON-NLS-1

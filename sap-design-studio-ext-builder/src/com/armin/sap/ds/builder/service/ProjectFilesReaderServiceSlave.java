@@ -13,13 +13,7 @@ import com.armin.sap.ds.builder.api.models.Extension;
 
 public class ProjectFilesReaderServiceSlave implements IProjectFilesReaderService {
 
-	private IServiceLocator _locator;
-	private IProjectFilesReaderService _parentService;
-	
 	public ProjectFilesReaderServiceSlave(IServiceLocator locator, IProjectFilesReaderService parentService) {
-		// TODO Auto-generated constructor stub
-		_locator = locator;
-		_parentService = parentService;
 		locator.hasService(IHandlerService.class);
 	}
 	

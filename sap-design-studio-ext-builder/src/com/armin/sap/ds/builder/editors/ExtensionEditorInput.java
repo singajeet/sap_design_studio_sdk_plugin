@@ -1,15 +1,12 @@
 package com.armin.sap.ds.builder.editors;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 
 public class ExtensionEditorInput implements IEditorInput {

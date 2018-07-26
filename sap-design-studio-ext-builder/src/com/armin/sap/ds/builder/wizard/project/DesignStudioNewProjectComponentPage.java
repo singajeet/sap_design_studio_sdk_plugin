@@ -25,7 +25,6 @@ import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.shared.ISharedData;
 import com.armin.sap.ds.builder.shared.ISharedDataSubscriber;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
-import org.eclipse.swt.custom.ScrolledComposite;
 
 
 public class DesignStudioNewProjectComponentPage extends WizardPage implements IWizardDetailsPage, ISharedDataSubscriber {

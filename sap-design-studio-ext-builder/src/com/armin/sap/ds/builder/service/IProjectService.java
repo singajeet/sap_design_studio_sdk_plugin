@@ -18,12 +18,12 @@ public interface IProjectService {
 	public Map<String, JAXBElement<Extension>> getExtensionsMap();
 	public IProject createProject(String projectName, URI location) throws Exception;
 	public IProject createProject(String projectName, URI location, IModel extensionModel, IModel componentModel) throws Exception;
-	public void addNewExtension(IModel extensionModel) throws Exception;
-	public void addNewExtension(IModel extensionModel, IProject project) throws Exception;
-	public void addNewComponent(IModel componentModel, IModel extensionModel) throws Exception;
-	public void addNewComponent(IModel componentModel, IModel extensionModel, IProject project) throws Exception;
-	public void addNewComponent(IModel componentModel, String extId) throws Exception;
-	public void addNewComponent(IModel componentModel, String extensionId, IProject project) throws Exception;
-	public void addNewGroup(String groupName, IModel extensionNode, IProject project);
-	public Extension getExtension(String id);
+	public IModel addNewExtension(IModel extensionModel) throws Exception;
+	public IModel addNewExtension(IModel extensionModel, IProject project) throws Exception;
+	public IModel addNewComponent(IModel componentModel, IModel extensionModel) throws Exception;
+	public IModel addNewComponent(IModel componentModel, IModel extensionModel, IProject project) throws Exception;
+	public IModel addNewComponent(IModel componentModel, String extId) throws Exception;
+	public IModel addNewComponent(IModel componentModel, String extensionId, IProject project) throws Exception;
+	public IModel addNewGroup(String groupName, IModel extensionNode, IProject project);
+	public IModel getExtension(String id);
 }

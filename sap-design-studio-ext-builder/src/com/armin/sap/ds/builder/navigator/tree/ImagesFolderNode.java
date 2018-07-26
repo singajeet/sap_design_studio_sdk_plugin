@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.service.ProjectService;
 
 public class ImagesFolderNode extends GenericFolderNode {
 

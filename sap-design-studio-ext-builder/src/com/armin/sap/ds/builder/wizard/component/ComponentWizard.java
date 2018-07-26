@@ -16,8 +16,10 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
+import com.armin.sap.ds.builder.navigator.tree.GroupNode;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
 
@@ -27,7 +29,7 @@ public class ComponentWizard extends Wizard implements INewWizard {
 	
 	private IStructuredSelection _selection;
 	private WizardPage _pageOne;	
-	private ExtensionNode _parentTreeNode;
+	private GroupNode _parentTreeNode;
 	private IProjectService _projectService;
 	private ILog logger;
 	
@@ -55,10 +57,10 @@ public class ComponentWizard extends Wizard implements INewWizard {
 			if(_selection.size() <= 0)
 				return;
 			Object selectedObj = _selection.getFirstElement();
-			if(selectedObj instanceof ExtensionNode) {				
-				_parentTreeNode = (ExtensionNode)selectedObj;							
+			if(selectedObj instanceof GroupNode) {				
+				_parentTreeNode = (GroupNode)selectedObj;							
 				logger.log(new Status(IStatus.INFO, this.getClass().getName(), 
-						"Selected object is of type: ExtensionNode with ID=" + _parentTreeNode.getName()));
+						"Selected object is of type: GroupNode with ID=" + _parentTreeNode.getName()));
 			}
 		}
 	    logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Init() completed"));
@@ -93,16 +95,16 @@ public class ComponentWizard extends Wizard implements INewWizard {
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "WorkspaceJob started: " + this.getName()));
 					
 					monitor.beginTask("Creating component - " + ((ComponentCreationPage)_pageOne).getModel().getId(), 2);
-					
-					_projectService.addNewComponent(component, _parentTreeNode.getExtension(), project);
-					logger.log(new Status(IStatus.INFO, this.getClass().getName(), 
-							"New Component Added [Id: " + component.getId() + ", Extension Id: " + _parentTreeNode.getExtension().getId() + ", Project: " + project.getName() + "]"));
-					
+					IModel t_component = _projectService.addNewComponent(component, ((ExtensionNode)_parentTreeNode.getParent(this)).getExtension(), project);
 					monitor.worked(1);
-					monitor.setTaskName("Refreshing project from local file system");
+					
+					monitor.setTaskName("Adding component to Group Node: " + ((GroupNode)_parentTreeNode).getModel().getId());
+					logger.log(new Status(IStatus.INFO, this.getClass().getName(), 
+							"Adding New Component [Id: " + component.getId() + "] to Group [Id: " + ((GroupNode)_parentTreeNode).getModel().getId() + "]"));
+					_parentTreeNode.addComponent((Component)t_component);
+					monitor.worked(1);
 					
 					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-					
 					logger.log(new Status(IStatus.OK, this.getClass().getName(), "WorkspaceJob Completed Successfully!"));
 					
 					return Status.OK_STATUS;

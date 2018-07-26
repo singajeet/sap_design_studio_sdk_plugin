@@ -14,6 +14,7 @@ import com.armin.sap.ds.builder.preferences.Settings;
 
 public class ProjectNode extends ProjectItemNode {
 
+	@SuppressWarnings("unused")
 	private IWorkspaceRoot _parent;
 	private IProject _project;
 	//private IProjectItemNode[] _children;

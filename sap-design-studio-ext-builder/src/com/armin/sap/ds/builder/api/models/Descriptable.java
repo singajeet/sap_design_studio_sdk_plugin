@@ -168,8 +168,8 @@ public class Descriptable implements IModel {
 		return name;
 	}
 
-	public void setName(String name) {
-		name = name;
+	public void setName(String p_name) {
+		name = p_name;
 	}
 
 }

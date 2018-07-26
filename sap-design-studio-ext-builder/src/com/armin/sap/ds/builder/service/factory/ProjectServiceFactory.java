@@ -15,6 +15,7 @@ public class ProjectServiceFactory extends AbstractServiceFactory {
 		// TODO Auto-generated constructor stub
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object create(Class serviceInterface, IServiceLocator parentLocator, IServiceLocator locator) {
 		if(!IProjectService.class.equals(serviceInterface))

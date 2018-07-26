@@ -13,13 +13,9 @@ import com.armin.sap.ds.builder.api.models.Extension;
 
 public class ProjectFilesReaderService implements IProjectFilesReaderService {
 
-	private IServiceLocator _locator;
-	
 	public ProjectFilesReaderService() {}
 	
 	public ProjectFilesReaderService(IServiceLocator locator) {
-		// TODO Auto-generated constructor stub
-		_locator = locator;
 		locator.hasService(IHandlerService.class);
 	}
 	
