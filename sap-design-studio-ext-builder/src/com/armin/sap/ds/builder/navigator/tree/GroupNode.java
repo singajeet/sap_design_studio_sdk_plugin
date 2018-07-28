@@ -18,13 +18,13 @@ public class GroupNode extends GenericFileNode {
 
 	public GroupNode(IProject project, Group group, IProjectItemNode parent) {
 		super(project, parent);
-		_item = group;
+		_item = group;		
 		_children = initializeChildren(group);
 	}
 	
 	@Override
 	public ProjectItemType getType() {
-		return ProjectItemType.GROUP_NODE;
+		return ProjectItemType.GROUP;
 	}
 	
 	/************************** Required to be overridden ********************************/

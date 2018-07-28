@@ -1,15 +1,11 @@
 package com.armin.sap.ds.builder.service;
 
 import java.net.URI;
-import java.util.Map;
-
-import javax.xml.bind.JAXBElement;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
-import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.IModel;
 
 
@@ -49,10 +45,6 @@ public class ProjectServiceSlave implements IProjectService {
 		return _parentService.getProject();		
 	}
 	
-	public Map<String, JAXBElement<Extension>> getExtensionsMap(){
-		return _parentService.getExtensionsMap();
-	}
-	
 	public IProject createProject(String projectName, URI location) throws Exception{		
 		return _parentService.createProject(projectName, location);
 	}
@@ -77,19 +69,7 @@ public class ProjectServiceSlave implements IProjectService {
 		return _parentService.addNewComponent(componentModel, extensionModel, project);
 	}
 	
-	public IModel addNewComponent(IModel componentModel, String extId) throws Exception{
-		return addNewComponent(componentModel, this.getExtension(extId));
-	}
-	
-	public IModel addNewComponent(IModel componentModel, String extensionId, IProject project) throws Exception{
-		return addNewComponent(componentModel, this.getExtension(extensionId), project);
-	}
-
-	public IModel getExtension(String id){
-		return _parentService.getExtension(id);		
-	}
-
-	@Override
+		@Override
 	public IModel addNewGroup(String groupName, IModel extensionNode, IProject project) {
 		return _parentService.addNewGroup(groupName, extensionNode, project);		
 	}

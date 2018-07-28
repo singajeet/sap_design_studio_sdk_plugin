@@ -1,7 +1,5 @@
 package com.armin.sap.ds.builder.service;
 
-import javax.xml.bind.JAXBElement;
-
 import org.eclipse.core.resources.IProject;
 
 import com.armin.sap.ds.builder.api.models.Extension;
@@ -11,15 +9,15 @@ import com.armin.sap.ds.builder.api.models.RequireJSType;
 
 public interface IProjectFilesBuilderService {
 
-	JAXBElement<Extension> saveExtension(IModel extensionModel, IProject project, JAXBElement<Extension> rootElement);
+	Extension saveExtension(IModel extensionModel, IProject project);
 
-	IModel saveComponent(IModel componentModel, IModel extensionModel, IProject project, JAXBElement<Extension> rootElement);
+	IModel saveComponent(IModel componentModel, IModel extensionModel, IProject project);
 
-	JAXBElement<Extension> setupAllFiles(IModel extensionModel, IModel componentModel, IProject project, JAXBElement<Extension> rootElement);
+	Extension setupAllFiles(IModel extensionModel, IModel componentModel, IProject project);
 
-	JAXBElement<Extension> updateExtension(IModel componentModel, IModel extensionModel, IProject project, JAXBElement<Extension> rootElement);
+	Extension updateExtension(IModel componentModel, IModel extensionModel, IProject project);
 	
-	Group buildAndSaveGroup(String groupName, IModel extensionNode, IProject project, JAXBElement<Extension> rootElement);
+	Group buildAndSaveGroup(String groupName, IModel extensionNode, IProject project);
 	
 	String setupRequireJSNode(IProject project, IModel componentNode, IModel extensionNode, RequireJSType jsNode);
 	

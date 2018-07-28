@@ -1,7 +1,5 @@
 package com.armin.sap.ds.builder.service;
 
-import javax.xml.bind.JAXBElement;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
@@ -28,24 +26,24 @@ public class ProjectFilesBuilderServiceSlave implements IProjectFilesBuilderServ
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#saveExtension(com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
-	public JAXBElement<Extension> saveExtension(IModel extensionModel, IProject project, JAXBElement<Extension> rootElement) {
-		return _parentService.saveExtension(extensionModel, project, rootElement);
+	public Extension saveExtension(IModel extensionModel, IProject project) {
+		return _parentService.saveExtension(extensionModel, project);
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#saveComponent(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject)
 	 */
 	@Override
-	public IModel saveComponent(IModel componentModel, IModel extensionModel, IProject project, JAXBElement<Extension> root) {
-		return _parentService.saveComponent(componentModel, extensionModel, project, root);
+	public IModel saveComponent(IModel componentModel, IModel extensionModel, IProject project) {
+		return _parentService.saveComponent(componentModel, extensionModel, project);
 	}
 	
 	/* (non-Javadoc)
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#setupAllFiles(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
-	public JAXBElement<Extension> setupAllFiles(IModel extensionModel, IModel componentModel, IProject project, JAXBElement<Extension> rootElement) {
-		return _parentService.setupAllFiles(extensionModel, componentModel, project, rootElement);
+	public Extension setupAllFiles(IModel extensionModel, IModel componentModel, IProject project) {
+		return _parentService.setupAllFiles(extensionModel, componentModel, project);
 	}
 	
 	
@@ -53,14 +51,14 @@ public class ProjectFilesBuilderServiceSlave implements IProjectFilesBuilderServ
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#updateExtension(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
-	public JAXBElement<Extension> updateExtension(IModel componentModel, IModel extensionModel, IProject project, JAXBElement<Extension> root) {
-		return _parentService.updateExtension(componentModel, extensionModel, project, root);
+	public Extension updateExtension(IModel componentModel, IModel extensionModel, IProject project) {
+		return _parentService.updateExtension(componentModel, extensionModel, project);
 	}
 
 	@Override
-	public Group buildAndSaveGroup(String groupName, IModel extensionNode, IProject project, JAXBElement<Extension> root) {
+	public Group buildAndSaveGroup(String groupName, IModel extensionNode, IProject project) {
 		// TODO Auto-generated method stub
-		return _parentService.buildAndSaveGroup(groupName, extensionNode, project, root);
+		return _parentService.buildAndSaveGroup(groupName, extensionNode, project);
 	}
 
 	@Override

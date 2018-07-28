@@ -25,11 +25,13 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.common.IDEConstants;
 import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.api.models.ComponentExtended;
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.Group;
 import com.armin.sap.ds.builder.api.models.IModel;
+import com.armin.sap.ds.builder.api.models.ObjectFactory;
 import com.armin.sap.ds.builder.api.models.RequireJSType;
 import com.armin.sap.ds.builder.preferences.Settings;
 
@@ -55,7 +57,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#saveExtension(com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
-	public JAXBElement<Extension> saveExtension(IModel extensionModel, IProject project, JAXBElement<Extension> rootElement) {
+	public Extension saveExtension(IModel extensionModel, IProject project) {
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Save extension started - [ID=" + extensionModel.getId() + ", Project=" + project.getName() + "]"));
 		
 		IFile extensionFile = null;
@@ -67,7 +69,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		if(!extensionFile.exists()) {
 			try {
 				
-				boolean saved = _saveExtension(extensionFile, rootElement);
+				boolean saved = _saveExtension(extensionFile, extensionModel);
 				
 				if(saved) {
 					//prepare manifest file under meta-inf folder
@@ -75,7 +77,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 					_saveManifest(manifest, extensionModel);
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Save extension finished"));
 				}
-				return rootElement;
+				return (Extension)extensionModel;
 			}
 			catch (Exception e) {
 				MessageDialog.open(MessageDialog.ERROR, null, "Error while generating file", e.toString(), SWT.SHEET);
@@ -92,7 +94,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#saveComponent(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject)
 	 */
 	@Override
-	public IModel saveComponent(IModel componentModel, IModel extensionModel, IProject project, JAXBElement<Extension> rootElement) {
+	public IModel saveComponent(IModel componentModel, IModel extensionModel, IProject project) {
 		
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Save component started"));
 		IFile componentFile = null;		
@@ -115,9 +117,9 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#setupAllFiles(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
-	public JAXBElement<Extension> setupAllFiles(IModel extensionModel, IModel componentModel, IProject project, JAXBElement<Extension> rootElement) {
-		JAXBElement<Extension> element = this.saveExtension(extensionModel, project, rootElement);
-		this.saveComponent(componentModel, extensionModel, project, element);
+	public Extension setupAllFiles(IModel extensionModel, IModel componentModel, IProject project) {
+		Extension element = this.saveExtension(extensionModel, project);
+		this.saveComponent(componentModel, extensionModel, project);
 		return element;
 	}
 	
@@ -187,25 +189,16 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#updateExtension(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
-	public JAXBElement<Extension> updateExtension(IModel componentModel, IModel extensionModel, IProject project, JAXBElement<Extension> rootElement) {
+	public Extension updateExtension(IModel componentModel, IModel extensionModel, IProject project) {
 		try {
 			IFile extensionFile = project.getFile(extensionModel.getId() + "/" + Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME));
 			
-			//search for extension's root element in extensions map table
-			JAXBElement<Extension> extension = rootElement;
-//			if(extension == null) {
-//				extension = _factory.createSdkExtension((Extension)extensionModel);
-//			}
 			if(extensionFile.exists()) {
-//				IPath backupFolder = extensionFile.getParent().getFullPath();
-//				String backupFileName = extensionFile.getName() + ".backup";
-//				IPath destination = backupFolder.append(backupFileName);
-//				extensionFile.move(destination, true, null);
 				extensionFile.delete(true, null);
 			}
-			boolean saved = _saveExtension(extensionFile, extension);
+			boolean saved = _saveExtension(extensionFile, extensionModel);
 			if(saved)
-				return extension;
+				return (Extension)extensionModel;
 			else
 				return null;
 		}catch(Exception e) {
@@ -215,11 +208,12 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		return null;
 	}
 	
-	private boolean _saveExtension(IFile extensionFile, JAXBElement<Extension> rootElement) {
+	private boolean _saveExtension(IFile extensionFile, IModel model) {
 		//Marshal/Save XML to contribution.xml file with pretty format
 		JAXBContext context;
 		Marshaller marshaller;
 		try {
+			JAXBElement<Extension> rootElement = (new ObjectFactory()).createSdkExtension((Extension)model);
 			context = JAXBContext.newInstance(Extension.class);
 			marshaller = context.createMarshaller();
 			extensionFile.create(new ByteArrayInputStream("<!-- contribution.xml -->".getBytes()), true, null);
@@ -287,22 +281,24 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		return jsFilePath;		
 	}
 
-	public Group buildAndSaveGroup(String groupName, IModel extensionModel, IProject project, JAXBElement<Extension> rootElement) {
+	public Group buildAndSaveGroup(String groupId, IModel extensionModel, IProject project) {
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group creation started"));
 		//Check if there is an group attribute in component and create new group if it don't exists
 		//String groupName = ((Component)componentNode).getGroup().toUpperCase();
-		if(groupName != null) {
-			groupName = groupName.toUpperCase();
-			if(!groupName.equals("DEFAULT") && !groupName.equals("TECHNICAL_COMPONENT")) {
-				logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group type: CUSTOM - " + groupName));
+		if(groupId != null) {
+			groupId = groupId.toLowerCase();
+			if(!groupId.equals(IDEConstants.DEFAULT) && !groupId.equals(IDEConstants.TECHNICAL_COMPONENT)) {
+				logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group type: CUSTOM - " + groupId));
 				Group group = null;
 				
 				//check whether the group is already added in the current extension node
 				for(Group g : ((Extension)extensionModel).getGroup()) {
-					if(g.getId().toUpperCase().equals(groupName)) {
+					if(g.getId().toLowerCase().equals(groupId)) {
 						group = g;
-						logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group found in saved groups"));
-						
+						logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group found in Extension model instance"));
+						if(!isGroupSavedInPreferences(groupId)) {
+							saveGroupInPreferences(groupId);
+						}
 						return group;
 					}							
 				}
@@ -313,17 +309,18 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 				if(rawGroups != null)
 					groups = rawGroups.split(";");
 				else
-					groups = new String[] {"DEFAULT", "TECHNICAL_COMPONENT"};
+					groups = new String[] {IDEConstants.DEFAULT, IDEConstants.TECHNICAL_COMPONENT};
 									
 				if(group == null) {	
 					for(String g : groups) {
-						g = g.toUpperCase();
-						if(g.equals(groupName)) {
+						g = g.toLowerCase();
+						if(g.equals(groupId)) {
 							logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group found in already saved groups list"));
 							group = new Group();
 							group.setId(g);
-							group.setTitle(g);
-							logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group added: [ID=" + groupName + "] to Extension [ID=" + extensionModel.getId() + "]"));
+							group.setTitle(g.toUpperCase());
+							group.setName(g.toUpperCase());
+							logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group added: [ID=" + groupId + "] to Extension [ID=" + extensionModel.getId() + "]"));
 							group.setVisible(true);
 							
 							//updateExtension(null, extensionNode, project, rootElement);
@@ -336,42 +333,59 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 				if(group == null) {
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group not found, creating it now"));
 					group = new Group();
-					group.setId(groupName);
-					group.setTitle(groupName);
+					group.setId(groupId);
+					group.setTitle(groupId.toUpperCase());
+					group.setName(groupId.toUpperCase());
 					group.setTooltip("Group assigned to component");
 					group.setVisible(true);
 					
 					//add new group to preferences also
+					if(rawGroups != null) {
+						rawGroups = rawGroups + ";" + groupId;						
+					} else {
+						rawGroups = groupId;
+					}
 					
-					if(groups.length > 0) {
-						String[] tempArr = groups;
-						groups = new String[tempArr.length + 1];
-						for(int i=0;i<tempArr.length;i++) {
-							groups[i] = tempArr[i];
-						}
-						groups[tempArr.length] = groupName;
-					} else {
-						groups = new String[1];
-						groups[0] = new String(groupName);
-					}
-					if(groups.length > 0) {
-						String buf = groups[0];
-						for(int i=1; i<groups.length; i++) {
-							buf+= ";" + groups[i];
-						}
-						Settings.store().set(Settings.FOR.GROUPS_LIST, buf);
-						logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Groups saved to local preferences"));
-						//updateExtension(null, extensionNode, project, rootElement);
-						return group;
-					} else {
-						logger.log(new Status(IStatus.WARNING, this.getClass().getName(), "Unable to save group list to preferences"));
-						return null;
-					}
+					Settings.store().set(Settings.FOR.GROUPS_LIST, rawGroups);
+					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Groups saved to local preferences"));
+					return group;
 				}
-			} else {
-				return null;
+			}
+			Group group = new Group();
+			group.setId(groupId);
+			group.setTitle(groupId.toUpperCase());
+			group.setName(groupId.toUpperCase());
+			group.setTooltip("Group assigned to component");
+			group.setVisible(true);
+			return group;
+		}
+		Group group = new Group();
+		group.setId(IDEConstants.DEFAULT);
+		group.setName(IDEConstants.DEFAULT.toUpperCase());
+		group.setTitle(IDEConstants.DEFAULT.toUpperCase());
+		group.setTooltip(IDEConstants.DEFAULT);
+		return group;
+	}
+
+	private void saveGroupInPreferences(String groupId) {
+		String rawGroups = Settings.store().get(Settings.FOR.GROUPS_LIST);
+		if(rawGroups != null) {
+			rawGroups = rawGroups + ";" + groupId.toLowerCase();
+		} else {
+			rawGroups = groupId.toLowerCase();
+		}
+		Settings.store().set(Settings.FOR.GROUPS_LIST, rawGroups);
+	}
+
+	private boolean isGroupSavedInPreferences(String groupId) {
+		String rawGroups = Settings.store().get(Settings.FOR.GROUPS_LIST);
+		if(rawGroups != null) {
+			String[] groups = rawGroups.split(";");
+			for(String group : groups) {
+				if(group.toLowerCase().equals(groupId.toLowerCase()))
+					return true;
 			}
 		}
-		return null;
+		return false;
 	}
 }

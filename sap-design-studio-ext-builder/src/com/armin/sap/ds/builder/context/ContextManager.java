@@ -3,6 +3,8 @@ package com.armin.sap.ds.builder.context;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.armin.sap.ds.builder.api.models.Extension;
+
 public class ContextManager {
 
 	private static ContextManager _singleton;
@@ -36,6 +38,20 @@ public class ContextManager {
 			_contextObjects.put(key, ctx);
 		}
 		return ctx;
+	}
+	
+	public Context create(String projectName, Map<String, Extension> extensions) {
+		Context ctx = null;
+		if(!_contextObjects.containsKey(projectName)) {
+			ctx = new ExtensionsContext(projectName, extensions);
+			_contextObjects.put(projectName, ctx);
+		}
+		return ctx;
+	}
+	
+	public Context createForExtensions(String projectName) {
+		Map<String, Extension> extensions = new HashMap<String, Extension>();
+		return this.create(projectName, extensions);
 	}
 	
 	public void remove(String key) {

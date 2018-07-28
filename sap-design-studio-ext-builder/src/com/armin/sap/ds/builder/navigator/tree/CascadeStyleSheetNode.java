@@ -22,7 +22,7 @@ public class CascadeStyleSheetNode extends GenericFileNode {
 	
 	@Override
 	public ProjectItemType getType() {
-		return ProjectItemType.CASCADE_STYLE_SHEET_FILE;
+		return ProjectItemType.CASCADE_STYLE_SHEET;
 	}
 	
 	public String getCSSPath() {

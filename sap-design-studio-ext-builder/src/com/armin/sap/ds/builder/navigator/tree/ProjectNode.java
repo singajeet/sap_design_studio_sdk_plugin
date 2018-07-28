@@ -106,7 +106,7 @@ public class ProjectNode extends ProjectItemNode {
 	
 	@Override
 	public ProjectItemType getType() {
-		return ProjectItemType.PROJECT_PARENT;
+		return ProjectItemType.WORKSPACE;
 	}
 
 

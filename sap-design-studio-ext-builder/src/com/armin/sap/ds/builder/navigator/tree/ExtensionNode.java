@@ -28,7 +28,7 @@ public class ExtensionNode extends GenericFileNode {
 
 	@Override
 	public ProjectItemType getType() {
-		return ProjectItemType.EXTENSION_FILE;
+		return ProjectItemType.EXTENSION;
 	}
 	
 	public Extension getExtension() {

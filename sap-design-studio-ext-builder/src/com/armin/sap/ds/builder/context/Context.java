@@ -6,10 +6,10 @@ import java.util.List;
 
 public class Context {
 
-	private String _key;
-	private Object _value;
-	private Object _source;
-	private List<ContextEventListener> _listeners;
+	protected String _key;
+	protected Object _value;
+	protected Object _source;
+	protected List<ContextEventListener> _listeners;
 	
 	public Context(String key) {
 		_key = key;
@@ -48,7 +48,7 @@ public class Context {
 		_listeners.remove(listener);
 	}
 	
-	private synchronized void fireEvent(Object newValue) {
+	protected synchronized void fireEvent(Object newValue) {
 		ContextEvent event = new ContextEvent(_source, _key, _value, newValue);
 		Iterator<ContextEventListener> itr = _listeners.iterator();
 		

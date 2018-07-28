@@ -20,6 +20,7 @@ import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.controls.ComponentControl;
 import com.armin.sap.ds.builder.controls.IComponentChangedListener;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
+import com.armin.sap.ds.builder.navigator.tree.GroupNode;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
 
@@ -42,7 +43,7 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 	public String EXTENDS_KEYWORD = " extends ";	
 	
 	private Component _model;
-	private ExtensionNode _parentTreeNode;
+	private GroupNode _parentTreeNode;
 	private Composite topLevel;
 	private Composite composite_top;
 	private Composite composite_bottom;
@@ -178,15 +179,15 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 			if(_selection.size() <= 0)
 				return;
 			Object selectedObj = _selection.getFirstElement();
-			if(selectedObj instanceof ExtensionNode) {
-				_componentPackage = ((ExtensionNode)selectedObj).getExtension().getId();
-				_parentTreeNode = (ExtensionNode)selectedObj;
+			if(selectedObj instanceof GroupNode) {
+				_componentPackage = ((ExtensionNode)((GroupNode)selectedObj).getParent(this)).getExtension().getId();
+				_parentTreeNode = (GroupNode)selectedObj;
 				txtPackage.setText(_componentPackage);				
 			}
 		}
 	}
 	
-	public ExtensionNode getParentExtensionTreeNode() {
+	public GroupNode getParentExtensionTreeNode() {
 		return _parentTreeNode;
 	}
 	

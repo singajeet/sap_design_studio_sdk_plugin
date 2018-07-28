@@ -21,7 +21,7 @@ public class HTMLNode extends GenericFileNode {
 	
 	@Override
 	public ProjectItemType getType() {
-		return ProjectItemType.HTML_FILE;
+		return ProjectItemType.HTML;
 	}
 	
 	public String getHTMLPath() {

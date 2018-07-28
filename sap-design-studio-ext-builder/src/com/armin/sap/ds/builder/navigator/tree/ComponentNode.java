@@ -22,7 +22,7 @@ public class ComponentNode extends ProjectItemNode {
 
 	@Override
 	public ProjectItemType getType() {
-		return ProjectItemType.COMPONENT_FILE;
+		return ProjectItemType.COMPONENT;
 	}
 	
 	public Component getComponent() {

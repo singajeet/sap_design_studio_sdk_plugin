@@ -1,6 +1,6 @@
 package com.armin.sap.ds.builder.api.common;
 
-public interface ProjectConstants {
+public interface IDEConstants {
 
 	String EXTENSION_TEMPLATE = "extension-template";
 	String EULA = "eula";
@@ -18,7 +18,7 @@ public interface ProjectConstants {
 	String COMPONENTS = "components";
 	String COMPONENT_TEMPLATE = "component-template";
 	String GROUP = "group";
-	String DEFAULT = "Default";
+	String DEFAULT = "default";
 	String PROPERTY_SHEET_PATH_ASSIGNMENT = "propertySheetPath=";
 	String DOUBLE_QUOTES = "\"";
 	String PROPERTY_SHEET_PATH_DEFAULT = "propertySheetPath=\"res/additional_properties_sheet/additional_properties_sheet.html\"";
@@ -55,7 +55,7 @@ public interface ProjectConstants {
 	String HEIGHT = "HEIGHT";
 	String WIDTH = "WIDTH";
 	String NEW_LINE = "\n";
-	String TECHNICAL_COMPONENT = "TECHNICAL_COMPONENT";
+	String TECHNICAL_COMPONENT = "technical_component";
 	String GROUP_TEMPLATE = "group-template";
 	String GROUPS = "groups";
 	String GROUP_CLOSE_TAG = "</group>";

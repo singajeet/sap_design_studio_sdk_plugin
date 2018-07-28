@@ -21,7 +21,7 @@ public class JavaScriptNode extends GenericFileNode {
 	
 	@Override
 	public ProjectItemType getType() {
-		return ProjectItemType.JAVASCRIPT_FILE;
+		return ProjectItemType.JAVASCRIPT;
 	}
 	
 	public String getJSPath() {

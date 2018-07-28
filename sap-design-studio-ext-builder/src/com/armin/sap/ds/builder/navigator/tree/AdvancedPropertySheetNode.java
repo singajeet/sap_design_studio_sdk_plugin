@@ -26,7 +26,7 @@ public class AdvancedPropertySheetNode extends GenericFileNode {
 
 	@Override
 	public ProjectItemType getType() {
-		return ProjectItemType.ADVANCED_PROPERTY_SHEET_FILE;
+		return ProjectItemType.ADVANCED_PROPERTY_SHEET;
 	}
 	
 	public String getPropertySheetPath() {

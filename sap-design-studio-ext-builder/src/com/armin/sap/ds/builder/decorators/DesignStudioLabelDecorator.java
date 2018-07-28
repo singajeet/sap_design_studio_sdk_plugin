@@ -7,7 +7,11 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.themes.IThemeManager;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.models.UI5Mode;
+import com.armin.sap.ds.builder.navigator.tree.ComponentNode;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
+import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
+import com.armin.sap.ds.builder.navigator.tree.GroupNode;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 import com.armin.sap.ds.builder.navigator.tree.ProjectItemType;
 
@@ -52,12 +56,30 @@ public class DesignStudioLabelDecorator implements ILightweightLabelDecorator {
 			
 			if(ele.getType() == ProjectItemType.EXTENSION_COLLECTION) {
 				ExtensionCollectionNode extensions = (ExtensionCollectionNode)ele;
-				decoration.addSuffix(" [ " + extensions.getExtensions().size() + " Extension(s) ]");	
-				if(color != null)
-					decoration.setForegroundColor(color);					
-			} else {
-				decoration.addSuffix(" [" + ele.getType().name() + " ]");
+				decoration.addSuffix(" [" + extensions.getExtensions().size() + " Extension(s)]");
+			} else if(ele.getType() == ProjectItemType.EXTENSION) {
+				ExtensionNode extension = (ExtensionNode)ele;
+				decoration.addSuffix(" [" + extension.getGroups().size() + " Group(s)]");				
+			} else if(ele.getType() == ProjectItemType.GROUP) {
+				GroupNode groups = (GroupNode)ele;
+				decoration.addSuffix(" [" + groups.getChildren(this).length + " Component(s)]");				
+			} else if(ele.getType() == ProjectItemType.COMPONENT) {
+				ComponentNode component = (ComponentNode)ele;
+				
+				String modes = "";
+				for(UI5Mode mode : component.getComponent().getModes()) {
+					if(modes.isEmpty()) {
+						modes = mode.name();
+					} else {
+						modes = modes + "," + mode.name();
+					}
+				}			
+				
+				decoration.addSuffix(" [MODE:" + modes + " | HANDLER:" + component.getComponent().getHandlerType().name() + "| DATABOUND:" + component.getComponent().isDatabound() +"]");				
 			}
+			
+			if(color != null)
+				decoration.setForegroundColor(color);
 		}
 	}
 

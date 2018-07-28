@@ -2,11 +2,7 @@ package com.armin.sap.ds.builder.service;
 
 import java.net.URI;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.xml.bind.JAXBElement;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
@@ -36,7 +32,6 @@ public class ProjectService implements IProjectService {
 	private IModel _extensionModel;
 	private IModel _componentModel;
 	private IProject _project;
-	private Map<String, JAXBElement<Extension>> _extensions;
 	private IProjectFilesBuilderService _filesBuilderService;
 	private IServiceLocator _locator;
 	private ILog logger;
@@ -49,8 +44,7 @@ public class ProjectService implements IProjectService {
 		
 		logger.log(new Status(IStatus.OK, this.getClass().getName(), "ProjectService instance created"));
 		
-		_factory = new ObjectFactory();
-		_extensions = new HashMap<String, JAXBElement<Extension>>();
+		_factory = new ObjectFactory();		
 		_filesBuilderService = new ProjectFilesBuilderService();		
 	}
 	
@@ -61,7 +55,6 @@ public class ProjectService implements IProjectService {
 		_factory = new ObjectFactory();
 		_locator = locator;
 		locator.hasService(IHandlerService.class);
-		_extensions = new HashMap<String, JAXBElement<Extension>>();		
 		
 		_filesBuilderService = (IProjectFilesBuilderService) _locator.getService(IProjectFilesBuilderService.class);
 		
@@ -69,14 +62,6 @@ public class ProjectService implements IProjectService {
 			_filesBuilderService = new ProjectFilesBuilderService();
 		}
 	}	
-	
-//	public static ProjectService get() {
-//		if(_singleton == null) {
-//			_singleton = new ProjectService();
-//		}
-//		
-//		return _singleton;
-//	}
 	
 	public void setModels(IModel extensionModel, IModel componentModel) {
 		setExtensionModel(extensionModel);
@@ -113,13 +98,8 @@ public class ProjectService implements IProjectService {
 		return _project;		
 	}
 	
-	public Map<String, JAXBElement<Extension>> getExtensionsMap(){
-		return _extensions;
-	}
 	
 	public IProject createProject(String projectName, URI location) throws Exception{	
-		JAXBElement<Extension> rootElement = null;
-		
 		logger.log(new Status(IStatus.OK, this.getClass().getName(), "CreateProject() started"));
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Parameters Passed: Name=" + projectName + ", Location=" + location.getPath()));
 		
@@ -134,24 +114,16 @@ public class ProjectService implements IProjectService {
 		if(this._extensionModel != null) {
 			createExtension();	
 			
-			rootElement = _factory.createSdkExtension((Extension)_extensionModel);
+			_extensionModel = _filesBuilderService.saveExtension(_extensionModel, _project);
+			logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Extension [Id=" + _extensionModel.getId() + "] created and saved!"));
 			
-			rootElement = _filesBuilderService.saveExtension(_extensionModel, _project, rootElement);
-			_extensions.put(_extensionModel.getId(), rootElement);
-			
-			if(rootElement == null) {
-				logger.log(new Status(IStatus.WARNING, this.getClass().getName(), "Unable to save Extension [Id=" + _extensionModel.getId() + "]"));
-				return null;
-			} else {
-				logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Extension [Id=" + _extensionModel.getId() + "] created and saved!"));
-			}
 		} else {
 			logger.log(new Status(IStatus.WARNING, this.getClass().getName(), "Extension model is empty, no extension will be created"));
 		}
 		
 		if(this._componentModel != null) {
 			createComponent(_extensionModel, _componentModel);
-			_componentModel = _filesBuilderService.saveComponent(_componentModel, _extensionModel, _project, rootElement);
+			_componentModel = _filesBuilderService.saveComponent(_componentModel, _extensionModel, _project);
 			
 			//Process the groups related to components available in current extension
 			//	1. Get group id/name from the current 'Component' node
@@ -162,7 +134,7 @@ public class ProjectService implements IProjectService {
 			//			and save it under the 'Groups' preferences
 			//Group group = _filesBuilderService.buildAndSaveGroup(((Component)_componentModel).getGroup(), _extensionModel, _project, rootElement);
 			//((Extension)_extensionModel).getGroup().add(group);
-			_addNewGroup(((Component)_componentModel).getGroup(), _extensionModel, _project, rootElement);
+			_addNewGroup(((Component)_componentModel).getGroup(), _extensionModel, _project);
 			//Insert "RequireJS" node in contribution.xml file and create JS file: res/js/"component_name".js
 			List<UI5Mode> modes = ((Component)_componentModel).getModes();			
 			RequireJSType jsNode = _factory.createRequireJSType();
@@ -181,10 +153,7 @@ public class ProjectService implements IProjectService {
 			
 			logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Component [Id=" + _componentModel.getId() + "] created and saved!"));
 			if(_componentModel != null) {				
-				_extensions.remove(_extensionModel.getId());
-				_extensions.put(_extensionModel.getId(), rootElement);
-				
-				_filesBuilderService.updateExtension(_componentModel, _extensionModel, _project, rootElement);
+				_filesBuilderService.updateExtension(_componentModel, _extensionModel, _project);
 				
 				logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Extension [Id=" + _extensionModel.getId() + "] updated with Component [ID=" + _componentModel.getId() + "] data"));
 			} else {
@@ -237,11 +206,7 @@ public class ProjectService implements IProjectService {
 			this.setExtensionModel(extensionModel);
 			this.createExtension();
 			
-			JAXBElement<Extension>  rootElement = _factory.createSdkExtension((Extension)_extensionModel);
-			
-			_extensions.put(_extensionModel.getId(), rootElement);
-			
-			rootElement = _filesBuilderService.saveExtension(extensionModel, _project, rootElement);
+			extensionModel = _filesBuilderService.saveExtension(extensionModel, _project);
 			
 			logger.log(new Status(IStatus.INFO, this.getClass().getName(), "AddNewExtension() completed"));
 			return _extensionModel;
@@ -267,9 +232,8 @@ public class ProjectService implements IProjectService {
 			this.setExtensionModel(extensionModel);
 			this.createComponent(extensionModel, componentModel);
 			
-			JAXBElement<Extension> rootElement = this.getProjectItemsRoot(_extensionModel.getId());
+			_componentModel = _filesBuilderService.saveComponent(_componentModel, _extensionModel, _project);
 			
-			_componentModel = _filesBuilderService.saveComponent(_componentModel, _extensionModel, _project, rootElement);
 			if(_componentModel != null) {
 				
 				((Extension)_extensionModel).getComponent().add((Component)_componentModel);
@@ -277,11 +241,9 @@ public class ProjectService implements IProjectService {
 				logger.log(new Status(IStatus.INFO, this.getClass().getName(), 
 						"Component [ID=" + _componentModel.getId() + "] saved under Extension [ID=" + _extensionModel.getId() + ", Project=" + _project.getName() + "]"));
 			
-				rootElement = _filesBuilderService.updateExtension(_componentModel, _extensionModel, _project, rootElement);
-				if(rootElement != null) {
+				_extensionModel = _filesBuilderService.updateExtension(_componentModel, _extensionModel, _project);
+				if(_componentModel != null) {
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Extension [ID=" + _extensionModel.getId() + ", Project=" + _project.getName() + " ] updated with new Component [ID=" + _componentModel.getId() + "]"));
-					_extensions.remove(extensionModel.getId());
-					_extensions.put(extensionModel.getId(), rootElement);
 					return _componentModel;
 				} else {
 					logger.log(new Status(IStatus.WARNING, this.getClass().getName(), "Unable to update Extension [ID=" + _extensionModel.getId() + ", Project=" + _project.getName() + " ] with new Component [ID=" + _componentModel.getId() + "] details"));
@@ -297,18 +259,6 @@ public class ProjectService implements IProjectService {
 		return this.addNewComponent(componentModel, extensionModel);
 	}
 	
-	public IModel addNewComponent(IModel componentModel, String extId) throws Exception{
-		return addNewComponent(componentModel, this.getExtension(extId));
-	}
-	
-	public IModel addNewComponent(IModel componentModel, String extensionId, IProject project) throws Exception{
-		return addNewComponent(componentModel, this.getExtension(extensionId), project);
-	}
-
-//	private void addFilesToProjectStructure() {			
-//		ProjectFilesBuilderService.getInstance().setupAllFiles(_extensionModel, _componentModel, _project, _extensions);
-//	}
-
 	private void addFoldersToProjectStructure(IProject project, String[] paths) throws Exception{
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Add folders to project ["+project.getName() + "] started"));
 		for(String path: paths) {
@@ -318,16 +268,6 @@ public class ProjectService implements IProjectService {
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Folder creation completed"));
 	}
 	
-	public Extension getExtension(String id){
-		JAXBElement<Extension> ext = _extensions.get(id);
-		return ext.getValue();		
-	}
-	
-	public JAXBElement<Extension> getProjectItemsRoot(String id){
-		JAXBElement<Extension> ext = _extensions.get(id);
-		return ext;
-	}
-
 	private void addNature(IProject project) throws Exception{
 		if(!project.hasNature(DesignStudioProjectNature.NATURE_ID)) {
 			IProjectDescription description = project.getDescription();
@@ -384,19 +324,15 @@ public class ProjectService implements IProjectService {
 
 	@Override
 	public IModel addNewGroup(String groupName, IModel extensionModel, IProject project) {
-		JAXBElement<Extension> rootElement = this.getProjectItemsRoot(extensionModel.getId());
-		IModel group = _addNewGroup(groupName, extensionModel, project, rootElement);
+		IModel group = _addNewGroup(groupName, extensionModel, project);
 		
-		_extensions.remove(extensionModel.getId());
-		_extensions.put(extensionModel.getId(), rootElement);
-		
-		_filesBuilderService.updateExtension(null, extensionModel, project, rootElement);
+		_filesBuilderService.updateExtension(null, extensionModel, project);
 		return group;
 	}
 	
-	private IModel _addNewGroup(String groupName, IModel extensionModel, IProject project, JAXBElement<Extension> rootElement) {
+	private IModel _addNewGroup(String groupName, IModel extensionModel, IProject project) {
 		//JAXBElement<Extension> rootElement = this.getProjectItemsRoot(extensionNode.getId());
-		Group group = _filesBuilderService.buildAndSaveGroup(groupName, extensionModel, project, rootElement);
+		Group group = _filesBuilderService.buildAndSaveGroup(groupName, extensionModel, project);
 		((Extension)_extensionModel).getGroup().add(group);		
 		return group;
 	}
