@@ -97,7 +97,7 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 	public void removeExtension(String id) {
 		if(id != null) {
 			for(IProjectItemNode node : _children) {
-				if(((ExtensionNode)node).getExtension().getId().equals(id)){
+				if(((ExtensionNode)node).getExtension().getId().toUpperCase().equals(id.toUpperCase())){
 					_children.remove(node);
 				}
 			}
@@ -127,7 +127,7 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 	public boolean exists(String extensionId) {
 		for(IProjectItemNode extension : _children) {
 			if(((ExtensionNode)extension).getExtension()
-							.getId().equals(extensionId)) {
+							.getId().toUpperCase().equals(extensionId.toUpperCase())) {
 				return true;
 			}
 		}
@@ -150,7 +150,7 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 		if(exists(id)) {
 			for(IProjectItemNode node : _children) {
 				Extension ext = ((ExtensionNode)node).getExtension();
-				if(ext.getId().equals(id))
+				if(ext.getId().toUpperCase().equals(id.toUpperCase()))
 					return ext;
 			}
 		}

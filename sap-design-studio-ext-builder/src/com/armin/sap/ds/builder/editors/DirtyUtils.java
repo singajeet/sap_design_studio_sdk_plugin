@@ -1,12 +1,15 @@
 package com.armin.sap.ds.builder.editors;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 public class DirtyUtils {
@@ -25,13 +28,31 @@ public class DirtyUtils {
 				text.addVerifyListener(new VerifyListenerImpl(listener));
 			} else if(control instanceof List) {
 				List list = (List)control;
-				list.addSelectionListener(new SelectionListenerImpl(listener));
+				list.addListener(SWT.Modify, new ListenerImpl(listener));
+				//list.addSelectionListener(new SelectionListenerImpl(listener));
 			}
 			else {
 				throw new UnsupportedOperationException("Not support for " + control.getClass().getSimpleName());
 			}
 		}
 	}
+	
+	static class ListenerImpl implements Listener {
+
+		private DirtyListener listener;
+		
+		public ListenerImpl(DirtyListener listener) {
+			this.listener = listener;
+		}
+		
+		@Override
+		public void handleEvent(Event event) {
+			listener.fireDirty();
+
+		}
+
+	}
+
 	
 	static class SelectionListenerImpl implements SelectionListener{
 

@@ -60,4 +60,5 @@ public interface IDEConstants {
 	String GROUPS = "groups";
 	String GROUP_CLOSE_TAG = "</group>";
 	String DEFAULT_VALUE_CLOSE_TAG = "</defaultValue>";
+	String EMPTY = "<Empty>";
 }

@@ -29,25 +29,25 @@ public class ProjectServiceSlave implements IProjectService {
 //		return _singleton;
 //	}
 	
-	public void setModels(IModel extensionModel, IModel componentModel) {
-		_parentService.setModels(extensionModel, componentModel);
-	}
-	
-	public IModel getExtensionModel() {
-		return _parentService.getExtensionModel();
-	}
-	
-	public IModel getComponentModel() {
-		return _parentService.getComponentModel();
-	}
-	
+//	public void setModels(IModel extensionModel, IModel componentModel) {
+//		_parentService.setModels(extensionModel, componentModel);
+//	}
+//	
+//	public IModel getExtensionModel() {
+//		return _parentService.getExtensionModel();
+//	}
+//	
+//	public IModel getComponentModel() {
+//		return _parentService.getComponentModel();
+//	}
+//	
 	public IProject getProject() {
 		return _parentService.getProject();		
 	}
-	
-	public IProject createProject(String projectName, URI location) throws Exception{		
-		return _parentService.createProject(projectName, location);
-	}
+//	
+//	public IProject createProject(String projectName, URI location) throws Exception{		
+//		return _parentService.createProject(projectName, location);
+//	}
 	
 	public IProject createProject(String projectName, URI location, IModel extensionModel, IModel componentModel) throws Exception{		
 		return _parentService.createProject(projectName, location, extensionModel, componentModel);
@@ -72,6 +72,16 @@ public class ProjectServiceSlave implements IProjectService {
 		@Override
 	public IModel addNewGroup(String groupName, IModel extensionNode, IProject project) {
 		return _parentService.addNewGroup(groupName, extensionNode, project);		
+	}
+		
+	public IModel updateExtension(IModel extensionModel, IProject project) {
+		return _parentService.updateExtension(extensionModel, project);
+	}
+
+	@Override
+	public void createExtension(IModel model) throws Exception {
+		// TODO Auto-generated method stub
+		_parentService.createExtension(model);
 	}
 
 }

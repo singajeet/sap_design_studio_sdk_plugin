@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
+import com.armin.sap.ds.builder.api.common.IDEConstants;
 import com.armin.sap.ds.builder.api.models.BackendSystemType;
 import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.api.models.Descriptable;
@@ -62,9 +63,9 @@ public class ProjectFilesReaderService implements IProjectFilesReaderService {
 						validateAndFix(components.get(i));
 					} else {
 						Component component = new Component();
-						component.setId("<empty>");
-						component.setName("<Empty>");
-						component.setTitle("<Empty>");
+						component.setId(IDEConstants.EMPTY.toLowerCase());
+						component.setName(IDEConstants.EMPTY);
+						component.setTitle(IDEConstants.EMPTY);
 						
 						components.set(i, component);
 					}
@@ -76,9 +77,9 @@ public class ProjectFilesReaderService implements IProjectFilesReaderService {
 						validateAndFix(groups.get(i));
 					} else {
 						Group group = new Group();						
-						group.setId("default");
-						group.setName("Default");
-						group.setTitle("Default");
+						group.setId(IDEConstants.DEFAULT.toUpperCase());
+						group.setName(IDEConstants.DEFAULT.toUpperCase());
+						group.setTitle(IDEConstants.DEFAULT.toUpperCase());
 						
 						groups.set(i, group);
 					}
@@ -94,13 +95,13 @@ public class ProjectFilesReaderService implements IProjectFilesReaderService {
 				List<String> css = comp.getCssInclude();
 				for(int i=0; i < css.size(); i++) {
 					if(css.get(i) == null) {
-						css.set(i, "<Empty>");
+						css.set(i, IDEConstants.EMPTY);
 					}
 				}
 				
 				String group = comp.getGroup();
 				if(group == null) {
-					comp.setGroup("Default");
+					comp.setGroup(IDEConstants.DEFAULT.toUpperCase());
 				}
 				
 				HandlerTypes handler = comp.getHandlerType();
@@ -111,7 +112,7 @@ public class ProjectFilesReaderService implements IProjectFilesReaderService {
 				List<String> js =comp.getJsInclude();
 				for(int i=0; i < js.size(); i++) {
 					if(js.get(i) == null) {
-						js.set(i, "<Empty>");
+						js.set(i, IDEConstants.EMPTY);
 					}
 				}
 				
@@ -126,10 +127,10 @@ public class ProjectFilesReaderService implements IProjectFilesReaderService {
 				for(int i=0; i < properties.size(); i++) {
 					if(properties.get(i) == null) {
 						Property property = new Property();
-						property.setId("<empty>");
-						property.setName("<Empty>");
-						property.setTitle("<Empty>");
-						property.setGroup("Default");
+						property.setId(IDEConstants.EMPTY.toLowerCase());
+						property.setName(IDEConstants.EMPTY);
+						property.setTitle(IDEConstants.EMPTY);
+						property.setGroup(IDEConstants.EMPTY);
 						property.setType(PropertyType.STRING);
 						property.setVisible(false);
 						
@@ -143,9 +144,9 @@ public class ProjectFilesReaderService implements IProjectFilesReaderService {
 				for(int i=0; i < jsType.size(); i++) {
 					if(jsType.get(i) == null) {
 						RequireJSType rjs = new RequireJSType();
-						rjs.setId("<empty>");
-						rjs.setName("<Empty>");
-						rjs.setValue("<Empty>");
+						rjs.setId(IDEConstants.EMPTY.toLowerCase());
+						rjs.setName(IDEConstants.EMPTY);
+						rjs.setValue(IDEConstants.EMPTY);
 						jsType.set(i, rjs);
 					} else {
 						validateAndFix(jsType.get(i));
@@ -156,10 +157,10 @@ public class ProjectFilesReaderService implements IProjectFilesReaderService {
 				for(int i=0; i < stds.size(); i++) {
 					if(stds.get(i) == null) {
 						StdInclude std = new StdInclude();
-						std.setId("<empty>");
-						std.setName("<Empty>");
-						std.setTitle("<Empty>");
-						std.setKind("<Empty>");
+						std.setId(IDEConstants.EMPTY.toLowerCase());
+						std.setName(IDEConstants.EMPTY);
+						std.setTitle(IDEConstants.EMPTY);
+						std.setKind(IDEConstants.EMPTY);
 						
 						stds.set(i, std);
 					} else {
@@ -195,10 +196,10 @@ public class ProjectFilesReaderService implements IProjectFilesReaderService {
 	private void fixExtension(Extension ext) {
 		//Process Extension attributes
 		if(ext.getName() == null || ext.getName().isEmpty()) {
-			ext.setName(ext.getId());
+			ext.setName(ext.getId().toUpperCase());
 		}
 		if(ext.getTitle() == null || ext.getTitle().isEmpty()) {
-			ext.setTitle(ext.getId());
+			ext.setTitle(ext.getId().toUpperCase());
 		}
 		if(ext.getVersion() == null || ext.getVersion().isEmpty()) {
 			ext.setVersion("1.0");

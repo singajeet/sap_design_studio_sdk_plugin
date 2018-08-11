@@ -61,7 +61,7 @@ public abstract class AbstractBaseEditor extends FormPage {
 		this.firePropertyChange(0);
 		
 		Control[] controls = this.registryDirtyControls();
-		DirtyListener listener = new DirtyListenerImpl();
+		DirtyListener listener = new DirtyListenerImpl(this);
 		DirtyUtils.registryDirty(listener, controls);
 	}
 	
@@ -70,14 +70,6 @@ public abstract class AbstractBaseEditor extends FormPage {
 	protected abstract void createPartControl2(Composite composite);
 	
 	protected abstract Control[] registryDirtyControls();
-	
-	class DirtyListenerImpl implements DirtyListener{
-		
-		@Override
-		public void fireDirty() {
-			AbstractBaseEditor.this.setDirty(true);
-		}
-	}
 
 }
 

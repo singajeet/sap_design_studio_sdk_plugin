@@ -461,6 +461,17 @@ public class ComponentControl extends Composite {
 
 	}
 	
+	public void setSelectedGroup(String groupId) {
+		if(comboGroup != null) {
+			for(int i=0; i < comboGroup.getItemCount(); i++) {
+				if(comboGroup.getItem(i).toUpperCase().equals(groupId.toUpperCase())) {
+					comboGroup.select(i);
+					return;
+				}
+			}
+		}
+	}
+	
 	public void addComponentChangedListener(IComponentChangedListener listener) {
 		if(listener != null)
 			_listeners.add(listener);

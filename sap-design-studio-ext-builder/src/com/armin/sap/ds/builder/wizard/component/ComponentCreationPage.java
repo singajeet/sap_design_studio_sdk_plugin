@@ -182,7 +182,10 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 			if(selectedObj instanceof GroupNode) {
 				_componentPackage = ((ExtensionNode)((GroupNode)selectedObj).getParent(this)).getExtension().getId();
 				_parentTreeNode = (GroupNode)selectedObj;
-				txtPackage.setText(_componentPackage);				
+				txtPackage.setText(_componentPackage);		
+				if(componentCtl != null) {
+					componentCtl.setSelectedGroup(_parentTreeNode.getModel().getId());
+				}
 			}
 		}
 	}

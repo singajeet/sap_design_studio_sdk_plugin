@@ -6,7 +6,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 
-public class LabelProvider implements ILabelProvider {
+public class NavigatorLabelProvider implements ILabelProvider {
 
 	@Override
 	public void addListener(ILabelProviderListener listener) {
@@ -36,7 +36,7 @@ public class LabelProvider implements ILabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
-		//Logger.debug("LabelProvider.getImage: " + element.getClass().getName());
+		//Logger.debug("NavigatorLabelProvider.getImage: " + element.getClass().getName());
         Image image = null;
  
         if (IProjectItemNode.class.isInstance(element)) {

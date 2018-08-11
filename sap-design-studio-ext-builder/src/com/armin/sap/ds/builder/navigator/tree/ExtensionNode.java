@@ -11,6 +11,8 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.common.IDEConstants;
+import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.Group;
 import com.armin.sap.ds.builder.preferences.Settings;
@@ -33,6 +35,10 @@ public class ExtensionNode extends GenericFileNode {
 	
 	public Extension getExtension() {
 		return (Extension)_item;
+	}
+	
+	public void setExtension(Extension item) {
+		this._item = item;
 	}
 	
 	public List<Group> getGroups(){
@@ -76,7 +82,7 @@ public class ExtensionNode extends GenericFileNode {
 	
 	@Override
 	public String getName() {
-		return ((Extension)_item).getId() + " - (" + ((Extension)_item).getTitle() + ")";
+		return ((Extension)_item).getId() + "." + ((Extension)_item).getTitle();
 	}
 		
 	@Override
@@ -102,6 +108,19 @@ public class ExtensionNode extends GenericFileNode {
 		    			Group group = groups.get(i);
 		    			IProjectItemNode groupNode = new GroupNode(this.getProject(), group, this);
 		    			children.add(groupNode);
+		    		}
+		    		
+		    		if(this.getGroup("DEFAULT") == null) {
+			    		for(Component comp : extension.getComponent()) {
+			    			if(comp.getGroup().toUpperCase().equals(IDEConstants.DEFAULT.toUpperCase())) {
+			    				Group group = new Group();
+				    			group.setId(IDEConstants.DEFAULT.toUpperCase());
+				    			group.setTitle(IDEConstants.DEFAULT.toUpperCase());
+				    			group.setTooltip(IDEConstants.DEFAULT.toUpperCase());
+				    			IProjectItemNode groupNode = new GroupNode(this.getProject(), group, this);
+				    			children.add(groupNode);
+			    			}
+			    		}
 		    		}
 	    		} else {
 	    			Group group = new Group();

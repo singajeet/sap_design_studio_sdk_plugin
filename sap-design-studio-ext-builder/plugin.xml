@@ -445,10 +445,10 @@
          point="org.eclipse.ui.navigator.navigatorContent">
       <navigatorContent
             activeByDefault="true"
-            contentProvider="com.armin.sap.ds.builder.navigator.providers.ContentProvider"
+            contentProvider="com.armin.sap.ds.builder.navigator.providers.NavigatorContentProvider"
             icon="images/sap_18.png"
             id="com.armin.sap.ds.builder.project.navigator.dscontent"
-            labelProvider="com.armin.sap.ds.builder.navigator.providers.LabelProvider"
+            labelProvider="com.armin.sap.ds.builder.navigator.providers.NavigatorLabelProvider"
             priority="normal"
             name="Design Studio Navigator Content">         
          <triggerPoints>
@@ -566,6 +566,22 @@
             icon="images/project_28x28.png"
             id="com.armin.sap.ds.builder.editors.generic_editor"
             name="SAP Design Studio Generic Editor">
+      </editor>
+      <editor
+            class="com.armin.sap.ds.builder.editors.DesignStudioExtensionsEditor"
+            id="com.armin.sap.ds.builder.editors.DesignStudioExtensionsEditor"
+            name="Extension Editor">
+      </editor>
+      <editor
+            class="com.armin.sap.ds.builder.editors.DSEditorMainPage"
+            id="com.armin.sap.ds.builder.editors.DSEditorMainPage"
+            name="Main Page">
+      </editor>
+      <editor
+            class="com.armin.sap.ds.builder.editors.ExtEditor"
+            icon="images/extension_16x16.png"
+            id="com.armin.sap.ds.builder.editors.ExtEditor"
+            name="Extension Editor">
       </editor>
    </extension>
    <extension

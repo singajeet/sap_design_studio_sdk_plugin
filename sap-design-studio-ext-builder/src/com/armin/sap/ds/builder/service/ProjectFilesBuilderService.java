@@ -14,6 +14,7 @@ import javax.xml.bind.Marshaller;
 
 import org.apache.commons.text.StringSubstitutor;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ILog;
@@ -69,10 +70,17 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		if(!extensionFile.exists()) {
 			try {
 				
+//				String folderName = extensionModel.getId();
+//				IFolder folder = project.getFolder(folderName);
+//				if(!folder.exists()) {
+//					folder.create(true, true, null);
+//				}
+				
 				boolean saved = _saveExtension(extensionFile, extensionModel);
 				
 				if(saved) {
 					//prepare manifest file under meta-inf folder
+					
 					IFile manifest = project.getFile(extensionModel.getId() + "/META-INF/manifest.mf");
 					_saveManifest(manifest, extensionModel);
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Save extension finished"));
@@ -286,14 +294,14 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		//Check if there is an group attribute in component and create new group if it don't exists
 		//String groupName = ((Component)componentNode).getGroup().toUpperCase();
 		if(groupId != null) {
-			groupId = groupId.toLowerCase();
-			if(!groupId.equals(IDEConstants.DEFAULT) && !groupId.equals(IDEConstants.TECHNICAL_COMPONENT)) {
+			groupId = groupId.toUpperCase();
+			if(!groupId.equals(IDEConstants.DEFAULT.toUpperCase()) && !groupId.equals(IDEConstants.TECHNICAL_COMPONENT.toUpperCase())) {
 				logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group type: CUSTOM - " + groupId));
 				Group group = null;
 				
 				//check whether the group is already added in the current extension node
 				for(Group g : ((Extension)extensionModel).getGroup()) {
-					if(g.getId().toLowerCase().equals(groupId)) {
+					if(g.getId().toUpperCase().equals(groupId)) {
 						group = g;
 						logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group found in Extension model instance"));
 						if(!isGroupSavedInPreferences(groupId)) {
@@ -309,11 +317,11 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 				if(rawGroups != null)
 					groups = rawGroups.split(";");
 				else
-					groups = new String[] {IDEConstants.DEFAULT, IDEConstants.TECHNICAL_COMPONENT};
+					groups = new String[] {IDEConstants.DEFAULT.toUpperCase(), IDEConstants.TECHNICAL_COMPONENT.toUpperCase()};
 									
 				if(group == null) {	
 					for(String g : groups) {
-						g = g.toLowerCase();
+						g = g.toUpperCase();
 						if(g.equals(groupId)) {
 							logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group found in already saved groups list"));
 							group = new Group();
@@ -370,9 +378,9 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	private void saveGroupInPreferences(String groupId) {
 		String rawGroups = Settings.store().get(Settings.FOR.GROUPS_LIST);
 		if(rawGroups != null) {
-			rawGroups = rawGroups + ";" + groupId.toLowerCase();
+			rawGroups = rawGroups + ";" + groupId.toUpperCase();
 		} else {
-			rawGroups = groupId.toLowerCase();
+			rawGroups = groupId.toUpperCase();
 		}
 		Settings.store().set(Settings.FOR.GROUPS_LIST, rawGroups);
 	}
@@ -382,7 +390,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		if(rawGroups != null) {
 			String[] groups = rawGroups.split(";");
 			for(String group : groups) {
-				if(group.toLowerCase().equals(groupId.toLowerCase()))
+				if(group.toUpperCase().equals(groupId.toUpperCase()))
 					return true;
 			}
 		}

@@ -95,6 +95,11 @@ public class ComponentWizard extends Wizard implements INewWizard {
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "WorkspaceJob started: " + this.getName()));
 					
 					monitor.beginTask("Creating component - " + ((ComponentCreationPage)_pageOne).getModel().getId(), 2);
+					
+					if(((Component)component).getGroup() == null || ((Component)component).getGroup().isEmpty()) {
+						((Component)component).setGroup(_parentTreeNode.getModel().getId().toUpperCase());
+					}
+					
 					IModel t_component = _projectService.addNewComponent(component, ((ExtensionNode)_parentTreeNode.getParent(this)).getExtension(), project);
 					monitor.worked(1);
 					
@@ -102,6 +107,10 @@ public class ComponentWizard extends Wizard implements INewWizard {
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), 
 							"Adding New Component [Id: " + component.getId() + "] to Group [Id: " + ((GroupNode)_parentTreeNode).getModel().getId() + "]"));
 					_parentTreeNode.addComponent((Component)t_component);
+					
+					if(_parentTreeNode.exists("No components found!") && _parentTreeNode.getChildren(this).length > 1) {
+						_parentTreeNode.removeItem("No components found!");
+					}
 					monitor.worked(1);
 					
 					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);

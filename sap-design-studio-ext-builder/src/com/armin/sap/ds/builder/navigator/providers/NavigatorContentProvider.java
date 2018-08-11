@@ -25,13 +25,13 @@ import com.armin.sap.ds.builder.DesignStudioProjectNature;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 import com.armin.sap.ds.builder.navigator.tree.ProjectNode;
 
-public class ContentProvider implements ITreeContentProvider, IResourceChangeListener {
+public class NavigatorContentProvider implements ITreeContentProvider, IResourceChangeListener {
 
 	private static final Object[] NO_CHILDREN = {};
     Viewer _viewer;
     private Map<String, Object> _wrapperCache = new HashMap<String, Object>();
     
-    public ContentProvider() {
+    public NavigatorContentProvider() {
     	ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
     }
     

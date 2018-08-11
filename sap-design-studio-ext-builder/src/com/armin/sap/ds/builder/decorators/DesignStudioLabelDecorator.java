@@ -45,6 +45,7 @@ public class DesignStudioLabelDecorator implements ILightweightLabelDecorator {
 	public void decorate(Object element, IDecoration decoration) {
 		IThemeManager theme = Activator.getDefault().getWorkbench().getThemeManager();
 		Color color = null;
+		
 		if(theme != null)
 			color = theme.getCurrentTheme().getColorRegistry().get("COLOR_DARK_YELLOW");
 		
@@ -57,12 +58,27 @@ public class DesignStudioLabelDecorator implements ILightweightLabelDecorator {
 			if(ele.getType() == ProjectItemType.EXTENSION_COLLECTION) {
 				ExtensionCollectionNode extensions = (ExtensionCollectionNode)ele;
 				decoration.addSuffix(" [" + extensions.getExtensions().size() + " Extension(s)]");
+				
 			} else if(ele.getType() == ProjectItemType.EXTENSION) {
 				ExtensionNode extension = (ExtensionNode)ele;
-				decoration.addSuffix(" [" + extension.getGroups().size() + " Group(s)]");				
+				int extensionChildCount = 0;
+				for(Object item : extension.getChildren(this)) {
+					IProjectItemNode itemNode = (IProjectItemNode)item;
+					if(itemNode.getType() == ProjectItemType.GROUP) {
+						extensionChildCount++;
+					}
+				}
+				decoration.addSuffix(" [" + extensionChildCount + " Group(s)]");				
 			} else if(ele.getType() == ProjectItemType.GROUP) {
+				int groupChildCount = 0;
 				GroupNode groups = (GroupNode)ele;
-				decoration.addSuffix(" [" + groups.getChildren(this).length + " Component(s)]");				
+				for(Object item : groups.getChildren(this)) {
+					IProjectItemNode itemNode = (IProjectItemNode)item;
+					if(itemNode.getType() == ProjectItemType.COMPONENT) {
+						groupChildCount++;
+					}
+				}
+				decoration.addSuffix(" [" + groupChildCount + " Component(s)]");				
 			} else if(ele.getType() == ProjectItemType.COMPONENT) {
 				ComponentNode component = (ComponentNode)ele;
 				
@@ -75,7 +91,9 @@ public class DesignStudioLabelDecorator implements ILightweightLabelDecorator {
 					}
 				}			
 				
-				decoration.addSuffix(" [MODE:" + modes + " | HANDLER:" + component.getComponent().getHandlerType().name() + "| DATABOUND:" + component.getComponent().isDatabound() +"]");				
+				decoration.addSuffix(" [MODE-" + modes + " | HANDLER-" 
+								+ component.getComponent().getHandlerType().name() 
+								+ "| DATABOUND-" + component.getComponent().isDatabound() +"]");				
 			}
 			
 			if(color != null)
