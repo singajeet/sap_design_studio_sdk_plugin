@@ -86,7 +86,6 @@ public class ExtensionWizard extends Wizard implements INewWizard {
 					logger.log(new Status(IStatus.OK, this.getClass().getName(), "WorkspaceJob has been started"));
 					
 					monitor.beginTask("Creating extension - " + ((ExtensionCreationPage)_pageOne).getModel().getId(), 2);
-					_projectService.createExtension(extension);
 					IModel model = _projectService.addNewExtension(extension, project);					
 					monitor.worked(1);
 					

@@ -14,7 +14,6 @@ import javax.xml.bind.Marshaller;
 
 import org.apache.commons.text.StringSubstitutor;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ILog;

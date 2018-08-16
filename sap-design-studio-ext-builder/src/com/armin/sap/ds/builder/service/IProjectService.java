@@ -12,8 +12,7 @@ public interface IProjectService {
 //	public IModel getComponentModel();
 	public IProject getProject();
 	//public IProject createProject(String projectName, URI location) throws Exception;
-	public IProject createProject(String projectName, URI location, IModel extensionModel, IModel componentModel) throws Exception;
-	public void createExtension(IModel model) throws Exception;
+	public IProject createProject(String projectName, URI location, IModel extensionModel, IModel componentModel) throws Exception;	
 	public IModel addNewExtension(IModel extensionModel) throws Exception;
 	public IModel addNewExtension(IModel extensionModel, IProject project) throws Exception;
 	public IModel addNewComponent(IModel componentModel, IModel extensionModel) throws Exception;

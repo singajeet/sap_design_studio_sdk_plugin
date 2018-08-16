@@ -445,10 +445,10 @@
          point="org.eclipse.ui.navigator.navigatorContent">
       <navigatorContent
             activeByDefault="true"
-            contentProvider="com.armin.sap.ds.builder.navigator.providers.NavigatorContentProvider"
+            contentProvider="com.armin.sap.ds.builder.providers.NavigatorContentProvider"
             icon="images/sap_18.png"
             id="com.armin.sap.ds.builder.project.navigator.dscontent"
-            labelProvider="com.armin.sap.ds.builder.navigator.providers.NavigatorLabelProvider"
+            labelProvider="com.armin.sap.ds.builder.providers.NavigatorLabelProvider"
             priority="normal"
             name="Design Studio Navigator Content">         
          <triggerPoints>

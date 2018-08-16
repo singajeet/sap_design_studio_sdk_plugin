@@ -1,4 +1,4 @@
-package com.armin.sap.ds.builder.navigator.providers;
+package com.armin.sap.ds.builder.providers;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.armin.sap.ds.builder.navigator.providers;
+package com.armin.sap.ds.builder.providers;
 
 import org.eclipse.ui.navigator.CommonActionProvider;
 

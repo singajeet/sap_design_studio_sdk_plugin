@@ -76,12 +76,6 @@ public class ProjectServiceSlave implements IProjectService {
 		
 	public IModel updateExtension(IModel extensionModel, IProject project) {
 		return _parentService.updateExtension(extensionModel, project);
-	}
-
-	@Override
-	public void createExtension(IModel model) throws Exception {
-		// TODO Auto-generated method stub
-		_parentService.createExtension(model);
-	}
+	}	
 
 }

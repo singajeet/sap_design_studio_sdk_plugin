@@ -1,6 +1,7 @@
 package com.armin.sap.ds.builder.editors;
 
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,20 +25,16 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPartConstants;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.ManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.armin.sap.ds.builder.Activator;
@@ -45,11 +42,11 @@ import com.armin.sap.ds.builder.actions.CreateNewExtensionAction;
 import com.armin.sap.ds.builder.actions.DeleteExtensionAction;
 import com.armin.sap.ds.builder.actions.SaveExtensionAction;
 import com.armin.sap.ds.builder.api.models.Extension;
-import com.armin.sap.ds.builder.navigator.providers.ExtensionEditorContentProvider;
-import com.armin.sap.ds.builder.navigator.providers.ExtensionEditorLabelProvider;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
+import com.armin.sap.ds.builder.providers.ExtensionEditorContentProvider;
+import com.armin.sap.ds.builder.providers.ExtensionEditorLabelProvider;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
 
@@ -69,16 +66,12 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 	private IAction saveExtension;
 	private IAction deleteExtension;
 	
-	private IHandlerService _handlerService;
-	private ICommandService _commandService;
 	private IProject _projectInput;
 	private ExtensionEditorInput _input;
-	//private List listExtensions;
 	private ExtensionCollectionNode _extensionCollection;
 	private IProjectService _projectService;
 	private Extension _currentSelectedExtension;
 	private ExtensionNode _currentSelectedExtensionNode;
-	private int _currentSelectedIndex = -1;
 	private ListViewer extensionsList;
 	private ExtensionEditorContentProvider _contentProvider;
 	private ExtensionEditorLabelProvider _labelProvider;
@@ -88,8 +81,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 		super.setInput(input);
 		this._input = (ExtensionEditorInput)input;
 		this._extensionCollection = (ExtensionCollectionNode) _input.getTreeNode();
-		//extensionsList.setInput(this._extensionCollection);
-		
+				
 		if(this._extensionCollection != null && this._extensionCollection.getExtensions().size() > 0) {
 			
 			if(extensionsList != null) {
@@ -115,9 +107,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 		_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
 		if(_projectService == null) {
 			_projectService = new ProjectService();
-		}
-		_commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-		_handlerService = (IHandlerService) PlatformUI.getWorkbench().getService(IHandlerService.class);
+		}				
 	}
 	
 	/**
@@ -130,9 +120,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 		_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
 		if(_projectService == null) {
 			_projectService = new ProjectService();
-		}
-		_commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-		_handlerService = (IHandlerService) PlatformUI.getWorkbench().getService(IHandlerService.class);
+		}				
 	}
 
 	/**
@@ -152,9 +140,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 		_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
 		if(_projectService == null) {
 			_projectService = new ProjectService();
-		}
-		_commandService = (ICommandService) PlatformUI.getWorkbench().getService(ICommandService.class);
-		_handlerService = (IHandlerService) PlatformUI.getWorkbench().getService(IHandlerService.class);
+		}				
 	}
 	
 	public void setProject(IProject project) {
@@ -175,7 +161,9 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 		toolkit.paintBordersFor(body);
 		managedForm.getForm().getBody().setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		Composite composite = new Composite(managedForm.getForm().getBody(), SWT.V_SCROLL);
+		
+		Composite composite = new Composite(managedForm.getForm().getBody(), SWT.V_SCROLL);				
+		
 		managedForm.getToolkit().adapt(composite);
 		managedForm.getToolkit().paintBordersFor(composite);
 		composite.setLayout(new GridLayout(1, false));
@@ -255,6 +243,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 		frmExtensions.updateToolBar();
 		frmExtensions.getHead().setSize(frmExtensions.getHead().getSize().x, 200);
 		
+		
 		Group groupExtensionsList = new Group(frmExtensions.getBody(), SWT.SHADOW_ETCHED_IN);
 		groupExtensionsList.setText("Extensions:");
 		groupExtensionsList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
@@ -269,13 +258,11 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 			extensionsList.setInput(this._extensionCollection);
 			_labelProvider = new ExtensionEditorLabelProvider();
 			extensionsList.setLabelProvider(_labelProvider);
-			
 		}
 		
 		extensionsList.getList().setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 1, 1));
-		
-		
 		extensionsList.addSelectionChangedListener(new ISelectionChangedListener() {
+
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -288,12 +275,8 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 						_currentSelectedExtension.setVendor(textExtensionVendor.getText());
 						_currentSelectedExtension.setEula(licenseText.getText());
 						
-						_currentSelectedExtensionNode.setExtension(_currentSelectedExtension);
-						
-						//_extensionCollection.getExtensions().set(_currentSelectedIndex, _currentSelectedExtensionNode);
-//						//listExtensions.setItem(_currentSelectedIndex, _currentSelectedExtension.getName()); 
-//						//listViewerExtensions.getList().setItem(_currentSelectedIndex, _currentSelectedExtension.getName());
-//						//listViewerExtensions.refresh();
+						_currentSelectedExtensionNode.setExtension(_currentSelectedExtension);						
+				
 					}					
 					
 				}
@@ -314,7 +297,6 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 							
 							_currentSelectedExtension = selectedExtension;
 							_currentSelectedExtensionNode = selectedExtensionNode;
-//							_currentSelectedIndex = index;
 						} else {
 							MessageDialog.openWarning(Activator.getDefault().getWorkbench().getDisplay().getActiveShell(), "Extension details not found", 
 																	"Unable to locate details of current selected extension in the list, "
@@ -371,14 +353,6 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 		textExtensionVendor.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		managedForm.getToolkit().adapt(textExtensionVendor, true, true);
 		
-		Label lblNewLabel = new Label(grpExtensionDetails, SWT.NONE);
-		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		managedForm.getToolkit().adapt(lblNewLabel, true, true);
-		lblNewLabel.setText("Components:");
-		
-		Hyperlink hprlnkSeeAllComponents = managedForm.getToolkit().createHyperlink(grpExtensionDetails, "See All Components", SWT.NONE);
-		managedForm.getToolkit().paintBordersFor(hprlnkSeeAllComponents);
-		
 		Composite composite_1 = new Composite(grpExtensionDetails, SWT.NONE);
 		GridLayout gl_composite_1 = new GridLayout(1, false);
 		composite_1.setLayout(gl_composite_1);
@@ -388,15 +362,20 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 		managedForm.getToolkit().adapt(composite_1);
 		managedForm.getToolkit().paintBordersFor(composite_1);
 		
-		ExpandableComposite xpndblcmpstEulaLicenseText = managedForm.getToolkit().createExpandableComposite(composite_1, ExpandableComposite.EXPANDED);
-		GridData xpndLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		xpndLayoutData.minimumHeight = 55;
-		xpndblcmpstEulaLicenseText.setLayoutData(xpndLayoutData);
+		ExpandableComposite xpndblcmpstEulaLicenseText = new ExpandableComposite(composite_1, SWT.BORDER ,ExpandableComposite.EXPANDED | ExpandableComposite.TWISTIE); //managedForm.getToolkit().createExpandableComposite(composite_1, ExpandableComposite.EXPANDED);
+		GridData xpndLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);		
+		xpndLayoutData.minimumHeight = 55;		
+		GridLayout eulaxpndblLayout = new GridLayout();
 		
+		xpndblcmpstEulaLicenseText.setLayout(eulaxpndblLayout);
+		xpndblcmpstEulaLicenseText.setLayoutData(xpndLayoutData);
+				
 		managedForm.getToolkit().paintBordersFor(xpndblcmpstEulaLicenseText);
-		xpndblcmpstEulaLicenseText.setText("Eula License Text:");
-		licenseText = new StyledText(xpndblcmpstEulaLicenseText, SWT.WRAP | SWT.V_SCROLL);
+		xpndblcmpstEulaLicenseText.setText("Eula License");
+		licenseText = new StyledText(xpndblcmpstEulaLicenseText, SWT.WRAP | SWT.V_SCROLL | SWT.BORDER);
 		GridData licenseLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		licenseLayoutData.grabExcessHorizontalSpace = true;
+		licenseLayoutData.grabExcessVerticalSpace = true;
 		licenseLayoutData.minimumHeight = 50;
 		licenseText.setLayoutData(licenseLayoutData);
 		
@@ -404,7 +383,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 
 		DirtyListenerImpl dirtyListener = new DirtyListenerImpl(this);
 		DirtyUtils.registryDirty(dirtyListener, textExtensionTitle, textExtensionVendor,
-												textExtensionVersion, licenseText, extensionsList.getControl());
+												textExtensionVersion, licenseText);
 	}
 	
 	@Override
@@ -420,34 +399,14 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 						_projectService.updateExtension(extension, _projectInput);
 					}
 				}
+				
+				this.setDirty(false);
 			
 		}catch(Exception e) {
 			MessageDialog.openError(this.getSite().getShell(), 
 					"Error", "Error while saving extension: " + e.getMessage());
 		}
-	}
-	
-//	protected DataBindingContext initDataBindings() {
-//		DataBindingContext bindingContext = new DataBindingContext();
-//		//
-//		IObservableValue observeTextTextProjectNameObserveWidget = WidgetProperties.text(SWT.NONE).observe(textProjectName);
-//		IObservableValue name_projectObserveValue = PojoProperties.value("name").observe(_package);
-//		bindingContext.bindValue(observeTextTextProjectNameObserveWidget, name_projectObserveValue, null, null);
-//		//
-//		IObservableValue observeTextTextProjectLocationObserveWidget = WidgetProperties.text(SWT.Modify).observe(textProjectLocation);
-//		IObservableValue version_packageObserveValue = PojoProperties.value("version").observe(_package);
-//		bindingContext.bindValue(observeTextTextProjectLocationObserveWidget, version_packageObserveValue, null, null);
-//		//
-//		IObservableValue observeTextTextPackageURLObserveWidget = WidgetProperties.text(SWT.Modify).observe(textProjectModificationDate);
-//		IObservableValue url_packageObserveValue = PojoProperties.value("url").observe(_package);
-//		bindingContext.bindValue(observeTextTextPackageURLObserveWidget, url_packageObserveValue, null, null);
-//		//
-//		IObservableList itemsListExtensionsObserveWidget = WidgetProperties.items().observe(listExtensions);
-//		IObservableList extensions_packageObserveList = PojoProperties.list("extensions").observe(_package);
-//		bindingContext.bindList(itemsListExtensionsObserveWidget, extensions_packageObserveList, null, null);
-//		//
-//		return bindingContext;
-//	}
+	}	
 
 	@Override
 	protected void createPartControl2(Composite composite) {
@@ -461,7 +420,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 	protected Control[] registryDirtyControls() {
 		return new Control[] {textProjectName, textProjectLocation, textProjectModificationDate,
 			 	textExtensionId, textExtensionTitle, textExtensionVendor,
-				textExtensionVersion, licenseText, extensionsList.getControl()};
+				textExtensionVersion, licenseText};
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -495,6 +454,7 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 			
 			if(extensionsList.getInput() == null)
 				extensionsList.setInput(this._extensionCollection);
+			
 		}
 		
 		if(nodes != null) {
@@ -504,35 +464,17 @@ public class ExtensionEditor extends AbstractBaseEditor implements IReusableDSEd
 			textExtensionVendor.setText(ext.getVendor());
 			textExtensionVersion.setText(ext.getVersion());
 			licenseText.setText(ext.getEula());
-			
-			
-			
-////			this._currentSelectedExtensionNode = (ExtensionNode)this._extensionCollection.getExtensions().get(0);
-////			this._currentSelectedExtension = _currentSelectedExtensionNode.getExtension();
-////			this._currentSelectedIndex = 0;
-////			listExtensions.select(0);
-////			listViewerExtensions.getList().select(0);
-//			
-//			this.setDirty(false);
 		}
 	}
 	
 	public String getExtensionInfo() {
 		this.getEditorInput();
-//		ExtensionCollectionNode pkg = ip.getExtensions();
-//		
-//		if(pkg == null)
-//			return "";
-//		
-//		String info = pkg.getProjectName() + " - " + pkg.getExtensions().size() + " (Extensions)";
-//		return info;
-		return "";
+		List<IProjectItemNode> pkg = _extensionCollection.getExtensions();
+		
+		if(pkg == null)
+			return "";
+		
+		String info = "Project: " + _projectInput.getName() + " [" + pkg.size() + " Extension(s)]";
+		return info;		
 	}
 }
-
-
-
-
-
-
-

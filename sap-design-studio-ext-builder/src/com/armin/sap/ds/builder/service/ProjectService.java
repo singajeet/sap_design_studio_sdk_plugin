@@ -185,7 +185,7 @@ public class ProjectService implements IProjectService {
 //	}
 	
 	
-	public void createExtension(IModel model) throws Exception {
+	private void createExtension(IModel model) throws Exception {
 		
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "CreateExtension() started"));
 		
@@ -207,7 +207,7 @@ public class ProjectService implements IProjectService {
 		
 		if(_project != null && extensionModel != null) {
 //			this.setExtensionModel(extensionModel);
-//			this.createExtension(extensionModel);
+			this.createExtension(extensionModel);
 			
 			extensionModel = _filesBuilderService.saveExtension(extensionModel, _project);
 			

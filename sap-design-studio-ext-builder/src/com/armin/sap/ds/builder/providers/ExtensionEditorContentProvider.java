@@ -1,4 +1,4 @@
-package com.armin.sap.ds.builder.navigator.providers;
+package com.armin.sap.ds.builder.providers;
 
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -9,7 +9,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
@@ -38,11 +37,7 @@ public class ExtensionEditorContentProvider implements IStructuredContentProvide
 				try {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
-							ListViewer viewer = (ListViewer)_viewer;
-							
-//							TreePath[] treePaths = viewer.getExpandedTreePaths();
-//							viewer.refresh();
-//							viewer.setExpandedTreePaths(treePaths);	
+							//ListViewer viewer = (ListViewer)_viewer;
 						}
 					});
 					return Status.OK_STATUS;
@@ -75,6 +70,4 @@ public class ExtensionEditorContentProvider implements IStructuredContentProvide
 		
 		return null;
 	}
-    
-	
 }

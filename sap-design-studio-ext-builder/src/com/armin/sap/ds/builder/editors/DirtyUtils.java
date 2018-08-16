@@ -1,14 +1,14 @@
 package com.armin.sap.ds.builder.editors;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.custom.VerifyKeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
@@ -22,16 +22,11 @@ public class DirtyUtils {
 		for(Control control : controls) {
 			if(control instanceof Text) {
 				Text text = (Text)control;
-				text.addVerifyListener(new VerifyListenerImpl(listener));
+				text.addModifyListener(new ModifyListenerImpl(listener));				
 			} else if(control instanceof StyledText) {
 				StyledText text = (StyledText)control;
-				text.addVerifyListener(new VerifyListenerImpl(listener));
-			} else if(control instanceof List) {
-				List list = (List)control;
-				list.addListener(SWT.Modify, new ListenerImpl(listener));
-				//list.addSelectionListener(new SelectionListenerImpl(listener));
-			}
-			else {
+				text.addVerifyKeyListener(new VerifyKeyListenerImpl(listener));				
+			} else {
 				throw new UnsupportedOperationException("Not support for " + control.getClass().getSimpleName());
 			}
 		}
@@ -49,6 +44,21 @@ public class DirtyUtils {
 		public void handleEvent(Event event) {
 			listener.fireDirty();
 
+		}
+
+	}
+	
+	static class ModifyListenerImpl implements ModifyListener {
+
+		private DirtyListener listener;
+		
+		public ModifyListenerImpl(DirtyListener listener) {
+			this.listener = listener;
+		}
+		
+		@Override
+		public void modifyText(ModifyEvent e) {
+			listener.fireDirty();
 		}
 
 	}
@@ -76,16 +86,19 @@ public class DirtyUtils {
 		
 	}
 
-	static class VerifyListenerImpl implements VerifyListener{
+	static class VerifyKeyListenerImpl implements VerifyKeyListener{
 		private DirtyListener listener;
 		
-		public VerifyListenerImpl(DirtyListener listener) {
+		public VerifyKeyListenerImpl(DirtyListener listener) {
 			this.listener = listener;
 		}
 		
 		@Override
-		public void verifyText(VerifyEvent arg0) {
-			listener.fireDirty();
+		public void verifyKey(VerifyEvent event) {
+			if(event.character >= 32 && event.character <= 126){
+				listener.fireDirty();
+			} 
+			
 		}
 	}
 }
