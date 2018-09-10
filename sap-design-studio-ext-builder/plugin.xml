@@ -33,14 +33,22 @@
             id="com.armin.sap.ds.builder.project.commands.category">
       </category>
       <command
-            name="Toggle Design Studio Project Nature"
-            defaultHandler="com.armin.sap.ds.builder.commands.handlers.ToggleProjectNatureHandler"
+            name="Convert to SAP Design Studio Project"
             categoryId="com.armin.sap.ds.builder.project.commands.category"
             id="com.armin.sap.ds.builder.commands.toggle.nature">
       </command>
       <command
             categoryId="com.armin.sap.ds.builder.project.commands.category"
-            defaultHandler="com.armin.sap.ds.builder.commands.handlers.OpenExtensionHandler"
+            id="com.armin.sap.ds.builder.commands.extension.collection.open"
+            name="Open Extension Collection">
+      </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.project.commands.category"
+            id="com.armin.sap.ds.builder.commands.extension.source.open"
+            name="Open Extension Source">
+      </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.project.commands.category"
             id="com.armin.sap.ds.builder.commands.extension.open"
             name="Open Extension">
       </command>
@@ -53,7 +61,7 @@
                commandId="com.armin.sap.ds.builder.commands.toggle.nature"
                disabledIcon="images/project_16x16_disabled.png"
                icon="images/project_16x16.png"
-               label="Toggle SAP Design Studio Nature"
+               label="Convert to SAP Design Studio Project"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -62,13 +70,16 @@
                   <count
                         value="1">
                   </count>
-                  <iterate>
+                  <iterate
+                        ifEmpty="false">
                      <adapt
                            type="org.eclipse.core.resources.IProject">
-                        <test
-                              value="com.armin.sap.ds.builder.nature.ID"
-                              property="org.eclipse.core.resources.projectNature">
-                        </test>
+                        <not>
+                           <test
+                                 property="org.eclipse.core.resources.projectNature"
+                                 value="com.armin.sap.ds.builder.nature.ID">
+                           </test>
+                        </not>
                      </adapt>
                   </iterate>
                </with>
@@ -78,11 +89,13 @@
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
-               id="com.armin.sap.ds.builder.toolbars.base_toolbar">
+               id="com.armin.sap.ds.builder.toolbars.design_studio_toolbar"
+               label="SAP Design Studio Toolbar">
             <command
                   commandId="com.armin.sap.ds.builder.commands.toggle.nature"
                   disabledIcon="images/project_16x16_disabled.png"
                   icon="images/project_16x16.png"
+                  label="Convert to SAP Design Studio Project"
                   tooltip="Toggles SAP Design Studio Nature of an project">
                <visibleWhen
                      checkEnabled="false">
@@ -91,13 +104,15 @@
                      <count
                            value="1">
                      </count>
-                     <iterate>
+                     <iterate
+                           ifEmpty="false">
                         <adapt
                               type="org.eclipse.core.resources.IProject">
-                           <test
-                                 property="org.eclipse.core.resources.projectNature"
-                                 value="com.armin.sap.ds.builder.nature.ID">
-                           </test>
+                           <not>
+                              <test
+                                    property="org.eclipse.core.resources.projectNature"
+                                    value="com.armin.sap.ds.builder.nature.ID">
+                              </test></not>
                         </adapt>
                      </iterate>
                   </with>
@@ -107,9 +122,10 @@
                   name="sap-design-studio-ext-builder.separator1">
             </separator>
             <command
-                  commandId="com.armin.sap.ds.builder.commands.extension.open"
-                  icon="images/open_extension_16x16.png"
-                  label="Open Extensions"
+                  commandId="com.armin.sap.ds.builder.commands.extension.collection.open"
+                  disabledIcon="images/extension_collection_16x16_disabled.png"
+                  icon="images/extension_collection_16x16.png"
+                  label="Open Extension Collection"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -122,6 +138,50 @@
                            ifEmpty="false">
                         <instanceof
                               value="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="com.armin.sap.ds.builder.commands.extension.source.open"
+                  disabledIcon="images/view_extension_source_disabled_16x16.gif"
+                  icon="images/view_extension_source_16x16.gif"
+                  label="Open Extension Source"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="com.armin.sap.ds.builder.commands.extension.open"
+                  disabledIcon="images/extension_16x16.png"
+                  icon="images/extension_16x16.png"
+                  label="Open Extension"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -217,10 +277,10 @@
                name="com.armin.sap.ds.builder.separator.new-open">
          </separator>
          <command
-               commandId="com.armin.sap.ds.builder.commands.extension.open"
-               icon="images/extension_16x16.png"
-               disabledIcon="images/extension_16x16_disabled.png"
-               label="Open Extensions"
+               commandId="com.armin.sap.ds.builder.commands.extension.collection.open"
+               icon="images/extension_collection_16x16.png"
+               disabledIcon="images/extension_collection_16x16_disabled.png"
+               label="Open Extension Collection"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -237,11 +297,6 @@
                   </iterate>
                </with>
             </visibleWhen>
-         </command>
-         <command
-               commandId="org.eclipse.ui.navigate.openResource"
-               label="Open File..."
-               style="push">
          </command>
          <command
                commandId="org.eclipse.ui.project.openProject"
@@ -257,14 +312,64 @@
                         value="1">
                   </count>
                   <iterate
-                        ifEmpty="false">
+                        ifEmpty="false"
+                        operator="and">
                      <adapt
                            type="org.eclipse.core.resources.IProject">
                         <test
                               property="org.eclipse.core.resources.projectNature"
                               value="com.armin.sap.ds.builder.nature.ID">
                         </test>
+                        <not>
+                           <test
+                                 property="org.eclipse.core.resources.open">
+                           </test>
+                        </not>
                      </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.armin.sap.ds.builder.commands.extension.open"
+               disabledIcon="images/extension_16x16.png"
+               icon="images/extension_16x16.png"
+               label="Open Extension"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.armin.sap.ds.builder.commands.extension.source.open"
+               disabledIcon="images/view_extension_source_disabled_16x16.gif"
+               icon="images/view_extension_source_16x16.gif"
+               label="Open Extension Source"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                     </instanceof>
                   </iterate>
                </with>
             </visibleWhen>
@@ -273,64 +378,25 @@
                name="sap-design-studio-ext-navigator.separator3">
          </separator>
          <command
-               commandId="org.eclipse.ui.edit.cut"
-               label="Cut"
-               style="push">
-         </command>
-         <command
-               commandId="org.eclipse.ui.edit.copy"
-               label="Copy"
-               style="push">
-         </command>
-         <command
-               commandId="org.eclipse.ui.edit.paste"
-               label="Paste"
-               style="push">
-         </command>
-         <command
-               commandId="org.eclipse.ui.edit.delete"
-               label="Delete"
-               style="push">
-         </command>
-         <separator
-               name="sap-design-studio-ext-navigator.separator4">
-         </separator>
-         <command
-               commandId="org.eclipse.ui.file.import"
-               label="Import..."
-               style="push">
-         </command>
-         <command
-               commandId="org.eclipse.ui.file.export"
-               label="Export..."
-               style="push">
-         </command>
-         <separator
-               name="sap-design-studio-ext-navigator.separator5">
-         </separator>
-         <command
                commandId="org.eclipse.ui.file.refresh"
                label="Refresh"
                style="push">
-         </command>true
-         <command
-               commandId="org.eclipse.ui.file.close"
-               label="Close"
-               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="+">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
          </command>
-         <command
-               commandId="org.eclipse.ui.project.closeProject"
-               label="Close Project"
-               style="push">
-         </command>
-         <command
-               commandId="org.eclipse.ui.project.closeUnrelatedProjects"
-               label="Close Unrelated Projects"
-               style="push">
-         </command>
-         <separator
-               name="sap-design-studio-ext-navigator.separator6">
-         </separator>
          <command
                commandId="org.eclipse.ui.file.properties"
                label="Properties"
@@ -346,21 +412,169 @@
             </visibleWhen>
          </command>
          <command
+               commandId="org.eclipse.ui.edit.cut"
+               label="Cut"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="+">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.copy"
+               label="Copy"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="+">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.paste"
+               label="Paste"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.edit.delete"
+               label="Delete"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="+">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.file.close"
+               label="Close"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.ui.project.closeProject"
+               label="Close Project"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <test
+                              property="org.eclipse.core.resources.open">
+                        </test>
+                        <test
+                              property="org.eclipse.core.resources.projectNature"
+                              value="com.armin.sap.ds.builder.nature.ID">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.project.closeUnrelatedProjects"
+               label="Close Unrelated Projects"
+               style="push">
+         </command>
+         <separator
+               name="sap-design-studio-ext-navigator.separator6">
+         </separator>
+         <separator
+               name="sap-design-studio-ext-navigator.separator5">
+         </separator>true
+         <separator
+               name="sap-design-studio-ext-navigator.separator6">
+         </separator>
+         <command
                commandId="com.armin.sap.ds.builder.commands.toggle.nature"
                disabledIcon="images/project_16x16_disabled.png"
                icon="images/project_16x16.png"
-               label="Toggle SAP Design Studio Nature"
+               label="Convert to SAP Design Studio Project"
                style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <not>
+                           <test
+                                 property="org.eclipse.core.resources.projectNature"
+                                 value="com.armin.sap.ds.builder.nature.ID">
+                           </test>
+                        </not>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
          </command>
       </menuContribution>
       <menuContribution
             allPopups="false"
             locationURI="menu:file?after=additions">
          <command
-               commandId="com.armin.sap.ds.builder.commands.extension.open"
-               disabledIcon="images/extension_16x16_disabled.png"
-               icon="images/extension_16x16.png"
-               label="Open Extensions"
+               commandId="com.armin.sap.ds.builder.commands.extension.collection.open"
+               disabledIcon="images/extension_collection_16x16_disabled.png"
+               icon="images/extension_collection_16x16.png"
+               label="Open Extension Collection"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -379,9 +593,80 @@
             </visibleWhen>
          </command>
          <command
-               commandId="org.eclipse.ui.file.refresh"
-               label="Refresh"
+               commandId="org.eclipse.ui.project.openProject"
+               disabledIcon="images/project_16x16_disabled.png"
+               icon="images/project_16x16.png"
+               label="Open Project..."
                style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <test
+                              property="org.eclipse.core.resources.projectNature"
+                              value="com.armin.sap.ds.builder.nature.ID">
+                        </test>
+                        <not>
+                           <test
+                                 property="org.eclipse.core.resources.open">
+                           </test>
+                        </not>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.armin.sap.ds.builder.commands.extension.source.open"
+               disabledIcon="images/view_extension_source_disabled_16x16.gif"
+               icon="images/view_extension_source_16x16.gif"
+               label="Open Extension Source"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.armin.sap.ds.builder.commands.extension.open"
+               disabledIcon="images/extension_16x16.png"
+               icon="images/extension_16x16.png"
+               label="Open Extension"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
          </command>
       </menuContribution>
    </extension>
@@ -466,6 +751,15 @@
                   value="com.armin.sap.ds.builder.navigator.tree.ProjectItemNode">
             </instanceof>
          </possibleChildren>
+         <actionProvider
+               class="com.armin.sap.ds.builder.providers.ActionProvider"
+               id="com.armin.sap.ds.builder.providers.cap"
+               priority="normal">
+            <enablement>
+               <instanceof
+                     value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+               </instanceof></enablement>
+         </actionProvider>
       </navigatorContent>
    </extension>
    <extension
@@ -538,54 +832,123 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.armin.sap.ds.builder.editors.ExtensionEditor"
-            contributorClass="com.armin.sap.ds.builder.editors.ExtensionEditorContributor"
+            class="com.armin.sap.ds.builder.extension.collection.editor.ExtensionCollectionEditor"
+            contributorClass="com.armin.sap.ds.builder.extension.collection.editor.ExtensionCollectionEditorContributor"
             default="true"
-            extensions="xml"
-            icon="images/extension_28x28.png"
-            id="com.armin.sap.ds.builder.editors.extension_editor"
-            name="SAP Design Studio Extension Editor">
-         <contentTypeBinding
-               contentTypeId="com.armin.sap.ds.builder.contenttype.extension">
-         </contentTypeBinding>
+            icon="images/extension_collection_16x16.png"
+            id="com.armin.sap.ds.builder.editors.extension_collection_editor"
+            name="Extension Collection Editor">
       </editor>
       <editor
-            class="com.armin.sap.ds.builder.editors.ComponentEditor"
-            contributorClass="com.armin.sap.ds.builder.editors.ComponentEditorContributor"
+            class="com.armin.sap.ds.builder.component.editor.ComponentEditor"
+            contributorClass="com.armin.sap.ds.builder.component.editor.ComponentEditorContributor"
             default="true"
             extensions="ztl"
             icon="images/component_28x28.png"
             id="com.armin.sap.ds.builder.editors.component_editor"
-            name="Design Studio Component Editor">
+            name="Component Editor">
          <contentTypeBinding
                contentTypeId="com.armin.sap.ds.sdk.contenttype.ztl">
          </contentTypeBinding>
       </editor>
       <editor
-            class="com.armin.sap.ds.builder.editors.DesignStudioGenericEditor"
-            icon="images/project_28x28.png"
-            id="com.armin.sap.ds.builder.editors.generic_editor"
-            name="SAP Design Studio Generic Editor">
+            class="com.armin.sap.ds.builder.extension.source.editor.ExtensionSourceEditor"
+            contributorClass="com.armin.sap.ds.builder.extension.source.editor.ExtensionSourceContributor"
+            default="false"
+            extensions="xml"
+            filenames="contribution.xml"
+            icon="images/view_extension_source_16x16.gif"
+            id="com.armin.sap.ds.builder.editors.extension_source_editor"
+            name="Extension Source Editor">
       </editor>
       <editor
-            class="com.armin.sap.ds.builder.editors.DesignStudioExtensionsEditor"
-            id="com.armin.sap.ds.builder.editors.DesignStudioExtensionsEditor"
-            name="Extension Editor">
-      </editor>
-      <editor
-            class="com.armin.sap.ds.builder.editors.DSEditorMainPage"
-            id="com.armin.sap.ds.builder.editors.DSEditorMainPage"
-            name="Main Page">
-      </editor>
-      <editor
-            class="com.armin.sap.ds.builder.editors.ExtEditor"
+            class="com.armin.sap.ds.builder.extension.editor.ExtensionEditor"
+            contributorClass="com.armin.sap.ds.builder.extension.editor.ExtensionEditorContributor"
             icon="images/extension_16x16.png"
-            id="com.armin.sap.ds.builder.editors.ExtEditor"
+            id="com.armin.sap.ds.builder.extension.editor.extension_editor"
             name="Extension Editor">
-      </editor>
+      </editor>      
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
+      <handler
+            class="com.armin.sap.ds.builder.commands.handlers.ToggleProjectNatureHandler"
+            commandId="com.armin.sap.ds.builder.commands.toggle.nature">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="1">
+               </count>
+               <iterate
+                     ifEmpty="false">
+                  <adapt
+                        type="org.eclipse.core.resources.IProject">
+                     <not>
+                        <test
+                              property="org.eclipse.core.resources.projectNature"
+                              value="com.armin.sap.ds.builder.nature.ID">
+                        </test>
+                     </not>
+                  </adapt>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.armin.sap.ds.builder.commands.handlers.OpenExtensionCollectionHandler"
+            commandId="com.armin.sap.ds.builder.commands.extension.collection.open">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="1">
+               </count>
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.armin.sap.ds.builder.commands.handlers.OpenExtensionSourceHandler"
+            commandId="com.armin.sap.ds.builder.commands.extension.source.open">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="1">
+               </count>
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.armin.sap.ds.builder.commands.handlers.OpenExtensionHandler"
+            commandId="com.armin.sap.ds.builder.commands.extension.open">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="1">
+               </count>
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -615,9 +978,9 @@
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
             class="com.armin.sap.ds.builder.wizard.project.DesignStudioNewProjectWizard"
-            descriptionImage="images/project_28x28.png"
+            descriptionImage="images/project_16x16.png"
             finalPerspective="com.armin.sap.ds.builder.project.perspective"
-            icon="images/project_28x28.png"
+            icon="images/project_16x16.png"
             id="com.armin.sap.ds.builder.wizards.new_project_wizard"
             name="SAP Design Studio Extension Project Wizard"
             project="true">
@@ -625,8 +988,8 @@
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
             class="com.armin.sap.ds.builder.wizard.extension.ExtensionWizard"
-            descriptionImage="images/extension_28x28.png"
-            icon="images/extension_28x28.png"
+            descriptionImage="images/extension_16x16.png"
+            icon="images/extension_16x16.png"
             id="com.armin.sap.ds.builder.wizards.new_extension_wizard"
             name="SAP Design Studio Extension">
          <selection
@@ -637,8 +1000,8 @@
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
             class="com.armin.sap.ds.builder.wizard.component.ComponentWizard"
-            descriptionImage="images/component_28x28.png"
-            icon="images/component_28x28.png"
+            descriptionImage="images/component_16x16.png"
+            icon="images/component_16x16.png"
             id="com.armin.sap.ds.builder.wizards.new_component_wizard"
             name="SAP Design Studio Component">
          <selection
@@ -649,8 +1012,8 @@
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
             class="com.armin.sap.ds.builder.wizard.group.GroupWizard"
-            descriptionImage="images/group_28x28.png"
-            icon="images/group_28x28.png"
+            descriptionImage="images/group_16x16.png"
+            icon="images/group_16x16.png"
             id="com.armin.sap.ds.builder.wizards.new_group_wizard"
             name="SAP Design Studio Group">
          <selection
@@ -723,21 +1086,6 @@
    <extension
          id="com.armin.sap.ds.builder.contenttype"
          point="org.eclipse.core.contenttype.contentTypes">
-      <content-type
-            base-type="org.eclipse.core.runtime.xml"
-            file-extensions="xml"
-            file-names="contribution.xml"
-            id="com.armin.sap.ds.builder.contenttype.extension"
-            name="%content-type.name"
-            priority="normal">
-         <describer
-               class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber2">
-            <parameter
-                  name="element"
-                  value="sdkExtension">
-            </parameter>
-         </describer>
-      </content-type>
       <content-type
             base-type="org.eclipse.core.runtime.xml"
             file-extensions="xml"
@@ -834,6 +1182,21 @@
             priority="normal">
          <describer
                class="com.armin.sap.ds.builder.describer.JsDescriber">
+         </describer>
+      </content-type>
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            file-extensions="xml"
+            file-names="contribution.xml"
+            id="com.armin.sap.ds.builder.contenttype.extension"
+            name="%content-type.name"
+            priority="normal">
+         <describer
+               class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber2">
+            <parameter
+                  name="element"
+                  value="sdkExtension">
+            </parameter>
          </describer>
       </content-type>
    </extension>

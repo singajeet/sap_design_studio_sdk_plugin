@@ -33,6 +33,7 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 		}
 		_children = initializeChildren(_extensionFolders);        
 		_item = new ResourceModel();
+		
 	}
 
 	/************************** Required to be overridden ********************************/

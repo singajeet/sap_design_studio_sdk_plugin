@@ -1,29 +1,41 @@
 package com.armin.sap.ds.builder.editors;
 
-class DirtyListenerImpl implements DirtyListener{
+import com.armin.sap.ds.builder.extension.editor.ExtensionEditor;
+import com.armin.sap.ds.builder.extension.source.editor.ExtensionSourceEditor;
+
+public class DirtyListenerImpl implements IDirtyListener{
 	
 	/**
 	 * 
 	 */
-	private AbstractBaseEditor abstractBaseEditor;
-	private ExtensionEditor extEditor;
+	private AbstractBaseEditorPart abstractBaseEditorPart;
+	private ExtensionSourceEditor extensionSourceEditor;
+	private ExtensionEditor extensionEditor;
 	
 	/**
-	 * @param abstractBaseEditor
+	 * @param abstractBaseEditorPart
 	 */
-	DirtyListenerImpl(AbstractBaseEditor abstractBaseEditor) {
-		this.abstractBaseEditor = abstractBaseEditor;
+	public DirtyListenerImpl(AbstractBaseEditorPart abstractBaseEditorPart) {
+		this.abstractBaseEditorPart = abstractBaseEditorPart;
+	}
+	
+	public DirtyListenerImpl(ExtensionSourceEditor extensionSourceEditor) {
+		this.extensionSourceEditor = extensionSourceEditor;
 	}
 
 	public DirtyListenerImpl(ExtensionEditor extensionEditor) {
-		extEditor = extensionEditor;
+		this.extensionEditor = extensionEditor;
 	}
 
 	@Override
 	public void fireDirty() {
-		if(abstractBaseEditor != null)
-			this.abstractBaseEditor.setDirty(true);
-		else
-			extEditor.setDirty(true);
+		if(abstractBaseEditorPart != null)
+			this.abstractBaseEditorPart.setDirty(true);
+		
+		if(extensionSourceEditor != null)
+			this.extensionSourceEditor.setDirty(true);
+		
+		if(extensionEditor != null)
+			this.extensionEditor.setDirty(true);
 	}
 }

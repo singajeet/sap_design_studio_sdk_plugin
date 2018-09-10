@@ -33,6 +33,7 @@ public class NavigatorContentProvider implements ITreeContentProvider, IResource
     
     public NavigatorContentProvider() {
     	ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
+    	
     }
     
 	@Override

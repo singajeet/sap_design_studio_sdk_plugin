@@ -2,6 +2,8 @@ package com.armin.sap.ds.builder.editors;
 
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -11,10 +13,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPropertyListener;
 
 public class DirtyUtils {
 
-	public static void registryDirty(DirtyListener listener, Control... controls) {
+	public static void registryDirty(IDirtyListener listener, Control... controls) {
 		if(controls == null) {
 			return;
 		}
@@ -22,21 +26,46 @@ public class DirtyUtils {
 		for(Control control : controls) {
 			if(control instanceof Text) {
 				Text text = (Text)control;
-				text.addModifyListener(new ModifyListenerImpl(listener));				
+				text.addKeyListener(new KeyListenerImpl(listener));
 			} else if(control instanceof StyledText) {
 				StyledText text = (StyledText)control;
-				text.addVerifyKeyListener(new VerifyKeyListenerImpl(listener));				
+				text.addKeyListener(new KeyListenerImpl(listener));
 			} else {
 				throw new UnsupportedOperationException("Not support for " + control.getClass().getSimpleName());
 			}
 		}
 	}
 	
+	
+	static class KeyListenerImpl implements KeyListener{
+
+		private IDirtyListener listener;
+		
+		
+		public KeyListenerImpl(IDirtyListener listener) {
+			this.listener = listener;
+		}
+		
+		@Override
+		public void keyPressed(KeyEvent e) {
+				e.doit = true;
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			e.doit = true;
+			if(e.character >= 32 && e.character <= 127) {
+				listener.fireDirty();
+			}			
+		}
+		
+	}
+	
 	static class ListenerImpl implements Listener {
 
-		private DirtyListener listener;
+		private IDirtyListener listener;
 		
-		public ListenerImpl(DirtyListener listener) {
+		public ListenerImpl(IDirtyListener listener) {
 			this.listener = listener;
 		}
 		
@@ -50,14 +79,14 @@ public class DirtyUtils {
 	
 	static class ModifyListenerImpl implements ModifyListener {
 
-		private DirtyListener listener;
+		private IDirtyListener listener;
 		
-		public ModifyListenerImpl(DirtyListener listener) {
+		public ModifyListenerImpl(IDirtyListener listener) {
 			this.listener = listener;
 		}
 		
 		@Override
-		public void modifyText(ModifyEvent e) {
+		public void modifyText(ModifyEvent e) {			
 			listener.fireDirty();
 		}
 
@@ -66,9 +95,9 @@ public class DirtyUtils {
 	
 	static class SelectionListenerImpl implements SelectionListener{
 
-		private DirtyListener listener;
+		private IDirtyListener listener;
 		
-		public SelectionListenerImpl(DirtyListener listener) {
+		public SelectionListenerImpl(IDirtyListener listener) {
 			this.listener = listener;
 		}
 		
@@ -85,11 +114,28 @@ public class DirtyUtils {
 		}
 		
 	}
+	
+	static class PropertyListenerImpl implements IPropertyListener{
+
+		private IDirtyListener listener;
+		
+		public PropertyListenerImpl(IDirtyListener listener) {
+			this.listener = listener;
+		}
+		
+		@Override
+		public void propertyChanged(Object source, int propId) {
+			if(propId == IEditorPart.PROP_DIRTY) {
+				listener.fireDirty();
+			}			
+		}
+		
+	}
 
 	static class VerifyKeyListenerImpl implements VerifyKeyListener{
-		private DirtyListener listener;
+		private IDirtyListener listener;
 		
-		public VerifyKeyListenerImpl(DirtyListener listener) {
+		public VerifyKeyListenerImpl(IDirtyListener listener) {
 			this.listener = listener;
 		}
 		
@@ -100,5 +146,11 @@ public class DirtyUtils {
 			} 
 			
 		}
+	}
+
+	public static void registryDirty(IDirtyListener listener, IEditorPart extensionEditor,
+			IEditorPart extensionSourceEditor) {
+		extensionEditor.addPropertyListener(new PropertyListenerImpl(listener));
+		
 	}
 }

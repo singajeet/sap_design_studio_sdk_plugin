@@ -1,10 +1,11 @@
 package com.armin.sap.ds.builder.perspectives;
 
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
+import org.eclipse.ui.IViewLayout;
 import org.eclipse.ui.console.IConsoleConstants;
-import org.eclipse.jdt.ui.JavaUI;
 
 
 /**
@@ -28,7 +29,11 @@ public class DesignStudioPerspectiveFactory implements IPerspectiveFactory {
 		addNewWizardShortcuts();
 		addPerspectiveShortcuts();
 		addViewShortcuts();
+		
+		
 	}
+
+	
 
 	@SuppressWarnings("deprecation")
 	private void addViews() {

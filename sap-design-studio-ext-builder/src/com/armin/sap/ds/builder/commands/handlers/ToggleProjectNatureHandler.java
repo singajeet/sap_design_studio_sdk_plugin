@@ -14,6 +14,7 @@ import com.armin.sap.ds.builder.DesignStudioProjectNature;
 
 public class ToggleProjectNatureHandler extends AbstractHandler {
 
+	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		ISelection selection = HandlerUtil.getCurrentSelection(event);
 		//
