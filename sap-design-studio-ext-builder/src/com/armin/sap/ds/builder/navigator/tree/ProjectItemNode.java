@@ -59,6 +59,13 @@ public class ProjectItemNode implements IProjectItemNode {
     	this._item.setId(msg);
     }
 	
+	public ProjectItemNode(String msg) {
+    	_item = new ResourceModel();    	
+    	_children = new ArrayList<IProjectItemNode>();
+    	this._item.setName(msg);
+    	this._item.setId(msg);
+    }
+	
     public String getProjectName() {
         return _project.getName();
     }

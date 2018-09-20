@@ -50,7 +50,7 @@ public class OpenExtensionCollectionHandler extends AbstractHandler {
 				input =  new ExtensionCollectionEditorInput((IProjectItemNode)selectObj);
 			}
 		}catch(Exception e) {
-			MessageDialog.open(MessageDialog.ERROR, null, "Invalid Selection", "Current selected 'Tree Node' is not valid for 'Extension Editor'. Please select 'Extensions' node and try again!", SWT.SHEET);
+			MessageDialog.open(MessageDialog.ERROR, null, "Invalid Selection", "Current selected 'Tree Node' is not valid for 'Extension Collection Editor'. Please select 'Extensions' node and try again!", SWT.SHEET);
 			e.printStackTrace();
 		}
 		
@@ -94,7 +94,7 @@ public class OpenExtensionCollectionHandler extends AbstractHandler {
 						
 				}
 			}catch(PartInitException e) {
-				MessageDialog.open(MessageDialog.ERROR, null, "Extension Editor Error", "Can not open 'Extension Editor' due to following error: " + e.getMessage(), SWT.SHEET);
+				MessageDialog.open(MessageDialog.ERROR, null, "Extension Editor Error", "Can not open 'Extension Collection Editor' due to following error: " + e.getMessage(), SWT.SHEET);
 				throw new RuntimeException(e);
 			}
 		}

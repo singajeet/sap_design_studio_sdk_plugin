@@ -28,6 +28,11 @@ public class InfoNode extends ProjectItemNode {
 		_item = new Info(msg);
 	}
 	
+	public InfoNode(String msg) {
+		super(msg);
+		_item = new Info(msg);
+	}
+	
 	@Override
 	public String getName() {
 		return this._item.getId();

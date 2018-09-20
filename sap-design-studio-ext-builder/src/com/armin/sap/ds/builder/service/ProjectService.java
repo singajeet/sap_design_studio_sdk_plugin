@@ -353,4 +353,14 @@ public class ProjectService implements IProjectService {
 		((Extension)extensionModel).getGroup().add(group);		
 		return group;
 	}
+
+	@Override
+	public boolean saveExtensionFile(String content) {
+		return _filesBuilderService.saveExtensionFile(_project, content);		
+	}
+
+	@Override
+	public boolean saveExtensionFile(String content, IProject project) {		
+		return _filesBuilderService.saveExtensionFile(project, content);
+	}
 }

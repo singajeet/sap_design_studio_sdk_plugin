@@ -19,4 +19,6 @@ public interface IProjectService {
 	public IModel addNewComponent(IModel componentModel, IModel extensionModel, IProject project) throws Exception;
 	public IModel addNewGroup(String groupName, IModel extensionNode, IProject project);	
 	public IModel updateExtension(IModel extensionModel, IProject project);
+	public boolean saveExtensionFile(String content);
+	public boolean saveExtensionFile(String content, IProject project);
 }

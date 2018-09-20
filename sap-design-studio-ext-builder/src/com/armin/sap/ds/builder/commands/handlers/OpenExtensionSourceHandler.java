@@ -16,10 +16,9 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.ui.part.FileInPlaceEditorInput;
+import org.eclipse.ui.part.FileEditorInput;
 
 import com.armin.sap.ds.builder.editors.IReusableDSEditorPart;
-import com.armin.sap.ds.builder.extension.source.editor.ExtensionSourceEditor;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 
 public class OpenExtensionSourceHandler extends AbstractHandler {
@@ -47,7 +46,7 @@ public class OpenExtensionSourceHandler extends AbstractHandler {
 				IProject project = selectedNode.getProject();
 				
 				String pathToXml = selectedNode.getExtension().getId() + "/contribution.xml";
-				input = new FileInPlaceEditorInput(project.getFile(pathToXml));
+				input = new FileEditorInput(project.getFile(pathToXml));
 			}
 		}catch(Exception e) {
 			MessageDialog.open(MessageDialog.ERROR, null, "Invalid Selection", "Current selected 'Tree Node' is not valid for 'Extension Source Editor'. Please select 'Extension' node and try again!", SWT.SHEET);
@@ -88,7 +87,7 @@ public class OpenExtensionSourceHandler extends AbstractHandler {
 		if(!found) {
 			try {
 				if(selectObj instanceof ExtensionNode) {
-						page.openEditor(input, ExtensionSourceEditor.ID);						
+						page.openEditor(input, "com.armin.sap.ds.builder.editors.extension_source_editor");						
 				}else {
 						MessageDialog.open(MessageDialog.ERROR, null, "Editor Not Found!", "Unable to find editor for editing " + input.getName(), SWT.SHEET);
 						

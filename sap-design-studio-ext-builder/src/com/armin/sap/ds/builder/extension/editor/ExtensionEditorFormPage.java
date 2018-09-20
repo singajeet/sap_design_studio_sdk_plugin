@@ -1,6 +1,6 @@
 package com.armin.sap.ds.builder.extension.editor;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -8,22 +8,28 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.CoolBar;
-import org.eclipse.swt.widgets.CoolItem;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
@@ -32,10 +38,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IWorkbenchPartConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.ManagedForm;
@@ -46,10 +54,13 @@ import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.armin.sap.ds.builder.api.models.Extension;
+import com.armin.sap.ds.builder.api.models.UI5Mode;
 import com.armin.sap.ds.builder.editors.AbstractBaseEditorPart;
+import com.armin.sap.ds.builder.navigator.tree.ComponentNode;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.GroupNode;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
+import com.armin.sap.ds.builder.navigator.tree.InfoNode;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
 
@@ -74,31 +85,20 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 	}
 	private static class TableComponentsContentProvider implements IStructuredContentProvider, IResourceChangeListener {
 		
-		private ExtensionNode extensionNode;
-//		private Viewer _viewer;
+		private GroupNode groupNode;
 		
-//		public TableComponentsContentProvider() {
-//			ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
-//		}
-		
-		public TableComponentsContentProvider(ExtensionNode node) {
-			extensionNode = node;
+		public TableComponentsContentProvider() {
 			ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
 		}
 		
 		public Object[] getElements(Object inputElement) {
-			ArrayList<Object> childs = new ArrayList<Object>();
-			if(extensionNode != null) {
-				for(Object groupObject : extensionNode.getChildren(inputElement)) {
-					GroupNode group = (GroupNode)groupObject;
-					Object[] components = group.getChildren(inputElement);
-					for(Object comp : components) {
-						childs.add(comp);
-					}
-				}
-				return childs.toArray();
+			if(inputElement != null && inputElement instanceof GroupNode) {
+				groupNode = (GroupNode)inputElement;
 			}
-			return new Object[0];
+			if(groupNode != null) {
+				return groupNode.getChildren(inputElement);
+			}
+			return new Object[] { new InfoNode("No components found!")};
 		}
 		public void dispose() {
 		}
@@ -133,12 +133,15 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 	private static class GroupsListContentProvider implements IStructuredContentProvider {
 		private ExtensionNode extensionNode;
 		
-//		public GroupsListContentProvider() {}
-		public GroupsListContentProvider(ExtensionNode node) {
-			extensionNode = node;
-		}
+		public GroupsListContentProvider() {}
+//		public GroupsListContentProvider(ExtensionNode node) {
+//			extensionNode = node;
+//		}
 		
 		public Object[] getElements(Object inputElement) {
+			if(inputElement != null && inputElement instanceof ExtensionNode) {
+				extensionNode = (ExtensionNode)inputElement;
+			}
 			if(extensionNode != null) {
 				return extensionNode.getChildren(inputElement);
 			}
@@ -149,7 +152,94 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		}
 	}
+	
+	private static class TableColumnLabelProvider extends ColumnLabelProvider{
 
+		private String _cellText = "";
+		private HashMap<Object, Button> buttons = new HashMap<Object, Button>(); 
+		
+		/* (non-Javadoc)
+		 * @see org.eclipse.jface.viewers.ColumnLabelProvider#getText(java.lang.Object)
+		 */
+		@Override
+		public String getText(Object element) {
+			// TODO Auto-generated method stub
+			return _cellText;
+		}
+
+		@Override
+		public void update(ViewerCell cell) {			
+			
+			ComponentNode componentNode = (ComponentNode)cell.getElement();
+			
+			switch(cell.getColumnIndex()) {
+			case 0:
+				_cellText = componentNode.getComponent().getId();
+				break;
+			case 1:
+				_cellText = componentNode.getComponent().getTitle();
+				break;
+			case 2:
+				_cellText = componentNode.getComponent().isDatabound() ? "Yes" : "No";
+				break;
+			case 3:
+				_cellText = componentNode.getComponent().getHandlerType().toString();
+				break;
+			case 4:
+				_cellText = "";
+				for(UI5Mode mode : componentNode.getComponent().getModes()) {
+					_cellText = _cellText + mode.toString() + ", ";
+				}
+				_cellText = _cellText.substring(0, _cellText.length() - 2);
+				break;
+			case 5:
+				_cellText = componentNode.getComponent().isVisible() ? "Yes" : "No";
+				break;
+			case 6:
+				TableItem item = (TableItem) cell.getItem();
+				Button button;
+				if(buttons.containsKey(cell.getElement())) {
+					button = buttons.get(cell.getElement());
+				} else {
+					button = new Button((Composite)cell.getViewerRow().getControl(), SWT.NONE);
+					button.setText("Edit");
+					buttons.put(cell.getElement(), button);
+				}
+				TableEditor editor = new TableEditor(item.getParent());
+				editor.grabHorizontal = true;
+				editor.grabVertical = true;
+				editor.setEditor(button, item, cell.getColumnIndex());
+				editor.layout();
+				_cellText = "";
+				
+				button.addSelectionListener(new SelectionListener() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+				});
+				break;
+			}
+			cell.setText(_cellText);
+			//super.update(cell);
+		}
+	}
+	
+	private static enum PROVIDERS{
+		LIST_VIEWER,
+		TABLE_VIEWER,
+		BOTH
+	}
+	
 	public static final String ID = "com.armin.sap.ds.builder.editors.extension_editor_form_page";
 	private Text _txtId;
 	private Text _txtTitle;
@@ -166,6 +256,9 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 	private GroupsListViewerLabelProvider _listLabelProvider;
 	private IProjectService _projectService;
 	private IProject _project;
+	private TableViewer _tableViewerComponents;
+	private ListViewer _listViewer;
+	private ColumnLabelProvider _cellLabelProvider;
 	
 	/**
 	 * Create the form page.	
@@ -173,7 +266,8 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 	 */
 	public ExtensionEditorFormPage() {
 		super(ID, "Extension Editor");
-		setPartName("SAP Design Studio Extension");
+		this.setPartName("Extension Editor");
+		setIndex(0);
 		setActive(true);
 		_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
 		if(_projectService == null) {
@@ -188,7 +282,8 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 	 */
 	public ExtensionEditorFormPage(String id, String title) {
 		super(id, title);
-		setPartName("SAP Design Studio Extension");
+		setPartName("Extension Editor");
+		setIndex(0);
 		setActive(true);
 		_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
 		if(_projectService == null) {
@@ -204,7 +299,8 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 	 */
 	public ExtensionEditorFormPage(FormEditor editor, String id, String title) {
 		super(editor, id, title);
-		setPartName("SAP Design Studio Extension");
+		setPartName("Extension Editor");
+		setIndex(0);
 		setActive(true);
 		_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
 		if(_projectService == null) {
@@ -219,18 +315,35 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 	 */
 	@Override
 	protected void setInput(IEditorInput input) {
-		super.setInput(input);
+		//super.setInput(input);
 		this._input = (ExtensionEditorInput)input;
-		this._extensionNode = (ExtensionNode) this._input.getTreeNode();
-		setupProviders();		
+		this._extensionNode = (ExtensionNode) this._input.getTreeNode();		
+		setupProviders(PROVIDERS.BOTH);	
+		firePropertyChange(IWorkbenchPartConstants.PROP_INPUT);
 	}
 	
-	private void setupProviders() {
-		if(this._extensionNode != null && this._extensionNode.getExtension() != null) {
-			this._tableContentProvider = new TableComponentsContentProvider(_extensionNode);
-			this._tableLabelProvider = new TableComponentsLabelProvider();
-			this._listContentProvider = new GroupsListContentProvider(_extensionNode);
-			this._listLabelProvider = new GroupsListViewerLabelProvider();
+	private void setupProviders(PROVIDERS provider) {
+		if(this._extensionNode != null && !this._extensionNode.getGroups().isEmpty()) {
+			
+			if(_listViewer != null && (provider == PROVIDERS.LIST_VIEWER || provider == PROVIDERS.BOTH)) {
+				this._listContentProvider = new GroupsListContentProvider();
+				this._listLabelProvider = new GroupsListViewerLabelProvider();
+				this._listViewer.setLabelProvider(_listLabelProvider);
+				this._listViewer.setContentProvider(_listContentProvider);
+				
+				_listViewer.setInput(_extensionNode);
+			}
+			
+			if(_tableViewerComponents != null && (provider == PROVIDERS.TABLE_VIEWER || provider == PROVIDERS.BOTH)) {
+				this._tableContentProvider = new TableComponentsContentProvider();//(GroupNode)_extensionNode.getChildren(null)[0]);
+				this._tableLabelProvider = new TableComponentsLabelProvider();
+				
+				this._cellLabelProvider = new TableColumnLabelProvider();
+				_tableViewerComponents.setLabelProvider(_tableLabelProvider);
+				_tableViewerComponents.setContentProvider(_tableContentProvider);
+				
+				_tableViewerComponents.setInput((GroupNode)_extensionNode.getChildren(null)[0]);
+			}
 		}
 	}
 
@@ -262,7 +375,8 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 
 	@Override
 	public void showData() {
-		ExtensionEditorInput ip = (ExtensionEditorInput)this.getEditorInput();
+		
+		ExtensionEditorInput ip = this._input;
 		_project = ip.getProject();
 		
 		ExtensionNode node = null;
@@ -293,23 +407,19 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 		Composite body = form.getBody();
 		toolkit.decorateFormHeading(form.getForm());
 		toolkit.paintBordersFor(body);
-		managedForm.getForm().getBody().setLayout(new FillLayout(SWT.HORIZONTAL));
+		managedForm.getForm().getBody().setLayout(new GridLayout(1, false));
+		managedForm.getForm().getBody().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));		
 		
-		
-		Composite composite = new Composite(managedForm.getForm().getBody(), SWT.V_SCROLL);				
+		Composite composite = new Composite(managedForm.getForm().getBody(), SWT.NONE);				
 		
 		managedForm.getToolkit().adapt(composite);
 		managedForm.getToolkit().paintBordersFor(composite);
-		composite.setLayout(new GridLayout(1, false));
-		
-		Group grpExtension = new Group(composite, SWT.BORDER | SWT.SHADOW_ETCHED_IN);
-		grpExtension.setText("Extension");
-		grpExtension.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		grpExtension.setLayout(new GridLayout(2, false));
-		
-		Group grpExtensionDetails = new Group(grpExtension, SWT.BORDER | SWT.SHADOW_ETCHED_IN);
+		composite.setLayout(new GridLayout(2, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+		Group grpExtensionDetails = new Group(composite, SWT.BORDER | SWT.SHADOW_ETCHED_IN);
 		grpExtensionDetails.setLayout(new GridLayout(2, false));
-		grpExtensionDetails.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
+		grpExtensionDetails.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		grpExtensionDetails.setText("Extension Details");
 		
 		Label lblNewLabel = new Label(grpExtensionDetails, SWT.NONE);
@@ -338,15 +448,10 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 		lblNewLabel_3.setText("Vendor");
 		
 		_txtVendor = new Text(grpExtensionDetails, SWT.BORDER);
-		_txtVendor.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		_txtVendor.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));		
+
 		
-		Composite composite_2 = new Composite(grpExtensionDetails, SWT.NONE);
-		composite_2.setLayout(new GridLayout(2, false));
-		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
-		formToolkit.adapt(composite_2);
-		formToolkit.paintBordersFor(composite_2);
-		
-		ExpandBar expandBar = new ExpandBar(composite_2, SWT.BORDER);
+		ExpandBar expandBar = new ExpandBar(grpExtensionDetails, SWT.BORDER);
 		expandBar.setForeground(SWTResourceManager.getColor(SWT.COLOR_LINK_FOREGROUND));
 		expandBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 		formToolkit.adapt(expandBar);
@@ -355,8 +460,7 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 		ExpandItem xpndtmNewExpanditem = new ExpandItem(expandBar, SWT.NONE);
 		xpndtmNewExpanditem.setText("EULA");
 		
-		Composite composite_1 = new Composite(expandBar, SWT.BORDER);
-		xpndtmNewExpanditem.setControl(composite_1);
+		Composite composite_1 = new Composite(expandBar, SWT.BORDER);		
 		formToolkit.adapt(composite_1);
 		formToolkit.paintBordersFor(composite_1);
 		composite_1.setLayout(new GridLayout(1, false));
@@ -364,41 +468,49 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 		_txtEula = new Text(composite_1, SWT.V_SCROLL | SWT.MULTI);
 		_txtEula.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		formToolkit.adapt(_txtEula, true, true);
+		xpndtmNewExpanditem.setControl(composite_1);
 		xpndtmNewExpanditem.setHeight(100);
+		expandBar.requestLayout();
 		
-		
-		Group grpGroups_1 = new Group(grpExtension, SWT.BORDER | SWT.SHADOW_ETCHED_IN);
+		Group grpGroups_1 = new Group(composite, SWT.BORDER | SWT.SHADOW_ETCHED_IN);
 		grpGroups_1.setText("Groups");
 		grpGroups_1.setLayout(new GridLayout(1, false));
 		GridData gd_grpGroups_1 = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_grpGroups_1.widthHint = 150;
 		grpGroups_1.setLayoutData(gd_grpGroups_1);
 		
-		ListViewer listViewer = new ListViewer(grpGroups_1, SWT.BORDER | SWT.V_SCROLL);
-		List listGroups = listViewer.getList();
+		_listViewer = new ListViewer(grpGroups_1, SWT.BORDER | SWT.V_SCROLL);
+		List listGroups = _listViewer.getList();
 		listGroups.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		if(_listContentProvider == null) {
-			setupProviders();
+			setupProviders(PROVIDERS.LIST_VIEWER);
 		}
 		
-		listViewer.setLabelProvider(_listLabelProvider);
-		listViewer.setContentProvider(_listContentProvider);
+		_listViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				if(event.getSelection() != null && !event.getSelection().isEmpty()) {
+					IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+					
+					if(selection.size() > 0) {
+						GroupNode groupNode = (GroupNode)selection.getFirstElement();
+						//_tableContentProvider = new TableComponentsContentProvider(groupNode);
+						_tableViewerComponents.setInput(groupNode);
+						
+					}
+				}
+			}
+			
+		});
 		
-		Group grpComponents = new Group(grpExtension, SWT.NONE);
+		Group grpComponents = new Group(composite, SWT.NONE);
 		grpComponents.setText("Component Details");
 		grpComponents.setLayout(new GridLayout(1, false));
-		grpComponents.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+		grpComponents.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));		
 		
-		CoolBar coolBar = new CoolBar(grpComponents, SWT.BORDER | SWT.FLAT);
-		coolBar.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-		formToolkit.adapt(coolBar);
-		formToolkit.paintBordersFor(coolBar);
-		
-		CoolItem coolItem = new CoolItem(coolBar, SWT.NONE);
-		
-		ToolBar toolBar4Components = new ToolBar(coolBar, SWT.FLAT | SWT.RIGHT | SWT.SHADOW_OUT);
-		coolItem.setControl(toolBar4Components);
+		ToolBar toolBar4Components = new ToolBar(grpComponents, SWT.NONE);		
 		formToolkit.adapt(toolBar4Components);
 		formToolkit.paintBordersFor(toolBar4Components);
 		
@@ -420,50 +532,67 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 		formToolkit.paintBordersFor(composite_3);
 		composite_3.setLayout(new GridLayout(1, false));
 		
-		TableViewer tableViewerComponents = new TableViewer(composite_3, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);
-		_tableComponents = tableViewerComponents.getTable();
+		_tableViewerComponents = new TableViewer(composite_3, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION);
+		_tableComponents = _tableViewerComponents.getTable();
 		_tableComponents.setLinesVisible(true);
 		_tableComponents.setHeaderVisible(true);
 		_tableComponents.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
 		formToolkit.paintBordersFor(_tableComponents);
 		
-		TableViewerColumn tableViewerIDColumn = new TableViewerColumn(tableViewerComponents, SWT.NONE);
+		setupProviders(PROVIDERS.TABLE_VIEWER);
+		
+		//0
+		TableViewerColumn tableViewerIDColumn = new TableViewerColumn(_tableViewerComponents, SWT.NONE);		
+		tableViewerIDColumn.setLabelProvider(_cellLabelProvider);
 		TableColumn tblclmnIDColumn = tableViewerIDColumn.getColumn();
 		tblclmnIDColumn.setWidth(100);
 		tblclmnIDColumn.setText("ID");
-		
-		TableViewerColumn tableViewerTitleColumn = new TableViewerColumn(tableViewerComponents, SWT.NONE);
+		//1
+		TableViewerColumn tableViewerTitleColumn = new TableViewerColumn(_tableViewerComponents, SWT.NONE);
+		tableViewerTitleColumn.setLabelProvider(_cellLabelProvider);
 		TableColumn tblclmnTitleColumn = tableViewerTitleColumn.getColumn();
 		tblclmnTitleColumn.setMoveable(true);
 		tblclmnTitleColumn.setWidth(100);
 		tblclmnTitleColumn.setText("Title");
-		
-		TableViewerColumn tableViewerDataboundColumn = new TableViewerColumn(tableViewerComponents, SWT.NONE);
+		//2
+		TableViewerColumn tableViewerDataboundColumn = new TableViewerColumn(_tableViewerComponents, SWT.NONE);
+		tableViewerDataboundColumn.setLabelProvider(_cellLabelProvider);
 		TableColumn tblclmnDataboundColumn = tableViewerDataboundColumn.getColumn();
 		tblclmnDataboundColumn.setMoveable(true);
 		tblclmnDataboundColumn.setWidth(100);
 		tblclmnDataboundColumn.setText("Is Databound?");
-		
-		TableViewerColumn tableViewerHandlerTypeColumn = new TableViewerColumn(tableViewerComponents, SWT.NONE);
+		//3
+		TableViewerColumn tableViewerHandlerTypeColumn = new TableViewerColumn(_tableViewerComponents, SWT.NONE);
+		tableViewerHandlerTypeColumn.setLabelProvider(_cellLabelProvider);
 		TableColumn tblclmnHandlerTypeColumn = tableViewerHandlerTypeColumn.getColumn();
 		tblclmnHandlerTypeColumn.setMoveable(true);
 		tblclmnHandlerTypeColumn.setWidth(100);
 		tblclmnHandlerTypeColumn.setText("Handler Type");
-		
-		TableViewerColumn tableViewerModesColumn = new TableViewerColumn(tableViewerComponents, SWT.NONE);
+		//4
+		TableViewerColumn tableViewerModesColumn = new TableViewerColumn(_tableViewerComponents, SWT.NONE);
+		tableViewerModesColumn.setLabelProvider(_cellLabelProvider);
 		TableColumn tblclmnModesColumn = tableViewerModesColumn.getColumn();
 		tblclmnModesColumn.setMoveable(true);
 		tblclmnModesColumn.setWidth(100);
 		tblclmnModesColumn.setText("Modes");
-		
-		TableViewerColumn tableViewerVisibleColumn = new TableViewerColumn(tableViewerComponents, SWT.NONE);
+		//5
+		TableViewerColumn tableViewerVisibleColumn = new TableViewerColumn(_tableViewerComponents, SWT.NONE);
+		tableViewerVisibleColumn.setLabelProvider(_cellLabelProvider);
 		TableColumn tblclmnVisibleColumn = tableViewerVisibleColumn.getColumn();
 		tblclmnVisibleColumn.setMoveable(true);
 		tblclmnVisibleColumn.setWidth(100);
 		tblclmnVisibleColumn.setText("Is Visible?");
-		tableViewerComponents.setLabelProvider(_tableLabelProvider);
-		tableViewerComponents.setContentProvider(_tableContentProvider);	
+		//6
+		TableViewerColumn tableViewerActionColumn = new TableViewerColumn(_tableViewerComponents, SWT.PUSH);
+		tableViewerActionColumn.setLabelProvider(_cellLabelProvider);
+		TableColumn tblclmnActionColumn = tableViewerActionColumn.getColumn();
+		tblclmnActionColumn.setMoveable(true);
+		tblclmnActionColumn.setWidth(30);
+		tblclmnActionColumn.setText("Action");
 		
+		_tableViewerComponents.setInput((GroupNode)_extensionNode.getChildren(null)[0]);
+		_listViewer.getList().select(0);
 	}
 
 	

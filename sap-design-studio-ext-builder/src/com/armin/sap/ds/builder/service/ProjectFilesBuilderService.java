@@ -11,6 +11,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.text.StringSubstitutor;
 import org.eclipse.core.resources.IFile;
@@ -392,6 +393,49 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 				if(group.toUpperCase().equals(groupId.toUpperCase()))
 					return true;
 			}
+		}
+		return false;
+	}
+
+	
+	private boolean saveExtensionFile(IProject project, IModel extensionModel, String fileContent) {
+		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Save extension file started - [Project=" + project.getName() + "]"));
+		
+		IFile extensionFile = null;
+		
+		//Get reference to contribution.xml file
+		extensionFile = project.getFile(extensionModel.getId() + "/" + Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME));
+		
+		try {
+			//Create contribution.xml (extension file) if not already created
+			if(!extensionFile.exists()) {				
+				logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Extension file don't exist and creating one now"));
+				extensionFile.create(new ByteArrayInputStream(fileContent.getBytes()), true, null);
+				return true;				
+			} else {
+				logger.log(new Status(IStatus.WARNING, this.getClass().getName(), "Extension file already exists. Overwriting with new content..."));
+				extensionFile.setContents(new ByteArrayInputStream(fileContent.getBytes()), true, true, null);
+				return true;
+			}	
+		}
+		catch (Exception e) {
+			MessageDialog.open(MessageDialog.ERROR, null, "Error while generating file", e.toString(), SWT.SHEET);
+			e.printStackTrace();
+			logger.log(new Status(IStatus.ERROR, this.getClass().getName(), "Error while saving extension: " + e.getMessage()));				
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean saveExtensionFile(IProject project, String fileContent) {
+		try {			
+			JAXBContext context = JAXBContext.newInstance(Extension.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();			
+			Object rawObject = unmarshaller.unmarshal(new ByteArrayInputStream(fileContent.getBytes()));
+			IModel model = (Extension)rawObject;
+			return saveExtensionFile(project, model, fileContent);
+		} catch (Exception e) {			
+			e.printStackTrace();
 		}
 		return false;
 	}

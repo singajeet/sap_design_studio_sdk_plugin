@@ -852,8 +852,8 @@
          </contentTypeBinding>
       </editor>
       <editor
-            class="com.armin.sap.ds.builder.extension.source.editor.ExtensionSourceEditor"
-            contributorClass="com.armin.sap.ds.builder.extension.source.editor.ExtensionSourceContributor"
+            class="com.armin.sap.ds.builder.extension.source.editors.ExtensionSourceEditor"
+            contributorClass="com.armin.sap.ds.builder.extension.source.editors.ExtensionSourceEditorContributor"
             default="false"
             extensions="xml"
             filenames="contribution.xml"
@@ -864,10 +864,11 @@
       <editor
             class="com.armin.sap.ds.builder.extension.editor.ExtensionEditor"
             contributorClass="com.armin.sap.ds.builder.extension.editor.ExtensionEditorContributor"
+            default="true"
             icon="images/extension_16x16.png"
             id="com.armin.sap.ds.builder.extension.editor.extension_editor"
             name="Extension Editor">
-      </editor>      
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">

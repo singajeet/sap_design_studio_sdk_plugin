@@ -76,6 +76,18 @@ public class ProjectServiceSlave implements IProjectService {
 		
 	public IModel updateExtension(IModel extensionModel, IProject project) {
 		return _parentService.updateExtension(extensionModel, project);
+	}
+
+	@Override
+	public boolean saveExtensionFile(String content) {
+		
+		return _parentService.saveExtensionFile(content);
+	}
+
+	@Override
+	public boolean saveExtensionFile(String content, IProject project) {
+		
+		return _parentService.saveExtensionFile(content, project);
 	}	
 
 }

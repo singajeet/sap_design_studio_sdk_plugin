@@ -81,5 +81,10 @@ public class ProjectFilesBuilderServiceSlave implements IProjectFilesBuilderServ
 	public String setupIconFile(IProject project, IModel componentModel, IModel extensionModel) {
 		return _parentService.setupIconFile(project, componentModel, extensionModel);
 	}
+
+		@Override
+	public boolean saveExtensionFile(IProject project, String fileContent) {		
+		return _parentService.saveExtensionFile(project, fileContent);
+	}
 	
 }

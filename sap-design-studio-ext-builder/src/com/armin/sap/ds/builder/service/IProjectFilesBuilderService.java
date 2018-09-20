@@ -10,6 +10,8 @@ import com.armin.sap.ds.builder.api.models.RequireJSType;
 public interface IProjectFilesBuilderService {
 
 	Extension saveExtension(IModel extensionModel, IProject project);
+	
+	boolean saveExtensionFile(IProject project, String fileContent);
 
 	IModel saveComponent(IModel componentModel, IModel extensionModel, IProject project);
 
