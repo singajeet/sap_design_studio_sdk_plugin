@@ -40,6 +40,14 @@ public class Context {
 		fireEvent(value);
 	}
 	
+	public Object getValue() {
+		return _value;
+	}
+	
+	public Object getSource() {
+		return _source;
+	}
+	
 	public synchronized void addEventListener(ContextEventListener listener) {
 		_listeners.add(listener);
 	}

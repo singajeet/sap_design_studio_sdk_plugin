@@ -5,22 +5,26 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IPropertyListener;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
+import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.xml.core.internal.provisional.contenttype.ContentTypeIdForXML;
 
+import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.editors.DirtyListenerImpl;
 import com.armin.sap.ds.builder.editors.DirtyUtils;
 import com.armin.sap.ds.builder.editors.IDirtyListener;
-import com.armin.sap.ds.builder.extension.source.editors.ExtensionSourceEditor;
 
 @SuppressWarnings("restriction")
 public class ExtensionEditor extends MultiPageEditorPart {
 
 	public static final String ID = "com.armin.sap.ds.builder.extension.editor.extension_editor"; //$NON-NLS-1$
-	private IEditorPart extensionEditor;
-	private IEditorPart extensionSourceEditor;
+	private IEditorPart extensionEditorPage;
+	private IEditorPart extensionSourceEditorPage;
 	private boolean dirty;
 	
 	public ExtensionEditor() {
@@ -29,16 +33,47 @@ public class ExtensionEditor extends MultiPageEditorPart {
 	@Override
 	protected void createPages() {
 		try {
-			extensionEditor = new ExtensionEditorFormPage();			
-			extensionSourceEditor = new ExtensionSourceEditor();
-			addPage(extensionEditor, this.getEditorInput());
-			addPage(extensionSourceEditor, this.getEditorInput());
+			extensionEditorPage = new ExtensionEditorFormPage();	
+			extensionEditorPage.addPropertyListener(new IPropertyListener() {
+
+				@Override
+				public void propertyChanged(Object source, int propId) {
+					if(propId == PROP_DIRTY) {
+						if(extensionEditorPage.isDirty()) {
+							setDirty(true);
+						} else {
+							setDirty(false);
+						}
+					}					
+				}
+				
+			});
+			addPage(extensionEditorPage, this.getEditorInput());
+			
+			extensionSourceEditorPage = new StructuredTextEditor();
+			extensionSourceEditorPage.addPropertyListener(new IPropertyListener() {
+
+				@Override
+				public void propertyChanged(Object source, int propId) {
+					if(propId == PROP_DIRTY) {
+						if(extensionEditorPage.isDirty()) {
+							setDirty(true);
+						} else {
+							setDirty(false);
+						}
+					}					
+				}
+				
+			});
+			
+			IFileEditorInput sourceInput = (IFileEditorInput)this.getEditorInput();
+			addPage(extensionSourceEditorPage, new FileEditorInput(sourceInput.getFile()));			
 			
 			setPageText(0, "Extension");
 			setPageText(1, "Source");
 			
 			IDirtyListener listener = new DirtyListenerImpl(this);
-			DirtyUtils.registryDirty(listener, extensionEditor, extensionSourceEditor);
+			DirtyUtils.registryDirty(listener, extensionEditorPage, extensionSourceEditorPage);
 			
 		} catch (PartInitException e) {
 			e.printStackTrace();
@@ -54,7 +89,7 @@ public class ExtensionEditor extends MultiPageEditorPart {
 	@Override
 	protected IEditorSite createSite(IEditorPart editor) {
 		IEditorSite site = null;
-		if(editor == extensionSourceEditor) {
+		if(editor == extensionSourceEditorPage) {
 			site = new MultiPageEditorSite(this, editor) {
 
 				/* (non-Javadoc)
@@ -66,6 +101,7 @@ public class ExtensionEditor extends MultiPageEditorPart {
 				}
 				
 			};
+			
 		} else {
 			site = super.createSite(editor);
 		}
@@ -79,8 +115,8 @@ public class ExtensionEditor extends MultiPageEditorPart {
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		setInput(input);
-		//extensionEditor.init(site, input);
-		//extensionSourceEditor.init(site, input);
+		//extensionEditorPage.init(site, input);
+		//extensionSourceEditorPage.init(site, input);
 	}
 
 	/* (non-Javadoc)
@@ -89,7 +125,7 @@ public class ExtensionEditor extends MultiPageEditorPart {
 	@Override
 	public boolean isDirty() {
 		// TODO Auto-generated method stub
-		return extensionEditor.isDirty() && extensionSourceEditor.isDirty();
+		return extensionEditorPage.isDirty() && extensionSourceEditorPage.isDirty();
 	}	
 	
 	public void setDirty(boolean dirty) {
@@ -103,19 +139,21 @@ public class ExtensionEditor extends MultiPageEditorPart {
 	@Override
 	public boolean isSaveAsAllowed() {
 		// TODO Auto-generated method stub
-		return extensionEditor.isSaveAsAllowed() && extensionSourceEditor.isSaveAsAllowed();
+		return extensionEditorPage.isSaveAsAllowed() && extensionSourceEditorPage.isSaveAsAllowed();
 	}
 	
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		extensionEditor.doSave(monitor);
-		extensionSourceEditor.doSave(monitor);
+		extensionEditorPage.doSave(monitor);
+		extensionSourceEditorPage.doSave(monitor);
+		Activator.getDefault().refreshViewers();
 	}
 
 	@Override
 	public void doSaveAs() {
-		extensionEditor.doSaveAs();
-		extensionSourceEditor.doSaveAs();
+		extensionEditorPage.doSaveAs();
+		extensionSourceEditorPage.doSaveAs();
+		Activator.getDefault().refreshViewers();
 	}
 
 }

@@ -1,6 +1,9 @@
 package com.armin.sap.ds.builder;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -49,12 +52,38 @@ public class Activator extends AbstractUIPlugin {
 		}
 	}
 	
+	public void registerViewer(Viewer viewer) {
+		Context viewersCtx = _ctxManager.getContext("VIEWERS");
+		if(viewersCtx == null) {
+			viewersCtx = _ctxManager.create("VIEWERS", new ArrayList<Viewer>(), this);
+		}
+		@SuppressWarnings("unchecked")
+		ArrayList<Viewer> viewerList = (ArrayList<Viewer>) viewersCtx.getValue();
+		if(!viewerList.contains(viewer)) {
+			viewerList.add(viewer);
+		}
+	}
+	
+	public void refreshViewers() {
+		Context viewersCtx = _ctxManager.getContext("VIEWERS");
+		if(viewersCtx != null) {
+			@SuppressWarnings("unchecked")
+			ArrayList<Viewer> viewerList = (ArrayList<Viewer>) viewersCtx.getValue();
+			for(Viewer viewer : viewerList){
+				if(!viewer.getControl().isDisposed())
+					viewer.refresh();
+			}
+		}
+	}
+	
 	public static Image getImage(String imagePath) {
 		ImageDescriptor imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, imagePath);
         Image image = imageDescriptor.createImage();
  
         return image;
     }
+	
+	
 	
 	/*
 	 * (non-Javadoc)

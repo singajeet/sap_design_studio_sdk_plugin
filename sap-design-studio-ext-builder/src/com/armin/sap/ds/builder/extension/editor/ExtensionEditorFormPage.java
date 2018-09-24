@@ -53,6 +53,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.UI5Mode;
 import com.armin.sap.ds.builder.editors.AbstractBaseEditorPart;
@@ -487,6 +488,8 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 			setupProviders(PROVIDERS.LIST_VIEWER);
 		}
 		
+		Activator.getDefault().registerViewer(_listViewer);
+		
 		_listViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
@@ -537,62 +540,72 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 		_tableComponents.setLinesVisible(true);
 		_tableComponents.setHeaderVisible(true);
 		_tableComponents.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		Activator.getDefault().registerViewer(_tableViewerComponents);
 		
 		formToolkit.paintBordersFor(_tableComponents);
 		
 		setupProviders(PROVIDERS.TABLE_VIEWER);
 		
 		//0
-		TableViewerColumn tableViewerIDColumn = new TableViewerColumn(_tableViewerComponents, SWT.NONE);		
-		tableViewerIDColumn.setLabelProvider(_cellLabelProvider);
+		TableViewerColumn tableViewerIDColumn = new TableViewerColumn(_tableViewerComponents, SWT.NONE);
+		if(_cellLabelProvider != null)
+			tableViewerIDColumn.setLabelProvider(_cellLabelProvider);
 		TableColumn tblclmnIDColumn = tableViewerIDColumn.getColumn();
 		tblclmnIDColumn.setWidth(100);
 		tblclmnIDColumn.setText("ID");
 		//1
 		TableViewerColumn tableViewerTitleColumn = new TableViewerColumn(_tableViewerComponents, SWT.NONE);
-		tableViewerTitleColumn.setLabelProvider(_cellLabelProvider);
+		if(_cellLabelProvider != null)
+			tableViewerTitleColumn.setLabelProvider(_cellLabelProvider);
 		TableColumn tblclmnTitleColumn = tableViewerTitleColumn.getColumn();
 		tblclmnTitleColumn.setMoveable(true);
 		tblclmnTitleColumn.setWidth(100);
 		tblclmnTitleColumn.setText("Title");
 		//2
 		TableViewerColumn tableViewerDataboundColumn = new TableViewerColumn(_tableViewerComponents, SWT.NONE);
-		tableViewerDataboundColumn.setLabelProvider(_cellLabelProvider);
+		if(_cellLabelProvider != null)
+			tableViewerDataboundColumn.setLabelProvider(_cellLabelProvider);
 		TableColumn tblclmnDataboundColumn = tableViewerDataboundColumn.getColumn();
 		tblclmnDataboundColumn.setMoveable(true);
 		tblclmnDataboundColumn.setWidth(100);
 		tblclmnDataboundColumn.setText("Is Databound?");
 		//3
 		TableViewerColumn tableViewerHandlerTypeColumn = new TableViewerColumn(_tableViewerComponents, SWT.NONE);
-		tableViewerHandlerTypeColumn.setLabelProvider(_cellLabelProvider);
+		if(_cellLabelProvider != null)
+			tableViewerHandlerTypeColumn.setLabelProvider(_cellLabelProvider);
 		TableColumn tblclmnHandlerTypeColumn = tableViewerHandlerTypeColumn.getColumn();
 		tblclmnHandlerTypeColumn.setMoveable(true);
 		tblclmnHandlerTypeColumn.setWidth(100);
 		tblclmnHandlerTypeColumn.setText("Handler Type");
 		//4
 		TableViewerColumn tableViewerModesColumn = new TableViewerColumn(_tableViewerComponents, SWT.NONE);
-		tableViewerModesColumn.setLabelProvider(_cellLabelProvider);
+		if(_cellLabelProvider != null)
+			tableViewerModesColumn.setLabelProvider(_cellLabelProvider);
 		TableColumn tblclmnModesColumn = tableViewerModesColumn.getColumn();
 		tblclmnModesColumn.setMoveable(true);
 		tblclmnModesColumn.setWidth(100);
 		tblclmnModesColumn.setText("Modes");
 		//5
 		TableViewerColumn tableViewerVisibleColumn = new TableViewerColumn(_tableViewerComponents, SWT.NONE);
-		tableViewerVisibleColumn.setLabelProvider(_cellLabelProvider);
+		if(_cellLabelProvider != null)
+			tableViewerVisibleColumn.setLabelProvider(_cellLabelProvider);
 		TableColumn tblclmnVisibleColumn = tableViewerVisibleColumn.getColumn();
 		tblclmnVisibleColumn.setMoveable(true);
 		tblclmnVisibleColumn.setWidth(100);
 		tblclmnVisibleColumn.setText("Is Visible?");
 		//6
 		TableViewerColumn tableViewerActionColumn = new TableViewerColumn(_tableViewerComponents, SWT.PUSH);
-		tableViewerActionColumn.setLabelProvider(_cellLabelProvider);
+		if(_cellLabelProvider != null)
+			tableViewerActionColumn.setLabelProvider(_cellLabelProvider);
 		TableColumn tblclmnActionColumn = tableViewerActionColumn.getColumn();
 		tblclmnActionColumn.setMoveable(true);
 		tblclmnActionColumn.setWidth(30);
 		tblclmnActionColumn.setText("Action");
 		
-		_tableViewerComponents.setInput((GroupNode)_extensionNode.getChildren(null)[0]);
-		_listViewer.getList().select(0);
+		if(!_extensionNode.getGroups().isEmpty()) {
+			_tableViewerComponents.setInput((GroupNode)_extensionNode.getChildren(null)[0]);
+			_listViewer.getList().select(0);
+		}
 	}
 
 	
@@ -609,7 +622,8 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 			if(this._extensionNode != null) {
 					this.updateExtensionModelFromUI();
 					Extension extension = ((ExtensionNode)this._extensionNode).getExtension();
-					_projectService.updateExtension(extension, _project);				
+					_projectService.updateExtension(extension, _project);
+					
 			}
 			
 			this.setDirty(false);

@@ -17,6 +17,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.editors.IReusableDSEditorPart;
 import com.armin.sap.ds.builder.extension.editor.ExtensionEditor;
 import com.armin.sap.ds.builder.extension.editor.ExtensionEditorInput;
@@ -27,30 +28,42 @@ public class OpenExtensionHandler extends AbstractHandler {
 
 	public static final String COMMAND_ID = "com.armin.sap.ds.builder.commands.extension.open";
 	
+	private ExtensionNode _node;
+	
+	public OpenExtensionHandler() {}
+	public OpenExtensionHandler(ExtensionNode node) {
+		this._node = node;
+	}
+	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 	
-		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
+		//IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
+		IWorkbenchWindow window = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow();
 		IWorkbenchPage page = window.getActivePage();
-		
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
-		
+		IEditorInput input = null;
 		Object selectObj = null;
 		
-		if(selection != null && !selection.isEmpty() && selection instanceof IStructuredSelection) {
-			selectObj = ((IStructuredSelection) selection).getFirstElement();
-		} 
-		
-		IEditorInput input = null;
-		try {
-			if(selectObj instanceof ExtensionNode) {
-				input =  new ExtensionEditorInput((IProjectItemNode)selectObj);
+		if(this._node != null) {
+			input =  new ExtensionEditorInput((IProjectItemNode)this._node);
+			selectObj = this._node;
+			
+		} else {		
+			ISelection selection = HandlerUtil.getCurrentSelection(event);
+			
+			if(selection != null && !selection.isEmpty() && selection instanceof IStructuredSelection) {
+				selectObj = ((IStructuredSelection) selection).getFirstElement();
+			} 			
+			
+			try {
+				if(selectObj instanceof ExtensionNode) {
+					input =  new ExtensionEditorInput((IProjectItemNode)selectObj);
+				}
+			}catch(Exception e) {
+				MessageDialog.open(MessageDialog.ERROR, null, "Invalid Selection", "Current selected 'Tree Node' is not valid for 'Extension Editor'. Please select 'Extension' node and try again!", SWT.SHEET);
+				e.printStackTrace();
 			}
-		}catch(Exception e) {
-			MessageDialog.open(MessageDialog.ERROR, null, "Invalid Selection", "Current selected 'Tree Node' is not valid for 'Extension Editor'. Please select 'Extension' node and try again!", SWT.SHEET);
-			e.printStackTrace();
 		}
-		
 		boolean found  = false;
 		
 		IEditorReference[] erefs = page.getEditorReferences();

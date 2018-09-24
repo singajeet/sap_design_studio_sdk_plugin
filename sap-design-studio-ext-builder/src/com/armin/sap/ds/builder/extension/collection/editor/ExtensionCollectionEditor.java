@@ -3,8 +3,12 @@ package com.armin.sap.ds.builder.extension.collection.editor;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -22,6 +26,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -41,6 +46,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Extension;
+import com.armin.sap.ds.builder.commands.handlers.OpenExtensionHandler;
 import com.armin.sap.ds.builder.editors.AbstractBaseEditorPart;
 import com.armin.sap.ds.builder.editors.IReusableDSEditorPart;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
@@ -230,12 +236,46 @@ public class ExtensionCollectionEditor extends AbstractBaseEditorPart implements
 		frmExtensions.getBody().setLayout(new GridLayout(3, false));
 		
 		IToolBarManager formToolBar = frmExtensions.getToolBarManager();
-		CommandContributionItemParameter param = new CommandContributionItemParameter(
+		formToolBar.add(new Action() {
+
+			
+			/* (non-Javadoc)
+			 * @see org.eclipse.jface.action.Action#getImageDescriptor()
+			 */
+			@Override
+			public ImageDescriptor getImageDescriptor() {
+				// TODO Auto-generated method stub
+				return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "images/open_extension_16x16.png");
+			}
+
+
+
+
+			/* (non-Javadoc)
+			 * @see org.eclipse.jface.action.Action#runWithEvent(org.eclipse.swt.widgets.Event)
+			 */
+			@Override
+			public void runWithEvent(Event event) {				
+				super.runWithEvent(event);
+				IHandler openHandler = new OpenExtensionHandler(_currentSelectedExtensionNode);
+				ExecutionEvent exEvent = new ExecutionEvent();				
+				
+				try {
+					openHandler.execute(exEvent);
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		});
+		
+		CommandContributionItemParameter paramSave = new CommandContributionItemParameter(
 																	this.getSite(), 
 																	null, 
 																	"org.eclipse.ui.file.save",
 																	CommandContributionItem.STYLE_PUSH);
-		IContributionItem contribSave = new CommandContributionItem(param);
+		IContributionItem contribSave = new CommandContributionItem(paramSave);
 		
 		formToolBar.add(contribSave);
 		formToolBar.update(true);
@@ -258,6 +298,7 @@ public class ExtensionCollectionEditor extends AbstractBaseEditorPart implements
 			_labelProvider = new ExtensionCollectionEditorLabelProvider();
 			extensionsList.setLabelProvider(_labelProvider);
 		}
+		Activator.getDefault().registerViewer(extensionsList);
 		
 		extensionsList.getList().setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 1, 1));
 		extensionsList.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -418,6 +459,7 @@ public class ExtensionCollectionEditor extends AbstractBaseEditorPart implements
 					}
 					
 					this.setDirty(false);
+					Activator.getDefault().refreshViewers();
 				}
 			
 		}catch(Exception e) {

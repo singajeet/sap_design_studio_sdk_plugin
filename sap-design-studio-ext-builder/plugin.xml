@@ -852,22 +852,22 @@
          </contentTypeBinding>
       </editor>
       <editor
-            class="com.armin.sap.ds.builder.extension.source.editors.ExtensionSourceEditor"
-            contributorClass="com.armin.sap.ds.builder.extension.source.editors.ExtensionSourceEditorContributor"
-            default="false"
-            extensions="xml"
-            filenames="contribution.xml"
-            icon="images/view_extension_source_16x16.gif"
-            id="com.armin.sap.ds.builder.editors.extension_source_editor"
-            name="Extension Source Editor">
-      </editor>
-      <editor
             class="com.armin.sap.ds.builder.extension.editor.ExtensionEditor"
             contributorClass="com.armin.sap.ds.builder.extension.editor.ExtensionEditorContributor"
             default="true"
             icon="images/extension_16x16.png"
             id="com.armin.sap.ds.builder.extension.editor.extension_editor"
             name="Extension Editor">
+      </editor>
+      <editor
+            class="org.eclipse.wst.sse.ui.StructuredTextEditor"
+            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+            default="false"
+            extensions="xml"
+            filenames="contribution.xml"
+            icon="images/view_extension_source_16x16.gif"
+            id="com.armin.sap.ds.builder.editors.extension_source_editor"
+            name="Extension Source Editor">
       </editor>
    </extension>
    <extension
@@ -1056,6 +1056,12 @@
             class="com.armin.sap.ds.builder.preferences.DesigStudioExtTemplatesPage"
             id="com.armin.sap.ds.builder.preferences.design_studio_template_preferences"
             name="Templates">
+      </page>
+      <page
+            category="com.armin.sap.ds.builder.preferences.design_studio_preferences"
+            class="com.armin.sap.ds.builder.preferences.DesigStudioExtSourceEditorPage"
+            id="com.armin.sap.ds.builder.preferences.extension_source_editor_preferences"
+            name="Extension Source Editor">
       </page>
    </extension>
    <extension

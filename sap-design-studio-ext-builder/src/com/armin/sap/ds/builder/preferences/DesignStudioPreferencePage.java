@@ -48,7 +48,7 @@ public class DesignStudioPreferencePage
 	 * restore itself.
 	 */
 	public void createFieldEditors() {
-Composite topPanel = getFieldEditorParent();
+		Composite topPanel = getFieldEditorParent();
 		
 		Group fileNames = new Group(topPanel, SWT.SHADOW_ETCHED_IN);
 		fileNames.setText("Default File Names");

@@ -133,7 +133,7 @@ public class NavigatorContentProvider implements ITreeContentProvider, IResource
 	
 	@Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		_viewer = viewer; 
+		_viewer = viewer;		
     }
 
 	@Override
