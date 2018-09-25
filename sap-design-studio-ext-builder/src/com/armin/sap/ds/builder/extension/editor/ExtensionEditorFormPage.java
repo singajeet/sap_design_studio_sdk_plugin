@@ -54,6 +54,7 @@ import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.IRefreshForm;
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.UI5Mode;
 import com.armin.sap.ds.builder.editors.AbstractBaseEditorPart;
@@ -260,7 +261,7 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 	private TableViewer _tableViewerComponents;
 	private ListViewer _listViewer;
 	private ColumnLabelProvider _cellLabelProvider;
-	
+	//private GroupNode _currentSelectedGroupNode;
 	/**
 	 * Create the form page.	
 	 * @wbp.parser.constructor	 
@@ -390,11 +391,11 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 		
 		if(node != null) {
 			Extension ext = (Extension)(node.getExtension());			
-			_txtId.setText(ext.getId());
-			_txtTitle.setText(ext.getTitle());
-			_txtVendor.setText(ext.getVendor());
-			_txtVersion.setText(ext.getVersion());
-			_txtEula.setText(ext.getEula());
+			if(!_txtId.isDisposed()) _txtId.setText(ext.getId());
+			if(!_txtTitle.isDisposed()) _txtTitle.setText(ext.getTitle());
+			if(!_txtVendor.isDisposed()) _txtVendor.setText(ext.getVendor());
+			if(!_txtVersion.isDisposed()) _txtVersion.setText(ext.getVersion());
+			if(!_txtEula.isDisposed()) _txtEula.setText(ext.getEula());
 		}
 		
 	}
@@ -488,8 +489,6 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 			setupProviders(PROVIDERS.LIST_VIEWER);
 		}
 		
-		Activator.getDefault().registerViewer(_listViewer);
-		
 		_listViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
@@ -499,7 +498,7 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 					
 					if(selection.size() > 0) {
 						GroupNode groupNode = (GroupNode)selection.getFirstElement();
-						//_tableContentProvider = new TableComponentsContentProvider(groupNode);
+						//_currentSelectedGroupNode = groupNode;
 						_tableViewerComponents.setInput(groupNode);
 						
 					}
@@ -606,6 +605,17 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 			_tableViewerComponents.setInput((GroupNode)_extensionNode.getChildren(null)[0]);
 			_listViewer.getList().select(0);
 		}
+		
+		//register components for data refresh
+		Activator.getDefault().registerViewer(_listViewer);
+		Activator.getDefault().registerFormForRefresh(new IRefreshForm() {
+
+			@Override
+			public void refreshForm() {
+				showData();				
+			}
+			
+		});
 	}
 
 	
@@ -622,8 +632,7 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 			if(this._extensionNode != null) {
 					this.updateExtensionModelFromUI();
 					Extension extension = ((ExtensionNode)this._extensionNode).getExtension();
-					_projectService.updateExtension(extension, _project);
-					
+					_projectService.updateExtension(extension, _project);					
 			}
 			
 			this.setDirty(false);

@@ -48,7 +48,10 @@ public class DirtyUtils {
 		
 		@Override
 		public void keyPressed(KeyEvent e) {
-				e.doit = true;
+			e.doit = true;
+			if(e.character >= 32 && e.character <= 127) {
+				listener.fireDirty();
+			}
 		}
 
 		@Override

@@ -115,6 +115,7 @@ public class ExtensionEditor extends MultiPageEditorPart {
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		setInput(input);
+		setDirty(false);
 		//extensionEditorPage.init(site, input);
 		//extensionSourceEditorPage.init(site, input);
 	}
@@ -125,15 +126,12 @@ public class ExtensionEditor extends MultiPageEditorPart {
 	@Override
 	public boolean isDirty() {
 		// TODO Auto-generated method stub
-		return extensionEditorPage.isDirty() && extensionSourceEditorPage.isDirty();
+		return this.dirty;//extensionEditorPage.isDirty() && extensionSourceEditorPage.isDirty();
 	}	
 	
 	public void setDirty(boolean dirty) {
-		if(this.dirty != dirty) {
-			this.dirty = dirty;
-			
-			this.firePropertyChange(IEditorPart.PROP_DIRTY);
-		}
+		this.dirty = dirty;
+		this.firePropertyChange(IEditorPart.PROP_DIRTY);		
 	}
 
 	@Override
@@ -144,13 +142,19 @@ public class ExtensionEditor extends MultiPageEditorPart {
 	
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		extensionEditorPage.doSave(monitor);
-		extensionSourceEditorPage.doSave(monitor);
+		int pageIndex = this.getActivePage();
+		if(pageIndex == 0) {
+			extensionEditorPage.doSave(monitor);
+			((StructuredTextEditor)extensionSourceEditorPage).doRevertToSaved();
+		} else {		
+			extensionSourceEditorPage.doSave(monitor);			
+		}
 		Activator.getDefault().refreshViewers();
+		setDirty(false);
 	}
 
 	@Override
-	public void doSaveAs() {
+	public void doSaveAs() {		
 		extensionEditorPage.doSaveAs();
 		extensionSourceEditorPage.doSaveAs();
 		Activator.getDefault().refreshViewers();

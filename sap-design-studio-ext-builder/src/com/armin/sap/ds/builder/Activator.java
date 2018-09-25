@@ -74,6 +74,27 @@ public class Activator extends AbstractUIPlugin {
 					viewer.refresh();
 			}
 		}
+		
+		Context formsCtx = _ctxManager.getContext("REFRESHFORMS");
+		if(formsCtx != null) {
+			@SuppressWarnings("unchecked")
+			ArrayList<IRefreshForm> formsList = (ArrayList<IRefreshForm>) formsCtx.getValue();
+			for(IRefreshForm form : formsList){
+				form.refreshForm();
+			}
+		}
+	}
+	
+	public void registerFormForRefresh(IRefreshForm callback) {
+		Context callbackCtx = _ctxManager.getContext("REFRESHFORMS");
+		if(callbackCtx == null) {
+			callbackCtx = _ctxManager.create("REFRESHFORMS", new ArrayList<IRefreshForm>(), this);
+		}
+		@SuppressWarnings("unchecked")
+		ArrayList<IRefreshForm> callbackList = (ArrayList<IRefreshForm>) callbackCtx.getValue();
+		if(!callbackList.contains(callback)) {
+			callbackList.add(callback);
+		}
 	}
 	
 	public static Image getImage(String imagePath) {

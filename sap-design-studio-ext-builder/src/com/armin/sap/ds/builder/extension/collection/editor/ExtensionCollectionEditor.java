@@ -45,6 +45,7 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.IRefreshForm;
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.commands.handlers.OpenExtensionHandler;
 import com.armin.sap.ds.builder.editors.AbstractBaseEditorPart;
@@ -79,6 +80,7 @@ public class ExtensionCollectionEditor extends AbstractBaseEditorPart implements
 	private ListViewer extensionsList;
 	private ExtensionCollectionEditorContentProvider _contentProvider;
 	private ExtensionCollectionEditorLabelProvider _labelProvider;
+	private IStructuredSelection _currentSelection;
 	
 	@Override
 	public void setInput(IEditorInput input) {
@@ -297,8 +299,7 @@ public class ExtensionCollectionEditor extends AbstractBaseEditorPart implements
 			extensionsList.setInput(this._extensionCollection);
 			_labelProvider = new ExtensionCollectionEditorLabelProvider();
 			extensionsList.setLabelProvider(_labelProvider);
-		}
-		Activator.getDefault().registerViewer(extensionsList);
+		}	
 		
 		extensionsList.getList().setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 1, 1));
 		extensionsList.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -323,10 +324,10 @@ public class ExtensionCollectionEditor extends AbstractBaseEditorPart implements
 				}
 				
 				if(event.getSelection() != null && !event.getSelection().isEmpty()) {
-					IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+					_currentSelection = (IStructuredSelection)event.getSelection();
 					
-					if(selection.size() > 0) {						
-						ExtensionNode selectedExtensionNode = (ExtensionNode)selection.getFirstElement();
+					if(_currentSelection.size() > 0) {						
+						ExtensionNode selectedExtensionNode = (ExtensionNode)_currentSelection.getFirstElement();
 						
 						if(selectedExtensionNode != null) {
 							Extension selectedExtension = selectedExtensionNode.getExtension();
@@ -422,10 +423,17 @@ public class ExtensionCollectionEditor extends AbstractBaseEditorPart implements
 		licenseText.setLayoutData(licenseLayoutData);
 		
 		xpndblcmpstEulaLicenseText.setClient(licenseText);		
+		
+		Activator.getDefault().registerViewer(extensionsList);
+		Activator.getDefault().registerFormForRefresh(new IRefreshForm() {
 
-//		DirtyListenerImpl dirtyListener = new DirtyListenerImpl(this);
-//		DirtyUtils.registryDirty(dirtyListener, textExtensionTitle, textExtensionVendor,
-//												textExtensionVersion, licenseText);
+			@Override
+			public void refreshForm() {
+				showData();
+			}
+			
+		});
+
 	}
 	
 	private void updateExtensionFromUI() {
@@ -497,33 +505,37 @@ public class ExtensionCollectionEditor extends AbstractBaseEditorPart implements
 				_extensionCollection = nodes;
 		}
 			
-		textProjectName.setText(_projectInput.getName());
-		textProjectLocation.setText(_projectInput.getLocation().toString());
-		textProjectModificationDate.setText(new Date(_projectInput.getModificationStamp()).toLocaleString());
+		if (!textProjectName.isDisposed()) textProjectName.setText(_projectInput.getName());
+		if (!textProjectLocation.isDisposed()) textProjectLocation.setText(_projectInput.getLocation().toString());
+		if (!textProjectModificationDate.isDisposed()) textProjectModificationDate.setText(new Date(_projectInput.getModificationStamp()).toLocaleString());
 		
 		if(this._extensionCollection != null && this._extensionCollection.getExtensions().size() > 0) {
 			if(_contentProvider == null) {
 				_contentProvider = new ExtensionCollectionEditorContentProvider(this._extensionCollection);			
-				extensionsList.setContentProvider(_contentProvider);
+				if(!extensionsList.getList().isDisposed()) extensionsList.setContentProvider(_contentProvider);
 			}
 			
 			if(_labelProvider == null) {
 				_labelProvider = new ExtensionCollectionEditorLabelProvider();
-				extensionsList.setLabelProvider(_labelProvider);
+				if(!extensionsList.getList().isDisposed()) extensionsList.setLabelProvider(_labelProvider);
 			}
 			
 			if(extensionsList.getInput() == null)
-				extensionsList.setInput(this._extensionCollection);
+				if(!extensionsList.getList().isDisposed()) extensionsList.setInput(this._extensionCollection);
 			
 		}
 		
 		if(nodes != null) {
 			Extension ext = (Extension)(nodes.getExtensions().get(0).getModel());			
-			textExtensionId.setText(ext.getId());
-			textExtensionTitle.setText(ext.getTitle());
-			textExtensionVendor.setText(ext.getVendor());
-			textExtensionVersion.setText(ext.getVersion());
-			licenseText.setText(ext.getEula());
+			if(!textExtensionId.isDisposed()) textExtensionId.setText(ext.getId());
+			if(!textExtensionTitle.isDisposed()) textExtensionTitle.setText(ext.getTitle());
+			if(!textExtensionVendor.isDisposed()) textExtensionVendor.setText(ext.getVendor());
+			if(!textExtensionVersion.isDisposed()) textExtensionVersion.setText(ext.getVersion());
+			if(!licenseText.isDisposed()) licenseText.setText(ext.getEula());
+		}
+		
+		if(_currentSelection != null) {
+			extensionsList.setSelection(_currentSelection);
 		}
 	}
 	

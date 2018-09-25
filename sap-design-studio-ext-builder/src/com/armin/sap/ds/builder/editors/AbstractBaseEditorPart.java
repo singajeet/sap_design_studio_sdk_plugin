@@ -35,11 +35,8 @@ public abstract class AbstractBaseEditorPart extends FormPage {
 	}
 	
 	public void setDirty(boolean dirty) {
-		if(this.dirty != dirty) {
-			this.dirty = dirty;
-			
-			this.firePropertyChange(IEditorPart.PROP_DIRTY);
-		}
+		this.dirty = dirty;
+		this.firePropertyChange(IEditorPart.PROP_DIRTY);		
 	}
 	
 	@Override
