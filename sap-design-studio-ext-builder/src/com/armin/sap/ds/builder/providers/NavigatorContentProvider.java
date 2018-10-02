@@ -146,9 +146,11 @@ public class NavigatorContentProvider implements ITreeContentProvider, IResource
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							TreeViewer viewer = (TreeViewer)_viewer;
-							TreePath[] treePaths = viewer.getExpandedTreePaths();
-							viewer.refresh();
-							viewer.setExpandedTreePaths(treePaths);	
+							if(!viewer.getTree().isDisposed()) {
+								TreePath[] treePaths = viewer.getExpandedTreePaths();
+								viewer.refresh();
+								viewer.setExpandedTreePaths(treePaths);
+							}
 						}
 					});
 					return Status.OK_STATUS;

@@ -116,8 +116,7 @@ public class ExtensionEditor extends MultiPageEditorPart {
 		super.init(site, input);
 		setInput(input);
 		setDirty(false);
-		//extensionEditorPage.init(site, input);
-		//extensionSourceEditorPage.init(site, input);
+		setPartName(((ExtensionEditorInput)input).getTreeNode().getModel().getId());		
 	}
 
 	/* (non-Javadoc)

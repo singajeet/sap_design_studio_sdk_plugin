@@ -38,7 +38,11 @@ import javax.xml.bind.annotation.XmlValue;
 })
 public class PossibleValueType implements IModel {
 
-    @XmlValue
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2128146327678789747L;
+	@XmlValue
     protected String value;
     @XmlAttribute(name = "title")
     protected String title;    

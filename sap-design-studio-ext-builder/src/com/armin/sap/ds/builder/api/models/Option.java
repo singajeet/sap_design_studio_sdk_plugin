@@ -36,7 +36,11 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "Option")
 public class Option extends Descriptable {
 
-    @XmlAttribute(name = "name", required = true)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -172477366695346023L;
+	@XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "value", required = true)
     protected String value;

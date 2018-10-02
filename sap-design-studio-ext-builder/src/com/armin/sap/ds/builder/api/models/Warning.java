@@ -2,6 +2,10 @@ package com.armin.sap.ds.builder.api.models;
 
 public class Warning implements IModel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4936824738607594797L;
 	private String _id;
 	private String _name;
 

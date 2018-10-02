@@ -41,5 +41,10 @@ public class Group
     extends Descriptable
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -184366921603590693L;
+
 
 }

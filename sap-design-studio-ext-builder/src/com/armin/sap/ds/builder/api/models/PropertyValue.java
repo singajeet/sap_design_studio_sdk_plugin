@@ -43,7 +43,11 @@ import javax.xml.bind.annotation.XmlValue;
 })
 public class PropertyValue implements IModel {
 
-    @XmlValue
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1780531146912372964L;
+	@XmlValue
     protected String value;
     @XmlAttribute(name = "property", required = true)
     protected String property;    

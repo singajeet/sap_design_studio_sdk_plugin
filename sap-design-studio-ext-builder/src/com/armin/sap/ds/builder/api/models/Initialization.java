@@ -45,6 +45,10 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Initialization extends Descriptable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3400232664136800739L;
 	protected List<PropertyValue> defaultValue;
 
     /**

@@ -2,6 +2,10 @@ package com.armin.sap.ds.builder.api.models;
 
 public class Error implements IModel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4705120010859076273L;
 	private String _id;
 	private String _name;
 	

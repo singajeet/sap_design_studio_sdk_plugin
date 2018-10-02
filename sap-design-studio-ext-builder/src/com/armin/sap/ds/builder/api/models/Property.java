@@ -55,7 +55,11 @@ public class Property
     extends Descriptable
 {
 
-    protected List<Property> property;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2010358678547856153L;
+	protected List<Property> property;
     protected List<PossibleValueType> possibleValue;
     protected List<Option> option;
     @XmlAttribute(name = "type", required = true)

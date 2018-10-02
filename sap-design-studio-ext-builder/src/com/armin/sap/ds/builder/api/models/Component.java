@@ -65,7 +65,12 @@ public class Component
     extends Descriptable
 {
 
-    protected List<RequireJSType> requireJs;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -437063015265773945L;
+	
+	protected List<RequireJSType> requireJs;
     protected List<StdInclude> stdInclude;
     protected List<String> jsInclude;
     protected List<String> cssInclude;

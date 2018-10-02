@@ -2,6 +2,11 @@ package com.armin.sap.ds.builder.api.models;
 
 public class Info implements IModel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4088618230095899393L;
+	
 	private String _id;
 	private String _name;
 	
@@ -43,4 +48,11 @@ public class Info implements IModel {
 		_name = name;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return String.format("Info [Id=%s, Name=%s]", _id, _name);
+	}	
 }

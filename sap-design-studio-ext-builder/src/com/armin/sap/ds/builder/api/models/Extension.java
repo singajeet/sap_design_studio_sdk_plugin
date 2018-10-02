@@ -68,7 +68,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlRootElement(name="sdkExtension")
 public class Extension implements IModel {
 
-    protected String license;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2373769565975545986L;
+	protected String license;
     protected List<Group> group;
     protected List<Component> component;
     @XmlAttribute(name = "eula")
@@ -93,8 +97,8 @@ public class Extension implements IModel {
      *     {@link String }
      *     
      */
-    public String getLicense() {
-        return license;
+    public String getLicense() {    	
+        return license;        
     }
 
     /**

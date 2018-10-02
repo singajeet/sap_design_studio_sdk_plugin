@@ -52,6 +52,20 @@
             id="com.armin.sap.ds.builder.commands.extension.open"
             name="Open Extension">
       </command>
+      <category
+            id="com.armin.sap.ds.builder.tree.commands.category"
+            name="SAP DS Navigator Tree Commands Category">
+      </category>
+      <command
+            categoryId="com.armin.sap.ds.builder.tree.commands.category"
+            id="com.armin.sap.ds.builder.commands.tree.copyNode"
+            name="Copy">
+      </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.tree.commands.category"
+            id="com.armin.sap.ds.builder.commands.tree.pasteNode"
+            name="Paste">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -182,6 +196,51 @@
                            ifEmpty="false">
                         <instanceof
                               value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <separator
+                  name="sap-design-studio-ext-builder.separator1">
+            </separator>
+            <command
+                  commandId="com.armin.sap.ds.builder.commands.tree.copyNode"
+                  icon="images/copy.png"
+                  label="Copy"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="+">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="com.armin.sap.ds.builder.commands.tree.pasteNode"
+                  icon="images/paste2.png"
+                  label="Paste"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -432,7 +491,8 @@
             </visibleWhen>
          </command>
          <command
-               commandId="org.eclipse.ui.edit.copy"
+               commandId="com.armin.sap.ds.builder.commands.tree.copyNode"
+               icon="images/copy.png"
                label="Copy"
                style="push">
             <visibleWhen
@@ -452,7 +512,8 @@
             </visibleWhen>
          </command>
          <command
-               commandId="org.eclipse.ui.edit.paste"
+               commandId="com.armin.sap.ds.builder.commands.tree.pasteNode"
+               icon="images/paste2.png"
                label="Paste"
                style="push">
             <visibleWhen
@@ -663,6 +724,52 @@
                         ifEmpty="false">
                      <instanceof
                            value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:edit?after=additions">
+         <command
+               commandId="com.armin.sap.ds.builder.commands.tree.copyNode"
+               icon="images/copy.png"
+               label="Copy"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="+">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.armin.sap.ds.builder.commands.tree.pasteNode"
+               icon="images/paste2.png"
+               label="Paste"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -950,6 +1057,42 @@
             </with>
          </enabledWhen>
       </handler>
+      <handler
+            class="com.armin.sap.ds.builder.navigator.tree.handlers.CopyCommandHandler"
+            commandId="com.armin.sap.ds.builder.commands.tree.copyNode">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="+">
+               </count>
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.armin.sap.ds.builder.navigator.tree.handlers.PasteCommandHandler"
+            commandId="com.armin.sap.ds.builder.commands.tree.pasteNode">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="1">
+               </count>
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
@@ -1224,6 +1367,17 @@
             factoryClass="com.armin.sap.ds.builder.service.factory.ProjectFilesReaderServiceFactory">
          <service
                serviceClass="com.armin.sap.ds.builder.service.IProjectFilesReaderService">
+         </service>
+      </serviceFactory>
+      <serviceFactory
+            factoryClass="com.armin.sap.ds.builder.service.factory.ClipboardOpsServiceFactory">
+         <service
+               serviceClass="com.armin.sap.ds.builder.service.IClipboardOpsService"></service>
+      </serviceFactory>
+      <serviceFactory
+            factoryClass="com.armin.sap.ds.builder.service.factory.ClipboardTransferServiceFactory">
+         <service
+               serviceClass="com.armin.sap.ds.builder.service.IClipboardTransferService">
          </service>
       </serviceFactory>
    </extension>

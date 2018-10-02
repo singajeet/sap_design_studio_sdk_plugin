@@ -40,7 +40,11 @@ import javax.xml.bind.annotation.XmlValue;
 })
 public class RequireJSType implements IModel {
 
-    @XmlValue
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4834059043007138474L;
+	@XmlValue
     protected String value;
     @XmlAttribute(name = "modes", required = true)
     protected List<UI5Mode> modes;    

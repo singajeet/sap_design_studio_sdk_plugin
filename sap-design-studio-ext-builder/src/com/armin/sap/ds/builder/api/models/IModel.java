@@ -1,6 +1,8 @@
 package com.armin.sap.ds.builder.api.models;
 
-public interface IModel {
+import java.io.Serializable;
+
+public interface IModel extends Serializable {
 	public String getId();
 	public void setId(String id);
 	public String getName();

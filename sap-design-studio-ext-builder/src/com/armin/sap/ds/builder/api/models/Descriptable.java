@@ -8,6 +8,8 @@
 
 package com.armin.sap.ds.builder.api.models;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -50,9 +52,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
     Component.class,
     Property.class
 })
-public class Descriptable implements IModel {
+public class Descriptable implements IModel, Serializable {
 
-    @XmlAttribute(name = "id", required = true)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 265352230846473849L;
+	
+	@XmlAttribute(name = "id", required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     protected String id;
     @XmlAttribute(name = "title", required = true)
@@ -172,4 +179,12 @@ public class Descriptable implements IModel {
 		name = p_name;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return String.format("Descriptable [id=%s, title=%s, tooltip=%s, visible=%s, name=%s]", id, title, tooltip,
+				visible, name);
+	}
 }

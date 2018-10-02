@@ -8,6 +8,8 @@
 
 package com.armin.sap.ds.builder.api.models;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -32,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "HandlerTypes")
 @XmlEnum
-public enum HandlerTypes {
+public enum HandlerTypes implements Serializable {
 
     @XmlEnumValue("div")
     DIV("div"),

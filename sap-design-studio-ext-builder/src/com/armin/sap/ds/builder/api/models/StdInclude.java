@@ -46,7 +46,11 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "StdInclude")
 public class StdInclude extends Descriptable{
 
-    @XmlAttribute(name = "kind", required = true)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6201334157442733686L;
+	@XmlAttribute(name = "kind", required = true)
     protected String kind;
     
     /**

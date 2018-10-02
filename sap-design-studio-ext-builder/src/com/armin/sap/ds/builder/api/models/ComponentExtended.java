@@ -9,6 +9,11 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "ComponentExtended")
 public class ComponentExtended extends Component {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2239142225088092338L;
+	
 	@XmlAttribute(name = "componentFileCreationEnabled")
 	private boolean componentFileCreationEnabled = true;
 	@XmlAttribute(name="classToExtend")

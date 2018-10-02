@@ -8,6 +8,8 @@
 
 package com.armin.sap.ds.builder.api.models;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -30,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "UI5Mode")
 @XmlEnum
-public enum UI5Mode {
+public enum UI5Mode implements Serializable{
 
     @XmlEnumValue("commons")
     COMMONS("commons"),

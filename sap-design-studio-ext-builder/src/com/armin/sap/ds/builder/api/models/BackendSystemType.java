@@ -8,6 +8,8 @@
 
 package com.armin.sap.ds.builder.api.models;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
@@ -31,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlType(name = "BackendSystemType")
 @XmlEnum
-public enum BackendSystemType {
+public enum BackendSystemType implements Serializable {
 
     LOCAL,
     BIPLATFORM,

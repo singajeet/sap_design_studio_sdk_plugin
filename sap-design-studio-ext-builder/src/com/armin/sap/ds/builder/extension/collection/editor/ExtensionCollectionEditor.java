@@ -245,14 +245,10 @@ public class ExtensionCollectionEditor extends AbstractBaseEditorPart implements
 			 * @see org.eclipse.jface.action.Action#getImageDescriptor()
 			 */
 			@Override
-			public ImageDescriptor getImageDescriptor() {
-				// TODO Auto-generated method stub
-				return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "images/open_extension_16x16.png");
+			public ImageDescriptor getImageDescriptor() {				
+				return AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "images/openFolder_16x16.gif");
 			}
-
-
-
-
+			
 			/* (non-Javadoc)
 			 * @see org.eclipse.jface.action.Action#runWithEvent(org.eclipse.swt.widgets.Event)
 			 */
@@ -264,8 +260,7 @@ public class ExtensionCollectionEditor extends AbstractBaseEditorPart implements
 				
 				try {
 					openHandler.execute(exEvent);
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
+				} catch (ExecutionException e) {			
 					e.printStackTrace();
 				}
 			}
@@ -292,7 +287,7 @@ public class ExtensionCollectionEditor extends AbstractBaseEditorPart implements
 		managedForm.getToolkit().paintBordersFor(groupExtensionsList);
 		groupExtensionsList.setLayout(new GridLayout(1, false));
 		
-		extensionsList = new ListViewer(groupExtensionsList); //, SWT.BORDER | SWT.V_SCROLL);
+		extensionsList = new ListViewer(groupExtensionsList); 
 		if(this._extensionCollection != null && this._extensionCollection.getExtensions().size() > 0) {
 			_contentProvider = new ExtensionCollectionEditorContentProvider(this._extensionCollection);
 			extensionsList.setContentProvider(_contentProvider);
@@ -309,18 +304,7 @@ public class ExtensionCollectionEditor extends AbstractBaseEditorPart implements
 			public void selectionChanged(SelectionChangedEvent event) {
 				
 				if(_currentSelectedExtension != null && _currentSelectedExtensionNode != null) {
-//					if(_currentSelectedExtension.getId().toUpperCase().equals(textExtensionId.getText().toUpperCase())){
-//						_currentSelectedExtension.setTitle(textExtensionTitle.getText());
-//						_currentSelectedExtension.setName(textExtensionId.getText() + "." + textExtensionTitle.getText());
-//						_currentSelectedExtension.setVersion(textExtensionVersion.getText());
-//						_currentSelectedExtension.setVendor(textExtensionVendor.getText());
-//						_currentSelectedExtension.setEula(licenseText.getText());
-//						
-//						_currentSelectedExtensionNode.setExtension(_currentSelectedExtension);						
-//				
-//					}
-					updateExtensionFromUI();
-					
+					updateExtensionFromUI();					
 				}
 				
 				if(event.getSelection() != null && !event.getSelection().isEmpty()) {

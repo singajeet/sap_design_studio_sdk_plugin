@@ -12,6 +12,11 @@ import org.eclipse.core.resources.IResource;
 @XmlType(name = "ResourceModel")
 public class ResourceModel extends Descriptable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4447407678379987070L;
+
 	public ResourceModel() {
 		this.id = UUID.randomUUID().toString();
 		this.name = this.id;
