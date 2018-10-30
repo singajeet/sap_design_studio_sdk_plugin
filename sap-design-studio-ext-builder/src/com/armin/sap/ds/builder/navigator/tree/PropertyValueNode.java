@@ -1,13 +1,17 @@
 package com.armin.sap.ds.builder.navigator.tree;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.model.IWorkbenchAdapter;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.PossibleValueType;
 import com.armin.sap.ds.builder.preferences.Settings;
+import com.armin.sap.ds.builder.properties.projectitemnode.PropertyValueNodeProperties;
 
 public class PropertyValueNode extends ProjectItemNode {
 	
@@ -56,5 +60,24 @@ public class PropertyValueNode extends ProjectItemNode {
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getAdapter(Class<T> adapter) {
+		 if (adapter == IWorkbenchAdapter.class)
+			 return (T)this;
+	     if (adapter == IPropertySource.class)
+	         return (T)(new PropertyValueNodeProperties(this));
+		return null;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor(Object object) {		
+		return ImageDescriptor.createFromImage(getImage());
+	}
+
+	@Override
+	public String getLabel(Object o) {		
+		return this.getName();
+	}
 
 }

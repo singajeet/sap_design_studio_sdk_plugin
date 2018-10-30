@@ -8,7 +8,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.armin.sap.ds.builder.api.models.Extension;
-import com.armin.sap.ds.builder.controls.ExtensionControl;
+import com.armin.sap.ds.builder.controls.ExtensionFormControl;
 import com.armin.sap.ds.builder.controls.IExtensionChangedListener;
 import com.armin.sap.ds.builder.shared.ISharedData;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
@@ -19,7 +19,7 @@ public class DesignStudioNewProjectExtensionPage extends WizardPage implements I
 	public String EXTENSION_XML_FILE_NAME = "contribution.xml";
 	private ISharedData _data;
 	private Extension _model;
-	private ExtensionControl extensionCtl;
+	private ExtensionFormControl extensionCtl;
 	private Composite topLevel;
 	
 	/**
@@ -74,7 +74,7 @@ public class DesignStudioNewProjectExtensionPage extends WizardPage implements I
 	
 	private void createCompositeChildControls() {
 		if(_model == null) {
-			extensionCtl = new ExtensionControl(topLevel, SWT.NONE);
+			extensionCtl = new ExtensionFormControl(topLevel, SWT.NONE);
 			extensionCtl.addExtensionChangedListener(new IExtensionChangedListener() {
 				
 				@Override
@@ -87,7 +87,7 @@ public class DesignStudioNewProjectExtensionPage extends WizardPage implements I
 				}
 			});			
 		} else {
-			extensionCtl = new ExtensionControl(topLevel, SWT.NONE, _model);
+			extensionCtl = new ExtensionFormControl(topLevel, SWT.NONE, _model);
 			extensionCtl.addExtensionChangedListener(new IExtensionChangedListener() {
 				
 				@Override

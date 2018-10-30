@@ -26,7 +26,7 @@ import com.armin.sap.ds.builder.api.models.HandlerTypes;
 import com.armin.sap.ds.builder.api.models.UI5Mode;
 import com.armin.sap.ds.builder.preferences.Settings;
 
-public class ComponentControl extends Composite {
+public class ComponentFormControl extends Composite {
 
 	private List<IComponentChangedListener> _listeners;
 	private Component _model;
@@ -54,14 +54,14 @@ public class ComponentControl extends Composite {
 	private Composite composite;
 	private Composite container;
 	
-	public ComponentControl(Composite parent, int style) {
+	public ComponentFormControl(Composite parent, int style) {
 		super(parent, style);
 		_listeners = new ArrayList<IComponentChangedListener>();
 		_model = new Component();
 		this.createControl();
 	}
 	
-	public ComponentControl(Composite parent, int style, Component model) {		
+	public ComponentFormControl(Composite parent, int style, Component model) {		
 		super(parent, style);
 		_listeners = new ArrayList<IComponentChangedListener>();
 		_model = model;

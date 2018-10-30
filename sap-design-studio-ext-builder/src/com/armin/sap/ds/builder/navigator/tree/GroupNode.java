@@ -4,17 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.model.IWorkbenchAdapter;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.Group;
 import com.armin.sap.ds.builder.preferences.Settings;
+import com.armin.sap.ds.builder.properties.projectitemnode.GroupNodeProperties;
 
-public class GroupNode extends GenericFileNode {
+public class GroupNode extends ProjectItemNode {
 
 	public GroupNode(IProject project, Group group, IProjectItemNode parent) {
 		super(project, parent);
@@ -48,23 +52,23 @@ public class GroupNode extends GenericFileNode {
 	public void addComponent(Component component) throws Exception{
 		if(!exists(component)) {
 			
-			//check if provided component is a valid model under this group's parent (i.e., 
-			//component model should exists under extension model's "Component" property.
 			ExtensionNode _parent = (ExtensionNode)this.getParent(this);
 			Extension extension = _parent.getExtension();
 			
-			boolean found = false;
-			for(Component comp : extension.getComponent()) {
-				if(comp.getId().toUpperCase().equals(component.getId().toUpperCase())) {
-					found = true;
-				}
-			}
-			if(found) {
+			
+			if(getAccessMode() == TreeNodeAccessMode.READ_ONLY) {
 				IProjectItemNode node = new ComponentNode(this.getProject(), component, this);
 				_children.add(node);
-			} else {
-				throw new Exception("Failed while adding new Component node. Reason: Unable to find Component model with [Id=" + component.getId() 
-										+ "] under Extension model [Id=" + extension.getId() + "]");
+			} else if(getAccessMode() == TreeNodeAccessMode.EDIT) {
+				//DO NOT CHANGE SEQUENCE OF NEXT 2 LINES
+				_projectService.addNewComponent(component, extension);
+				IProjectItemNode node = new ComponentNode(this.getProject(), component, this);
+				_children.add(node);
+				
+			} 
+			else {
+				throw new Exception("Failed while adding new Component node. "
+						+ "Reason: Invalid access mode for Group [Name=" + this.getName() + "]");
 				
 			}
 		}
@@ -103,5 +107,25 @@ public class GroupNode extends GenericFileNode {
     	return children;
     }
 
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getAdapter(Class<T> adapter) {
+		 if (adapter == IWorkbenchAdapter.class)
+			 return (T)this;
+	     if (adapter == IPropertySource.class)
+	         return (T)(new GroupNodeProperties(this));
+		return null;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor(Object object) {		
+		return ImageDescriptor.createFromImage(getImage());
+	}
+
+	@Override
+	public String getLabel(Object o) {		
+		return this.getName();
+	}
 
 }

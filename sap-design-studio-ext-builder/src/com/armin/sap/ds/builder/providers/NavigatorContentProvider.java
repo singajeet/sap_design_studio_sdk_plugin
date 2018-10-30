@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
+import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.DesignStudioProjectNature;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 import com.armin.sap.ds.builder.navigator.tree.ProjectNode;
@@ -134,6 +135,7 @@ public class NavigatorContentProvider implements ITreeContentProvider, IResource
 	@Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		_viewer = viewer;		
+		Activator.CNF = viewer;
     }
 
 	@Override

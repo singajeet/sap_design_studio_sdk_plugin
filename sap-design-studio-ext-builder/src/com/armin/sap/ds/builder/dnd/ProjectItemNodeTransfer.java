@@ -16,7 +16,7 @@ public class ProjectItemNodeTransfer extends ByteArrayTransfer {
 	private static final int PROJECT_ITEM_NODE_TYPE_ID = registerType(PROJECT_ITEM_NODE_TYPE_NAME);
 	private static ProjectItemNodeTransfer _instance = new ProjectItemNodeTransfer();
 	
-	private ProjectItemNodeTransfer() {
+	protected ProjectItemNodeTransfer() {
 		
 	}
 	
@@ -91,8 +91,7 @@ public class ProjectItemNodeTransfer extends ByteArrayTransfer {
 				in.close();
 			}catch(Exception e) {
 				e.printStackTrace();
-			}
-			
+			}			
 		}
 		return objs.toArray();
 	}

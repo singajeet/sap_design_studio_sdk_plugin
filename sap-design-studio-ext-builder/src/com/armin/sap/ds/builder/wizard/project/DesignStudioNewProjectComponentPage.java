@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Text;
 import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.api.models.ComponentExtended;
 import com.armin.sap.ds.builder.api.models.IModel;
-import com.armin.sap.ds.builder.controls.ComponentControl;
+import com.armin.sap.ds.builder.controls.ComponentFormControl;
 import com.armin.sap.ds.builder.controls.IComponentChangedListener;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.shared.ISharedData;
@@ -36,7 +36,7 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 	private Text txtDescription;
 	private Combo comboExtends;
 	private Button checkCreateComponentFile;	
-	private ComponentControl componentCtl;
+	private ComponentFormControl componentCtl;
 	
 	public String COMPONENT_ZTL_FILE_NAME = "contribution.ztl";
 	@SuppressWarnings("unused")
@@ -176,7 +176,7 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 		bottomSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		GridLayout bottomSectionLayout = new GridLayout(1, false);		
 		bottomSection.setLayout(bottomSectionLayout);
-		componentCtl = new ComponentControl(bottomSection, SWT.NONE, _model);
+		componentCtl = new ComponentFormControl(bottomSection, SWT.NONE, _model);
 				
 		componentCtl.addComponentChangedListener(new IComponentChangedListener() {
 			@Override

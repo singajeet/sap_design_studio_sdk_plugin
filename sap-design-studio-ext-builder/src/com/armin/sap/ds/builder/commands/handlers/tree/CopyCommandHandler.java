@@ -1,4 +1,4 @@
-package com.armin.sap.ds.builder.navigator.tree.handlers;
+package com.armin.sap.ds.builder.commands.handlers.tree;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;

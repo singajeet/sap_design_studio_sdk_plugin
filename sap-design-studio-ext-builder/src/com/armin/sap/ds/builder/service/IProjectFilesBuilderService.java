@@ -17,9 +17,11 @@ public interface IProjectFilesBuilderService {
 
 	Extension setupAllFiles(IModel extensionModel, IModel componentModel, IProject project);
 
-	Extension updateExtension(IModel componentModel, IModel extensionModel, IProject project);
+	Extension updateExtension(IModel extensionModel, IProject project);
 	
-	Group buildAndSaveGroup(String groupName, IModel extensionNode, IProject project);
+	Group findGroup(String groupName, IModel extensionNode, IProject project);
+	
+	boolean saveGroup(String groupName, IModel extensionNode, IProject project);
 	
 	String setupRequireJSNode(IProject project, IModel componentNode, IModel extensionNode, RequireJSType jsNode);
 	

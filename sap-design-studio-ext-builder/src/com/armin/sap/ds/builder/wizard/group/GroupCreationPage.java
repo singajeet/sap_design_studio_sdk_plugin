@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.armin.sap.ds.builder.api.models.Group;
 import com.armin.sap.ds.builder.api.models.IModel;
-import com.armin.sap.ds.builder.controls.GroupControl;
+import com.armin.sap.ds.builder.controls.GroupFormControl;
 import com.armin.sap.ds.builder.controls.IGroupChangedListener;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
@@ -19,7 +19,7 @@ import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
 public class GroupCreationPage extends WizardPage implements IWizardDetailsPage {
 
 	private IStructuredSelection _selection;
-	private GroupControl groupCtl;
+	private GroupFormControl groupCtl;
 	private Group _model;
 	private ExtensionNode _parentExtensionTreeNode;
 	
@@ -61,7 +61,7 @@ public class GroupCreationPage extends WizardPage implements IWizardDetailsPage 
 	
 	private void createCompositeChildControls() {
 		Composite area = (Composite)this.getControl();
-		groupCtl = new GroupControl(area, SWT.NONE, _model);
+		groupCtl = new GroupFormControl(area, SWT.NONE, _model);
 		groupCtl.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1));
 		groupCtl.addGroupChangedListener(new IGroupChangedListener() {
 			

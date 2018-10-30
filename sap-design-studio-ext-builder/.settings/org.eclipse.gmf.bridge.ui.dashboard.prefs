@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+gmf_dashboard/domainGenerationModel=platform\:/resource/sap-design-studio-ext-builder/models/sdk.genmodel
+gmf_dashboard/domainModel=platform\:/resource/sap-design-studio-ext-builder/models/sdk.ecore
+gmf_dashboard/generationModel=platform\:/resource/sap-design-studio-ext-builder/models/sdk.gmfgen
+gmf_dashboard/graphicalDefinitionModel=platform\:/resource/sap-design-studio-ext-builder/models/sdk.gmfgraph
+gmf_dashboard/mappingModel=platform\:/resource/sap-design-studio-ext-builder/models/sdk.gmfmap
+gmf_dashboard/toolingDefinitionModel=platform\:/resource/sap-design-studio-ext-builder/models/sdk.gmftool

@@ -4,20 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.model.IWorkbenchAdapter;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.preferences.Settings;
+import com.armin.sap.ds.builder.properties.projectitemnode.CSSCollectionNodeProperties;
 
-public class CascadeStyleSheetCollectionNode extends ProjectItemNode {
+public class CascadeStyleSheetCollectionNode extends GenericFolderNode {
 	
 	private static final String NAME = "Style Sheets (CSS)";	
 	private List<String> _styleSheets;	
 	
 	public CascadeStyleSheetCollectionNode(IProject project, List<String> styleSheets, IProjectItemNode parent) {
-		super(project, parent);
+		super(project, NAME, parent);
 		_styleSheets = styleSheets;		
 		_children = initializeChildren(styleSheets);
 	}
@@ -128,5 +132,24 @@ public class CascadeStyleSheetCollectionNode extends ProjectItemNode {
 		return children;
 	}
 
-	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getAdapter(Class<T> adapter) {
+		 if (adapter == IWorkbenchAdapter.class)
+			 return (T)this;
+	     if (adapter == IPropertySource.class)
+	         return (T)(new CSSCollectionNodeProperties(this));
+		return null;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor(Object object) {		
+		return ImageDescriptor.createFromImage(getImage());
+	}
+
+	@Override
+	public String getLabel(Object o) {		
+		return this.getName();
+	}
+
 }

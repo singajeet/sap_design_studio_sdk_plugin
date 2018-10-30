@@ -4,27 +4,39 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.model.IWorkbenchAdapter;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.api.models.ResourceModel;
 import com.armin.sap.ds.builder.preferences.Settings;
+import com.armin.sap.ds.builder.properties.projectitemnode.ProjectItemNodeProperties;
+import com.armin.sap.ds.builder.service.IProjectService;
+import com.armin.sap.ds.builder.service.ProjectService;
 
-public class ProjectItemNode implements IProjectItemNode {
+public class ProjectItemNode implements IProjectItemNode, IWorkbenchAdapter, IAdaptable {
 	
 	protected IProjectItemNode _parent;
 	protected IProject _project;	
 	protected String _description;
+	protected String _tooltip;
 	protected Image _image;
 	protected ArrayList<IProjectItemNode> _children;
 	protected IModel _item;
+	protected IProjectService _projectService;
+	protected TreeNodeAccessMode _mode = TreeNodeAccessMode.READ_ONLY;
 	
 	public ProjectItemNode(IProject project, IModel item, IProjectItemNode parent) {
     	_parent = parent;
@@ -35,6 +47,11 @@ public class ProjectItemNode implements IProjectItemNode {
     	} else {
     		_item = new ResourceModel();
     	}
+    	
+    	_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
+		if(_projectService == null) {
+			_projectService = new ProjectService();
+		}
     }
     
 	public ProjectItemNode(IProject project, IProjectItemNode parent) {
@@ -42,12 +59,22 @@ public class ProjectItemNode implements IProjectItemNode {
     	_project = project;
     	_children = new ArrayList<IProjectItemNode>();
     	_item = new ResourceModel();
+    	
+    	_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
+		if(_projectService == null) {
+			_projectService = new ProjectService();
+		}
     }
 	
 	public ProjectItemNode(IProject project) {    	
     	_project = project;
     	_children = new ArrayList<IProjectItemNode>();
     	_item = new ResourceModel();
+    	
+    	_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
+		if(_projectService == null) {
+			_projectService = new ProjectService();
+		}
     }
 	
 	public ProjectItemNode(String msg, IProjectItemNode parent) {
@@ -57,6 +84,11 @@ public class ProjectItemNode implements IProjectItemNode {
     	_children = new ArrayList<IProjectItemNode>();
     	this._item.setName(msg);
     	this._item.setId(msg);
+    	
+    	_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
+		if(_projectService == null) {
+			_projectService = new ProjectService();
+		}
     }
 	
 	public ProjectItemNode(String msg) {
@@ -64,6 +96,11 @@ public class ProjectItemNode implements IProjectItemNode {
     	_children = new ArrayList<IProjectItemNode>();
     	this._item.setName(msg);
     	this._item.setId(msg);
+    	
+    	_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
+		if(_projectService == null) {
+			_projectService = new ProjectService();
+		}
     }
 	
     public String getProjectName() {
@@ -78,6 +115,14 @@ public class ProjectItemNode implements IProjectItemNode {
 		_image = new Image(Display.getCurrent(), imgData);
 		image.dispose();
 		return _image;
+    }
+    
+    @Override
+    public void setImage(String file) {
+    	IFile imageFile = this._project.getFile(file);
+    	if(imageFile.exists()) {
+    		this._image = Activator.getImage(file);
+    	}
     }
     
     @Override
@@ -124,10 +169,22 @@ public class ProjectItemNode implements IProjectItemNode {
 	public String getDescription() {		
 		return _description;
 	}
+	
+	@Override
+	public void setDescription(String desc) {
+		this._description = desc;
+	}
 
 	@Override
-	public String getTooltip() {		
-		return _description;
+	public String getTooltip() {
+		if(_tooltip == null && _description != null)
+			_tooltip = _description;
+		return _tooltip;
+	}
+	
+	@Override
+	public void setTooltip(String tooltip) {
+		_tooltip = tooltip;
 	}
 	
 	
@@ -151,6 +208,7 @@ public class ProjectItemNode implements IProjectItemNode {
 				_children.add(item);
 			}
 		}
+		
 	}
 
 	@Override
@@ -343,6 +401,36 @@ public class ProjectItemNode implements IProjectItemNode {
 	@Override
 	public IModel getModel() {
 		return _item;
+	}
+
+	@Override
+	public TreeNodeAccessMode getAccessMode() {		
+		return this._mode;
+	}
+
+	@Override
+	public void setAccessMode(TreeNodeAccessMode mode) {
+		this._mode = mode;		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getAdapter(Class<T> adapter) {
+		 if (adapter == IWorkbenchAdapter.class)
+			 return (T)this;
+	     if (adapter == IPropertySource.class)
+	         return (T)(new ProjectItemNodeProperties(this));
+		return null;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor(Object object) {		
+		return ImageDescriptor.createFromImage(getImage());
+	}
+
+	@Override
+	public String getLabel(Object o) {		
+		return this.getName();
 	}
 	
 }

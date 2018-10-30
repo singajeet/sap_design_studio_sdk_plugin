@@ -22,6 +22,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 
+import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
@@ -104,7 +105,7 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 					return Status.OK_STATUS;
 				} catch (Exception e) {
 					e.printStackTrace();
-					MessageDialog.openError(getShell(), "Error", e.getMessage());
+					MessageDialog.openError(Activator.getDefault().getWorkbench().getDisplay().getActiveShell(), "Error", e.getMessage());
 				} finally {
 					if(monitor != null)
 						monitor.done();					

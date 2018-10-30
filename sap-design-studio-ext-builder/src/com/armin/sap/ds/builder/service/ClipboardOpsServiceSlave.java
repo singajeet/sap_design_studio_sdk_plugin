@@ -4,6 +4,7 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
 import com.armin.sap.ds.builder.api.models.IModel;
+import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 
 public class ClipboardOpsServiceSlave implements IClipboardOpsService {
 
@@ -24,6 +25,11 @@ public class ClipboardOpsServiceSlave implements IClipboardOpsService {
 	@Override
 	public IModel[] pasteModelsFromClipboard() {
 		return _parentService.pasteModelsFromClipboard();
+	}
+
+	@Override
+	public boolean isContentAvailableForNode(IProjectItemNode node) {		
+		return _parentService.isContentAvailableForNode(node);
 	}
 
 }

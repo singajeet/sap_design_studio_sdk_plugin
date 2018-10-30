@@ -19,6 +19,7 @@ import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
+import com.armin.sap.ds.builder.navigator.tree.TreeNodeAccessMode;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
 
@@ -36,6 +37,8 @@ public class ExtensionWizard extends Wizard implements INewWizard {
 		logger.log(new Status(IStatus.OK, this.getClass().getName(), "Object created"));
 		
 		setWindowTitle("New Extension");
+		setNeedsProgressMonitor(true);
+		
 		_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
 		if(_projectService == null) {
 			_projectService = new ProjectService();
@@ -85,16 +88,19 @@ public class ExtensionWizard extends Wizard implements INewWizard {
 				try {
 					logger.log(new Status(IStatus.OK, this.getClass().getName(), "WorkspaceJob has been started"));
 					
-					monitor.beginTask("Creating extension - " + ((ExtensionCreationPage)_pageOne).getModel().getId(), 2);
-					IModel model = _projectService.addNewExtension(extension, project);					
+					monitor.beginTask("Changing access mode of ExtensionCollectionNode to EDIT - " + ((ExtensionCreationPage)_pageOne).getModel().getId(), 2);
+					//IModel model = _projectService.addNewExtension(extension, project);
+					_parentTreeNode.setAccessMode(TreeNodeAccessMode.EDIT);					
 					monitor.worked(1);
+					
 					
 					monitor.setTaskName("Creating Extension [Id: " + extension.getId() + "]...");
-					_parentTreeNode.addExtension((Extension)model);
+					_parentTreeNode.addExtension((Extension)extension);
 					logger.log(new Status(IStatus.OK, this.getClass().getName(), "Extension created and added under ExtensionCollectionNode"));
+					_parentTreeNode.setAccessMode(TreeNodeAccessMode.READ_ONLY);
 					monitor.worked(1);
 					
-					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);					
 					
 					logger.log(new Status(IStatus.OK, this.getClass().getName(), "WorkspaceJob is completed!"));
 					return Status.OK_STATUS;

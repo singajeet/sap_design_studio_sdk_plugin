@@ -5,12 +5,15 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.dnd.ProjectItemNodeTransfer;
+import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
+import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 
 public class ClipboardOpsService implements IClipboardOpsService {
 
@@ -55,6 +58,10 @@ public class ClipboardOpsService implements IClipboardOpsService {
 	@Override
 	public IModel[] pasteModelsFromClipboard() {
 		_clipboard = new Clipboard(Activator.getDefault().getWorkbench().getDisplay());
+		logger.log(new Status(IStatus.OK, this.getClass().getName(), "Available type names in clipboard..."));
+		for(String typeName : _clipboard.getAvailableTypeNames()) {
+			logger.log(new Status(IStatus.OK, this.getClass().getName(), "TypeName: " + typeName));
+		}
 		ProjectItemNodeTransfer transfer = (ProjectItemNodeTransfer)_transferService.getProjectItemNodeTransferInstance();
 		
 		Object obj = _clipboard.getContents(transfer);
@@ -77,6 +84,22 @@ public class ClipboardOpsService implements IClipboardOpsService {
 		_clipboard.dispose();
 		
 		return models;
+	}
+
+	@Override
+	public boolean isContentAvailableForNode(IProjectItemNode node) {
+		_clipboard = new Clipboard(Activator.getDefault().getWorkbench().getDisplay());
+		TransferData[] dataTypes = _clipboard.getAvailableTypes();
+		
+		if(node instanceof ExtensionCollectionNode) {
+			for(TransferData dataType : dataTypes) {
+				if(ProjectItemNodeTransfer.getInstance().isSupportedType(dataType)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 }

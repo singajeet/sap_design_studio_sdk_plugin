@@ -1,6 +1,5 @@
 package com.armin.sap.ds.builder.wizard.group;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.ILog;
@@ -18,9 +17,11 @@ import com.armin.sap.ds.builder.api.models.Group;
 import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
+import com.armin.sap.ds.builder.navigator.tree.TreeNodeAccessMode;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
 import com.armin.sap.ds.builder.wizard.IWizardDetailsPage;
+import com.armin.sap.ds.builder.wizard.extension.ExtensionCreationPage;
 
 public class GroupWizard extends Wizard implements INewWizard {
 
@@ -79,7 +80,6 @@ public class GroupWizard extends Wizard implements INewWizard {
 		
 		IModel group = ((GroupCreationPage)_pageOne).getModel();
 		ExtensionNode parentNode = (ExtensionNode)_parentTreeNode;
-		IProject project = parentNode.getProject();
 		
 		WorkspaceJob job = new WorkspaceJob("Create new group") {
 			@Override
@@ -87,16 +87,17 @@ public class GroupWizard extends Wizard implements INewWizard {
 				try {
 					logger.log(new Status(IStatus.OK, this.getClass().getName(), "RunInWorkspace() started"));
 					
-					try {
-						IModel groupModel = _pageOne.getModel();
+					try {						
 						monitor.beginTask("Creating group - " + group.getId(), 2);
 						
-						monitor.setTaskName("Adding group [" + group.getId() + "] to extension [" + parentNode.getModel().getId() + "]...");
-						_projectService.addNewGroup(groupModel.getId(), parentNode.getModel(), project);
+						monitor.beginTask("Changing access mode of ExtensionNode to EDIT - " + ((ExtensionCreationPage)_pageOne).getModel().getId(), 2);					
+						_parentTreeNode.setAccessMode(TreeNodeAccessMode.EDIT);
 						monitor.worked(1);
 						
 						logger.log(new Status(IStatus.OK, this.getClass().getName(), "Adding group [" + group.getId() + "] to extension [" + parentNode.getModel().getId() + "]"));
 						parentNode.addGroup((Group)group);
+						
+						_parentTreeNode.setAccessMode(TreeNodeAccessMode.READ_ONLY);
 						monitor.worked(1);
 						
 						parentNode.getProject().refreshLocal(IResource.DEPTH_INFINITE, monitor);

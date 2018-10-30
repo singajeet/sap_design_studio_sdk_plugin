@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
@@ -84,7 +85,8 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 					IFile manifest = project.getFile(extensionModel.getId() + "/META-INF/manifest.mf");
 					_saveManifest(manifest, extensionModel);
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Save extension finished"));
-				}
+				}				
+				
 				return (Extension)extensionModel;
 			}
 			catch (Exception e) {
@@ -93,7 +95,8 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 				logger.log(new Status(IStatus.ERROR, this.getClass().getName(), "Error while saving extension: " + e.getMessage()));				
 			}
 		} else {
-			logger.log(new Status(IStatus.WARNING, this.getClass().getName(), "Extension file already exists. Use update method instead"));			
+			logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Extension file already exists. Extension file will be updated..."));
+			updateExtension(extensionModel, project);
 		}		
 		return null;
 	}
@@ -111,7 +114,8 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		componentFile = project.getFile(extensionModel.getId() + "/" + Settings.store().get(Settings.FOR.COMPONENT_ZTL_FILE_NAME));
 			
 		//setup contribute.ztl file
-		boolean saved = _saveComponent(componentFile, extensionModel, componentModel);	
+		boolean saved = _saveComponent(componentFile, extensionModel, componentModel);		
+		
 		if(saved) {
 			logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Component [ID=" + componentModel.getId() + ", Ext ID=" + extensionModel.getId() + "] saved!"));		
 			return componentModel;
@@ -184,6 +188,9 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		try {
 			if(!manifest.exists()) {
 				manifest.create(new ByteArrayInputStream(content.getBytes()), true,	null);
+			} else {
+				manifest.delete(true, null);
+				manifest.create(new ByteArrayInputStream(content.getBytes()), true,	null);
 			}
 		return true;
 		}catch(Exception e) {
@@ -197,7 +204,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#updateExtension(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
-	public Extension updateExtension(IModel componentModel, IModel extensionModel, IProject project) {
+	public Extension updateExtension(IModel extensionModel, IProject project) {
 		try {
 			IFile extensionFile = project.getFile(extensionModel.getId() + "/" + Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME));
 			
@@ -243,7 +250,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 			File fsIconFile = new File(iconPath);
 			IFile iconFile = project.getFile(extensionModel.getId() + "/res/images/" + fsIconFile.getName());
 			try {
-				if(!iconFile.exists()) {
+				if(!iconFile.exists() && fsIconFile.exists()) {
 					iconFile.create(new FileInputStream(fsIconFile), true, null);
 				}				
 				return extensionModel.getId() + "/res/images/" + fsIconFile.getName();
@@ -288,18 +295,40 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		createComponentSupportingFile(project, jsFilePath + ".js", Settings.store().get(Settings.FOR.JS_TEMPLATE));
 		return jsFilePath;		
 	}
+	
+	public boolean saveGroup(String groupName, IModel extensionNode, IProject project) {
+		List<Group> groups = ((Extension)extensionNode).getGroup();
+		if(groups.isEmpty()) {
+			((Extension)extensionNode).getGroup().add(createNewGroup(groupName));
+			updateExtension(extensionNode, project);	
+			return true;
+		}
+		for(Group group : groups) {
+			if(group.getId().toUpperCase().equals(groupName))
+				return true;
+		}
+		
+		((Extension)extensionNode).getGroup().add(createNewGroup(groupName));
+		updateExtension(extensionNode, project);
+		return true;
+	}
 
-	public Group buildAndSaveGroup(String groupId, IModel extensionModel, IProject project) {
+	public Group findGroup(String groupId, IModel extensionModel, IProject project) {
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group creation started"));
 		//Check if there is an group attribute in component and create new group if it don't exists
 		//String groupName = ((Component)componentNode).getGroup().toUpperCase();
 		if(groupId != null) {
 			groupId = groupId.toUpperCase();
+			
+			//If group is not a DEFAULT or TECHNICAL_COMPONENT			
 			if(!groupId.equals(IDEConstants.DEFAULT.toUpperCase()) && !groupId.equals(IDEConstants.TECHNICAL_COMPONENT.toUpperCase())) {
-				logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group type: CUSTOM - " + groupId));
+				
+				logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Processing group for Id: " + groupId));
 				Group group = null;
 				
 				//check whether the group is already added in the current extension node
+				//if exists save it to the preferences also if it is not yet saved
+				//and return the model instance
 				for(Group g : ((Extension)extensionModel).getGroup()) {
 					if(g.getId().toUpperCase().equals(groupId)) {
 						group = g;
@@ -310,69 +339,80 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 						return group;
 					}							
 				}
+				
 				//if not found, check if group exists in the preferences of this plugin
 				//if available then add it under the current extension node				
-				String rawGroups = Settings.store().get(Settings.FOR.GROUPS_LIST);
-				String[] groups = null;
-				if(rawGroups != null)
-					groups = rawGroups.split(";");
-				else
-					groups = new String[] {IDEConstants.DEFAULT.toUpperCase(), IDEConstants.TECHNICAL_COMPONENT.toUpperCase()};
-									
-				if(group == null) {	
-					for(String g : groups) {
-						g = g.toUpperCase();
-						if(g.equals(groupId)) {
-							logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group found in already saved groups list"));
-							group = new Group();
-							group.setId(g);
-							group.setTitle(g.toUpperCase());
-							group.setName(g.toUpperCase());
-							logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group added: [ID=" + groupId + "] to Extension [ID=" + extensionModel.getId() + "]"));
-							group.setVisible(true);
-							
-							//updateExtension(null, extensionNode, project, rootElement);
-							return group;
-						}
-					}
-				}
-				
-				//if group is still not available in list too, add same to extension and custom list
 				if(group == null) {
-					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group not found, creating it now"));
-					group = new Group();
-					group.setId(groupId);
-					group.setTitle(groupId.toUpperCase());
-					group.setName(groupId.toUpperCase());
-					group.setTooltip("Group assigned to component");
-					group.setVisible(true);
-					
-					//add new group to preferences also
-					if(rawGroups != null) {
-						rawGroups = rawGroups + ";" + groupId;						
-					} else {
-						rawGroups = groupId;
+					if(isGroupSavedInPreferences(groupId)) {
+						return getGroupFromPreferences(groupId);
 					}
-					
-					Settings.store().set(Settings.FOR.GROUPS_LIST, rawGroups);
-					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Groups saved to local preferences"));
-					return group;
+					else {
+						saveGroupInPreferences(groupId);
+						return createNewGroup(groupId);
+					}
 				}
 			}
-			Group group = new Group();
-			group.setId(groupId);
-			group.setTitle(groupId.toUpperCase());
-			group.setName(groupId.toUpperCase());
-			group.setTooltip("Group assigned to component");
-			group.setVisible(true);
-			return group;
+			//Name/Id of Group is DEFAULT or TECHNICAL_COMPONENT, so create group model
+			//accordingly and return same
+			if(groupId.equals(IDEConstants.DEFAULT.toUpperCase())) {
+				return createDefaultGroup();
+			} else if(groupId.equals(IDEConstants.TECHNICAL_COMPONENT.toUpperCase())){
+				return createTechnicalComponentGroup();
+			}
+			
 		}
+		return createDefaultGroup();
+	}
+	
+	private Group createTechnicalComponentGroup() {
+		Group group = new Group();
+		group.setId(IDEConstants.TECHNICAL_COMPONENT);
+		group.setName(IDEConstants.TECHNICAL_COMPONENT.toUpperCase());
+		group.setTitle(IDEConstants.TECHNICAL_COMPONENT.toUpperCase());
+		group.setTooltip(IDEConstants.TECHNICAL_COMPONENT);
+		return group;
+	}
+	
+	private Group createDefaultGroup() {
 		Group group = new Group();
 		group.setId(IDEConstants.DEFAULT);
 		group.setName(IDEConstants.DEFAULT.toUpperCase());
 		group.setTitle(IDEConstants.DEFAULT.toUpperCase());
 		group.setTooltip(IDEConstants.DEFAULT);
 		return group;
+	}
+	
+	private Group createNewGroup(String groupId) {
+		Group group = new Group();
+		group.setId(groupId);
+		group.setTitle(groupId.toUpperCase());
+		group.setName(groupId.toUpperCase());		
+		group.setVisible(true);
+		return group;
+	}
+	
+	private Group getGroupFromPreferences(String groupId) {
+		String rawGroups = Settings.store().get(Settings.FOR.GROUPS_LIST);
+		String[] groups = null;
+		if(rawGroups != null)
+			groups = rawGroups.split(";");
+		else
+			groups = new String[] {IDEConstants.DEFAULT.toUpperCase(), IDEConstants.TECHNICAL_COMPONENT.toUpperCase()};
+			
+			for(String g : groups) {
+				g = g.toUpperCase();
+				if(g.equals(groupId)) {
+					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Group found in preferences of Groups"));
+					Group group = new Group();
+					group.setId(g);
+					group.setTitle(g.toUpperCase());
+					group.setName(g.toUpperCase());					
+					group.setVisible(true);				
+					
+					return group;
+				}
+			}
+		return null;
 	}
 
 	private void saveGroupInPreferences(String groupId) {

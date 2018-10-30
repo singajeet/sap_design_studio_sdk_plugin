@@ -11,6 +11,8 @@ import com.armin.sap.ds.builder.api.models.IModel;
 
 public interface IProjectItemNode {
 	public Image getImage();
+	
+	public void setImage(String image);
 	 
 	public Object[] getElements(Object input);
 	
@@ -30,7 +32,11 @@ public interface IProjectItemNode {
     
     public String getDescription();
     
+    public void setDescription(String desc);
+    
     public String getTooltip();
+    
+    public void setTooltip(String tooltip);
     
     public void addItem(IProjectItemNode item);
     
@@ -66,4 +72,8 @@ public interface IProjectItemNode {
 	
 	public void updateItemsList(ArrayList<IProjectItemNode> items, boolean merge);
     //public IResource getElementAsResource();
+	
+	public TreeNodeAccessMode getAccessMode();
+	
+	public void setAccessMode(TreeNodeAccessMode mode);
 }

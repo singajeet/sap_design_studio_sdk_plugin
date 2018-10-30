@@ -5,19 +5,28 @@ import java.util.ArrayList;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.model.IWorkbenchAdapter;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.preferences.Settings;
+import com.armin.sap.ds.builder.properties.projectitemnode.ComponentNodeProperties;
 
-public class ComponentNode extends ProjectItemNode {
+public class ComponentNode extends GenericFileNode {
 
 	public ComponentNode(IProject project, Component component, IProjectItemNode parent) {
 		super(project, component, parent);		
 		_children = initializeChildren(component);
+	}
+	
+	public ComponentNode(IProject project, Component component, IProjectItemNode parent, TreeNodeAccessMode mode) {
+		this(project, component, parent);
+		setAccessMode(mode);
 	}
 
 	@Override
@@ -52,6 +61,21 @@ public class ComponentNode extends ProjectItemNode {
 		return _image;
 	}
 
+	public void addAdvancedPropertySheet(String path) {
+		if(path != null && !getComponent().getPropertySheetPath().equalsIgnoreCase(path)) {
+			getComponent().setPropertySheetPath(path);
+			for(int i=0; i< _children.size(); i++) {
+				IProjectItemNode node = _children.get(i);
+				if(node instanceof AdvancedPropertySheetNode) {
+					_children.remove(i);
+					AdvancedPropertySheetNode newPathNode = new AdvancedPropertySheetNode(this.getProject(), path, this);
+					_children.add(newPathNode);
+					
+				}
+			}
+		}
+	}
+	
 //	@Override
 //	public Object[] getElements(Object input) {
 //		return getChildren(input);
@@ -119,5 +143,26 @@ public class ComponentNode extends ProjectItemNode {
 		}
 
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getAdapter(Class<T> adapter) {
+		 if (adapter == IWorkbenchAdapter.class)
+			 return (T)this;
+	     if (adapter == IPropertySource.class)
+	         return (T)(new ComponentNodeProperties(this));
+		return null;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor(Object object) {		
+		return ImageDescriptor.createFromImage(getImage());
+	}
+
+	@Override
+	public String getLabel(Object o) {		
+		return this.getName();
+	}
+
 
 }

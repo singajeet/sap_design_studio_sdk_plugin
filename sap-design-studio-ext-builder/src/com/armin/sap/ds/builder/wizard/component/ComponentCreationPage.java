@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Text;
 import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.api.models.ComponentExtended;
 import com.armin.sap.ds.builder.api.models.IModel;
-import com.armin.sap.ds.builder.controls.ComponentControl;
+import com.armin.sap.ds.builder.controls.ComponentFormControl;
 import com.armin.sap.ds.builder.controls.IComponentChangedListener;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.GroupNode;
@@ -35,7 +35,7 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 	private Text txtPackage;
 	private Text txtDescription;
 	private Combo comboExtends;		
-	private ComponentControl componentCtl;
+	private ComponentFormControl componentCtl;
 	
 	public String COMPONENT_ZTL_FILE_NAME = "contribution.ztl";
 	@SuppressWarnings("unused")
@@ -151,7 +151,7 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 		composite_bottom.setLayout(gl_composite_bottom);
 		composite_bottom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
-		componentCtl = new ComponentControl(composite_bottom, SWT.NONE, _model);
+		componentCtl = new ComponentFormControl(composite_bottom, SWT.NONE, _model);
 		componentCtl.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		GridLayout gl_componentCtl = new GridLayout(1, false);
 		gl_componentCtl.verticalSpacing = 0;

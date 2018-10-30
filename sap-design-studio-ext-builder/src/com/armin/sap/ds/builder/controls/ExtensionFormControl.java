@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Text;
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.shared.ISharedData;
 
-public class ExtensionControl extends Composite {
+public class ExtensionFormControl extends Composite {
 
 	private Extension _model;
 	
@@ -36,14 +36,14 @@ public class ExtensionControl extends Composite {
 	private Composite _container;
 	private List<IExtensionChangedListener> _listeners;
 	
-	public ExtensionControl(Composite parent, int style) {
+	public ExtensionFormControl(Composite parent, int style) {
 		super(parent, style);
 		_model = new Extension();
 		_listeners = new ArrayList<IExtensionChangedListener>();
 		this.createControl();
 	}
 
-	public ExtensionControl(Composite parent, int style, Extension model) {
+	public ExtensionFormControl(Composite parent, int style, Extension model) {
 		super(parent, style);
 		_model = model;
 		_listeners = new ArrayList<IExtensionChangedListener>();

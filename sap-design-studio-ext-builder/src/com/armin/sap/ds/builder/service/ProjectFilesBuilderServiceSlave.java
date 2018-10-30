@@ -51,14 +51,14 @@ public class ProjectFilesBuilderServiceSlave implements IProjectFilesBuilderServ
 	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#updateExtension(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
-	public Extension updateExtension(IModel componentModel, IModel extensionModel, IProject project) {
-		return _parentService.updateExtension(componentModel, extensionModel, project);
+	public Extension updateExtension(IModel extensionModel, IProject project) {
+		return _parentService.updateExtension(extensionModel, project);
 	}
 
 	@Override
-	public Group buildAndSaveGroup(String groupName, IModel extensionNode, IProject project) {
+	public Group findGroup(String groupName, IModel extensionNode, IProject project) {
 		// TODO Auto-generated method stub
-		return _parentService.buildAndSaveGroup(groupName, extensionNode, project);
+		return _parentService.findGroup(groupName, extensionNode, project);
 	}
 
 	@Override
@@ -86,5 +86,10 @@ public class ProjectFilesBuilderServiceSlave implements IProjectFilesBuilderServ
 	public boolean saveExtensionFile(IProject project, String fileContent) {		
 		return _parentService.saveExtensionFile(project, fileContent);
 	}
+
+		@Override
+		public boolean saveGroup(String groupName, IModel extensionNode, IProject project) {
+			return _parentService.saveGroup(groupName, extensionNode, project);
+		}
 	
 }

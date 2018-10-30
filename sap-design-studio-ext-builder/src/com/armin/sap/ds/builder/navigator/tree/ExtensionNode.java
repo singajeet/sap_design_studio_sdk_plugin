@@ -6,9 +6,12 @@ import java.util.List;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.model.IWorkbenchAdapter;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.common.IDEConstants;
@@ -16,6 +19,7 @@ import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.Group;
 import com.armin.sap.ds.builder.preferences.Settings;
+import com.armin.sap.ds.builder.properties.projectitemnode.ExtensionNodeProperties;
 
 public class ExtensionNode extends GenericFileNode {
 
@@ -26,6 +30,11 @@ public class ExtensionNode extends GenericFileNode {
 		super(project, parent);
 		_item = extension;
 		_children = initializeChildren(extension);
+	}
+	
+	public ExtensionNode(IProject project, Extension extension, IProjectItemNode parent, TreeNodeAccessMode mode) {
+		this(project, extension, parent);
+		setAccessMode(mode);
 	}
 
 	@Override
@@ -58,20 +67,25 @@ public class ExtensionNode extends GenericFileNode {
 		if(!exists(group)) {
 			Extension extension = this.getExtension();
 			
-			//Check whether the passed group model exists under the current extension model
-			boolean found = false;
-			for(Group g : extension.getGroup()) {
-				if(g.getId().toUpperCase().equals(group.getId().toUpperCase())) {
-					found = true;
-				}
-			}
-			
-			if(found) {
+			if(getAccessMode() == TreeNodeAccessMode.READ_ONLY) {
+				//Just add group as TreeNode in the explorer
+				GroupNode node = new GroupNode(this.getProject(), group, this);
+				_children.add(node);				
+			} 
+			else if(getAccessMode() == TreeNodeAccessMode.EDIT){				
+				//Add a new Group model instance, save it to XML file
+				//and add it to TreeNode in explorer
+				
+				//DO NOT CHANGE SEQUENCE OF NEXT 2 LINES
+				_projectService.addNewGroup(group.getName(), extension, this.getProject());
+				
 				GroupNode node = new GroupNode(this.getProject(), group, this);
 				_children.add(node);
-			} else {
-				throw new Exception("Failed while adding new Group node. Reason: Unable to find Group model with [Id=" + group.getId() 
-				+ "] under Extension model [Id=" + extension.getId() + "]");
+				
+			} 
+			else {
+				throw new Exception("Failed while adding new Group node. Reason: Invalid "
+						+ "access mode for extension node [Id=" + extension.getId() + "]");
 			}
 			
 		}
@@ -106,8 +120,10 @@ public class ExtensionNode extends GenericFileNode {
 	    		if(groups.size() > 0) {
 		    		for(int i=0;i<groups.size();i++) {
 		    			Group group = groups.get(i);
-		    			IProjectItemNode groupNode = new GroupNode(this.getProject(), group, this);
-		    			children.add(groupNode);
+		    			if(!exists(group)) {
+		    				IProjectItemNode groupNode = new GroupNode(this.getProject(), group, this);
+		    				children.add(groupNode);
+		    			}
 		    		}
 		    		
 		    		if(this.getGroup("DEFAULT") == null) {
@@ -119,6 +135,7 @@ public class ExtensionNode extends GenericFileNode {
 				    			group.setTooltip(IDEConstants.DEFAULT.toUpperCase());
 				    			IProjectItemNode groupNode = new GroupNode(this.getProject(), group, this);
 				    			children.add(groupNode);
+				    			break;
 			    			}
 			    		}
 		    		}
@@ -165,5 +182,25 @@ public class ExtensionNode extends GenericFileNode {
     	}
         return children;
     }
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getAdapter(Class<T> adapter) {
+		 if (adapter == IWorkbenchAdapter.class)
+			 return (T)this;
+	     if (adapter == IPropertySource.class)
+	         return (T)(new ExtensionNodeProperties(this));
+		return null;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor(Object object) {		
+		return ImageDescriptor.createFromImage(getImage());
+	}
+
+	@Override
+	public String getLabel(Object o) {		
+		return this.getName();
+	}
 
 }

@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.armin.sap.ds.builder.api.models.Group;
 
-public class GroupControl extends Composite {
+public class GroupFormControl extends Composite {
 	private Text txtExtensionId;
 	private Text txtGroupId;
 	private Text txtGroupName;
@@ -26,7 +26,7 @@ public class GroupControl extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public GroupControl(Composite parent, int style, Group model) {
+	public GroupFormControl(Composite parent, int style, Group model) {
 		this(parent, style);
 		_model = model;				
 	}
@@ -36,7 +36,7 @@ public class GroupControl extends Composite {
 	 * @param parent
 	 * @param style
 	 */
-	public GroupControl(Composite parent, int style) {
+	public GroupFormControl(Composite parent, int style) {
 		super(parent, SWT.BORDER);
 		
 		_model = new Group();

@@ -18,8 +18,8 @@ import org.eclipse.ui.PlatformUI;
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.api.models.IModel;
-import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.GroupNode;
+import com.armin.sap.ds.builder.navigator.tree.TreeNodeAccessMode;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
 
@@ -100,19 +100,23 @@ public class ComponentWizard extends Wizard implements INewWizard {
 						((Component)component).setGroup(_parentTreeNode.getModel().getId().toUpperCase());
 					}
 					
-					IModel t_component = _projectService.addNewComponent(component, ((ExtensionNode)_parentTreeNode.getParent(this)).getExtension(), project);
+					monitor.beginTask("Changing access mode of GroupNode to EDIT - " + ((ComponentCreationPage)_pageOne).getModel().getId(), 2);					
+					_parentTreeNode.setAccessMode(TreeNodeAccessMode.EDIT);
+					
+					//IModel t_component = _projectService.addNewComponent(component, ((ExtensionNode)_parentTreeNode.getParent(this)).getExtension(), project);
 					monitor.worked(1);
 					
 					monitor.setTaskName("Adding component to Group Node: " + ((GroupNode)_parentTreeNode).getModel().getId());
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), 
 							"Adding New Component [Id: " + component.getId() + "] to Group [Id: " + ((GroupNode)_parentTreeNode).getModel().getId() + "]"));
-					_parentTreeNode.addComponent((Component)t_component);
+					_parentTreeNode.addComponent((Component)component);
+					
+					_parentTreeNode.setAccessMode(TreeNodeAccessMode.READ_ONLY);
 					
 					if(_parentTreeNode.exists("No components found!") && _parentTreeNode.getChildren(this).length > 1) {
 						_parentTreeNode.removeItem("No components found!");
 					}
-					monitor.worked(1);
-					
+					monitor.worked(1);					
 					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
 					logger.log(new Status(IStatus.OK, this.getClass().getName(), "WorkspaceJob Completed Successfully!"));
 					
@@ -129,7 +133,6 @@ public class ComponentWizard extends Wizard implements INewWizard {
 			}			
 		};
 		
-		job.setRule(project);
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), 
 				"Project " + project.getName() + " has been set as rule for WorkspaceJob"));
 		job.schedule();

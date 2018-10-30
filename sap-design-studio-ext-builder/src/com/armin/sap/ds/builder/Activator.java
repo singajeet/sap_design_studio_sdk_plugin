@@ -23,6 +23,8 @@ public class Activator extends AbstractUIPlugin {
 	private ContextManager _ctxManager;
 	private Context _extensionsContext;
 	
+	public static Viewer CNF; 
+	
 	/**
 	 * The constructor
 	 */

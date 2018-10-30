@@ -18,6 +18,7 @@ public enum ProjectItemType {
 	HTML,
 	MANIFEST,
 	PLUGIN,
+	PROJECT,
 	TARGET,
 	WORKSPACE,
 	GROUP,

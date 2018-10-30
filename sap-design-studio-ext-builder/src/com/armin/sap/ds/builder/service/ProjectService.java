@@ -134,7 +134,7 @@ public class ProjectService implements IProjectService {
 			//			and save it under the 'Groups' preferences
 			//Group group = _filesBuilderService.buildAndSaveGroup(((Component)_componentModel).getGroup(), _extensionModel, _project, rootElement);
 			//((Extension)_extensionModel).getGroup().add(group);
-			_addNewGroup(((Component)componentModel).getGroup(), extensionModel, _project);
+			assignGroup(((Component)componentModel).getGroup(), extensionModel, _project);
 			//Insert "RequireJS" node in contribution.xml file and create JS file: res/js/"component_name".js
 			List<UI5Mode> modes = ((Component)componentModel).getModes();			
 			RequireJSType jsNode = _factory.createRequireJSType();
@@ -153,7 +153,7 @@ public class ProjectService implements IProjectService {
 			
 			logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Component [Id=" + componentModel.getId() + "] created and saved!"));
 			if(componentModel != null) {				
-				_filesBuilderService.updateExtension(componentModel, extensionModel, _project);
+				_filesBuilderService.updateExtension(extensionModel, _project);
 				
 				logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Extension [Id=" + extensionModel.getId() + "] updated with Component [ID=" + componentModel.getId() + "] data"));
 			} 
@@ -166,7 +166,7 @@ public class ProjectService implements IProjectService {
 	public IModel updateExtension(IModel extensionModel, IProject project) {
 		if(project == null)
 			project = _project;
-		return _filesBuilderService.updateExtension(null, extensionModel, project);
+		return _filesBuilderService.updateExtension(extensionModel, project);
 	}
 	
 //	public IProject createProject(String projectName, URI location, IModel extensionModel, IModel componentModel) throws Exception{		
@@ -227,7 +227,7 @@ public class ProjectService implements IProjectService {
 	private void createComponent(IModel extensionModel, IModel componentModel) throws Exception{
 		((Extension)extensionModel).getComponent().add((Component)componentModel);
 		
-		_addNewGroup(((Component)componentModel).getGroup(), extensionModel, _project);
+		assignGroup(((Component)componentModel).getGroup(), extensionModel, _project);
 		//Insert "RequireJS" node in contribution.xml file and create JS file: res/js/"component_name".js
 		List<UI5Mode> modes = ((Component)componentModel).getModes();			
 		RequireJSType jsNode = _factory.createRequireJSType();
@@ -262,7 +262,7 @@ public class ProjectService implements IProjectService {
 				logger.log(new Status(IStatus.INFO, this.getClass().getName(), 
 						"Component [ID=" + componentModel.getId() + "] saved under Extension [ID=" + extensionModel.getId() + ", Project=" + _project.getName() + "]"));
 			
-				extensionModel = _filesBuilderService.updateExtension(componentModel, extensionModel, _project);
+				extensionModel = _filesBuilderService.updateExtension(extensionModel, _project);
 				
 				logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Extension [ID=" + extensionModel.getId() + ", Project=" + _project.getName() + " ] updated with new Component [ID=" + componentModel.getId() + "]"));
 				return componentModel;				
@@ -340,16 +340,13 @@ public class ProjectService implements IProjectService {
 	}
 
 	@Override
-	public IModel addNewGroup(String groupName, IModel extensionModel, IProject project) {
-		IModel group = _addNewGroup(groupName, extensionModel, project);
-		
-		_filesBuilderService.updateExtension(null, extensionModel, project);
-		return group;
+	public IModel addNewGroup(String groupName, IModel extensionModel, IProject project) {				
+		_filesBuilderService.updateExtension(extensionModel, project);
+		return _filesBuilderService.findGroup(groupName, extensionModel, project);
 	}
 	
-	private IModel _addNewGroup(String groupName, IModel extensionModel, IProject project) {
-		//JAXBElement<Extension> rootElement = this.getProjectItemsRoot(extensionNode.getId());
-		Group group = _filesBuilderService.buildAndSaveGroup(groupName, extensionModel, project);
+	private IModel assignGroup(String groupName, IModel extensionModel, IProject project) {		
+		Group group = _filesBuilderService.findGroup(groupName, extensionModel, project);
 		((Extension)extensionModel).getGroup().add(group);		
 		return group;
 	}

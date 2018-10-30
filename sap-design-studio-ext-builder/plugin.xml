@@ -52,19 +52,74 @@
             id="com.armin.sap.ds.builder.commands.extension.open"
             name="Open Extension">
       </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.project.commands.category"
+            id="com.armin.sap.ds.builder.commands.project.open"
+            name="Open Project">
+      </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.project.commands.category"
+            id="com.armin.sap.ds.builder.commands.component.open"
+            name="Open Component">
+      </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.project.commands.category"
+            id="com.armin.sap.ds.builder.commands.component.ui.open"
+            name="Open Component UI">
+      </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.project.commands.category"
+            id="com.armin.sap.ds.builder.commands.component.designer.open"
+            name="Open Component Designer">
+      </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.project.commands.category"
+            id="com.armin.sap.ds.builder.commands.extension.collection.close"
+            name="Close Extension Collection">
+      </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.project.commands.category"
+            id="com.armin.sap.ds.builder.commands.extension.source.close"
+            name="Close Extension Source">
+      </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.project.commands.category"
+            id="com.armin.sap.ds.builder.commands.extension.close"
+            name="Close Extension">
+      </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.project.commands.category"
+            id="com.armin.sap.ds.builder.commands.project.close"
+            name="Close Project">
+      </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.project.commands.category"
+            id="com.armin.sap.ds.builder.commands.component.close"
+            name="Close Component">
+      </command>
       <category
-            id="com.armin.sap.ds.builder.tree.commands.category"
-            name="SAP DS Navigator Tree Commands Category">
+            id="com.armin.sap.ds.builder.cmd_cat.tree_nav.edit"
+            name="SAP DS Edit Navigator Tree Commands Category">
       </category>
       <command
-            categoryId="com.armin.sap.ds.builder.tree.commands.category"
+            categoryId="com.armin.sap.ds.builder.cmd_cat.tree_nav.edit"
+            id="com.armin.sap.ds.builder.commands.tree.cutNode"
+            name="Cut">
+      </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.cmd_cat.tree_nav.edit"
             id="com.armin.sap.ds.builder.commands.tree.copyNode"
             name="Copy">
       </command>
       <command
-            categoryId="com.armin.sap.ds.builder.tree.commands.category"
+            categoryId="com.armin.sap.ds.builder.cmd_cat.tree_nav.edit"
             id="com.armin.sap.ds.builder.commands.tree.pasteNode"
             name="Paste">
+      </command>
+      <command
+            categoryId="com.armin.sap.ds.builder.cmd_cat.tree_nav.edit"
+            id="com.armin.sap.ds.builder.commands.tree.deleteNode"
+            name="Delete">
       </command>
    </extension>
    <extension
@@ -201,6 +256,72 @@
                   </with>
                </visibleWhen>
             </command>
+            <command
+                  commandId="com.armin.sap.ds.builder.commands.component.open"
+                  disabledIcon="images/component_16x16_disabled.png"
+                  icon="images/component_16x16.png"
+                  label="Open Component"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="com.armin.sap.ds.builder.commands.component.ui.open"
+                  disabledIcon="images/component_16x16_disabled.png"
+                  icon="images/component_16x16.png"
+                  label="Open Component UI"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="com.armin.sap.ds.builder.commands.component.designer.open"
+                  disabledIcon="images/component_16x16_disabled.png"
+                  icon="images/component_16x16.png"
+                  label="Open Component Designer"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
             <separator
                   name="sap-design-studio-ext-builder.separator1">
             </separator>
@@ -236,6 +357,48 @@
                         variable="selection">
                      <count
                            value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="com.armin.sap.ds.builder.commands.tree.cutNode"
+                  icon="images/cut.gif"
+                  label="Cut"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="+">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="com.armin.sap.ds.builder.commands.tree.deleteNode"
+                  icon="images/delete.gif"
+                  label="Delete"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="+">
                      </count>
                      <iterate
                            ifEmpty="false">
@@ -333,7 +496,8 @@
             </command>
          </menu>
          <separator
-               name="com.armin.sap.ds.builder.separator.new-open">
+               name="com.armin.sap.ds.builder.separator.new-open"
+               visible="true">
          </separator>
          <command
                commandId="com.armin.sap.ds.builder.commands.extension.collection.open"
@@ -433,8 +597,120 @@
                </with>
             </visibleWhen>
          </command>
+         <command
+                  commandId="com.armin.sap.ds.builder.commands.component.open"
+                  disabledIcon="images/component_16x16_disabled.png"
+                  icon="images/component_16x16.png"
+                  label="Open Component"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+         		</command>
+               <command
+                  commandId="com.armin.sap.ds.builder.commands.component.ui.open"
+                  disabledIcon="images/component_16x16_disabled.png"
+                  icon="images/component_16x16.png"
+                  label="Open Component UI"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>   
+            <command
+                  commandId="com.armin.sap.ds.builder.commands.component.designer.open"
+                  disabledIcon="images/component_16x16_disabled.png"
+                  icon="images/component_16x16.png"
+                  label="Open Component Designer"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
          <separator
-               name="sap-design-studio-ext-navigator.separator3">
+               name="sap-design-studio-ext-navigator.separator3"
+               visible="true">
+         </separator>
+         <command
+               commandId="org.eclipse.ui.project.closeProject"
+               label="Close Project"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <and>
+                           <test
+                                 property="org.eclipse.core.resources.open"
+                                 value="true">
+                           </test>
+                           <test
+                                 property="org.eclipse.core.resources.projectNature"
+                                 value="com.armin.sap.ds.builder.nature.ID">
+                           </test>
+                        </and>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.file.close"
+               label="Close"
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.ui.project.closeUnrelatedProjects"
+               label="Close Unrelated Projects"
+               style="push">
+         </command>
+         <separator
+               name="sap-design-studio-ext-builder.separator1"
+               visible="true">
          </separator>
          <command
                commandId="org.eclipse.ui.file.refresh"
@@ -456,6 +732,10 @@
                </with>
             </visibleWhen>
          </command>
+         <separator
+               name="sap-design-studio-ext-navigator.separator6"
+               visible="true">
+         </separator>
          <command
                commandId="org.eclipse.ui.file.properties"
                label="Properties"
@@ -470,8 +750,13 @@
                </with>
             </visibleWhen>
          </command>
+         <separator
+               name="sap-design-studio-ext-navigator.separator5"
+               visible="true">
+         </separator>
          <command
-               commandId="org.eclipse.ui.edit.cut"
+               commandId="com.armin.sap.ds.builder.commands.tree.copyNode"
+               icon="images/cut.gif"
                label="Cut"
                style="push">
             <visibleWhen
@@ -533,7 +818,8 @@
             </visibleWhen>
          </command>
          <command
-               commandId="org.eclipse.ui.edit.delete"
+               commandId="com.armin.sap.ds.builder.commands.tree.deleteNode"
+               icon="images/delete.gif"
                label="Delete"
                style="push">
             <visibleWhen
@@ -551,53 +837,10 @@
                   </iterate>
                </with>
             </visibleWhen>
-         </command>
-         <command
-               commandId="org.eclipse.ui.file.close"
-               label="Close"
-               style="push">
-         </command>
-         <command
-               commandId="org.eclipse.ui.project.closeProject"
-               label="Close Project"
-               style="push">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="selection">
-                  <count
-                        value="1">
-                  </count>
-                  <iterate
-                        ifEmpty="false"
-                        operator="and">
-                     <adapt
-                           type="org.eclipse.core.resources.IProject">
-                        <test
-                              property="org.eclipse.core.resources.open">
-                        </test>
-                        <test
-                              property="org.eclipse.core.resources.projectNature"
-                              value="com.armin.sap.ds.builder.nature.ID">
-                        </test>
-                     </adapt>
-                  </iterate>
-               </with>
-            </visibleWhen>
-         </command>
-         <command
-               commandId="org.eclipse.ui.project.closeUnrelatedProjects"
-               label="Close Unrelated Projects"
-               style="push">
-         </command>
+         </command>true
          <separator
-               name="sap-design-studio-ext-navigator.separator6">
-         </separator>
-         <separator
-               name="sap-design-studio-ext-navigator.separator5">
-         </separator>true
-         <separator
-               name="sap-design-studio-ext-navigator.separator6">
+               name="sap-design-studio-ext-navigator.separator6"
+               visible="true">
          </separator>
          <command
                commandId="com.armin.sap.ds.builder.commands.toggle.nature"
@@ -729,10 +972,97 @@
                </with>
             </visibleWhen>
          </command>
+         <command
+               commandId="com.armin.sap.ds.builder.commands.component.open"
+               disabledIcon="images/component_16x16_disabled.png"
+               icon="images/component_16x16.png"
+               label="Open Component"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+                     <command
+                  commandId="com.armin.sap.ds.builder.commands.component.ui.open"
+                  disabledIcon="images/component_16x16_disabled.png"
+                  icon="images/component_16x16.png"
+                  label="Open Component UI"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="com.armin.sap.ds.builder.commands.component.designer.open"
+                  disabledIcon="images/component_16x16_disabled.png"
+                  icon="images/component_16x16.png"
+                  label="Open Component Designer"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <count
+                           value="1">
+                     </count>
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                        </instanceof>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
       </menuContribution>
       <menuContribution
             allPopups="false"
             locationURI="menu:edit?after=additions">
+         <command
+               commandId="com.armin.sap.ds.builder.commands.tree.copyNode"
+               icon="images/cut.gif"
+               label="Cut"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="+">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
          <command
                commandId="com.armin.sap.ds.builder.commands.tree.copyNode"
                icon="images/copy.png"
@@ -775,6 +1105,62 @@
                </with>
             </visibleWhen>
          </command>
+         <command
+               commandId="com.armin.sap.ds.builder.commands.tree.deleteNode"
+               icon="images/delete.gif"
+               label="Delete"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="+">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:project?after=additions">
+         <command
+               commandId="org.eclipse.ui.project.openProject"
+               label="Open Project..."
+               style="push">
+         </command>
+         <command
+               commandId="org.eclipse.ui.project.closeProject"
+               label="Close Project"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <instanceof
+                           value="org.eclipse.core.resources.IProject">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.project.closeUnrelatedProjects"
+               label="Close Unrelated Projects"
+               style="push">
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -792,7 +1178,7 @@
          point="org.eclipse.ui.views">
       <view
             category="com.armin.sap.ds.builder.view.category"
-            class="org.eclipse.ui.navigator.CommonNavigator"
+            class="com.armin.sap.ds.builder.navigator.ProjectNavigator"
             icon="images/sap_18.png"
             id="com.armin.sap.ds.builder.project.navigator.view"
             name="SAP Design Studio Project Navigator"
@@ -954,9 +1340,6 @@
             icon="images/component_28x28.png"
             id="com.armin.sap.ds.builder.editors.component_editor"
             name="Component Editor">
-         <contentTypeBinding
-               contentTypeId="com.armin.sap.ds.sdk.contenttype.ztl">
-         </contentTypeBinding>
       </editor>
       <editor
             class="com.armin.sap.ds.builder.extension.editor.ExtensionEditor"
@@ -975,6 +1358,22 @@
             icon="images/view_extension_source_16x16.gif"
             id="com.armin.sap.ds.builder.editors.extension_source_editor"
             name="Extension Source Editor">
+      </editor>
+      <editor
+            class="com.armin.sap.ds.builder.component.editor.ComponentUIEditor"
+            default="false"
+            icon="images/component_28x28.png"
+            id="com.armin.sap.ds.builder.editors.component_ui_editor"
+            name="Component UI Editor">
+      </editor>
+      <editor
+            class="org.eclipse.jst.pagedesigner.editors.HTMLEditor"
+            contributorClass="org.eclipse.jst.pagedesigner.editors.actions.PageDesignerActionBarContributor2"
+            default="false"
+            extensions="xml, html, ztl, htm"
+            icon="images/component_28x28.png"
+            id="com.armin.sap.ds.builder.editors.component_designer_editor"
+            name="Component Designer Editor">
       </editor>
    </extension>
    <extension
@@ -1058,7 +1457,7 @@
          </enabledWhen>
       </handler>
       <handler
-            class="com.armin.sap.ds.builder.navigator.tree.handlers.CopyCommandHandler"
+            class="com.armin.sap.ds.builder.commands.handlers.tree.CopyCommandHandler"
             commandId="com.armin.sap.ds.builder.commands.tree.copyNode">
          <enabledWhen>
             <with
@@ -1076,7 +1475,7 @@
          </enabledWhen>
       </handler>
       <handler
-            class="com.armin.sap.ds.builder.navigator.tree.handlers.PasteCommandHandler"
+            class="com.armin.sap.ds.builder.commands.handlers.tree.PasteCommandHandler"
             commandId="com.armin.sap.ds.builder.commands.tree.pasteNode">
          <enabledWhen>
             <with
@@ -1087,7 +1486,97 @@
                <iterate
                      ifEmpty="false">
                   <instanceof
-                        value="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode">
+                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.armin.sap.ds.builder.commands.handlers.tree.CutCommandHandler"
+            commandId="com.armin.sap.ds.builder.commands.tree.cutNode">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="1">
+               </count>
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.armin.sap.ds.builder.commands.handlers.OpenComponentHandler"
+            commandId="com.armin.sap.ds.builder.commands.component.open">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="+">
+               </count>
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.armin.sap.ds.builder.commands.handlers.tree.DeleteCommandHandler"
+            commandId="com.armin.sap.ds.builder.commands.tree.deleteNode">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="+">
+               </count>
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.armin.sap.ds.builder.commands.handlers.OpenComponentUIHandler"
+            commandId="com.armin.sap.ds.builder.commands.component.ui.open">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="+">
+               </count>
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.armin.sap.ds.builder.commands.handlers.OpenComponentDesignerHandler"
+            commandId="com.armin.sap.ds.builder.commands.component.designer.open">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="+">
+               </count>
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
                   </instanceof>
                </iterate>
             </with>
@@ -1218,7 +1707,7 @@
       <page
             name="Properties"
             nameFilter="*.*"
-            class="com.armin.sap.ds.builder.properties.DesignStudioPropertyPage"
+            class="com.armin.sap.ds.builder.properties.projectitemnode.DesignStudioPropertyPage"
             id="com.armin.sap.ds.builder.properties.samplePropertyPage">
          <enabledWhen>
             <instanceof
@@ -1262,7 +1751,7 @@
                class="com.armin.sap.ds.builder.describer.PropertiesDescriber">
          </describer>
       </content-type>
-      <content-type
+    <!--  <content-type
             base-type="com.armin.sap.ds.files.ztl"
             file-extensions="ztl"
             file-names="contribution.ztl"
@@ -1272,7 +1761,7 @@
          <describer
                class="com.armin.sap.ds.builder.describer.ZtlDescriber">
          </describer>
-      </content-type>
+      </content-type> -->
       <content-type
             base-type="org.eclipse.core.runtime.xml"
             file-extensions="target"
@@ -1387,6 +1876,5 @@
             application="sap_ds_sdk_extensions_generator_plugin"
             name="SAP DS SDK Extensions Generator Plugin">
       </product>
-   </extension>
-
+   </extension>  
 </plugin>

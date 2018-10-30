@@ -6,26 +6,32 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.model.IWorkbenchAdapter;
+import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.ResourceModel;
 import com.armin.sap.ds.builder.preferences.Settings;
+import com.armin.sap.ds.builder.properties.projectitemnode.ExtensionCollectionNodeProperties;
 import com.armin.sap.ds.builder.service.IProjectFilesReaderService;
 import com.armin.sap.ds.builder.service.ProjectFilesReaderService;
 
-public class ExtensionCollectionNode extends ProjectItemNode {
+public class ExtensionCollectionNode extends GenericFolderNode {
 
 	private static final String NAME = "Extensions";	
 	private ArrayList<IResource> _extensionFolders;
 	private IProjectFilesReaderService _service;
 	
 	public ExtensionCollectionNode(IProject project, ArrayList<IResource> extensionFolders, IProjectItemNode parent) {
-		super(project, parent);
+		super(project,project.getName(), parent);
+		setAccessMode(TreeNodeAccessMode.READ_ONLY);
 		_extensionFolders = extensionFolders;
 		_service = PlatformUI.getWorkbench().getService(IProjectFilesReaderService.class);
 		if(_service == null) {
@@ -34,6 +40,11 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 		_children = initializeChildren(_extensionFolders);        
 		_item = new ResourceModel();
 		
+	}
+	
+	public ExtensionCollectionNode(IProject project, ArrayList<IResource> extensionFolders, IProjectItemNode parent, TreeNodeAccessMode mode) {
+		this(project, extensionFolders, parent);
+		setAccessMode(mode);	
 	}
 
 	/************************** Required to be overridden ********************************/
@@ -62,9 +73,7 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 			_children = children;
 		} else {
 			for(IProjectItemNode extension : _children) {
-				if(!exists(extension)) {
-					_children.add(extension);
-				}
+				addExtension((Extension)extension);
 			}			
 		}
 	}
@@ -72,8 +81,20 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 	public void addExtension(Extension extension) {
 		if(extension != null) {			
 			if(!exists(extension)) {
-				IProjectItemNode item = new ExtensionNode(super.getProject(), extension, this);
-				_children.add(item);				
+				//First, Add extension to contribution.xml if required
+				//This will be used by ExtensionNode class for creating TreeNode
+				//as the ExtensionNode assumes that all folders required for extension
+				//are already created
+				
+				//Sequence of next 2 lines should remain same
+				if(getAccessMode() == TreeNodeAccessMode.EDIT) {
+					addNewExtensionContribution(extension);
+					ExtensionNode item = new ExtensionNode(super.getProject(), extension, this);
+					this.addExtension(item);						
+				} else {
+					ExtensionNode item = new ExtensionNode(super.getProject(), extension, this);
+					this.addExtension(item);
+				}
 			}
 		}
 	}
@@ -82,17 +103,29 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 		if(resource != null) {
 			if(!exists(resource)) {
 				Extension extension = _service.getExtensionModel(resource);
-				IProjectItemNode extNode = new ExtensionNode(super.getProject(), extension, this);
-				_children.add(extNode);
+				this.addExtension(extension);
 			}
 		}
 	}
 	
 	public void addExtension(ExtensionNode extension) {
 		if(extension != null) {
-			if(!exists(extension))
+			if(!exists(extension)) {
 				_children.add(extension);
+			}
 		}
+	}
+	
+	private void addNewExtensionContribution(Extension extension) {
+		
+			try {
+				this._projectService.addNewExtension(extension, _project);
+			}catch(Exception e) {
+				MessageDialog.openError(Activator.getDefault().getWorkbench().getDisplay().getActiveShell(), 
+						"Extension Creation Failed", "Unable to create extension due to following error: " + e.getMessage());
+				e.printStackTrace();
+			}
+		
 	}
 	
 	public void removeExtension(String id) {
@@ -166,10 +199,6 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 		return NAME;
 	}
 	
-//	public IProject getProject() {
-//		return super.getProject();
-//	}
-	
 	public List<IProjectItemNode> getExtensions(){
 		return _children;
 	}
@@ -184,26 +213,6 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 		return _image;
 	}
 	
-//	@Override
-//	public Object[] getElements(Object input) {
-//		return getChildren(input);
-//	}
-	
-//	@Override
-//	public Object[] getChildren(Object parent) {
-//		return _children.toArray();
-//	}
-	
-//	@Override
-//	public Object getParent(Object element) {
-//		return super.getParent(element);
-//	}
-//	
-//	@Override
-//	public boolean hasChildren(Object parent) {				
-//		return (_children.size() > 0);
-//	}
-	
 	public IResource[] getExtensionsAsResources() throws CoreException {
 		return (IResource[]) _extensionFolders.toArray();
 	}
@@ -217,9 +226,7 @@ public class ExtensionCollectionNode extends ProjectItemNode {
     		
     		for(IResource resource : extResources) {
     			if(resource.getType() == IResource.FOLDER) {
-    				Extension extension = _service.getExtensionModel(resource);
-    				IProjectItemNode extNode = new ExtensionNode(this.getProject(), extension, this);
-    				_children.add(extNode);
+    				this.addExtension(resource);
     			}
     		}
     		    		
@@ -238,4 +245,25 @@ public class ExtensionCollectionNode extends ProjectItemNode {
 	public ProjectItemType getType() {
 		return ProjectItemType.EXTENSION_COLLECTION;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getAdapter(Class<T> adapter) {
+		 if (adapter == IWorkbenchAdapter.class)
+			 return (T)this;
+	     if (adapter == IPropertySource.class)
+	         return (T)(new ExtensionCollectionNodeProperties(this));
+		return null;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor(Object object) {		
+		return ImageDescriptor.createFromImage(getImage());
+	}
+
+	@Override
+	public String getLabel(Object o) {		
+		return this.getName();
+	}
+
 }
