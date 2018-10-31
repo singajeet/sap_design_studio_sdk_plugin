@@ -1,5 +1,8 @@
 package com.armin.sap.ds.builder.properties.projectitemnode;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
@@ -112,6 +115,15 @@ public class ProjectItemNodeProperties implements IPropertySource {
 		return false;
 	}
 
+	protected IPropertyDescriptor[] mergeWithParent(IPropertyDescriptor[] nodePropertyDescriptors) {
+		IPropertyDescriptor[] parentPropertyDescriptors = this.getPropertyDescriptors();
+		ArrayList<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(Arrays.asList(parentPropertyDescriptors));
+		propertyDescriptors.addAll(Arrays.asList(nodePropertyDescriptors));
+		IPropertyDescriptor[] mergedArray = new IPropertyDescriptor[propertyDescriptors.size()];
+		propertyDescriptors.toArray(mergedArray);
+        return mergedArray;		
+	}
+	
 	@Override
 	public void resetPropertyValue(Object id) {		
 

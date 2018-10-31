@@ -1546,42 +1546,6 @@
             </with>
          </enabledWhen>
       </handler>
-      <handler
-            class="com.armin.sap.ds.builder.commands.handlers.OpenComponentUIHandler"
-            commandId="com.armin.sap.ds.builder.commands.component.ui.open">
-         <enabledWhen>
-            <with
-                  variable="selection">
-               <count
-                     value="+">
-               </count>
-               <iterate
-                     ifEmpty="false">
-                  <instanceof
-                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
-                  </instanceof>
-               </iterate>
-            </with>
-         </enabledWhen>
-      </handler>
-      <handler
-            class="com.armin.sap.ds.builder.commands.handlers.OpenComponentDesignerHandler"
-            commandId="com.armin.sap.ds.builder.commands.component.designer.open">
-         <enabledWhen>
-            <with
-                  variable="selection">
-               <count
-                     value="+">
-               </count>
-               <iterate
-                     ifEmpty="false">
-                  <instanceof
-                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
-                  </instanceof>
-               </iterate>
-            </with>
-         </enabledWhen>
-      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
