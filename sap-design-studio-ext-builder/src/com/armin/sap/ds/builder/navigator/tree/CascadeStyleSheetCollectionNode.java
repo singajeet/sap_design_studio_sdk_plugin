@@ -13,7 +13,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.CSSCollectionNodeProperties;
+import com.armin.sap.ds.builder.properties.CSSCollectionNodeProperties;
 
 public class CascadeStyleSheetCollectionNode extends GenericFolderNode {
 	

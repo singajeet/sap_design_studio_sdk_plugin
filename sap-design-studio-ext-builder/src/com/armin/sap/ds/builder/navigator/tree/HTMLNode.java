@@ -12,7 +12,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.HTMLNodeProperties;
+import com.armin.sap.ds.builder.properties.HTMLNodeProperties;
 
 public class HTMLNode extends GenericFileNode {
 

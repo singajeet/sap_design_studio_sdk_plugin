@@ -1,4 +1,4 @@
-package com.armin.sap.ds.builder.properties.projectitemnode;
+package com.armin.sap.ds.builder.properties;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -14,8 +14,8 @@ public class ProjectNodeProperties extends ProjectItemNodeProperties {
 	protected static final String PROPERTY_PATH = "path";
 	protected static final String PROPERTY_NATURE = "nature";
 	
-	protected final Object projectNodePropertiesTable[][] = {
-			{PROPERTY_PATH, new TextPropertyDescriptor(PROPERTY_PATH, "Location")},
+	protected final Object ProjectNodePropertiesTable[][] = {
+			{PROPERTY_PATH, new TextPropertyDescriptor(PROPERTY_PATH, "Path")},
 			{PROPERTY_NATURE, new TextPropertyDescriptor(PROPERTY_NATURE, "Nature")}
 			
 	};
@@ -42,17 +42,17 @@ public class ProjectNodeProperties extends ProjectItemNodeProperties {
 	
 	@Override
 	public IPropertyDescriptor[] getPropertyDescriptors() {		
-		IPropertyDescriptor[] projectNodePropertyDescriptors = new IPropertyDescriptor[projectNodePropertiesTable.length]; 
+		IPropertyDescriptor[] projectNodePropertyDescriptors = new IPropertyDescriptor[ProjectNodePropertiesTable.length]; 
 		
-		 for (int i = 0; i < projectNodePropertiesTable.length; i++) {
+		 for (int i = 0; i < ProjectNodePropertiesTable.length; i++) {
 	            PropertyDescriptor descriptor;
 
-	            descriptor = (PropertyDescriptor) projectNodePropertiesTable[i][1];
+	            descriptor = (PropertyDescriptor) ProjectNodePropertiesTable[i][1];
 	            projectNodePropertyDescriptors[i] = descriptor;	            
 	            descriptor.setCategory("Project");//$NON-NLS-1$
 	        }
 
-		 IPropertyDescriptor[] mergedArray = this.mergeWithParent(projectNodePropertyDescriptors);
+		 IPropertyDescriptor[] mergedArray = super.mergeWithParent(projectNodePropertyDescriptors);
 	     return mergedArray;
 	}
 

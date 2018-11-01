@@ -13,7 +13,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.api.models.ResourceModel;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.ImageNodeProperties;
+import com.armin.sap.ds.builder.properties.ImageNodeProperties;
 
 public class ImageNode extends GenericFileNode {
 

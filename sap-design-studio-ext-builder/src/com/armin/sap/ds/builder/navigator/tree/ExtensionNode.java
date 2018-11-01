@@ -19,7 +19,7 @@ import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.Group;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.ExtensionNodeProperties;
+import com.armin.sap.ds.builder.properties.ExtensionNodeProperties;
 
 public class ExtensionNode extends GenericFileNode {
 

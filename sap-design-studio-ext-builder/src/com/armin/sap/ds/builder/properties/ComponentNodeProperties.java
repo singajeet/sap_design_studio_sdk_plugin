@@ -1,4 +1,4 @@
-package com.armin.sap.ds.builder.properties.projectitemnode;
+package com.armin.sap.ds.builder.properties;
 
 import com.armin.sap.ds.builder.navigator.tree.ComponentNode;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;

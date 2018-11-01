@@ -16,7 +16,7 @@ import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.Group;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.GroupNodeProperties;
+import com.armin.sap.ds.builder.properties.GroupNodeProperties;
 
 public class GroupNode extends ProjectItemNode {
 

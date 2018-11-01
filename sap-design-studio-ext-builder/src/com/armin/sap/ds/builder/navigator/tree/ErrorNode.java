@@ -11,7 +11,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Error;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.ErrorNodeProperties;
+import com.armin.sap.ds.builder.properties.ErrorNodeProperties;
 
 public class ErrorNode extends ProjectItemNode {
 

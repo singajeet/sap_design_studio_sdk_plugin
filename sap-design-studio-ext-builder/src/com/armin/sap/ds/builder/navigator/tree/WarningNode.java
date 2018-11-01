@@ -11,7 +11,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Warning;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.WarningNodeProperties;
+import com.armin.sap.ds.builder.properties.WarningNodeProperties;
 
 public class WarningNode extends ProjectItemNode {
 

@@ -14,7 +14,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.AdvancedPropertySheetNodeProperties;
+import com.armin.sap.ds.builder.properties.AdvancedPropertySheetNodeProperties;
 
 public class AdvancedPropertySheetNode extends GenericFileNode {
 	

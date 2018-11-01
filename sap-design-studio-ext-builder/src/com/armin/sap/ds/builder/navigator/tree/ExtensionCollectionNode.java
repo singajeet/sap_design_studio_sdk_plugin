@@ -19,7 +19,7 @@ import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.ResourceModel;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.ExtensionCollectionNodeProperties;
+import com.armin.sap.ds.builder.properties.ExtensionCollectionNodeProperties;
 import com.armin.sap.ds.builder.service.IProjectFilesReaderService;
 import com.armin.sap.ds.builder.service.ProjectFilesReaderService;
 

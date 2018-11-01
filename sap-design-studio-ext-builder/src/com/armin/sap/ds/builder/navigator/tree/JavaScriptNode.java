@@ -12,7 +12,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.JavaScriptNodeProperties;
+import com.armin.sap.ds.builder.properties.JavaScriptNodeProperties;
 
 public class JavaScriptNode extends GenericFileNode {
 	

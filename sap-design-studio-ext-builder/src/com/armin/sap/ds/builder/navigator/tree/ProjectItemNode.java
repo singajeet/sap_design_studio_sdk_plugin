@@ -22,7 +22,7 @@ import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.api.models.ResourceModel;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.ProjectItemNodeProperties;
+import com.armin.sap.ds.builder.properties.ProjectItemNodeProperties;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
 

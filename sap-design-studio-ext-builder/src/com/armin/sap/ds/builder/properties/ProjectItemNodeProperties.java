@@ -1,4 +1,4 @@
-package com.armin.sap.ds.builder.properties.projectitemnode;
+package com.armin.sap.ds.builder.properties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +18,7 @@ public class ProjectItemNodeProperties implements IPropertySource {
 	protected static final String PROPERTY_DESCRIPTION = "description";
 	protected static final String PROPERTY_TOOLTIP = "tooltip";
 	protected static final String PROPERTY_TYPE = "type";	
+	private IPropertyDescriptor[] descriptors;
 	
 	protected final Object PropertiesTable[][] = {
 			{PROPERTY_ID, new TextPropertyDescriptor(PROPERTY_ID, "Id")},
@@ -37,6 +38,7 @@ public class ProjectItemNodeProperties implements IPropertySource {
 		super();
 		this.node = node;
 		this.initProperties();
+		this.initPropertyDescriptors();
 	}
 	
 	protected void firePropertyChanged(String propName, Object value) {
@@ -67,22 +69,30 @@ public class ProjectItemNodeProperties implements IPropertySource {
 		return this;
 	}
 
-	@Override
-	public IPropertyDescriptor[] getPropertyDescriptors() {
-		IPropertyDescriptor[] propertyDescriptors = new IPropertyDescriptor[PropertiesTable.length];
+	private void initPropertyDescriptors() {
+		if(descriptors == null) {
+			descriptors = new IPropertyDescriptor[PropertiesTable.length];
 		
-		 for (int i = 0; i < PropertiesTable.length; i++) {
+			for (int i = 0; i < PropertiesTable.length; i++) {
 	            // Add each property supported.
 
 	            PropertyDescriptor descriptor;
 
 	            descriptor = (PropertyDescriptor) PropertiesTable[i][1];
-	            propertyDescriptors[i] = descriptor;
+	            descriptors[i] = descriptor;
 	            descriptor.setCategory("Basic");//$NON-NLS-1$
 	        }
 
+		}
+	}
+	
+	@Override
+	public IPropertyDescriptor[] getPropertyDescriptors() {
+			if(descriptors == null) {
+				this.initPropertyDescriptors();
+			}			 
 	        // Return it.
-	        return propertyDescriptors;
+	        return descriptors;
 	}
 
 	@Override
@@ -115,13 +125,20 @@ public class ProjectItemNodeProperties implements IPropertySource {
 		return false;
 	}
 
-	protected IPropertyDescriptor[] mergeWithParent(IPropertyDescriptor[] nodePropertyDescriptors) {
-		IPropertyDescriptor[] parentPropertyDescriptors = this.getPropertyDescriptors();
-		ArrayList<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(Arrays.asList(parentPropertyDescriptors));
-		propertyDescriptors.addAll(Arrays.asList(nodePropertyDescriptors));
-		IPropertyDescriptor[] mergedArray = new IPropertyDescriptor[propertyDescriptors.size()];
-		propertyDescriptors.toArray(mergedArray);
-        return mergedArray;		
+	protected final IPropertyDescriptor[] mergeWithParent(IPropertyDescriptor[] nodePropertyDescriptors) {
+		if(this.descriptors == null) {
+			this.initPropertyDescriptors();
+		}
+		
+		if(descriptors.length > 0) {
+			//IPropertyDescriptor[] parentPropertyDescriptors = this.getPropertyDescriptors();
+			ArrayList<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(Arrays.asList(descriptors));
+			propertyDescriptors.addAll(Arrays.asList(nodePropertyDescriptors));
+			IPropertyDescriptor[] mergedArray = new IPropertyDescriptor[propertyDescriptors.size()];
+			propertyDescriptors.toArray(mergedArray);
+			return mergedArray;
+		}
+        return nodePropertyDescriptors;
 	}
 	
 	@Override

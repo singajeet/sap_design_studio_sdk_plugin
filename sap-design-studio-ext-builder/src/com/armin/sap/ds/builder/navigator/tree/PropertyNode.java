@@ -15,7 +15,7 @@ import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.PossibleValueType;
 import com.armin.sap.ds.builder.api.models.Property;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.PropertyNodeProperties;
+import com.armin.sap.ds.builder.properties.PropertyNodeProperties;
 
 public class PropertyNode extends ProjectItemNode {
 

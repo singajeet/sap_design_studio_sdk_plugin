@@ -11,7 +11,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Info;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.InfoNodeProperties;
+import com.armin.sap.ds.builder.properties.InfoNodeProperties;
 
 public class InfoNode extends ProjectItemNode {
 

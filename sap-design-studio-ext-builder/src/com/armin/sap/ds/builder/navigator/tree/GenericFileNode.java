@@ -15,7 +15,7 @@ import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.api.models.ResourceModel;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.GenericFileNodeProperties;
+import com.armin.sap.ds.builder.properties.GenericFileNodeProperties;
 
 public class GenericFileNode extends ProjectItemNode {
 

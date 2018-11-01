@@ -14,7 +14,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.preferences.Settings;
-import com.armin.sap.ds.builder.properties.projectitemnode.ImagesFolderNodeProperties;
+import com.armin.sap.ds.builder.properties.ImagesFolderNodeProperties;
 
 public class ImagesFolderNode extends GenericFolderNode {
 
