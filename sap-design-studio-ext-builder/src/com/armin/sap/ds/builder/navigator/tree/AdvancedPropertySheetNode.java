@@ -22,7 +22,7 @@ public class AdvancedPropertySheetNode extends GenericFileNode {
 	private String _apsPath;	
 	
 	public AdvancedPropertySheetNode(IProject project, String apsPath, IProjectItemNode parent) {
-		super(project, apsPath, parent);
+		super(project, project.getFile(apsPath), parent);
 		_apsPath = apsPath;		
 		_children = initializeChildren(apsPath);
 		
@@ -35,6 +35,11 @@ public class AdvancedPropertySheetNode extends GenericFileNode {
 	
 	public String getPropertySheetPath() {
 		return _apsPath;
+	}
+	
+	@Override
+	public String getFilePath() {
+		return this.getPropertySheetPath();
 	}
 	
 	/**************************

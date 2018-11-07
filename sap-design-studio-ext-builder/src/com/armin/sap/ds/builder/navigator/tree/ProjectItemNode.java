@@ -19,8 +19,9 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.common.UIHelper;
 import com.armin.sap.ds.builder.api.models.IModel;
-import com.armin.sap.ds.builder.api.models.ResourceModel;
+import com.armin.sap.ds.builder.api.models.Resource;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.properties.ProjectItemNodeProperties;
 import com.armin.sap.ds.builder.service.IProjectService;
@@ -38,14 +39,19 @@ public class ProjectItemNode implements IProjectItemNode, IWorkbenchAdapter, IAd
 	protected IProjectService _projectService;
 	protected TreeNodeAccessMode _mode = TreeNodeAccessMode.READ_ONLY;
 	
+	
+	/**
+	 * Constructor to create tree node based on an IModel
+	 * @param project
+	 * @param item
+	 * @param parent
+	 */
 	public ProjectItemNode(IProject project, IModel item, IProjectItemNode parent) {
     	_parent = parent;
     	_project = project;
     	_children = new ArrayList<IProjectItemNode>();
     	if(item != null) {
     		_item = item;
-    	} else {
-    		_item = new ResourceModel();
     	}
     	
     	_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
@@ -54,48 +60,46 @@ public class ProjectItemNode implements IProjectItemNode, IWorkbenchAdapter, IAd
 		}
     }
     
+	/**
+	 * Constructor to create empty tree node
+	 * @param project
+	 * @param parent
+	 */
 	public ProjectItemNode(IProject project, IProjectItemNode parent) {
     	_parent = parent;
     	_project = project;
     	_children = new ArrayList<IProjectItemNode>();
-    	_item = new ResourceModel();
     	
-    	_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
+    	_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);    	
 		if(_projectService == null) {
 			_projectService = new ProjectService();
 		}
     }
 	
-	public ProjectItemNode(IProject project) {    	
-    	_project = project;
-    	_children = new ArrayList<IProjectItemNode>();
-    	_item = new ResourceModel();
-    	
-    	_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
-		if(_projectService == null) {
-			_projectService = new ProjectService();
-		}
-    }
-	
-	public ProjectItemNode(String msg, IProjectItemNode parent) {
+	/**
+	 * Constructor to create tree node for information purpose only
+	 * @param title
+	 * @param parent
+	 */
+	public ProjectItemNode(String title, IProjectItemNode parent) {
     	_parent = parent;
     	_project = parent.getProject();
-    	_item = new ResourceModel();    	
     	_children = new ArrayList<IProjectItemNode>();
-    	this._item.setName(msg);
-    	this._item.setId(msg);
-    	
+    	    	
     	_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
 		if(_projectService == null) {
 			_projectService = new ProjectService();
 		}
     }
 	
-	public ProjectItemNode(String msg) {
-    	_item = new ResourceModel();    	
+	/**
+	 * Constructor to create tree node for information purpose only
+	 * NOTE: This node will be added to root node of the tree
+	 * @param title
+	 */
+	public ProjectItemNode(String title) {
     	_children = new ArrayList<IProjectItemNode>();
-    	this._item.setName(msg);
-    	this._item.setId(msg);
+    	_parent = UIHelper.INSTANCE.getRootTreeNode();
     	
     	_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
 		if(_projectService == null) {
@@ -210,13 +214,17 @@ public class ProjectItemNode implements IProjectItemNode, IWorkbenchAdapter, IAd
 		}
 		
 	}
-
+	
 	@Override
 	public void addItem(IResource item) {
 		if(item != null) {
 			if(!exists(item)) {
-				IProjectItemNode node = new ProjectItemNode(this.getProject(), new ResourceModel(item), this);
-				_children.add(node);
+				if(item.getType() == IResource.FILE || item.getType() == IResource.FOLDER) {
+					this.addItem(item.getRawLocation().toOSString());
+				} else {
+					IProjectItemNode node = new ResourceItemNode(this.getProject(), item, this);
+					_children.add(node);
+				}
 			}
 		}
 	}
@@ -243,7 +251,7 @@ public class ProjectItemNode implements IProjectItemNode, IWorkbenchAdapter, IAd
 					case "JPEG":
 						item = new ImageNode(this.getProject(), strPath, this);
 					default:					
-						item = new GenericFileNode(this.getProject(), strPath, this);
+						item = new GenericFileNode(this.getProject(), this.getProject().getFile(strPath), this);
 				}
 			} else if(path.toFile().isDirectory()) {
 				String[] segments = path.segments();
@@ -345,14 +353,14 @@ public class ProjectItemNode implements IProjectItemNode, IWorkbenchAdapter, IAd
 	public void updateItemsListFromResource(ArrayList<IResource> items, boolean merge) {
 		if(merge) {
 			for(IResource resource : items) {
-				IProjectItemNode item = new ProjectItemNode(this.getProject(), new ResourceModel(resource), this);
+				IProjectItemNode item = new ProjectItemNode(this.getProject(), new Resource(resource), this);
 				if(!exists(item))
 					_children.add(item);
 			}
 		} else {
 			_children.clear();
 			for(IResource resource : items) {
-				IProjectItemNode item = new ProjectItemNode(this.getProject(), new ResourceModel(resource), this);
+				IProjectItemNode item = new ProjectItemNode(this.getProject(), new Resource(resource), this);
 				if(!exists(item))
 					_children.add(item);
 			}

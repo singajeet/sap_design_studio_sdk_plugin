@@ -19,7 +19,7 @@ public class CascadeStyleSheetNode extends GenericFileNode {
 	private String _cssPath;
 	
 	public CascadeStyleSheetNode(IProject project, String cssPath, IProjectItemNode parent) {
-		super(project, cssPath, parent);
+		super(project, project.getFile(cssPath), parent);
 		_cssPath = cssPath;
 		
 	}

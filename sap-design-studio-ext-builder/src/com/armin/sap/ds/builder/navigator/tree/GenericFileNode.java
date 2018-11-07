@@ -1,9 +1,8 @@
 package com.armin.sap.ds.builder.navigator.tree;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -13,38 +12,28 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.IModel;
-import com.armin.sap.ds.builder.api.models.ResourceModel;
+import com.armin.sap.ds.builder.api.models.Resource;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.properties.GenericFileNodeProperties;
 
 public class GenericFileNode extends ProjectItemNode {
 
-	protected String _filePath;
-	
-	public GenericFileNode(IProject project, IProjectItemNode parent) {
-		super(project, parent);
-		_item = new ResourceModel();
-	}
+	protected IResource _file;
 	
 	public GenericFileNode(IProject project, IModel model, IProjectItemNode parent) {
 		super(project, parent);
 		if(model != null) {
 			_item = model;
-		} else {
-			_item = new ResourceModel();
 		}
 	}
 	
-	public GenericFileNode(IProject project, String filePath, IProjectItemNode parent) {
+	public GenericFileNode(IProject project, IResource p_file, IProjectItemNode parent) {
 		super(project, parent);
-		_filePath = filePath;
-		IResource item = project.findMember(filePath);
-		if(item != null) {
-			_item = new ResourceModel(item);
-		} else {
-			_item = new ResourceModel();
-			_item.setId(filePath);
-			_item.setName(filePath);
+		_file = p_file;
+		IFile file = (IFile)p_file;
+		
+		if(file != null) {
+			_item = new Resource(file);
 		}
 	}
 
@@ -54,9 +43,8 @@ public class GenericFileNode extends ProjectItemNode {
 	}
 	
 	@Override
-	public String getName() {
-		IPath path = new Path(_filePath);
-		return path.toFile().getName();
+	public String getName() {		
+		return _file.getName();
 	}
 	
 	@Override
@@ -70,8 +58,17 @@ public class GenericFileNode extends ProjectItemNode {
 	}
 
 	public String getFilePath() {
-		return _filePath;
+		return this._file.getProjectRelativePath().toOSString();
 	}
+	
+	public String getAbsolutePath() {
+		return this._file.getRawLocation().toOSString();
+	}
+	
+	public IFile getAsFile() {
+		return (IFile)this._file;
+	}
+	
 //	@Override
 //	public Object[] getElements(Object input) {
 //		return getChildren(input);

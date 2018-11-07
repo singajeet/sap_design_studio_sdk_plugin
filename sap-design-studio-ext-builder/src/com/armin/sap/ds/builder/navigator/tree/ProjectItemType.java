@@ -3,6 +3,7 @@ package com.armin.sap.ds.builder.navigator.tree;
 public enum ProjectItemType {	
 	GENERIC_FOLDER,
 	RESOURCE_FOLDER,
+	RESOURCE,
 	IMAGES_FOLDER,
 	IMAGE,
 	CSS_FOLDER,

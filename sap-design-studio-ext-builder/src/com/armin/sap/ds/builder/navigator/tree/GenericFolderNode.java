@@ -12,7 +12,7 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.api.models.ResourceModel;
+import com.armin.sap.ds.builder.api.models.Resource;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.properties.GenericFolderNodeProperties;
 
@@ -25,17 +25,15 @@ public class GenericFolderNode extends ProjectItemNode {
 		_folderName = folderName;
 		IResource item = project.findMember(folderName);
 		if(item != null) {
-			_item = new ResourceModel(item);
-		} else {
-			_item = new ResourceModel();
-			_item.setId(folderName);
-			_item.setName(folderName);
+			_item = new Resource(item);
 		}
 	}
 	
 	public GenericFolderNode(String name, IProjectItemNode parent) {
 		super(name, parent);
-		_item = new ResourceModel();
+		IResource item = parent.getProject().findMember(name);
+		if(item != null)
+			_item = new Resource(item);
 	}
 
 	@Override
@@ -47,6 +45,10 @@ public class GenericFolderNode extends ProjectItemNode {
 	public String getName() {
 		IPath path = new Path(_folderName);
 		return path.lastSegment();
+	}
+	
+	public String getFolderPath() {
+		return (this._folderName != null ? this._folderName : ((Resource)this._item).getAbsPath().toOSString());
 	}
 	
 	@Override

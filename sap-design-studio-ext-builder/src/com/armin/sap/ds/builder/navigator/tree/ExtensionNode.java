@@ -27,7 +27,7 @@ public class ExtensionNode extends GenericFileNode {
 	//private IProjectItemNode[] _children;
 	
 	public ExtensionNode(IProject project, Extension extension, IProjectItemNode parent) {
-		super(project, parent);
+		super(project, project.getFile(extension.getId() + "/contribution.xml"), parent);
 		_item = extension;
 		_children = initializeChildren(extension);
 	}
@@ -157,7 +157,7 @@ public class ExtensionNode extends GenericFileNode {
 							if(!member.getName().toUpperCase().equals("RES") && 
 									!member.getName().toUpperCase().equals("META-INF")
 									) {
-								IProjectItemNode subFolder = new GenericFolderNode(this.getProject(), member.getName(), this);
+								IProjectItemNode subFolder = new GenericFolderNode(this.getProject(), member.getFullPath().toOSString(), this);
 								children.add(subFolder);
 							}
 						} else if(member.getType() == IResource.FILE) {
@@ -169,7 +169,8 @@ public class ExtensionNode extends GenericFileNode {
 									!fileName.toUpperCase().equals("DESIGNSTUDIO.TARGET") &&
 									!fileName.toUpperCase().equals("PLUGIN.XML")
 									) {
-								IProjectItemNode subFile = new GenericFileNode(this.getProject(), fileName, this);
+								IProjectItemNode subFile = new GenericFileNode(this.getProject(), member, this);
+								
 								children.add(subFile);
 							}
 						}

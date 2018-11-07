@@ -81,7 +81,7 @@ public class ComponentEditorInput implements IEditorInput, IFileEditorInput {
 	public IFile getFile() {
 		GroupNode gpNode = (GroupNode)((ComponentNode)_node).getParent(null);
 		ExtensionNode exNode = (ExtensionNode)gpNode.getParent(null);
-		String resPath = exNode.getExtension().getId() + "/contribution.ztl";
+		String resPath = exNode.getExtension().getId() + "/" + ((ComponentNode)_node).getId() + "/contribution.ztl";
 		IFile file = _project.getFile(resPath);
 		return file;
 	}

@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.model.IWorkbenchAdapter;
 import org.eclipse.ui.views.properties.IPropertySource;
 
-import com.armin.sap.ds.builder.api.models.ResourceModel;
+import com.armin.sap.ds.builder.api.models.Resource;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.properties.ImageNodeProperties;
 
@@ -22,21 +22,17 @@ public class ImageNode extends GenericFileNode {
 	
 	
 	public ImageNode(IProject project, String imagePath, String imageFileName, IProjectItemNode parent) {
-		super(project, imagePath + "/" + imageFileName, parent);
+		super(project, project.getFile(imagePath + "/" + imageFileName), parent);
 		_imagePath = imagePath;
 		_imageFileName = imageFileName;		
 	}
 	
 	public ImageNode(IProject project, String imagePath, IProjectItemNode parent) {
-		super(project, imagePath, parent);
+		super(project, project.getFile(imagePath), parent);
 		_imagePath = imagePath;
 		IResource item = project.findMember(_imagePath);
 		if(item != null) {
-			_item = new ResourceModel(item);
-		} else {
-			_item = new ResourceModel();
-			_item.setId(_imagePath);
-			_item.setName(_imagePath);
+			_item = new Resource(item);
 		}
 	}
 

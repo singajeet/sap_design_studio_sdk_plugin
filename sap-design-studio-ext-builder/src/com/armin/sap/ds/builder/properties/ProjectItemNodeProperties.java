@@ -1,8 +1,5 @@
 package com.armin.sap.ds.builder.properties;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
@@ -57,6 +54,7 @@ public class ProjectItemNodeProperties implements IPropertySource {
 	}
 	
 	private void initProperties() {
+		
 		id = node.getModel().getId();
 		name = node.getName();
 		description = node.getDescription();
@@ -125,21 +123,21 @@ public class ProjectItemNodeProperties implements IPropertySource {
 		return false;
 	}
 
-	protected final IPropertyDescriptor[] mergeWithParent(IPropertyDescriptor[] nodePropertyDescriptors) {
-		if(this.descriptors == null) {
-			this.initPropertyDescriptors();
-		}
-		
-		if(descriptors.length > 0) {
-			//IPropertyDescriptor[] parentPropertyDescriptors = this.getPropertyDescriptors();
-			ArrayList<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(Arrays.asList(descriptors));
-			propertyDescriptors.addAll(Arrays.asList(nodePropertyDescriptors));
-			IPropertyDescriptor[] mergedArray = new IPropertyDescriptor[propertyDescriptors.size()];
-			propertyDescriptors.toArray(mergedArray);
-			return mergedArray;
-		}
-        return nodePropertyDescriptors;
-	}
+//	protected final IPropertyDescriptor[] mergeWithParent(IPropertyDescriptor[] nodePropertyDescriptors) {
+//		if(this.descriptors == null) {
+//			this.initPropertyDescriptors();
+//		}
+//		
+//		if(descriptors.length > 0) {
+//			//IPropertyDescriptor[] parentPropertyDescriptors = this.getPropertyDescriptors();
+//			ArrayList<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(Arrays.asList(descriptors));
+//			propertyDescriptors.addAll(Arrays.asList(nodePropertyDescriptors));
+//			IPropertyDescriptor[] mergedArray = new IPropertyDescriptor[propertyDescriptors.size()];
+//			propertyDescriptors.toArray(mergedArray);
+//			return mergedArray;
+//		}
+//        return nodePropertyDescriptors;
+//	}
 	
 	@Override
 	public void resetPropertyValue(Object id) {		

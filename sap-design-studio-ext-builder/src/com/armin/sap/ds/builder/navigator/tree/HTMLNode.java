@@ -19,7 +19,7 @@ public class HTMLNode extends GenericFileNode {
 	private String _htmlPath;
 
 	public HTMLNode(IProject project, String htmlPath, IProjectItemNode parent) {
-		super(project, htmlPath, parent);
+		super(project, project.getFile(htmlPath), parent);
 		_htmlPath = htmlPath;		
 	}
 	

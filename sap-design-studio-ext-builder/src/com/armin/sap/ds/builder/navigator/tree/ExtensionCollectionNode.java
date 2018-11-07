@@ -17,7 +17,6 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Extension;
-import com.armin.sap.ds.builder.api.models.ResourceModel;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.properties.ExtensionCollectionNodeProperties;
 import com.armin.sap.ds.builder.service.IProjectFilesReaderService;
@@ -37,9 +36,7 @@ public class ExtensionCollectionNode extends GenericFolderNode {
 		if(_service == null) {
 			_service = new ProjectFilesReaderService();
 		}
-		_children = initializeChildren(_extensionFolders);        
-		_item = new ResourceModel();
-		
+		_children = initializeChildren(_extensionFolders);
 	}
 	
 	public ExtensionCollectionNode(IProject project, ArrayList<IResource> extensionFolders, IProjectItemNode parent, TreeNodeAccessMode mode) {

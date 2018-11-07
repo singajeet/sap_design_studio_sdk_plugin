@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.DesignStudioProjectNature;
+import com.armin.sap.ds.builder.api.common.UIHelper;
 import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 import com.armin.sap.ds.builder.navigator.tree.ProjectNode;
 
@@ -93,6 +94,7 @@ public class NavigatorContentProvider implements ITreeContentProvider, IResource
 				}
 				if(project.getNature(DesignStudioProjectNature.NATURE_ID) != null) {
 					result = new ProjectNode(project);
+					UIHelper.INSTANCE.setRootTreeNode((IProjectItemNode)result);
 				}
 			}
 		}catch(Exception e) {

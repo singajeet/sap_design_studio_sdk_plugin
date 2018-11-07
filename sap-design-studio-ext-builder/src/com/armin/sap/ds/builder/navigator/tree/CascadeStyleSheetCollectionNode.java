@@ -12,6 +12,7 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.models.Resource;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.properties.CSSCollectionNodeProperties;
 
@@ -24,6 +25,7 @@ public class CascadeStyleSheetCollectionNode extends GenericFolderNode {
 		super(project, NAME, parent);
 		_styleSheets = styleSheets;		
 		_children = initializeChildren(styleSheets);
+		this._item = new Resource(project.findMember(this.getFolderPath()));
 	}
 	
 	@Override
@@ -33,6 +35,14 @@ public class CascadeStyleSheetCollectionNode extends GenericFolderNode {
 	
 	public List<String> getStyleSheets(){
 		return _styleSheets;
+	}
+	
+	@Override
+	public String getFolderPath() {
+		ComponentNode cmp = (ComponentNode)this.getParent(null);
+		GroupNode grp = (GroupNode)cmp.getParent(null);
+		ExtensionNode ext = (ExtensionNode)grp.getParent(null);
+		return ext.getExtension().getId() + "/res/css";
 	}
 	
 	/**************************

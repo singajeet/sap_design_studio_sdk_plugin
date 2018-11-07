@@ -41,6 +41,15 @@ public class ComponentNode extends GenericFileNode {
 	public String getId() {
 		return _item.getId();
 	}
+	
+	@Override
+	public String getFilePath() {
+		if(this._parent != null) {
+			ExtensionNode ext = (ExtensionNode)this._parent.getParent(null);
+			return ext.getExtension().getId() + "/" + this.getId() + "/contribution.ztl";
+		}
+		return null;
+	}
 
 	/**************************
 	 * Required to be overridden

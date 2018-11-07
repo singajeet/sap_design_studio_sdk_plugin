@@ -8,10 +8,14 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.INavigatorContentService;
 
+import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
+
 public class UIHelper {
 
 	public static UIHelper INSTANCE = new UIHelper();
 	private static final String NAVIGATOR_VIEW = "com.armin.sap.ds.builder.project.navigator.view";
+	
+	private IProjectItemNode rootTreeNode;
 	
 	private UIHelper() {
 		// TODO Auto-generated constructor stub
@@ -40,5 +44,13 @@ public class UIHelper {
 	
 	public void updateCommonNavigator() {
 		getNavigatorContentService().update();
+	}
+	
+	public void setRootTreeNode(IProjectItemNode node) {
+		this.rootTreeNode = node;
+	}
+	
+	public IProjectItemNode getRootTreeNode() {
+		return this.rootTreeNode;
 	}
 }

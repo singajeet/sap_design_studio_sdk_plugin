@@ -19,7 +19,7 @@ public class JavaScriptNode extends GenericFileNode {
 	private String _jsPath;
 	
 	public JavaScriptNode(IProject project, String jsPath, IProjectItemNode parent) {
-		super(project, jsPath, parent);
+		super(project, project.getFile(jsPath), parent);
 		_jsPath = jsPath;
 	}
 	

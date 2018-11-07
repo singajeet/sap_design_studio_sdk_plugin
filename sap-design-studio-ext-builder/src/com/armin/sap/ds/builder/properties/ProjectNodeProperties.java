@@ -1,5 +1,8 @@
 package com.armin.sap.ds.builder.properties;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -13,6 +16,7 @@ public class ProjectNodeProperties extends ProjectItemNodeProperties {
 	final protected ProjectNode _projNode; 
 	protected static final String PROPERTY_PATH = "path";
 	protected static final String PROPERTY_NATURE = "nature";
+	private IPropertyDescriptor[] descriptors;
 	
 	protected final Object ProjectNodePropertiesTable[][] = {
 			{PROPERTY_PATH, new TextPropertyDescriptor(PROPERTY_PATH, "Path")},
@@ -27,6 +31,7 @@ public class ProjectNodeProperties extends ProjectItemNodeProperties {
 		super(node);
 		this._projNode = node;
 		this.initProperties();
+		this.initPropertyDescriptors();
 	}
 	
 	private void initProperties() {
@@ -40,22 +45,29 @@ public class ProjectNodeProperties extends ProjectItemNodeProperties {
 		}
 	}
 	
+	private void initPropertyDescriptors() {
+		
+		if(this.descriptors == null) {
+			this.descriptors = new IPropertyDescriptor[ProjectNodePropertiesTable.length];
+		}
+		
+		for (int i = 0; i < ProjectNodePropertiesTable.length; i++) {
+            PropertyDescriptor descriptor;
+            descriptor = (PropertyDescriptor) ProjectNodePropertiesTable[i][1];
+            this.descriptors[i] = descriptor;	            
+            descriptor.setCategory("File System");//$NON-NLS-1$
+        }		 
+	}
+	
 	@Override
 	public IPropertyDescriptor[] getPropertyDescriptors() {		
-		IPropertyDescriptor[] projectNodePropertyDescriptors = new IPropertyDescriptor[ProjectNodePropertiesTable.length]; 
+		ArrayList<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(Arrays.asList(this.descriptors));
+		propertyDescriptors.addAll(Arrays.asList(super.getPropertyDescriptors()));
+		IPropertyDescriptor[] mergedArray = new IPropertyDescriptor[propertyDescriptors.size()];
+		propertyDescriptors.toArray(mergedArray);		
 		
-		 for (int i = 0; i < ProjectNodePropertiesTable.length; i++) {
-	            PropertyDescriptor descriptor;
-
-	            descriptor = (PropertyDescriptor) ProjectNodePropertiesTable[i][1];
-	            projectNodePropertyDescriptors[i] = descriptor;	            
-	            descriptor.setCategory("Project");//$NON-NLS-1$
-	        }
-
-		 IPropertyDescriptor[] mergedArray = super.mergeWithParent(projectNodePropertyDescriptors);
-	     return mergedArray;
+	    return mergedArray;
 	}
-
 	@Override
 	public Object getPropertyValue(Object id) {
 		if(id.equals(PROPERTY_PATH)) {			
