@@ -17,7 +17,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Component;
-import com.armin.sap.ds.builder.api.models.IModel;
+import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.GroupNode;
 import com.armin.sap.ds.builder.navigator.tree.TreeNodeAccessMode;
 import com.armin.sap.ds.builder.service.IProjectService;
@@ -82,7 +82,7 @@ public class ComponentWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		logger.log(new Status(IStatus.OK, this.getClass().getName(), "performFinish() started"));
 		
-		IModel component = ((ComponentCreationPage)_pageOne).getModel();
+		Component component = (Component)((ComponentCreationPage)_pageOne).getModel();
 		IProject project = _parentTreeNode.getProject();
 		
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Component model instance: " + component.getId()));
@@ -94,13 +94,20 @@ public class ComponentWizard extends Wizard implements INewWizard {
 				try {
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "WorkspaceJob started: " + this.getName()));
 					
-					monitor.beginTask("Creating component - " + ((ComponentCreationPage)_pageOne).getModel().getId(), 2);
+					//Component comp = (Component)((ComponentCreationPage)_pageOne).getModel();
 					
-					if(((Component)component).getGroup() == null || ((Component)component).getGroup().isEmpty()) {
-						((Component)component).setGroup(_parentTreeNode.getModel().getId().toUpperCase());
+					monitor.beginTask("Creating component - " + component.getId(), 2);
+					
+					if(component.getGroup() == null || component.getGroup().isEmpty()) {
+						component.setGroup(_parentTreeNode.getModel().getId().toUpperCase());
 					}
 					
-					monitor.beginTask("Changing access mode of GroupNode to EDIT - " + ((ComponentCreationPage)_pageOne).getModel().getId(), 2);					
+					if(component.getPropertySheetPath() != null && !component.getPropertySheetPath().isEmpty()) {
+						String extId = ((ExtensionNode)_parentTreeNode.getParent(null)).getExtension().getId();
+						component.setPropertySheetPath(extId + "/" + component.getPropertySheetPath());
+					}
+					
+					monitor.beginTask("Changing access mode of GroupNode to EDIT - " + component.getId(), 2);					
 					_parentTreeNode.setAccessMode(TreeNodeAccessMode.EDIT);
 					
 					//IModel t_component = _projectService.addNewComponent(component, ((ExtensionNode)_parentTreeNode.getParent(this)).getExtension(), project);
@@ -109,7 +116,7 @@ public class ComponentWizard extends Wizard implements INewWizard {
 					monitor.setTaskName("Adding component to Group Node: " + ((GroupNode)_parentTreeNode).getModel().getId());
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), 
 							"Adding New Component [Id: " + component.getId() + "] to Group [Id: " + ((GroupNode)_parentTreeNode).getModel().getId() + "]"));
-					_parentTreeNode.addComponent((Component)component);
+					_parentTreeNode.addComponent(component);
 					
 					_parentTreeNode.setAccessMode(TreeNodeAccessMode.READ_ONLY);
 					

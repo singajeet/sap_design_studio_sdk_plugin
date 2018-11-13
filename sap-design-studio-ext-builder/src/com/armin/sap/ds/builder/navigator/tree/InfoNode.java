@@ -23,10 +23,7 @@ public class InfoNode extends ProjectItemNode {
 		super(project, parent);
 	}
 
-	public InfoNode(IProject project) {
-		super(project);		
-	}
-
+	
 	public InfoNode(String msg, IProjectItemNode parent) {
 		super(msg, parent);
 		_item = new Info(msg);

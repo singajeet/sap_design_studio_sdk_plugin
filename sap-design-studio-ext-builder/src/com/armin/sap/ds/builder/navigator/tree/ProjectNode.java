@@ -20,8 +20,7 @@ public class ProjectNode extends ProjectItemNode {
 
 	@SuppressWarnings("unused")
 	private IWorkspaceRoot _parent;
-	private IProject _project;
-	//private IProjectItemNode[] _children;
+	private IProject _project;	
 	private String _name;
 	
 	public ProjectNode(IProject project) { 
@@ -53,31 +52,6 @@ public class ProjectNode extends ProjectItemNode {
 		image.dispose();
 		return _image;
 	}
-	
-//	@Override
-//	public IProject getProject() {
-//		return _project;
-//	}
-	
-//	@Override
-//	public Object[] getElements(Object input) {
-//		return getChildren(input);
-//	}
-	
-//	@Override
-//	public Object[] getChildren(Object parent) {
-//		return _children.toArray();
-//	}
-	
-//	@Override
-//	public Object getParent(Object element) {
-//		return _parent;
-//	}
-	
-//	@Override
-//	public boolean hasChildren(Object parent) {				
-//		return (_children.size() > 0);
-//	}
 	
 	/************************************************************************************/
 	

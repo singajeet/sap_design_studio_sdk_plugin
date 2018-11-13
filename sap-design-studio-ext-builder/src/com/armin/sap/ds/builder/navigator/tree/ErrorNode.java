@@ -22,11 +22,7 @@ public class ErrorNode extends ProjectItemNode {
 	public ErrorNode(IProject project, IProjectItemNode parent) {
 		super(project, parent);		
 	}
-
-	public ErrorNode(IProject project) {
-		super(project);		
-	}
-
+	
 	public ErrorNode(String msg, IProjectItemNode parent) {
 		super(msg, parent);
 		_item = new Error(msg);

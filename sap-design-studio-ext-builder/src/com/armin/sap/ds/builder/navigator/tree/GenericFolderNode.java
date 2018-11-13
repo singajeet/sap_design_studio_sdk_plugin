@@ -1,9 +1,8 @@
 package com.armin.sap.ds.builder.navigator.tree;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -18,7 +17,9 @@ import com.armin.sap.ds.builder.properties.GenericFolderNodeProperties;
 
 public class GenericFolderNode extends ProjectItemNode {
 
+	@SuppressWarnings("unused")
 	private String _folderName;
+	private IResource _folder;
 	
 	public GenericFolderNode(IProject project, String folderName, IProjectItemNode parent) {
 		super(project, parent);
@@ -27,6 +28,12 @@ public class GenericFolderNode extends ProjectItemNode {
 		if(item != null) {
 			_item = new Resource(item);
 		}
+	}
+	
+	public GenericFolderNode(IProject project, IResource folder, IProjectItemNode parent) {
+		super(project, parent);
+		_folder = folder;		
+		_item = new Resource(folder);		
 	}
 	
 	public GenericFolderNode(String name, IProjectItemNode parent) {
@@ -43,13 +50,21 @@ public class GenericFolderNode extends ProjectItemNode {
 	
 	@Override
 	public String getName() {
-		IPath path = new Path(_folderName);
-		return path.lastSegment();
+		return _folder.getName();
 	}
 	
 	public String getFolderPath() {
-		return (this._folderName != null ? this._folderName : ((Resource)this._item).getAbsPath().toOSString());
+		return this._folder.getProjectRelativePath().toOSString();
 	}
+	
+	public String getAbsolutePath() {
+		return this._folder.getRawLocation().toOSString();
+	}
+	
+	public IFolder getAsFile() {
+		return (IFolder)this._folder;
+	}
+	
 	
 	@Override
 	public Image getImage() {

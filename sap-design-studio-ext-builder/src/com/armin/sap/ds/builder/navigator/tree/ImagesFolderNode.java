@@ -21,10 +21,10 @@ public class ImagesFolderNode extends GenericFolderNode {
 	//private static final String PATH = ProjectService.get().getExtensionModel().getId() + "/res/images/";
 	private static final String NAME = "Images";
 	
-	public ImagesFolderNode(IProject project, String imagesFolder, IProjectItemNode parent) {
-		super(project, imagesFolder, parent);
-		if(imagesFolder != null) {			
-			_children = initializeChildren(imagesFolder + "/res/images/");
+	public ImagesFolderNode(IProject project, String extensionBasePath, IProjectItemNode parent) {
+		super(project, extensionBasePath, parent);
+		if(extensionBasePath != null) {			
+			_children = initializeChildren(extensionBasePath + "/" + ((ComponentNode)parent).getId() + "/res/images/");
 		} else {
 			_children = new ArrayList<IProjectItemNode>();
 			_children.add(new ProjectItemNode("-- No images available! --", this));

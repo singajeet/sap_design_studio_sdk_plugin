@@ -55,7 +55,10 @@ public class ProjectItemNodeProperties implements IPropertySource {
 	
 	private void initProperties() {
 		
-		id = node.getModel().getId();
+		if(node.getModel() != null && node.getModel().getId() != null)
+			id = node.getModel().getId();
+		else
+			id = node.getName();
 		name = node.getName();
 		description = node.getDescription();
 		tooltip = node.getTooltip();
@@ -122,22 +125,6 @@ public class ProjectItemNodeProperties implements IPropertySource {
 	public boolean isPropertySet(Object id) {		
 		return false;
 	}
-
-//	protected final IPropertyDescriptor[] mergeWithParent(IPropertyDescriptor[] nodePropertyDescriptors) {
-//		if(this.descriptors == null) {
-//			this.initPropertyDescriptors();
-//		}
-//		
-//		if(descriptors.length > 0) {
-//			//IPropertyDescriptor[] parentPropertyDescriptors = this.getPropertyDescriptors();
-//			ArrayList<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(Arrays.asList(descriptors));
-//			propertyDescriptors.addAll(Arrays.asList(nodePropertyDescriptors));
-//			IPropertyDescriptor[] mergedArray = new IPropertyDescriptor[propertyDescriptors.size()];
-//			propertyDescriptors.toArray(mergedArray);
-//			return mergedArray;
-//		}
-//        return nodePropertyDescriptors;
-//	}
 	
 	@Override
 	public void resetPropertyValue(Object id) {		

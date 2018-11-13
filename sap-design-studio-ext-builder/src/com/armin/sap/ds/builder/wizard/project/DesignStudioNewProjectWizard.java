@@ -23,7 +23,8 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.api.models.IModel;
+import com.armin.sap.ds.builder.api.models.Component;
+import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
 import com.armin.sap.ds.builder.shared.ISharedData;
@@ -82,14 +83,18 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 //			location = _pageOne.getLocationURI();
 //		}
 		
-		IModel extensionModel = ((DesignStudioNewProjectExtensionPage)_pageTwo).getModel();
-		IModel componentModel = ((DesignStudioNewProjectComponentPage)_pageThree).getModel();
+		Extension extensionModel = (Extension)((DesignStudioNewProjectExtensionPage)_pageTwo).getModel();
+		Component componentModel = (Component)((DesignStudioNewProjectComponentPage)_pageThree).getModel();
 		
 		
 		WorkspaceJob job = new WorkspaceJob("Create project " + name) {
 			public IStatus runInWorkspace(IProgressMonitor monitor) {
 				try {
 					//doFinish(name, location, extensionModel, componentModel, monitor);
+					
+					if(componentModel.getPropertySheetPath() != null && !componentModel.getPropertySheetPath().isEmpty()) {
+						componentModel.setPropertySheetPath(extensionModel.getId() + "/" + componentModel.getPropertySheetPath());
+					}
 					
 					monitor.beginTask("Creating project " + name + "...", 2);
 					IProject project = _projectService.createProject(name, location, extensionModel, componentModel);

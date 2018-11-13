@@ -2,7 +2,7 @@ package com.armin.sap.ds.builder.properties;
 
 import com.armin.sap.ds.builder.navigator.tree.AdvancedPropertySheetNode;
 
-public class AdvancedPropertySheetNodeProperties extends GenericFileNodeProperties {
+public class AdvancedPropertySheetNodeProperties extends GenericFolderNodeProperties {
 
 	final protected AdvancedPropertySheetNode _fileNode;
 	
@@ -13,7 +13,7 @@ public class AdvancedPropertySheetNodeProperties extends GenericFileNodeProperti
 	}
 	
 	private void initProperties() {
-		this.path = _fileNode.getFilePath();
+		this.path = _fileNode.getFolderPath();
 	}
 
 }

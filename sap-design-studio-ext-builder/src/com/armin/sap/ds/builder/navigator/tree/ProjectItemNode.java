@@ -27,6 +27,10 @@ import com.armin.sap.ds.builder.properties.ProjectItemNodeProperties;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
 
+/**
+ * @author armin
+ *
+ */
 public class ProjectItemNode implements IProjectItemNode, IWorkbenchAdapter, IAdaptable {
 	
 	protected IProjectItemNode _parent;
@@ -106,6 +110,23 @@ public class ProjectItemNode implements IProjectItemNode, IWorkbenchAdapter, IAd
 			_projectService = new ProjectService();
 		}
     }
+	
+	
+	/**
+	 * Constructor to create an empty tree node
+	 * NOTE: This node will be added to root node of the tree
+	 * @param project
+	 */
+	public ProjectItemNode(IProject project) {
+		_project = project;
+		_children = new ArrayList<IProjectItemNode>();
+    	_parent = UIHelper.INSTANCE.getRootTreeNode();
+    	
+    	_projectService = (IProjectService) PlatformUI.getWorkbench().getService(IProjectService.class);
+		if(_projectService == null) {
+			_projectService = new ProjectService();
+		}
+	}
 	
     public String getProjectName() {
         return _project.getName();

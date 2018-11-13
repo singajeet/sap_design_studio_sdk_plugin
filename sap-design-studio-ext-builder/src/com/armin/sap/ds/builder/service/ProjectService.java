@@ -192,10 +192,10 @@ public class ProjectService implements IProjectService {
 		Extension extensionModel = (Extension)model;
 		String[] folderPaths = {				
 				extensionModel.getId() + "/META-INF",
-				extensionModel.getId() + "/res/js",
+				extensionModel.getId() + "/res" /*/js",
 				extensionModel.getId() + "/res/css",
 				extensionModel.getId() + "/res/images",
-				extensionModel.getId() + "/res/additional_properties_sheet"
+				extensionModel.getId() + "/res/additional_properties_sheet"*/
 		};
 		
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Create folders: " + Arrays.toString(folderPaths)));
@@ -225,6 +225,14 @@ public class ProjectService implements IProjectService {
 	}
 	
 	private void createComponent(IModel extensionModel, IModel componentModel) throws Exception{
+		String[] folderPaths = {				
+				extensionModel.getId() + "/" + componentModel.getId() + "/res/js",
+				extensionModel.getId() + "/" + componentModel.getId() + "/res/css",
+				extensionModel.getId() + "/" + componentModel.getId() + "/res/images",
+				extensionModel.getId() + "/" + componentModel.getId() + "/res/additional_properties_sheet"
+		};
+		
+		addFoldersToProjectStructure(_project, folderPaths);
 		((Extension)extensionModel).getComponent().add((Component)componentModel);
 		
 		assignGroup(((Component)componentModel).getGroup(), extensionModel, _project);

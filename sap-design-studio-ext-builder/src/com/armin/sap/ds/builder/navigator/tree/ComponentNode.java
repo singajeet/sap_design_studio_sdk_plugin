@@ -127,7 +127,7 @@ public class ComponentNode extends GenericFileNode {
 			children.add(images);
 			
 			//Sub folders under this "res" folder
-			String resPath = extensionNode.getExtension().getId() + "/res";
+			String resPath = extensionNode.getExtension().getId() + "/" + component.getId() + "/res";
 			IFolder resFolder = this.getProject().getFolder(resPath);
 			if(resFolder.exists()) {
 				for(IResource folder : resFolder.members()) {
@@ -137,7 +137,7 @@ public class ComponentNode extends GenericFileNode {
 								!folder.getName().toUpperCase().equals("IMAGES") &&
 								!folder.getName().toUpperCase().equals("ADDITIONAL_PROPERTIES_SHEET")
 								) {
-							IProjectItemNode subFolder = new GenericFolderNode(this.getProject(), folder.getName(), this);
+							IProjectItemNode subFolder = new GenericFolderNode(this.getProject(), folder, this);
 							children.add(subFolder);
 						}
 					}

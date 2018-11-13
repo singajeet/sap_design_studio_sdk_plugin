@@ -111,7 +111,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		IFile componentFile = null;		
 		
 		//Get reference to contribution.ztl file
-		componentFile = project.getFile(extensionModel.getId() + "/" + Settings.store().get(Settings.FOR.COMPONENT_ZTL_FILE_NAME));
+		componentFile = project.getFile(extensionModel.getId() + "/" + componentModel.getId() + "/" + Settings.store().get(Settings.FOR.COMPONENT_ZTL_FILE_NAME));
 			
 		//setup contribute.ztl file
 		boolean saved = _saveComponent(componentFile, extensionModel, componentModel);		
@@ -248,12 +248,12 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		String iconPath = ((Component)componentModel).getIcon();
 		if(iconPath != null && !iconPath.isEmpty()) {
 			File fsIconFile = new File(iconPath);
-			IFile iconFile = project.getFile(extensionModel.getId() + "/res/images/" + fsIconFile.getName());
+			IFile iconFile = project.getFile(extensionModel.getId() + "/" + componentModel.getId() + "/res/images/" + fsIconFile.getName());
 			try {
 				if(!iconFile.exists() && fsIconFile.exists()) {
 					iconFile.create(new FileInputStream(fsIconFile), true, null);
 				}				
-				return extensionModel.getId() + "/res/images/" + fsIconFile.getName();
+				return extensionModel.getId() + "/" + componentModel.getId() + "/res/images/" + fsIconFile.getName();
 			} catch (FileNotFoundException e) {				
 				e.printStackTrace();
 				logger.log(new Status(IStatus.ERROR, this.getClass().getName(), "Error setting up icon file: " + e.getMessage()));
@@ -269,7 +269,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	
 	public String setupCSSIncludeNode(IModel componentModel, IProject project, IModel extension) {
 		//Create cssInclude node		
-		String cssFilePath = extension.getId() + "/res/css/" + componentModel.getId() + ".css";		
+		String cssFilePath = extension.getId() + "/" + componentModel.getId() + "/res/css/" + componentModel.getId() + ".css";		
 		createComponentSupportingFile(project, cssFilePath, Settings.store().get(Settings.FOR.CSS_TEMPLATE));
 		return cssFilePath;
 	}
@@ -291,7 +291,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	
 	public String setupRequireJSNode(IProject project, IModel componentModel, IModel extensionModel, RequireJSType jsNodeModel) {
 		//Get the mode from the component		
-		String jsFilePath = extensionModel.getId() + "/res/js/" + componentModel.getId();
+		String jsFilePath = extensionModel.getId() + "/" + componentModel.getId() + "/res/js/" + componentModel.getId();
 		createComponentSupportingFile(project, jsFilePath + ".js", Settings.store().get(Settings.FOR.JS_TEMPLATE));
 		return jsFilePath;		
 	}

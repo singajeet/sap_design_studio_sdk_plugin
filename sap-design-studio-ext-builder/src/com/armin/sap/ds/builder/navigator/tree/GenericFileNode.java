@@ -11,6 +11,7 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.models.Component;
 import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.api.models.Resource;
 import com.armin.sap.ds.builder.preferences.Settings;
@@ -25,6 +26,7 @@ public class GenericFileNode extends ProjectItemNode {
 		if(model != null) {
 			_item = model;
 		}
+		initFileDetails();
 	}
 	
 	public GenericFileNode(IProject project, IResource p_file, IProjectItemNode parent) {
@@ -37,6 +39,17 @@ public class GenericFileNode extends ProjectItemNode {
 		}
 	}
 
+	private void initFileDetails() {
+		String filePath = "";
+		if(_file == null) {
+			if(_item instanceof Component) {
+				ExtensionNode ext = (ExtensionNode)_parent.getParent(null);
+				filePath = ext.getExtension().getId() + "/" + _item.getId() + "/contribution.ztl";
+				_file = _project.getFile(filePath);
+			}
+		}
+	}
+	
 	@Override
 	public ProjectItemType getType() {
 		return ProjectItemType.GENERIC_FILE;
@@ -58,11 +71,17 @@ public class GenericFileNode extends ProjectItemNode {
 	}
 
 	public String getFilePath() {
-		return this._file.getProjectRelativePath().toOSString();
+		if(this._file != null)
+			return this._file.getProjectRelativePath().toOSString();
+		else
+			return "";
 	}
 	
 	public String getAbsolutePath() {
-		return this._file.getRawLocation().toOSString();
+		if(this._file != null)
+			return this._file.getRawLocation().toOSString();
+		else
+			return "";
 	}
 	
 	public IFile getAsFile() {

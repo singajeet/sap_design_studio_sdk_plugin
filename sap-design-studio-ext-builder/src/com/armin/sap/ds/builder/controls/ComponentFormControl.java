@@ -371,9 +371,10 @@ public class ComponentFormControl extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				if(checkAddPropertySheet.getSelection())
-					txtPropertySheetPath.setEnabled(true);
+					//txtPropertySheetPath.setEnabled(true);
+					_model.setPropertySheetPath(txtClass.getText() + "/res/additional_properties_sheet");
 				else
-					txtPropertySheetPath.setEnabled(false);					
+					_model.setPropertySheetPath(null);
 			}
 
 			@Override
@@ -382,17 +383,17 @@ public class ComponentFormControl extends Composite {
 			}
 			
 		});
-		txtPropertySheetPath = new Text(apsGroup, SWT.SINGLE | SWT.BORDER | SWT.FILL);
-		txtPropertySheetPath.setText("res/additional_properties_sheet/additional_properties_page");
-		txtPropertySheetPath.setEnabled(false);
-		txtPropertySheetPath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		txtPropertySheetPath.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {			
-				if(checkAddPropertySheet.getSelection())
-					_model.setPropertySheetPath(txtPropertySheetPath.getText());					
-			}
-		});
+//		txtPropertySheetPath = new Text(apsGroup, SWT.SINGLE | SWT.BORDER | SWT.FILL);
+//		txtPropertySheetPath.setText("res/additional_properties_sheet/additional_properties_page");
+//		txtPropertySheetPath.setEnabled(false);
+//		txtPropertySheetPath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		txtPropertySheetPath.addModifyListener(new ModifyListener() {
+//			@Override
+//			public void modifyText(ModifyEvent e) {			
+//				if(checkAddPropertySheet.getSelection())
+//					_model.setPropertySheetPath(txtPropertySheetPath.getText());					
+//			}
+//		});
 		//--- Group Row
 		Label lblGroup = new Label(composite, SWT.NONE);
 		lblGroup.setText("Group:");

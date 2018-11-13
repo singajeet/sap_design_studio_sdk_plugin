@@ -42,7 +42,7 @@ public class CascadeStyleSheetCollectionNode extends GenericFolderNode {
 		ComponentNode cmp = (ComponentNode)this.getParent(null);
 		GroupNode grp = (GroupNode)cmp.getParent(null);
 		ExtensionNode ext = (ExtensionNode)grp.getParent(null);
-		return ext.getExtension().getId() + "/res/css";
+		return ext.getExtension().getId() + "/" + cmp.getId() + "/res/css";
 	}
 	
 	/**************************

@@ -155,9 +155,10 @@ public class ExtensionNode extends GenericFileNode {
 					for(IResource member : extensionFolder.members()) {
 						if(member.getType() == IResource.FOLDER) {
 							if(!member.getName().toUpperCase().equals("RES") && 
-									!member.getName().toUpperCase().equals("META-INF")
+									!member.getName().toUpperCase().equals("META-INF") &&
+									!this.isComponentFolder(member)
 									) {
-								IProjectItemNode subFolder = new GenericFolderNode(this.getProject(), member.getFullPath().toOSString(), this);
+								IProjectItemNode subFolder = new GenericFolderNode(this.getProject(), member, this);
 								children.add(subFolder);
 							}
 						} else if(member.getType() == IResource.FILE) {
@@ -183,6 +184,18 @@ public class ExtensionNode extends GenericFileNode {
     	}
         return children;
     }
+	
+	private boolean isComponentFolder(IResource member) {
+		Extension extension = (Extension)this._item;
+		List<Component> components = extension.getComponent();
+		String memberName = member.getName().toUpperCase();
+		for(Component comp : components) {
+			if(comp.getId().toUpperCase().equals(memberName)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
