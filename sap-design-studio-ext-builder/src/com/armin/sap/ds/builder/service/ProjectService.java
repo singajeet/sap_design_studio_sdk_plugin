@@ -103,13 +103,16 @@ public class ProjectService implements IProjectService {
 		logger.log(new Status(IStatus.OK, this.getClass().getName(), "CreateProject() started"));
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Parameters Passed: Name=" + projectName + ", Location=" + location.getPath()));
 		
-		if(_project == null) {
+		if(_project != null) {
+			_project.close(null);
+			_project = null;
+		}
 			_project = createBaseProject(projectName, location);			
 			addNature(_project);
-		} else {
-			logger.log(new Status(IStatus.ERROR, this.getClass().getName(), "Project creation failed. Reason: Close already opened project first!"));
-			throw new Exception("Cann't create new project: " + projectName + "! Please close current project first");
-		}		
+//		} else {
+//			logger.log(new Status(IStatus.ERROR, this.getClass().getName(), "Project creation failed. Reason: Close already opened project first!"));
+//			throw new Exception("Cann't create new project: " + projectName + "! Please close current project first");
+//		}		
 		
 		if(extensionModel != null) {
 			createExtension(extensionModel);	
@@ -132,25 +135,25 @@ public class ProjectService implements IProjectService {
 			//	4. If available, create a 'Group' node and add it under 'Extension' node
 			//	5. If not available, create a new 'Group' node, add it under 'Extension' node
 			//			and save it under the 'Groups' preferences
-			//Group group = _filesBuilderService.buildAndSaveGroup(((Component)_componentModel).getGroup(), _extensionModel, _project, rootElement);
-			//((Extension)_extensionModel).getGroup().add(group);
-			assignGroup(((Component)componentModel).getGroup(), extensionModel, _project);
+		
+//			assignGroup(((Component)componentModel).getGroup(), extensionModel, _project);
+			
 			//Insert "RequireJS" node in contribution.xml file and create JS file: res/js/"component_name".js
-			List<UI5Mode> modes = ((Component)componentModel).getModes();			
-			RequireJSType jsNode = _factory.createRequireJSType();
-			String jsFilePath = _filesBuilderService.setupRequireJSNode(_project, componentModel, extensionModel, jsNode);
-			jsNode.getModes().addAll(modes);
-			jsNode.setValue(jsFilePath);
-			((Component)componentModel).getRequireJs().add(jsNode);
-			
+//			List<UI5Mode> modes = ((Component)componentModel).getModes();			
+//			RequireJSType jsNode = _factory.createRequireJSType();
+//			String jsFilePath = _filesBuilderService.setupRequireJSNode(_project, componentModel, extensionModel, jsNode);
+//			jsNode.getModes().addAll(modes);
+//			jsNode.setValue(jsFilePath);
+//			((Component)componentModel).getRequireJs().add(jsNode);
+//			
 			//Insert "cssInclude" node and create a css file
-			String cssFilePath = _filesBuilderService.setupCSSIncludeNode(componentModel, _project, extensionModel);
-			((Component)componentModel).getCssInclude().add(cssFilePath);
-			
+//			String cssFilePath = _filesBuilderService.setupCSSIncludeNode(componentModel, _project, extensionModel);
+//			((Component)componentModel).getCssInclude().add(cssFilePath);
+//			
 			//Setup icon file in the project
-			String iconPath = _filesBuilderService.setupIconFile(_project, componentModel, extensionModel);
-			((Component)componentModel).setIcon(iconPath);
-			
+//			String iconPath = _filesBuilderService.setupIconFile(_project, componentModel, extensionModel);
+//			((Component)componentModel).setIcon(iconPath);
+//			
 			logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Component [Id=" + componentModel.getId() + "] created and saved!"));
 			if(componentModel != null) {				
 				_filesBuilderService.updateExtension(extensionModel, _project);
@@ -169,21 +172,6 @@ public class ProjectService implements IProjectService {
 		return _filesBuilderService.updateExtension(extensionModel, project);
 	}
 	
-//	public IProject createProject(String projectName, URI location, IModel extensionModel, IModel componentModel) throws Exception{		
-//		
-//		_extensionModel = extensionModel;
-//		_componentModel = componentModel;
-//		
-//		IProject project = null;
-//		if(_project == null) {
-//			project = this.createProject(projectName, location);
-//		} else {
-//			_project.close(null);
-//			project = this.createProject(projectName, location);
-//		}
-//		return project;
-//	}
-	
 	
 	private void createExtension(IModel model) throws Exception {
 		
@@ -192,10 +180,7 @@ public class ProjectService implements IProjectService {
 		Extension extensionModel = (Extension)model;
 		String[] folderPaths = {				
 				extensionModel.getId() + "/META-INF",
-				extensionModel.getId() + "/res" /*/js",
-				extensionModel.getId() + "/res/css",
-				extensionModel.getId() + "/res/images",
-				extensionModel.getId() + "/res/additional_properties_sheet"*/
+				extensionModel.getId() + "/res" 
 		};
 		
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Create folders: " + Arrays.toString(folderPaths)));
@@ -206,7 +191,6 @@ public class ProjectService implements IProjectService {
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "AddNewExtension() started"));
 		
 		if(_project != null && extensionModel != null) {
-//			this.setExtensionModel(extensionModel);
 			this.createExtension(extensionModel);
 			
 			extensionModel = _filesBuilderService.saveExtension(extensionModel, _project);
@@ -228,14 +212,14 @@ public class ProjectService implements IProjectService {
 		String[] folderPaths = {				
 				extensionModel.getId() + "/" + componentModel.getId() + "/res/js",
 				extensionModel.getId() + "/" + componentModel.getId() + "/res/css",
-				extensionModel.getId() + "/" + componentModel.getId() + "/res/images",
-				extensionModel.getId() + "/" + componentModel.getId() + "/res/additional_properties_sheet"
+				extensionModel.getId() + "/" + componentModel.getId() + "/res/images"
 		};
 		
 		addFoldersToProjectStructure(_project, folderPaths);
 		((Extension)extensionModel).getComponent().add((Component)componentModel);
 		
 		assignGroup(((Component)componentModel).getGroup(), extensionModel, _project);
+
 		//Insert "RequireJS" node in contribution.xml file and create JS file: res/js/"component_name".js
 		List<UI5Mode> modes = ((Component)componentModel).getModes();			
 		RequireJSType jsNode = _factory.createRequireJSType();
@@ -252,13 +236,20 @@ public class ProjectService implements IProjectService {
 		String iconPath = _filesBuilderService.setupIconFile(_project, componentModel, extensionModel);
 		((Component)componentModel).setIcon(iconPath);		
 		
+		//Setup advanced property sheet path if required
+		Component comp = (Component)componentModel;
+		if(comp.getPropertySheetPath() != null && !comp.getPropertySheetPath().isEmpty()) {
+			String[] apsFolder = {				
+					extensionModel.getId() + "/" + componentModel.getId() + "/res/additional_properties_sheet"
+			};
+			addFoldersToProjectStructure(_project, apsFolder);
+			_filesBuilderService.setupAdvancedPropertySheet(_project, componentModel, extensionModel);
+		}
 	}
 	
 	public IModel addNewComponent(IModel componentModel, IModel extensionModel) throws Exception{
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "AddNewComponent() started"));
 		if(_project != null) {
-//			this.setComponentModel(componentModel);
-//			this.setExtensionModel(extensionModel);
 			this.createComponent(extensionModel, componentModel);
 			
 			componentModel = _filesBuilderService.saveComponent(componentModel, extensionModel, _project);

@@ -87,9 +87,13 @@ public class ProjectFilesBuilderServiceSlave implements IProjectFilesBuilderServ
 		return _parentService.saveExtensionFile(project, fileContent);
 	}
 
-		@Override
-		public boolean saveGroup(String groupName, IModel extensionNode, IProject project) {
-			return _parentService.saveGroup(groupName, extensionNode, project);
-		}
+	@Override
+	public boolean saveGroup(String groupName, IModel extensionNode, IProject project) {
+		return _parentService.saveGroup(groupName, extensionNode, project);
+	}
 	
+	@Override
+	public String[] setupAdvancedPropertySheet(IProject project, IModel componentModel, IModel extensionModel) {
+		return _parentService.setupAdvancedPropertySheet(project, componentModel, extensionModel);
+	}
 }

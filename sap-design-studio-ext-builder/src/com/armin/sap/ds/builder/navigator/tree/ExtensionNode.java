@@ -38,6 +38,14 @@ public class ExtensionNode extends GenericFileNode {
 	}
 
 	@Override
+	public String getFilePath() {
+		if(this._item != null) {			
+			return this._item.getId() + "/contribution.xml";
+		}
+		return null;
+	}
+	
+	@Override
 	public ProjectItemType getType() {
 		return ProjectItemType.EXTENSION;
 	}

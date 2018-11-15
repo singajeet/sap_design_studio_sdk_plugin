@@ -30,4 +30,6 @@ public interface IProjectFilesBuilderService {
 	String setupCSSIncludeNode(IModel componentNode, IProject project, IModel extension);
 	
 	String setupIconFile(IProject project, IModel componentModel, IModel extensionModel);
+	
+	String[] setupAdvancedPropertySheet(IProject project, IModel componentModel, IModel extensionModel);
 }

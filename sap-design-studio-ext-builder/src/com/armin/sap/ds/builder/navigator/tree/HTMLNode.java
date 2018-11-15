@@ -32,6 +32,11 @@ public class HTMLNode extends GenericFileNode {
 		return _htmlPath;
 	}
 	
+	@Override
+	public String getFilePath() {
+		return this._htmlPath;
+	}
+	
 	/**************************
 	 * Required to be overridden
 	 ********************************/

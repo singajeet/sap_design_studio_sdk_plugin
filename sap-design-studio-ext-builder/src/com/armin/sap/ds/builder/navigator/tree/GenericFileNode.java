@@ -12,6 +12,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.api.models.Component;
+import com.armin.sap.ds.builder.api.models.Extension;
 import com.armin.sap.ds.builder.api.models.IModel;
 import com.armin.sap.ds.builder.api.models.Resource;
 import com.armin.sap.ds.builder.preferences.Settings;
@@ -45,6 +46,9 @@ public class GenericFileNode extends ProjectItemNode {
 			if(_item instanceof Component) {
 				ExtensionNode ext = (ExtensionNode)_parent.getParent(null);
 				filePath = ext.getExtension().getId() + "/" + _item.getId() + "/contribution.ztl";
+				_file = _project.getFile(filePath);
+			} else if(_item instanceof Extension) {
+				filePath = ((Extension)_item).getId() + "/contribution.xml";
 				_file = _project.getFile(filePath);
 			}
 		}

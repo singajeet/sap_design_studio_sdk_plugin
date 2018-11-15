@@ -1,10 +1,10 @@
 package com.armin.sap.ds.builder.properties;
 
-import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
+import com.armin.sap.ds.builder.navigator.tree.JavaScriptNode;
 
-public class JavaScriptNodeProperties extends ProjectItemNodeProperties {
+public class JavaScriptNodeProperties extends GenericFileNodeProperties {
 
-	public JavaScriptNodeProperties(IProjectItemNode node) {
+	public JavaScriptNodeProperties(JavaScriptNode node) {
 		super(node);
 		// TODO Auto-generated constructor stub
 	}

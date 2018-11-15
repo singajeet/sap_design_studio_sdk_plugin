@@ -74,9 +74,9 @@ public class AdvancedPropertySheetNode extends GenericFolderNode {
 		 String componentId = cmp.getComponent().getId();
 		 
 		 validPath = extensionId + "/" + componentId + "/res/additional_properties_sheet/" + componentId;
-		 htmlPath = validPath + ".html";
-		 cssPath = validPath + ".css";
-		 jsPath = validPath + ".js";			 
+		 htmlPath = validPath + "_aps.html";
+		 cssPath = validPath + "_aps.css";
+		 jsPath = validPath + "_aps.js";			 
 		 
 		 IProjectItemNode html = new HTMLNode(super.getProject(), htmlPath, this);
 		 _children.add(html);

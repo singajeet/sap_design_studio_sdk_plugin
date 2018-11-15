@@ -46,6 +46,11 @@ public class ExtensionCollectionNode extends GenericFolderNode {
 
 	/************************** Required to be overridden ********************************/
 	
+	@Override
+	public String getFolderPath() {
+		return this.getProject().getFile(".project").getProjectRelativePath().toOSString();
+	}
+	
 	public void clear() {
 		if(_children != null)
 			_children = initializeChildren(_extensionFolders);	

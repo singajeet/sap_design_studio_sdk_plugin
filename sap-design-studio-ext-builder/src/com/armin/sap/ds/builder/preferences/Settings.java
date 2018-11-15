@@ -64,6 +64,10 @@ public class Settings {
 		
 		public static final String DEFAULT_CSS_TEMPLATE = "// CSS Style classes //";
 		
+		public static final String HTML_TEMPLATE = "cssTemplate";
+		
+		public static final String DEFAULT_HTML_TEMPLATE = "<html><head></head><body></body></html>";
+		
 		public static final String ZTL_TEMPLATE = "ztlTemplate";
 		
 		public static final String DEFAULT_ZTL_TEMPLATE = "class ${package}.${class} extends ${parentclass} {* \n /** Add Code Below **/ \n *}";

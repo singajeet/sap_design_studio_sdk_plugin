@@ -33,6 +33,11 @@ public class CascadeStyleSheetNode extends GenericFileNode {
 		return _cssPath;
 	}
 	
+	@Override
+	public String getFilePath() {
+		return this._cssPath;
+	}
+	
 	/**************************
 	 * Required to be overridden
 	 ********************************/

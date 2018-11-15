@@ -71,12 +71,6 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		if(!extensionFile.exists()) {
 			try {
 				
-//				String folderName = extensionModel.getId();
-//				IFolder folder = project.getFolder(folderName);
-//				if(!folder.exists()) {
-//					folder.create(true, true, null);
-//				}
-				
 				boolean saved = _saveExtension(extensionFile, extensionModel);
 				
 				if(saved) {
@@ -274,6 +268,18 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		return cssFilePath;
 	}
 
+	public String[] setupAdvancedPropertySheet(IProject project, IModel componentModel, IModel extensionModel) {
+		
+		String validPath = extensionModel.getId() + "/" + componentModel.getId() + "/res/additional_properties_sheet/" + componentModel.getId();
+		String htmlPath = validPath + "_aps.html";
+		String cssPath = validPath + "_aps.css";
+		String jsPath = validPath + "_aps.js";
+		
+		createComponentSupportingFile(project, htmlPath, Settings.store().get(Settings.FOR.HTML_TEMPLATE));
+		createComponentSupportingFile(project, cssPath, Settings.store().get(Settings.FOR.CSS_TEMPLATE));
+		createComponentSupportingFile(project, jsPath, Settings.store().get(Settings.FOR.JS_TEMPLATE));
+		return new String[] {htmlPath, cssPath, jsPath};
+	}
 	
 	public boolean createComponentSupportingFile(IProject project, String path, String content) {
 		IFile file = project.getFile(path);		

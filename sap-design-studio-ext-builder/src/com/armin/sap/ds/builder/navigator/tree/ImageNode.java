@@ -49,6 +49,11 @@ public class ImageNode extends GenericFileNode {
 		return _imageFileName;
 	}
 	
+	@Override
+	public String getFilePath() {
+		return _imageFileName==null ? _imagePath : _imagePath + "/" + _imageFileName;
+	}
+	
 	/**************************
 	 * Required to be overridden
 	 ********************************/

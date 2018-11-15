@@ -32,6 +32,11 @@ public class JavaScriptNode extends GenericFileNode {
 		return _jsPath;
 	}
 	
+	@Override
+	public String getFilePath() {
+		return _jsPath;
+	}
+	
 	/**************************
 	 * Required to be overridden
 	 ********************************/

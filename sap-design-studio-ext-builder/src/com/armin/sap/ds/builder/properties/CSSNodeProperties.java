@@ -1,10 +1,10 @@
 package com.armin.sap.ds.builder.properties;
 
-import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
+import com.armin.sap.ds.builder.navigator.tree.CascadeStyleSheetNode;
 
-public class CSSNodeProperties extends ProjectItemNodeProperties {
+public class CSSNodeProperties extends GenericFileNodeProperties {
 
-	public CSSNodeProperties(IProjectItemNode node) {
+	public CSSNodeProperties(CascadeStyleSheetNode node) {
 		super(node);
 		// TODO Auto-generated constructor stub
 	}

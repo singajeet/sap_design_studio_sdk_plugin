@@ -20,11 +20,13 @@ public class ImagesFolderNode extends GenericFolderNode {
 
 	//private static final String PATH = ProjectService.get().getExtensionModel().getId() + "/res/images/";
 	private static final String NAME = "Images";
+	private String _imagesFolderPath;
 	
 	public ImagesFolderNode(IProject project, String extensionBasePath, IProjectItemNode parent) {
 		super(project, extensionBasePath, parent);
 		if(extensionBasePath != null) {			
-			_children = initializeChildren(extensionBasePath + "/" + ((ComponentNode)parent).getId() + "/res/images/");
+			_imagesFolderPath = extensionBasePath + "/" + ((ComponentNode)parent).getId() + "/res/images/";
+			_children = initializeChildren(_imagesFolderPath);
 		} else {
 			_children = new ArrayList<IProjectItemNode>();
 			_children.add(new ProjectItemNode("-- No images available! --", this));
@@ -34,6 +36,11 @@ public class ImagesFolderNode extends GenericFolderNode {
 	@Override
 	public ProjectItemType getType() {
 		return ProjectItemType.IMAGES_FOLDER;
+	}
+	
+	@Override
+	public String getFolderPath() {
+		return _imagesFolderPath;
 	}
 	
 	/**************************
