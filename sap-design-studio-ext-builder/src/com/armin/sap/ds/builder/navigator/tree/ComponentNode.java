@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -19,6 +20,8 @@ import com.armin.sap.ds.builder.properties.ComponentNodeProperties;
 
 public class ComponentNode extends GenericFileNode {
 
+	private URI _diagramURI;
+	
 	public ComponentNode(IProject project, Component component, IProjectItemNode parent) {
 		super(project, component, parent);		
 		_children = initializeChildren(component);
@@ -49,6 +52,22 @@ public class ComponentNode extends GenericFileNode {
 			return ext.getExtension().getId() + "/" + this.getId() + "/contribution.ztl";
 		}
 		return null;
+	}
+
+	
+	
+	/**
+	 * @return the _diagramURI
+	 */
+	public URI getDiagramURI() {
+		return _diagramURI;
+	}
+
+	/**
+	 * @param _diagramURI the _diagramURI to set
+	 */
+	public void setDiagramURI(URI _diagramURI) {
+		this._diagramURI = _diagramURI;
 	}
 
 	/**************************

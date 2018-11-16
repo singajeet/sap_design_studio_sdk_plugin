@@ -1,5 +1,7 @@
 package com.armin.sap.ds.builder.wizard.component;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
@@ -7,6 +9,9 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.graphiti.mm.pictograms.Diagram;
+import org.eclipse.graphiti.services.Graphiti;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -16,9 +21,12 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.api.common.FileService;
 import com.armin.sap.ds.builder.api.models.Component;
+import com.armin.sap.ds.builder.navigator.tree.ComponentNode;
 import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
 import com.armin.sap.ds.builder.navigator.tree.GroupNode;
+import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
 import com.armin.sap.ds.builder.navigator.tree.TreeNodeAccessMode;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
@@ -116,7 +124,8 @@ public class ComponentWizard extends Wizard implements INewWizard {
 					monitor.setTaskName("Adding component to Group Node: " + ((GroupNode)_parentTreeNode).getModel().getId());
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), 
 							"Adding New Component [Id: " + component.getId() + "] to Group [Id: " + ((GroupNode)_parentTreeNode).getModel().getId() + "]"));
-					_parentTreeNode.addComponent(component);
+					IProjectItemNode compNode = _parentTreeNode.addComponent(component);
+					this.addDiagram(component, (ComponentNode)compNode);
 					
 					_parentTreeNode.setAccessMode(TreeNodeAccessMode.READ_ONLY);
 					
@@ -137,6 +146,30 @@ public class ComponentWizard extends Wizard implements INewWizard {
 				}
 				logger.log(new Status(IStatus.CANCEL, this.getClass().getName(), "WorkspaceJob was not completed!"));
 				return Status.CANCEL_STATUS;
+			}
+
+			private void addDiagram(Component component, ComponentNode compNode) {
+				String diagramTypeId = "com.armin.sap.ds.builder.diagram.type.component";
+				String diagramName = component.getId();
+				IFolder diagramFolder = null;
+				String extId = ((ExtensionNode)_parentTreeNode.getParent(null)).getExtension().getId();
+				String folderPath = extId + "/" + component.getId() + "/res/diagrams";
+				
+				Diagram diagram = Graphiti.getPeCreateService().createDiagram(diagramTypeId, diagramName, true);
+				if (diagramFolder == null) {
+					diagramFolder = project.getFolder(folderPath); //$NON-NLS-1$
+				}
+				
+				//String editorID = DiagramEditor.DIAGRAM_EDITOR_ID;
+				String editorExtension = "diagram"; //$NON-NLS-1$
+				//String diagramTypeProviderId = GraphitiUi.getExtensionManager().getDiagramTypeProviderId(diagramTypeId);
+				//String namingConventionID = diagramTypeProviderId + ".editor"; //$NON-NLS-1$
+				//IEditorDescriptor specificEditor = PlatformUI.getWorkbench().getEditorRegistry().findEditor(namingConventionID);
+				
+				IFile diagramFile = diagramFolder.getFile(diagramName + "." + editorExtension); //$NON-NLS-1$
+				URI uri = URI.createPlatformResourceURI(diagramFile.getFullPath().toString(), true);
+				compNode.setDiagramURI(uri);
+				FileService.createEmfFileForDiagram(uri, diagram);
 			}			
 		};
 		

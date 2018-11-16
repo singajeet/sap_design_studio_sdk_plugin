@@ -20,7 +20,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.expressions;bundle-version="3.6.0",
  org.eclipse.sapphire.ui.swt.gef;bundle-version="9.1.0",
  org.eclipse.jst.pagedesigner;bundle-version="1.8.2",
- org.eclipse.ui.views.properties.tabbed;bundle-version="3.8.1"
+ org.eclipse.ui.views.properties.tabbed;bundle-version="3.8.1",
+ org.eclipse.graphiti;bundle-version="0.14.0",
+ org.eclipse.graphiti.ui;bundle-version="0.14.0",
+ org.eclipse.emf.transaction;bundle-version="1.9.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: com.armin.sap.ds.builder
 Bundle-ActivationPolicy: lazy

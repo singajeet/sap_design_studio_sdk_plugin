@@ -212,7 +212,8 @@ public class ProjectService implements IProjectService {
 		String[] folderPaths = {				
 				extensionModel.getId() + "/" + componentModel.getId() + "/res/js",
 				extensionModel.getId() + "/" + componentModel.getId() + "/res/css",
-				extensionModel.getId() + "/" + componentModel.getId() + "/res/images"
+				extensionModel.getId() + "/" + componentModel.getId() + "/res/images",
+				extensionModel.getId() + "/" + componentModel.getId() + "/res/diagrams"
 		};
 		
 		addFoldersToProjectStructure(_project, folderPaths);

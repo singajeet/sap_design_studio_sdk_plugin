@@ -49,7 +49,7 @@ public class GroupNode extends ProjectItemNode {
     }
 	
 	
-	public void addComponent(Component component) throws Exception{
+	public IProjectItemNode addComponent(Component component) throws Exception{
 		if(!exists(component)) {
 			
 			ExtensionNode _parent = (ExtensionNode)this.getParent(this);
@@ -59,19 +59,20 @@ public class GroupNode extends ProjectItemNode {
 			if(getAccessMode() == TreeNodeAccessMode.READ_ONLY) {
 				IProjectItemNode node = new ComponentNode(this.getProject(), component, this);
 				_children.add(node);
+				return node;
 			} else if(getAccessMode() == TreeNodeAccessMode.EDIT) {
 				//DO NOT CHANGE SEQUENCE OF NEXT 2 LINES
 				_projectService.addNewComponent(component, extension);
 				IProjectItemNode node = new ComponentNode(this.getProject(), component, this);
 				_children.add(node);
-				
+				return node;
 			} 
 			else {
 				throw new Exception("Failed while adding new Component node. "
-						+ "Reason: Invalid access mode for Group [Name=" + this.getName() + "]");
-				
+						+ "Reason: Invalid access mode for Group [Name=" + this.getName() + "]");				
 			}
 		}
+		return null;
 	}
 	
 	

@@ -1826,5 +1826,26 @@
             application="sap_ds_sdk_extensions_generator_plugin"
             name="SAP DS SDK Extensions Generator Plugin">
       </product>
+   </extension>
+   <extension
+         point="org.eclipse.graphiti.ui.diagramTypes">
+      <diagramType
+            id="com.armin.sap.ds.builder.diagram.type.component"
+            name="Component Diagram"
+            type="Component">
+      </diagramType>
+   </extension>
+   <extension
+         point="org.eclipse.graphiti.ui.diagramTypeProviders">
+      <diagramTypeProvider
+            class="com.armin.sap.ds.builder.component.editor.ComponentClientDiagramTypeProvider"
+            context="org.eclipse.graphiti.ui.diagramEditor"
+            description="Component Diagram Type Provider"
+            id="com.armin.sap.ds.builder.diagram.type.provider.component"
+            name="Component Diagram Type Provider">
+         <diagramType
+               id="com.armin.sap.ds.builder.diagram.type.component">
+         </diagramType>
+      </diagramTypeProvider>
    </extension>  
 </plugin>
