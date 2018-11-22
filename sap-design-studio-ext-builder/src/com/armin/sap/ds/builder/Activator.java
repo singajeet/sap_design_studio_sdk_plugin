@@ -10,6 +10,7 @@ import org.osgi.framework.BundleContext;
 
 import com.armin.sap.ds.builder.context.Context;
 import com.armin.sap.ds.builder.context.ContextManager;
+import com.armin.sap.ds.builder.ui.IRefreshForm;
 
 public class Activator extends AbstractUIPlugin {
 

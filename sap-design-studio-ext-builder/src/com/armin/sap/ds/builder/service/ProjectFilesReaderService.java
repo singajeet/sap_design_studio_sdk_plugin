@@ -11,18 +11,18 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
 import com.armin.sap.ds.builder.api.common.IDEConstants;
-import com.armin.sap.ds.builder.api.models.BackendSystemType;
-import com.armin.sap.ds.builder.api.models.Component;
-import com.armin.sap.ds.builder.api.models.Descriptable;
-import com.armin.sap.ds.builder.api.models.Extension;
-import com.armin.sap.ds.builder.api.models.Group;
-import com.armin.sap.ds.builder.api.models.HandlerTypes;
-import com.armin.sap.ds.builder.api.models.IModel;
-import com.armin.sap.ds.builder.api.models.Property;
-import com.armin.sap.ds.builder.api.models.PropertyType;
-import com.armin.sap.ds.builder.api.models.RequireJSType;
-import com.armin.sap.ds.builder.api.models.StdInclude;
-import com.armin.sap.ds.builder.api.models.UI5Mode;
+import com.armin.sap.ds.builder.api.models.domain.BackendSystemType;
+import com.armin.sap.ds.builder.api.models.domain.Component;
+import com.armin.sap.ds.builder.api.models.domain.Descriptable;
+import com.armin.sap.ds.builder.api.models.domain.Extension;
+import com.armin.sap.ds.builder.api.models.domain.Group;
+import com.armin.sap.ds.builder.api.models.domain.HandlerTypes;
+import com.armin.sap.ds.builder.api.models.domain.IModel;
+import com.armin.sap.ds.builder.api.models.domain.Property;
+import com.armin.sap.ds.builder.api.models.domain.PropertyType;
+import com.armin.sap.ds.builder.api.models.domain.RequireJSType;
+import com.armin.sap.ds.builder.api.models.domain.StdInclude;
+import com.armin.sap.ds.builder.api.models.domain.UI5Mode;
 
 public class ProjectFilesReaderService implements IProjectFilesReaderService {
 

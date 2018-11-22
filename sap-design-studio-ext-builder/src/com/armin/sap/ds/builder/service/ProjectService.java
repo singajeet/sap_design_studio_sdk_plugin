@@ -17,14 +17,14 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.DesignStudioProjectNature;
-import com.armin.sap.ds.builder.api.models.Component;
-import com.armin.sap.ds.builder.api.models.Extension;
-import com.armin.sap.ds.builder.api.models.Group;
-import com.armin.sap.ds.builder.api.models.IModel;
-import com.armin.sap.ds.builder.api.models.ObjectFactory;
-import com.armin.sap.ds.builder.api.models.RequireJSType;
-import com.armin.sap.ds.builder.api.models.UI5Mode;
+import com.armin.sap.ds.builder.api.models.domain.Component;
+import com.armin.sap.ds.builder.api.models.domain.Extension;
+import com.armin.sap.ds.builder.api.models.domain.Group;
+import com.armin.sap.ds.builder.api.models.domain.IModel;
+import com.armin.sap.ds.builder.api.models.domain.ObjectFactory;
+import com.armin.sap.ds.builder.api.models.domain.RequireJSType;
+import com.armin.sap.ds.builder.api.models.domain.UI5Mode;
+import com.armin.sap.ds.builder.api.project.nature.DesignStudioProjectNature;
 
 
 public class ProjectService implements IProjectService {

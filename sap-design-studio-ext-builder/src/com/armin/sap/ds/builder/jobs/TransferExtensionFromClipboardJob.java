@@ -9,10 +9,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.api.models.Extension;
-import com.armin.sap.ds.builder.api.models.IModel;
-import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
-import com.armin.sap.ds.builder.navigator.tree.TreeNodeAccessMode;
+import com.armin.sap.ds.builder.api.models.domain.Extension;
+import com.armin.sap.ds.builder.api.models.domain.IModel;
+import com.armin.sap.ds.builder.ui.navigation.tree.TreeNodeAccessMode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionCollectionNode;
 
 public class TransferExtensionFromClipboardJob extends WorkspaceJob {
 

@@ -8,7 +8,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.TransferData;
 
-import com.armin.sap.ds.builder.api.models.IModel;
+import com.armin.sap.ds.builder.api.models.domain.IModel;
 
 public class ProjectItemNodeTransfer extends ByteArrayTransfer {
 

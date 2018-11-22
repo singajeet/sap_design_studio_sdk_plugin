@@ -8,7 +8,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.INavigatorContentService;
 
-import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode;
 
 public class UIHelper {
 

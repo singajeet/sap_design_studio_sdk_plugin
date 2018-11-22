@@ -22,10 +22,10 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.DesignStudioProjectNature;
 import com.armin.sap.ds.builder.api.common.UIHelper;
-import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
-import com.armin.sap.ds.builder.navigator.tree.ProjectNode;
+import com.armin.sap.ds.builder.api.project.nature.DesignStudioProjectNature;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ProjectNode;
 
 public class NavigatorContentProvider implements ITreeContentProvider, IResourceChangeListener {
 

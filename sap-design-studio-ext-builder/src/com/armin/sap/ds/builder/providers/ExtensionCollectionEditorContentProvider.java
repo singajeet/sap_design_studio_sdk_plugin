@@ -12,7 +12,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
-import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionCollectionNode;
 
 public class ExtensionCollectionEditorContentProvider implements IStructuredContentProvider, IResourceChangeListener {
 

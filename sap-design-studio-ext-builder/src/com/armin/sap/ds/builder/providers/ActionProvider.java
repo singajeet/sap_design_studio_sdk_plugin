@@ -15,11 +15,11 @@ import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 
-import com.armin.sap.ds.builder.command.CommandFactory;
-import com.armin.sap.ds.builder.commands.handlers.OpenExtensionCollectionHandler;
-import com.armin.sap.ds.builder.commands.handlers.OpenExtensionSourceHandler;
-import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
-import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
+import com.armin.sap.ds.builder.commands.CommandFactory;
+import com.armin.sap.ds.builder.commands.handlers.file.OpenExtensionCollectionHandler;
+import com.armin.sap.ds.builder.commands.handlers.file.OpenExtensionSourceHandler;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionCollectionNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode;
 
 public class ActionProvider extends CommonActionProvider {
 

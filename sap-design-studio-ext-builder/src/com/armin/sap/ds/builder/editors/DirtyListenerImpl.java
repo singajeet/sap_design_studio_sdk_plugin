@@ -1,6 +1,6 @@
 package com.armin.sap.ds.builder.editors;
 
-import com.armin.sap.ds.builder.extension.editor.ExtensionEditor;
+import com.armin.sap.ds.builder.editors.extension.ExtensionEditor;
 
 public class DirtyListenerImpl implements IDirtyListener{
 	

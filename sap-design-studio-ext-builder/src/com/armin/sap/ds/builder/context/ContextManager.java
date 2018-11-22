@@ -3,7 +3,7 @@ package com.armin.sap.ds.builder.context;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.armin.sap.ds.builder.api.models.Extension;
+import com.armin.sap.ds.builder.api.models.domain.Extension;
 
 public class ContextManager {
 

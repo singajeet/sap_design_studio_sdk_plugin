@@ -4,7 +4,7 @@ import java.net.URI;
 
 import org.eclipse.core.resources.IProject;
 
-import com.armin.sap.ds.builder.api.models.IModel;
+import com.armin.sap.ds.builder.api.models.domain.IModel;
 
 public interface IProjectService {
 //	public void setModels(IModel extensionModel, IModel componentModel);

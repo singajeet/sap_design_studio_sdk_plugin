@@ -9,7 +9,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
-import com.armin.sap.ds.builder.api.models.Extension;
+import com.armin.sap.ds.builder.api.models.domain.Extension;
 
 public class ProjectFilesReaderServiceSlave implements IProjectFilesReaderService {
 

@@ -2,10 +2,10 @@ package com.armin.sap.ds.builder.service;
 
 import org.eclipse.core.resources.IProject;
 
-import com.armin.sap.ds.builder.api.models.Extension;
-import com.armin.sap.ds.builder.api.models.Group;
-import com.armin.sap.ds.builder.api.models.IModel;
-import com.armin.sap.ds.builder.api.models.RequireJSType;
+import com.armin.sap.ds.builder.api.models.domain.Extension;
+import com.armin.sap.ds.builder.api.models.domain.Group;
+import com.armin.sap.ds.builder.api.models.domain.IModel;
+import com.armin.sap.ds.builder.api.models.domain.RequireJSType;
 
 public interface IProjectFilesBuilderService {
 

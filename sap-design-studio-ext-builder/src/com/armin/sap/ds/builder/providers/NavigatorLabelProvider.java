@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 
-import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode;
 
 public class NavigatorLabelProvider implements ILabelProvider {
 

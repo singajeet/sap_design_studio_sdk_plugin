@@ -9,7 +9,7 @@
       <builder
             hasNature="true">
          <run
-               class="com.armin.sap.ds.builder.DesignStudioProjectBuilder">
+               class="com.armin.sap.ds.builder.api.project.builder.DesignStudioProjectBuilder">
          </run>
       </builder>
    </extension>
@@ -19,7 +19,7 @@
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="com.armin.sap.ds.builder.DesignStudioProjectNature">               
+               class="com.armin.sap.ds.builder.api.project.nature.DesignStudioProjectNature">               
          </run>
       </runtime>
       <builder
@@ -64,12 +64,7 @@
       </command>
       <command
             categoryId="com.armin.sap.ds.builder.project.commands.category"
-            id="com.armin.sap.ds.builder.commands.component.ui.open"
-            name="Open Component UI">
-      </command>
-      <command
-            categoryId="com.armin.sap.ds.builder.project.commands.category"
-            id="com.armin.sap.ds.builder.commands.component.designer.open"
+            id="com.armin.sap.ds.builder.commands.component.diagram.open"
             name="Open Component Designer">
       </command>
       <command
@@ -206,7 +201,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionCollectionNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -228,7 +223,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -250,7 +245,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -272,17 +267,17 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode">
                         </instanceof>
                      </iterate>
                   </with>
                </visibleWhen>
             </command>
             <command
-                  commandId="com.armin.sap.ds.builder.commands.component.ui.open"
-                  disabledIcon="images/component_16x16_disabled.png"
-                  icon="images/component_16x16.png"
-                  label="Open Component UI"
+                  commandId="com.armin.sap.ds.builder.commands.component.diagram.open"
+                  disabledIcon="images/component_diagram.png"
+                  icon="images/component_diagram.png"
+                  label="Open Component Diagram"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -294,29 +289,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
-                        </instanceof>
-                     </iterate>
-                  </with>
-               </visibleWhen>
-            </command>
-            <command
-                  commandId="com.armin.sap.ds.builder.commands.component.designer.open"
-                  disabledIcon="images/component_16x16_disabled.png"
-                  icon="images/component_16x16.png"
-                  label="Open Component Designer"
-                  style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <with
-                        variable="selection">
-                     <count
-                           value="1">
-                     </count>
-                     <iterate
-                           ifEmpty="false">
-                        <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -340,7 +313,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -361,7 +334,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -382,7 +355,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -403,7 +376,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -436,7 +409,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionCollectionNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -462,7 +435,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.GroupNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.GroupNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -488,7 +461,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -515,7 +488,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionCollectionNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -569,7 +542,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -591,7 +564,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -613,56 +586,34 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode">
                         </instanceof>
                      </iterate>
                   </with>
                </visibleWhen>
          		</command>
-               <command
-                  commandId="com.armin.sap.ds.builder.commands.component.ui.open"
-                  disabledIcon="images/component_16x16_disabled.png"
-                  icon="images/component_16x16.png"
-                  label="Open Component UI"
-                  style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <with
-                        variable="selection">
-                     <count
-                           value="1">
-                     </count>
-                     <iterate
-                           ifEmpty="false">
-                        <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
-                        </instanceof>
-                     </iterate>
-                  </with>
-               </visibleWhen>
-            </command>   
-            <command
-                  commandId="com.armin.sap.ds.builder.commands.component.designer.open"
-                  disabledIcon="images/component_16x16_disabled.png"
-                  icon="images/component_16x16.png"
-                  label="Open Component Designer"
-                  style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <with
-                        variable="selection">
-                     <count
-                           value="1">
-                     </count>
-                     <iterate
-                           ifEmpty="false">
-                        <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
-                        </instanceof>
-                     </iterate>
-                  </with>
-               </visibleWhen>
-            </command>
+         <command
+               commandId="com.armin.sap.ds.builder.commands.component.diagram.open"
+               disabledIcon="images/component_diagram.png"
+               icon="images/component_diagram.png"
+               label="Open Component Diagram"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate
+                        ifEmpty="false">
+                     <instanceof
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
          <separator
                name="sap-design-studio-ext-navigator.separator3"
                visible="true">
@@ -726,7 +677,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -769,7 +720,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -790,7 +741,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -811,7 +762,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -832,7 +783,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -890,7 +841,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionCollectionNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -944,7 +895,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -966,7 +917,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -988,39 +939,17 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode">
                      </instanceof>
                   </iterate>
                </with>
             </visibleWhen>
          </command>
-                     <command
-                  commandId="com.armin.sap.ds.builder.commands.component.ui.open"
-                  disabledIcon="images/component_16x16_disabled.png"
-                  icon="images/component_16x16.png"
-                  label="Open Component UI"
-                  style="push">
-               <visibleWhen
-                     checkEnabled="false">
-                  <with
-                        variable="selection">
-                     <count
-                           value="1">
-                     </count>
-                     <iterate
-                           ifEmpty="false">
-                        <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
-                        </instanceof>
-                     </iterate>
-                  </with>
-               </visibleWhen>
-            </command>
             <command
-                  commandId="com.armin.sap.ds.builder.commands.component.designer.open"
-                  disabledIcon="images/component_16x16_disabled.png"
-                  icon="images/component_16x16.png"
-                  label="Open Component Designer"
+                  commandId="com.armin.sap.ds.builder.commands.component.diagram.open"
+                  disabledIcon="images/component_diagram.png"
+                  icon="images/component_diagram.png"
+                  label="Open Component Diagram"
                   style="push">
                <visibleWhen
                      checkEnabled="false">
@@ -1032,7 +961,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.navigator.tree.ComponentNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -1057,7 +986,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -1078,7 +1007,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -1099,7 +1028,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -1120,7 +1049,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -1178,7 +1107,7 @@
          point="org.eclipse.ui.views">
       <view
             category="com.armin.sap.ds.builder.view.category"
-            class="com.armin.sap.ds.builder.navigator.ProjectNavigator"
+            class="com.armin.sap.ds.builder.ui.navigation.ProjectNavigator"
             icon="images/sap_18.png"
             id="com.armin.sap.ds.builder.project.navigator.view"
             name="SAP Design Studio Project Navigator"
@@ -1193,7 +1122,7 @@
             inject="true"
             icon="images/quickview-icon.png"
             category="com.armin.sap.ds.builder.view.category"
-            class="com.armin.sap.ds.builder.views.DesignStudioDefaultView"
+            class="com.armin.sap.ds.builder.ui.views.DesignStudioDefaultView"
             id="com.armin.sap.ds.builder.views.default">
       </view>
    </extension>
@@ -1235,13 +1164,13 @@
                      value="org.eclipse.core.resources.IResource">
                </instanceof>
             	<instanceof
-	                  value="com.armin.sap.ds.builder.navigator.tree.ProjectItemNode">
+	                  value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ProjectItemNode">
 	            </instanceof>
             </or>	            
          </triggerPoints>
          <possibleChildren>
             <instanceof
-                  value="com.armin.sap.ds.builder.navigator.tree.ProjectItemNode">
+                  value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ProjectItemNode">
             </instanceof>
          </possibleChildren>
          <actionProvider
@@ -1250,7 +1179,7 @@
                priority="normal">
             <enablement>
                <instanceof
-                     value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                     value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                </instanceof></enablement>
          </actionProvider>
       </navigatorContent>
@@ -1292,7 +1221,7 @@
                         name="org.eclipse.core.resources.IFile">
                   </objectClass>
                   <objectClass
-                        name="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                        name="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                   </objectClass>
                </or>
             </and>
@@ -1315,7 +1244,7 @@
                         name="org.eclipse.core.resources.IFile">
                   </objectClass>
                   <objectClass
-                        name="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                        name="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                   </objectClass>
                </or>
             </and>
@@ -1325,16 +1254,16 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.armin.sap.ds.builder.extension.collection.editor.ExtensionCollectionEditor"
-            contributorClass="com.armin.sap.ds.builder.extension.collection.editor.ExtensionCollectionEditorContributor"
+            class="com.armin.sap.ds.builder.editors.extension.collection.ExtensionCollectionEditor"
+            contributorClass="com.armin.sap.ds.builder.editors.extension.collection.ExtensionCollectionEditorContributor"
             default="true"
             icon="images/extension_collection_16x16.png"
             id="com.armin.sap.ds.builder.editors.extension_collection_editor"
             name="Extension Collection Editor">
       </editor>
       <editor
-            class="com.armin.sap.ds.builder.component.editor.ComponentEditor"
-            contributorClass="com.armin.sap.ds.builder.component.editor.ComponentEditorContributor"
+            class="com.armin.sap.ds.builder.editors.component.ComponentEditor"
+            contributorClass="com.armin.sap.ds.builder.editors.component.ComponentEditorContributor"
             default="true"
             extensions="ztl"
             icon="images/component_28x28.png"
@@ -1342,8 +1271,8 @@
             name="Component Editor">
       </editor>
       <editor
-            class="com.armin.sap.ds.builder.extension.editor.ExtensionEditor"
-            contributorClass="com.armin.sap.ds.builder.extension.editor.ExtensionEditorContributor"
+            class="com.armin.sap.ds.builder.editors.extension.ExtensionEditor"
+            contributorClass="com.armin.sap.ds.builder.editors.extension.ExtensionEditorContributor"
             default="true"
             icon="images/extension_16x16.png"
             id="com.armin.sap.ds.builder.extension.editor.extension_editor"
@@ -1360,26 +1289,18 @@
             name="Extension Source Editor">
       </editor>
       <editor
-            class="com.armin.sap.ds.builder.component.editor.ComponentUIEditor"
+            class="com.armin.sap.ds.builder.editors.component.ComponentDiagramEditor"
             default="false"
+            extensions="diagram"
             icon="images/component_28x28.png"
-            id="com.armin.sap.ds.builder.editors.component_ui_editor"
-            name="Component UI Editor">
-      </editor>
-      <editor
-            class="org.eclipse.jst.pagedesigner.editors.HTMLEditor"
-            contributorClass="org.eclipse.jst.pagedesigner.editors.actions.PageDesignerActionBarContributor2"
-            default="false"
-            extensions="xml, html, ztl, htm"
-            icon="images/component_28x28.png"
-            id="com.armin.sap.ds.builder.editors.component_designer_editor"
-            name="Component Designer Editor">
+            id="com.armin.sap.ds.builder.editors.component_diagram_editor"
+            name="Component Diagram Editor">
       </editor>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="com.armin.sap.ds.builder.commands.handlers.ToggleProjectNatureHandler"
+            class="com.armin.sap.ds.builder.commands.handlers.file.ToggleProjectNatureHandler"
             commandId="com.armin.sap.ds.builder.commands.toggle.nature">
          <enabledWhen>
             <with
@@ -1403,7 +1324,7 @@
          </enabledWhen>
       </handler>
       <handler
-            class="com.armin.sap.ds.builder.commands.handlers.OpenExtensionCollectionHandler"
+            class="com.armin.sap.ds.builder.commands.handlers.file.OpenExtensionCollectionHandler"
             commandId="com.armin.sap.ds.builder.commands.extension.collection.open">
          <enabledWhen>
             <with
@@ -1414,14 +1335,14 @@
                <iterate
                      ifEmpty="false">
                   <instanceof
-                        value="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode">
+                        value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionCollectionNode">
                   </instanceof>
                </iterate>
             </with>
          </enabledWhen>
       </handler>
       <handler
-            class="com.armin.sap.ds.builder.commands.handlers.OpenExtensionSourceHandler"
+            class="com.armin.sap.ds.builder.commands.handlers.file.OpenExtensionSourceHandler"
             commandId="com.armin.sap.ds.builder.commands.extension.source.open">
          <enabledWhen>
             <with
@@ -1432,14 +1353,14 @@
                <iterate
                      ifEmpty="false">
                   <instanceof
-                        value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                        value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode">
                   </instanceof>
                </iterate>
             </with>
          </enabledWhen>
       </handler>
       <handler
-            class="com.armin.sap.ds.builder.commands.handlers.OpenExtensionHandler"
+            class="com.armin.sap.ds.builder.commands.handlers.file.OpenExtensionHandler"
             commandId="com.armin.sap.ds.builder.commands.extension.open">
          <enabledWhen>
             <with
@@ -1450,14 +1371,14 @@
                <iterate
                      ifEmpty="false">
                   <instanceof
-                        value="com.armin.sap.ds.builder.navigator.tree.ExtensionNode">
+                        value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode">
                   </instanceof>
                </iterate>
             </with>
          </enabledWhen>
       </handler>
       <handler
-            class="com.armin.sap.ds.builder.commands.handlers.tree.CopyCommandHandler"
+            class="com.armin.sap.ds.builder.commands.handlers.edit.CopyCommandHandler"
             commandId="com.armin.sap.ds.builder.commands.tree.copyNode">
          <enabledWhen>
             <with
@@ -1468,14 +1389,14 @@
                <iterate
                      ifEmpty="false">
                   <instanceof
-                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                        value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                   </instanceof>
                </iterate>
             </with>
          </enabledWhen>
       </handler>
       <handler
-            class="com.armin.sap.ds.builder.commands.handlers.tree.PasteCommandHandler"
+            class="com.armin.sap.ds.builder.commands.handlers.edit.PasteCommandHandler"
             commandId="com.armin.sap.ds.builder.commands.tree.pasteNode">
          <enabledWhen>
             <with
@@ -1486,14 +1407,14 @@
                <iterate
                      ifEmpty="false">
                   <instanceof
-                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                        value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                   </instanceof>
                </iterate>
             </with>
          </enabledWhen>
       </handler>
       <handler
-            class="com.armin.sap.ds.builder.commands.handlers.tree.CutCommandHandler"
+            class="com.armin.sap.ds.builder.commands.handlers.edit.CutCommandHandler"
             commandId="com.armin.sap.ds.builder.commands.tree.cutNode">
          <enabledWhen>
             <with
@@ -1504,14 +1425,14 @@
                <iterate
                      ifEmpty="false">
                   <instanceof
-                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                        value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                   </instanceof>
                </iterate>
             </with>
          </enabledWhen>
       </handler>
       <handler
-            class="com.armin.sap.ds.builder.commands.handlers.OpenComponentHandler"
+            class="com.armin.sap.ds.builder.commands.handlers.file.OpenComponentHandler"
             commandId="com.armin.sap.ds.builder.commands.component.open">
          <enabledWhen>
             <with
@@ -1522,14 +1443,14 @@
                <iterate
                      ifEmpty="false">
                   <instanceof
-                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                        value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                   </instanceof>
                </iterate>
             </with>
          </enabledWhen>
       </handler>
       <handler
-            class="com.armin.sap.ds.builder.commands.handlers.tree.DeleteCommandHandler"
+            class="com.armin.sap.ds.builder.commands.handlers.edit.DeleteCommandHandler"
             commandId="com.armin.sap.ds.builder.commands.tree.deleteNode">
          <enabledWhen>
             <with
@@ -1540,7 +1461,25 @@
                <iterate
                      ifEmpty="false">
                   <instanceof
-                        value="com.armin.sap.ds.builder.navigator.tree.IProjectItemNode">
+                        value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.armin.sap.ds.builder.commands.handlers.file.OpenComponentDiagramHandler"
+            commandId="com.armin.sap.ds.builder.commands.component.diagram.open">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="+">
+               </count>
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode">
                   </instanceof>
                </iterate>
             </with>
@@ -1574,7 +1513,7 @@
       </category>
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
-            class="com.armin.sap.ds.builder.wizard.project.DesignStudioNewProjectWizard"
+            class="com.armin.sap.ds.builder.ui.wizards.project.DesignStudioNewProjectWizard"
             descriptionImage="images/project_16x16.png"
             finalPerspective="com.armin.sap.ds.builder.project.perspective"
             icon="images/project_16x16.png"
@@ -1584,37 +1523,37 @@
       </wizard>
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
-            class="com.armin.sap.ds.builder.wizard.extension.ExtensionWizard"
+            class="com.armin.sap.ds.builder.ui.wizards.extension.ExtensionWizard"
             descriptionImage="images/extension_16x16.png"
             icon="images/extension_16x16.png"
             id="com.armin.sap.ds.builder.wizards.new_extension_wizard"
             name="SAP Design Studio Extension">
          <selection
-               class="com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode"
+               class="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionCollectionNode"
                name="SAP Design Studio ExtensionCollection">
          </selection>
       </wizard>
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
-            class="com.armin.sap.ds.builder.wizard.component.ComponentWizard"
+            class="com.armin.sap.ds.builder.ui.wizards.component.ComponentWizard"
             descriptionImage="images/component_16x16.png"
             icon="images/component_16x16.png"
             id="com.armin.sap.ds.builder.wizards.new_component_wizard"
             name="SAP Design Studio Component">
          <selection
-               class="com.armin.sap.ds.builder.navigator.tree.GroupNode"
+               class="com.armin.sap.ds.builder.ui.navigation.tree.nodes.GroupNode"
                name="SAP Design Studio Group">
          </selection>
       </wizard>
       <wizard
             category="com.armin.sap.ds.builder.wizards.category"
-            class="com.armin.sap.ds.builder.wizard.group.GroupWizard"
+            class="com.armin.sap.ds.builder.ui.wizards.group.GroupWizard"
             descriptionImage="images/group_16x16.png"
             icon="images/group_16x16.png"
             id="com.armin.sap.ds.builder.wizards.new_group_wizard"
             name="SAP Design Studio Group">
          <selection
-               class="com.armin.sap.ds.builder.navigator.tree.ExtensionNode"
+               class="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode"
                name="SAP Design Studio Extension">
          </selection>
       </wizard>
@@ -1838,7 +1777,7 @@
    <extension
          point="org.eclipse.graphiti.ui.diagramTypeProviders">
       <diagramTypeProvider
-            class="com.armin.sap.ds.builder.component.editor.ComponentClientDiagramTypeProvider"
+            class="com.armin.sap.ds.builder.diagrams.providers.ComponentClientDiagramTypeProvider"
             context="org.eclipse.graphiti.ui.diagramEditor"
             description="Component Diagram Type Provider"
             id="com.armin.sap.ds.builder.diagram.type.provider.component"
@@ -1847,5 +1786,5 @@
                id="com.armin.sap.ds.builder.diagram.type.component">
          </diagramType>
       </diagramTypeProvider>
-   </extension>  
+   </extension>
 </plugin>

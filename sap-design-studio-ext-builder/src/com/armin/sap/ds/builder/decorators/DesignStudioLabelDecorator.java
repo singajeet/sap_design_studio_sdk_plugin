@@ -7,13 +7,13 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.themes.IThemeManager;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.api.models.UI5Mode;
-import com.armin.sap.ds.builder.navigator.tree.ComponentNode;
-import com.armin.sap.ds.builder.navigator.tree.ExtensionCollectionNode;
-import com.armin.sap.ds.builder.navigator.tree.ExtensionNode;
-import com.armin.sap.ds.builder.navigator.tree.GroupNode;
-import com.armin.sap.ds.builder.navigator.tree.IProjectItemNode;
-import com.armin.sap.ds.builder.navigator.tree.ProjectItemType;
+import com.armin.sap.ds.builder.api.models.domain.UI5Mode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionCollectionNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.GroupNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ProjectItemNodeType;
 
 public class DesignStudioLabelDecorator implements ILightweightLabelDecorator {
 
@@ -55,31 +55,31 @@ public class DesignStudioLabelDecorator implements ILightweightLabelDecorator {
 			if(color != null)
 				decoration.setForegroundColor(color);
 			
-			if(ele.getType() == ProjectItemType.EXTENSION_COLLECTION) {
+			if(ele.getType() == ProjectItemNodeType.EXTENSION_COLLECTION) {
 				ExtensionCollectionNode extensions = (ExtensionCollectionNode)ele;
 				decoration.addSuffix(" [" + extensions.getExtensions().size() + " Extension(s)]");
 				
-			} else if(ele.getType() == ProjectItemType.EXTENSION) {
+			} else if(ele.getType() == ProjectItemNodeType.EXTENSION) {
 				ExtensionNode extension = (ExtensionNode)ele;
 				int extensionChildCount = 0;
 				for(Object item : extension.getChildren(this)) {
 					IProjectItemNode itemNode = (IProjectItemNode)item;
-					if(itemNode.getType() == ProjectItemType.GROUP) {
+					if(itemNode.getType() == ProjectItemNodeType.GROUP) {
 						extensionChildCount++;
 					}
 				}
 				decoration.addSuffix(" [" + extensionChildCount + " Group(s)]");				
-			} else if(ele.getType() == ProjectItemType.GROUP) {
+			} else if(ele.getType() == ProjectItemNodeType.GROUP) {
 				int groupChildCount = 0;
 				GroupNode groups = (GroupNode)ele;
 				for(Object item : groups.getChildren(this)) {
 					IProjectItemNode itemNode = (IProjectItemNode)item;
-					if(itemNode.getType() == ProjectItemType.COMPONENT) {
+					if(itemNode.getType() == ProjectItemNodeType.COMPONENT) {
 						groupChildCount++;
 					}
 				}
 				decoration.addSuffix(" [" + groupChildCount + " Component(s)]");				
-			} else if(ele.getType() == ProjectItemType.COMPONENT) {
+			} else if(ele.getType() == ProjectItemNodeType.COMPONENT) {
 				ComponentNode component = (ComponentNode)ele;
 				
 				String modes = "";

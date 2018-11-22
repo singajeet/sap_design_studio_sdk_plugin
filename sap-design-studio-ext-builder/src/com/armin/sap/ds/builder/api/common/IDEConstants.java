@@ -61,4 +61,6 @@ public interface IDEConstants {
 	String GROUP_CLOSE_TAG = "</group>";
 	String DEFAULT_VALUE_CLOSE_TAG = "</defaultValue>";
 	String EMPTY = "<Empty>";
+	String RESOURCE_ATTRIBUTE_ADDRESS = "resource_attribute_address";
+	String RESOURCE_MARKER_URI = "resource_marker_uri";
 }
