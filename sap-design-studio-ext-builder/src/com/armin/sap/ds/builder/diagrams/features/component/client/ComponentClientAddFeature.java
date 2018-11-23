@@ -1,4 +1,4 @@
-package com.armin.sap.ds.builder.diagrams.features;
+package com.armin.sap.ds.builder.diagrams.features.component.client;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.graphiti.features.IFeatureProvider;

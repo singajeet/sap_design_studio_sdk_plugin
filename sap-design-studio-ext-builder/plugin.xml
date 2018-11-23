@@ -1289,7 +1289,7 @@
             name="Extension Source Editor">
       </editor>
       <editor
-            class="com.armin.sap.ds.builder.editors.component.ComponentDiagramEditor"
+            class="com.armin.sap.ds.builder.editors.component.diagram.ComponentDiagramEditor"
             default="false"
             extensions="diagram"
             icon="images/component_28x28.png"
@@ -1777,7 +1777,7 @@
    <extension
          point="org.eclipse.graphiti.ui.diagramTypeProviders">
       <diagramTypeProvider
-            class="com.armin.sap.ds.builder.diagrams.providers.ComponentClientDiagramTypeProvider"
+            class="com.armin.sap.ds.builder.diagrams.providers.component.client.ComponentClientDiagramTypeProvider"
             context="org.eclipse.graphiti.ui.diagramEditor"
             description="Component Diagram Type Provider"
             id="com.armin.sap.ds.builder.diagram.type.provider.component"

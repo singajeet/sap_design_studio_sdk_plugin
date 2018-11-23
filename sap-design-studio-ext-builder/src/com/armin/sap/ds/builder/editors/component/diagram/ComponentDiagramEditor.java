@@ -1,4 +1,4 @@
-package com.armin.sap.ds.builder.editors.component;
+package com.armin.sap.ds.builder.editors.component.diagram;
 
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;

@@ -1,4 +1,4 @@
-package com.armin.sap.ds.builder.diagrams.providers;
+package com.armin.sap.ds.builder.diagrams.providers.component.client;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.graphiti.dt.IDiagramTypeProvider;
@@ -7,8 +7,8 @@ import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.context.IAddContext;
 import org.eclipse.graphiti.ui.features.DefaultFeatureProvider;
 
-import com.armin.sap.ds.builder.diagrams.features.ComponentClientAddFeature;
-import com.armin.sap.ds.builder.diagrams.features.ComponentClientCreateFeature;
+import com.armin.sap.ds.builder.diagrams.features.component.client.ComponentClientAddFeature;
+import com.armin.sap.ds.builder.diagrams.features.component.client.ComponentClientCreateFeature;
 
 public class ComponentClientFeatureProvider extends DefaultFeatureProvider {
 

@@ -1,4 +1,4 @@
-package com.armin.sap.ds.builder.diagrams.features;
+package com.armin.sap.ds.builder.diagrams.features.component.client;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EcoreFactory;
@@ -11,12 +11,12 @@ import com.armin.sap.ds.builder.api.common.Prompts;
 
 public class ComponentClientCreateFeature extends AbstractCreateFeature {
 	
-	private static final String TITLE = "Create Client Instance";
+	private static final String TITLE = "Create SDK Component's Client Object";
 	 
-    private static final String USER_QUESTION = "Enter name for client instance";
+    private static final String USER_QUESTION = "Enter Component ID";
 
 	public ComponentClientCreateFeature(IFeatureProvider fp) {
-		super(fp, TITLE, "Creates component client instance");		
+		super(fp, TITLE, "Create SDK Component's Client Object");		
 	}
 
 	@Override

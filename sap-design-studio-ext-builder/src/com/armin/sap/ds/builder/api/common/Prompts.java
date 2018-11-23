@@ -5,6 +5,9 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
+import com.armin.sap.ds.builder.ui.dialogs.ComponentClientCreateFeatureDialog;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode;
+
 public class Prompts {
 
 	public static Prompts INSTANCE = new Prompts();
@@ -23,6 +26,12 @@ public class Prompts {
 			ret = inputDialog.getValue();
 		}
 		return ret;
+	}
+	
+	public static void askComponent(ComponentNode node) {
+		ComponentClientCreateFeatureDialog d = new ComponentClientCreateFeatureDialog(getShell(), node);
+		d.open();
+		
 	}
 	
 	private static Shell getShell() {

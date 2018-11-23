@@ -14,7 +14,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.armin.sap.ds.builder.editors.component.ComponentDiagramEditor;
+import com.armin.sap.ds.builder.editors.component.diagram.ComponentDiagramEditor;
+import com.armin.sap.ds.builder.editors.component.diagram.ComponentDiagramEditorInput;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.GroupNode;
@@ -60,7 +61,7 @@ public class OpenComponentDiagramHandler extends AbstractHandler {
 				String absPath = _node.getProject().getFile(path).getRawLocation().toOSString();
 				URI fileURI = URI.createFileURI(absPath);
 				
-				input = new DiagramEditorInput(fileURI, DIAGRAM_TYPE_PROVIDER_ID);
+				input = new ComponentDiagramEditorInput(fileURI, DIAGRAM_TYPE_PROVIDER_ID, _node);
 				((DiagramEditorInput)input).setProviderId(DIAGRAM_TYPE_PROVIDER_ID);
 				
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(input, EDITOR_ID);
