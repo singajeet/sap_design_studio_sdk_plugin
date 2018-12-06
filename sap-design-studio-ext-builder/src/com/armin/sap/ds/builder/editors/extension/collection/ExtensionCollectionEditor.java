@@ -45,10 +45,10 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.api.models.domain.Extension;
 import com.armin.sap.ds.builder.commands.handlers.file.OpenExtensionHandler;
 import com.armin.sap.ds.builder.editors.AbstractBaseEditorPart;
 import com.armin.sap.ds.builder.editors.IReusableDSEditorPart;
+import com.armin.sap.ds.builder.models.domain.Extension;
 import com.armin.sap.ds.builder.providers.ExtensionCollectionEditorContentProvider;
 import com.armin.sap.ds.builder.providers.ExtensionCollectionEditorLabelProvider;
 import com.armin.sap.ds.builder.service.IProjectService;

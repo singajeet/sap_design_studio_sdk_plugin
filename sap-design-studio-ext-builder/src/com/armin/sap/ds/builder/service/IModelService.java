@@ -4,7 +4,7 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBElement;
 
-import com.armin.sap.ds.builder.api.models.domain.Extension;
+import com.armin.sap.ds.builder.models.domain.Extension;
 
 public interface IModelService {
 	JAXBElement<Extension> getRootElement(String id);

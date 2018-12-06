@@ -4,10 +4,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
-import com.armin.sap.ds.builder.api.models.domain.Extension;
-import com.armin.sap.ds.builder.api.models.domain.Group;
-import com.armin.sap.ds.builder.api.models.domain.IModel;
-import com.armin.sap.ds.builder.api.models.domain.RequireJSType;
+import com.armin.sap.ds.builder.models.domain.Extension;
+import com.armin.sap.ds.builder.models.domain.Group;
+import com.armin.sap.ds.builder.models.domain.IModel;
+import com.armin.sap.ds.builder.models.domain.RequireJSType;
 
 
 public class ProjectFilesBuilderServiceSlave implements IProjectFilesBuilderService {
@@ -23,7 +23,7 @@ public class ProjectFilesBuilderServiceSlave implements IProjectFilesBuilderServ
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#saveExtension(com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
+	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#saveExtension(com.armin.sap.ds.builder.core.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
 	public Extension saveExtension(IModel extensionModel, IProject project) {
@@ -31,7 +31,7 @@ public class ProjectFilesBuilderServiceSlave implements IProjectFilesBuilderServ
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#saveComponent(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject)
+	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#saveComponent(com.armin.sap.ds.builder.core.models.IModel, com.armin.sap.ds.builder.core.models.IModel, org.eclipse.core.resources.IProject)
 	 */
 	@Override
 	public IModel saveComponent(IModel componentModel, IModel extensionModel, IProject project) {
@@ -39,7 +39,7 @@ public class ProjectFilesBuilderServiceSlave implements IProjectFilesBuilderServ
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#setupAllFiles(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
+	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#setupAllFiles(com.armin.sap.ds.builder.core.models.IModel, com.armin.sap.ds.builder.core.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
 	public Extension setupAllFiles(IModel extensionModel, IModel componentModel, IProject project) {
@@ -48,7 +48,7 @@ public class ProjectFilesBuilderServiceSlave implements IProjectFilesBuilderServ
 	
 	
 	/* (non-Javadoc)
-	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#updateExtension(com.armin.sap.ds.builder.api.models.IModel, com.armin.sap.ds.builder.api.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
+	 * @see com.armin.sap.ds.builder.service.IProjectFilesBuilderService#updateExtension(com.armin.sap.ds.builder.core.models.IModel, com.armin.sap.ds.builder.core.models.IModel, org.eclipse.core.resources.IProject, java.util.Map)
 	 */
 	@Override
 	public Extension updateExtension(IModel extensionModel, IProject project) {

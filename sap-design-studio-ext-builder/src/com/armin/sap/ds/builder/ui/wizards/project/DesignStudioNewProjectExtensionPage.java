@@ -7,10 +7,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.armin.sap.ds.builder.api.common.shared.ISharedData;
-import com.armin.sap.ds.builder.api.models.domain.Extension;
 import com.armin.sap.ds.builder.controls.ExtensionFormControl;
 import com.armin.sap.ds.builder.controls.IExtensionChangedListener;
+import com.armin.sap.ds.builder.core.common.shared.ISharedData;
+import com.armin.sap.ds.builder.models.domain.Extension;
 import com.armin.sap.ds.builder.ui.wizards.IWizardDetailsPage;
 
 

@@ -13,8 +13,8 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.api.models.domain.IModel;
-import com.armin.sap.ds.builder.api.models.domain.Resource;
+import com.armin.sap.ds.builder.models.domain.IModel;
+import com.armin.sap.ds.builder.models.domain.Resource;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.properties.tree.nodes.ProjectItemNodeProperties;
 import com.armin.sap.ds.builder.service.IProjectService;

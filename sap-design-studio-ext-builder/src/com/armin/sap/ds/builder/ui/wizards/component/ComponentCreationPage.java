@@ -15,11 +15,11 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.ResourceManager;
 
-import com.armin.sap.ds.builder.api.models.domain.Component;
-import com.armin.sap.ds.builder.api.models.domain.ComponentExtended;
-import com.armin.sap.ds.builder.api.models.domain.IModel;
 import com.armin.sap.ds.builder.controls.ComponentFormControl;
 import com.armin.sap.ds.builder.controls.IComponentChangedListener;
+import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.ComponentExtended;
+import com.armin.sap.ds.builder.models.domain.IModel;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.GroupNode;

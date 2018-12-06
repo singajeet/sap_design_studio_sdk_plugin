@@ -7,7 +7,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.swt.graphics.Image;
 
-import com.armin.sap.ds.builder.api.models.domain.IModel;
+import com.armin.sap.ds.builder.models.domain.IModel;
 import com.armin.sap.ds.builder.ui.navigation.tree.TreeNodeAccessMode;
 
 public interface IProjectItemNode {

@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.armin.sap.ds.builder.api.models.domain.Group;
+import com.armin.sap.ds.builder.models.domain.Group;
 
 public class GroupFormControl extends Composite {
 	private Text txtExtensionId;

@@ -10,7 +10,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import com.armin.sap.ds.builder.api.project.nature.DesignStudioProjectNature;
+import com.armin.sap.ds.builder.core.project.nature.DesignStudioProjectNature;
 
 public class ToggleProjectNatureHandler extends AbstractHandler {
 

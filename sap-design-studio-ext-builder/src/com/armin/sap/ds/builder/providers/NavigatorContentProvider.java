@@ -22,8 +22,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.api.common.UIHelper;
-import com.armin.sap.ds.builder.api.project.nature.DesignStudioProjectNature;
+import com.armin.sap.ds.builder.core.common.UIHelper;
+import com.armin.sap.ds.builder.core.project.nature.DesignStudioProjectNature;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ProjectNode;
 

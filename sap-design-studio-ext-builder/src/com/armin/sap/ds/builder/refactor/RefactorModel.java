@@ -1,6 +1,6 @@
 package com.armin.sap.ds.builder.refactor;
 
-import com.armin.sap.ds.builder.api.models.domain.IModel;
+import com.armin.sap.ds.builder.models.domain.IModel;
 
 public class RefactorModel implements IRefactor {
 

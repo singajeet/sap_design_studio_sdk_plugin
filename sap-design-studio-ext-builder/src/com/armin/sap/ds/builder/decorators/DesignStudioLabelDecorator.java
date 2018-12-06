@@ -7,7 +7,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.themes.IThemeManager;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.api.models.domain.UI5Mode;
+import com.armin.sap.ds.builder.models.domain.UI5Mode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionCollectionNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode;

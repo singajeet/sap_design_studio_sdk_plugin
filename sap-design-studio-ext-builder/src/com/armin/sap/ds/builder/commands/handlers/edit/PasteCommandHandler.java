@@ -16,9 +16,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.api.models.domain.Extension;
-import com.armin.sap.ds.builder.api.models.domain.IModel;
 import com.armin.sap.ds.builder.jobs.TransferExtensionFromClipboardJob;
+import com.armin.sap.ds.builder.models.domain.Extension;
+import com.armin.sap.ds.builder.models.domain.IModel;
 import com.armin.sap.ds.builder.refactor.RefactorExtensionModel;
 import com.armin.sap.ds.builder.service.ClipboardOpsService;
 import com.armin.sap.ds.builder.service.IClipboardOpsService;

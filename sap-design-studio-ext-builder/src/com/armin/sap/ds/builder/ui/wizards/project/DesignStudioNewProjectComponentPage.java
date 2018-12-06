@@ -16,13 +16,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import com.armin.sap.ds.builder.api.common.shared.ISharedData;
-import com.armin.sap.ds.builder.api.common.shared.ISharedDataSubscriber;
-import com.armin.sap.ds.builder.api.models.domain.Component;
-import com.armin.sap.ds.builder.api.models.domain.ComponentExtended;
-import com.armin.sap.ds.builder.api.models.domain.IModel;
 import com.armin.sap.ds.builder.controls.ComponentFormControl;
 import com.armin.sap.ds.builder.controls.IComponentChangedListener;
+import com.armin.sap.ds.builder.core.common.shared.ISharedData;
+import com.armin.sap.ds.builder.core.common.shared.ISharedDataSubscriber;
+import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.ComponentExtended;
+import com.armin.sap.ds.builder.models.domain.IModel;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.ui.wizards.IWizardDetailsPage;
 

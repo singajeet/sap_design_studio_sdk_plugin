@@ -6,7 +6,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
-import com.armin.sap.ds.builder.api.models.domain.IModel;
+import com.armin.sap.ds.builder.models.domain.IModel;
 
 
 public class ProjectServiceSlave implements IProjectService {

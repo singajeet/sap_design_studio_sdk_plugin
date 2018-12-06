@@ -9,7 +9,7 @@
       <builder
             hasNature="true">
          <run
-               class="com.armin.sap.ds.builder.api.project.builder.DesignStudioProjectBuilder">
+               class="com.armin.sap.ds.builder.core.project.builder.DesignStudioProjectBuilder">
          </run>
       </builder>
    </extension>
@@ -19,7 +19,7 @@
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="com.armin.sap.ds.builder.api.project.nature.DesignStudioProjectNature">               
+               class="com.armin.sap.ds.builder.core.project.nature.DesignStudioProjectNature">               
          </run>
       </runtime>
       <builder
@@ -1771,13 +1771,13 @@
       <diagramType
             id="com.armin.sap.ds.builder.diagram.type.component"
             name="Component Diagram"
-            type="Component">
+            type="patternBasedTool">
       </diagramType>
    </extension>
    <extension
          point="org.eclipse.graphiti.ui.diagramTypeProviders">
       <diagramTypeProvider
-            class="com.armin.sap.ds.builder.diagrams.providers.component.client.ComponentClientDiagramTypeProvider"
+            class="com.armin.sap.ds.builder.diagrams.providers.component.client.ClientComponentDiagramTypeProvider"
             context="org.eclipse.graphiti.ui.diagramEditor"
             description="Component Diagram Type Provider"
             id="com.armin.sap.ds.builder.diagram.type.provider.component"
@@ -1786,5 +1786,60 @@
                id="com.armin.sap.ds.builder.diagram.type.component">
          </diagramType>
       </diagramTypeProvider>
+   </extension>
+<extension  point="org.eclipse.emf.ecp.view.model.provider.xmi.file">
+<file filePath="src/com/armin/sap/ds/builder/diagrams/views/ClientComponent.view"/>
+</extension>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated extendedSDK -->
+      <package
+            uri="www.armin.com/lumira_designer/models"
+            class="extendedSDKPackage.ExtendedSDKPackagePackage"
+            genModel="src/com/armin/sap/ds/builder/diagrams/def/extendedSDK.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated extendedModels -->
+      <package
+            uri="www.armin.com/lumira_designer/models"
+            class="com.armin.sap.ds.builder.diagrams.models.ModelsPackage"
+            genModel="src/com/armin/sap/ds/builder/diagrams/def/extendedModels.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated extendedSDK -->
+      <package
+            uri="http://www.sap.com/bi/zen/sdk"
+            class="sdk.SdkPackage"
+            genModel="src/com/armin/sap/ds/builder/diagrams/def/extendedSDK.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated extendedSDK -->
+      <parser
+            type="sdk"
+            class="sdk.util.SdkResourceFactoryImpl"/>
+   </extension>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated sdk_extended -->
+      <package
+            uri="www.armin.com/lumira_designer/models"
+            class="com.armin.sap.ds.builder.models.extended.IExtendedPackage"
+            genModel="src/com/armin/sap/ds/builder/diagrams/def/sdk_extended.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated sdk_extended -->
+      <package
+            uri="http://www.sap.com/bi/zen/sdk"
+            class="com.armin.sap.ds.builder.models.core.ICorePackage"
+            genModel="src/com/armin/sap/ds/builder/diagrams/def/sdk_extended.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated sdk_extended -->
+      <parser
+            type="core"
+            class="com.armin.sap.ds.builder.models.core.util.CoreResourceFactory"/>
    </extension>
 </plugin>

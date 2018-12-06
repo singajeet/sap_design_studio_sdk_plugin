@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 
-import com.armin.sap.ds.builder.api.models.domain.Extension;
+import com.armin.sap.ds.builder.models.domain.Extension;
 
 /**
  * @author armin

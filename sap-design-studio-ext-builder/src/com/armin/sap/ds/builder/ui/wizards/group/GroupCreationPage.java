@@ -7,10 +7,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.armin.sap.ds.builder.api.models.domain.Group;
-import com.armin.sap.ds.builder.api.models.domain.IModel;
 import com.armin.sap.ds.builder.controls.GroupFormControl;
 import com.armin.sap.ds.builder.controls.IGroupChangedListener;
+import com.armin.sap.ds.builder.models.domain.Group;
+import com.armin.sap.ds.builder.models.domain.IModel;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode;
 import com.armin.sap.ds.builder.ui.wizards.IWizardDetailsPage;

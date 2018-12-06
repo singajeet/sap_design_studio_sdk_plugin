@@ -21,9 +21,9 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.armin.sap.ds.builder.api.models.domain.Component;
-import com.armin.sap.ds.builder.api.models.domain.HandlerTypes;
-import com.armin.sap.ds.builder.api.models.domain.UI5Mode;
+import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.HandlerTypes;
+import com.armin.sap.ds.builder.models.domain.UI5Mode;
 import com.armin.sap.ds.builder.preferences.Settings;
 
 public class ComponentFormControl extends Composite {

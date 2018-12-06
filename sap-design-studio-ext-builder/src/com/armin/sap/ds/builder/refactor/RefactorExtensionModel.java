@@ -1,9 +1,9 @@
 package com.armin.sap.ds.builder.refactor;
 
-import com.armin.sap.ds.builder.api.models.domain.Component;
-import com.armin.sap.ds.builder.api.models.domain.Extension;
-import com.armin.sap.ds.builder.api.models.domain.IModel;
-import com.armin.sap.ds.builder.api.models.domain.RequireJSType;
+import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.Extension;
+import com.armin.sap.ds.builder.models.domain.IModel;
+import com.armin.sap.ds.builder.models.domain.RequireJSType;
 
 public class RefactorExtensionModel extends RefactorModel {
 

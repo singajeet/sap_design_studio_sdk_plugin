@@ -27,11 +27,11 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.api.common.FileService;
-import com.armin.sap.ds.builder.api.common.shared.ISharedData;
-import com.armin.sap.ds.builder.api.common.shared.SharedData;
-import com.armin.sap.ds.builder.api.models.domain.Component;
-import com.armin.sap.ds.builder.api.models.domain.Extension;
+import com.armin.sap.ds.builder.core.common.FileService;
+import com.armin.sap.ds.builder.core.common.shared.ISharedData;
+import com.armin.sap.ds.builder.core.common.shared.SharedData;
+import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.Extension;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
 

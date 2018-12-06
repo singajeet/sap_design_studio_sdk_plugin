@@ -21,8 +21,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.api.common.FileService;
-import com.armin.sap.ds.builder.api.models.domain.Component;
+import com.armin.sap.ds.builder.core.common.FileService;
+import com.armin.sap.ds.builder.models.domain.Component;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
 import com.armin.sap.ds.builder.ui.navigation.tree.TreeNodeAccessMode;

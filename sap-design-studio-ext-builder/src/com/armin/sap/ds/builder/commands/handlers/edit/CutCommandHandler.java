@@ -13,8 +13,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.api.models.domain.IModel;
 import com.armin.sap.ds.builder.dnd.ProjectItemNodeTransfer;
+import com.armin.sap.ds.builder.models.domain.IModel;
 import com.armin.sap.ds.builder.service.ClipboardOpsService;
 import com.armin.sap.ds.builder.service.IClipboardOpsService;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode;

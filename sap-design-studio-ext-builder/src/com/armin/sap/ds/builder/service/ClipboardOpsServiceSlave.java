@@ -3,7 +3,7 @@ package com.armin.sap.ds.builder.service;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
-import com.armin.sap.ds.builder.api.models.domain.IModel;
+import com.armin.sap.ds.builder.models.domain.IModel;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode;
 
 public class ClipboardOpsServiceSlave implements IClipboardOpsService {

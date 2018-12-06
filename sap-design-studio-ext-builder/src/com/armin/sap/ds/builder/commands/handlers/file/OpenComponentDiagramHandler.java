@@ -4,7 +4,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -62,7 +61,7 @@ public class OpenComponentDiagramHandler extends AbstractHandler {
 				URI fileURI = URI.createFileURI(absPath);
 				
 				input = new ComponentDiagramEditorInput(fileURI, DIAGRAM_TYPE_PROVIDER_ID, _node);
-				((DiagramEditorInput)input).setProviderId(DIAGRAM_TYPE_PROVIDER_ID);
+				//((DiagramEditorInput)input).setProviderId(DIAGRAM_TYPE_PROVIDER_ID);
 				
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().openEditor(input, EDITOR_ID);
 			}else {

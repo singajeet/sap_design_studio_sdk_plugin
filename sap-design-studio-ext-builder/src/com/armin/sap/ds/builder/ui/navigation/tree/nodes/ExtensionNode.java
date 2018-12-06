@@ -14,10 +14,10 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.api.common.IDEConstants;
-import com.armin.sap.ds.builder.api.models.domain.Component;
-import com.armin.sap.ds.builder.api.models.domain.Extension;
-import com.armin.sap.ds.builder.api.models.domain.Group;
+import com.armin.sap.ds.builder.core.common.IDEConstants;
+import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.Extension;
+import com.armin.sap.ds.builder.models.domain.Group;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.properties.tree.nodes.ExtensionNodeProperties;
 import com.armin.sap.ds.builder.ui.navigation.tree.TreeNodeAccessMode;
