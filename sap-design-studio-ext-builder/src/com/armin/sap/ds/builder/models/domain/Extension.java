@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *       &lt;sequence>
  *         &lt;element name="license" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="group" type="{http://www.sap.com/bi/zen/sdk}Group" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="component" type="{http://www.sap.com/bi/zen/sdk}Component" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="component" type="{http://www.sap.com/bi/zen/sdk}ComponentExtended" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="eula" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="id" use="required">
@@ -74,7 +74,7 @@ public class Extension implements IModel {
 	private static final long serialVersionUID = -2373769565975545986L;
 	protected String license;
     protected List<Group> group;
-    protected List<Component> component;
+    protected List<ComponentExtended> component;
     @XmlAttribute(name = "eula")
     protected String eula;
     @XmlAttribute(name = "id", required = true)
@@ -164,9 +164,9 @@ public class Extension implements IModel {
      * 
      * 
      */
-    public List<Component> getComponent() {
+    public List<ComponentExtended> getComponent() {
         if (component == null) {
-            component = new ArrayList<Component>();
+            component = new ArrayList<ComponentExtended>();
         }
         return this.component;
     }

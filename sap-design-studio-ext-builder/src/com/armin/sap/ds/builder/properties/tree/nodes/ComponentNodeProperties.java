@@ -7,11 +7,11 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
-import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode;
 
 public class ComponentNodeProperties extends GenericFileNodeProperties {
 
-	protected final ComponentNode _compNode;
+	protected final ComponentExtendedNode _compNode;
 	protected static final String PROPERTY_DATA_BOUND = "data_bound";
 	protected static final String PROPERTY_GROUP = "group";
 	protected static final String PROPERTY_HANDLER_TYPE = "handler_type";
@@ -33,7 +33,7 @@ public class ComponentNodeProperties extends GenericFileNodeProperties {
 	protected String new_instance_prefix = "";
 	private IPropertyDescriptor[] descriptors;
 	
-	public ComponentNodeProperties(ComponentNode node) {
+	public ComponentNodeProperties(ComponentExtendedNode node) {
 		super(node);
 		_compNode = node;
 		this.initProperties();

@@ -20,7 +20,6 @@ import com.armin.sap.ds.builder.controls.ComponentFormControl;
 import com.armin.sap.ds.builder.controls.IComponentChangedListener;
 import com.armin.sap.ds.builder.core.common.shared.ISharedData;
 import com.armin.sap.ds.builder.core.common.shared.ISharedDataSubscriber;
-import com.armin.sap.ds.builder.models.domain.Component;
 import com.armin.sap.ds.builder.models.domain.ComponentExtended;
 import com.armin.sap.ds.builder.models.domain.IModel;
 import com.armin.sap.ds.builder.preferences.Settings;
@@ -43,7 +42,7 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 	private String INIT_CLASS_TO_EXTEND = "Component";
 	public String EXTENDS_KEYWORD = " extends ";	
 	
-	private Component _model;
+	private ComponentExtended _model;
 	private Composite baseContainer;
 	private Composite bottomSection;
 	
@@ -134,7 +133,7 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 		Label lblExtends = new Label(middleSection, SWT.NONE);
 		lblExtends.setText("Component Inherit From:");
 		comboExtends = new Combo(middleSection, SWT.READ_ONLY | SWT.BORDER);
-		String parentClassStr = Settings.store().get(Settings.FOR.COMPONENT_PARENT_CLASSES);
+		String parentClassStr = Settings.store().get(Settings.FOR.COMPONENT_PARENT_CLASSES_ID);
 		String[] parentClasses = parentClassStr.split(";");
 		for(String parent : parentClasses) {
 			comboExtends.add(parent);
@@ -181,7 +180,7 @@ public class DesignStudioNewProjectComponentPage extends WizardPage implements I
 		componentCtl.addComponentChangedListener(new IComponentChangedListener() {
 			@Override
 			public void OnComponentChanged(boolean isValid) {
-				_model = componentCtl.getModel();
+				_model = (ComponentExtended)componentCtl.getModel();
 				setPageComplete(isValid);
 			}
 		});

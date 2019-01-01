@@ -23,10 +23,11 @@ import org.eclipse.ui.PlatformUI;
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.core.common.FileService;
 import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.ComponentExtended;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
 import com.armin.sap.ds.builder.ui.navigation.tree.TreeNodeAccessMode;
-import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.GroupNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode;
@@ -90,7 +91,7 @@ public class ComponentWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		logger.log(new Status(IStatus.OK, this.getClass().getName(), "performFinish() started"));
 		
-		Component component = (Component)((ComponentCreationPage)_pageOne).getModel();
+		ComponentExtended component = (ComponentExtended)((ComponentCreationPage)_pageOne).getModel();
 		IProject project = _parentTreeNode.getProject();
 		
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Component model instance: " + component.getId()));
@@ -125,7 +126,7 @@ public class ComponentWizard extends Wizard implements INewWizard {
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), 
 							"Adding New Component [Id: " + component.getId() + "] to Group [Id: " + ((GroupNode)_parentTreeNode).getModel().getId() + "]"));
 					IProjectItemNode compNode = _parentTreeNode.addComponent(component);
-					this.addDiagram(component, (ComponentNode)compNode);
+					this.addDiagram(component, (ComponentExtendedNode)compNode);
 					
 					_parentTreeNode.setAccessMode(TreeNodeAccessMode.READ_ONLY);
 					
@@ -148,7 +149,7 @@ public class ComponentWizard extends Wizard implements INewWizard {
 				return Status.CANCEL_STATUS;
 			}
 
-			private void addDiagram(Component component, ComponentNode compNode) {
+			private void addDiagram(Component component, ComponentExtendedNode compNode) {
 				String diagramTypeId = "com.armin.sap.ds.builder.diagram.type.component";
 				String diagramName = component.getId();
 				IFolder diagramFolder = null;

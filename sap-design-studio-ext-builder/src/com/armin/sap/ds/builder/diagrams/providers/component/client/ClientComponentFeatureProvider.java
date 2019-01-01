@@ -4,12 +4,14 @@ import org.eclipse.graphiti.dt.IDiagramTypeProvider;
 import org.eclipse.graphiti.pattern.DefaultFeatureProviderWithPatterns;
 
 import com.armin.sap.ds.builder.diagrams.patterns.ComponentClientObjectPattern;
+import com.armin.sap.ds.builder.diagrams.patterns.ConstantsObjectPattern;
 
 public class ClientComponentFeatureProvider extends DefaultFeatureProviderWithPatterns {
 
 	public ClientComponentFeatureProvider(IDiagramTypeProvider dtp) {
 		super(dtp);
 		addPattern(new ComponentClientObjectPattern());
+		addPattern(new ConstantsObjectPattern());
 	}
 
 	/* (non-Javadoc)

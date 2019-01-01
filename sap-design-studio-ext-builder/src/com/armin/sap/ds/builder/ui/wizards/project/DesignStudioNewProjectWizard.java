@@ -30,7 +30,7 @@ import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.core.common.FileService;
 import com.armin.sap.ds.builder.core.common.shared.ISharedData;
 import com.armin.sap.ds.builder.core.common.shared.SharedData;
-import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.ComponentExtended;
 import com.armin.sap.ds.builder.models.domain.Extension;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
@@ -89,7 +89,7 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 //		}
 		
 		Extension extensionModel = (Extension)((DesignStudioNewProjectExtensionPage)_pageTwo).getModel();
-		Component componentModel = (Component)((DesignStudioNewProjectComponentPage)_pageThree).getModel();
+		ComponentExtended componentModel = (ComponentExtended)((DesignStudioNewProjectComponentPage)_pageThree).getModel();
 		
 		
 		WorkspaceJob job = new WorkspaceJob("Create project " + name) {
@@ -124,7 +124,7 @@ public class DesignStudioNewProjectWizard extends Wizard implements INewWizard, 
 				return Status.CANCEL_STATUS;
 			}
 			
-			private void addDiagram(Component component, Extension ext, IProject project) {
+			private void addDiagram(ComponentExtended component, Extension ext, IProject project) {
 				
 				String diagramTypeId = "com.armin.sap.ds.builder.diagram.type.component";
 				String diagramName = component.getId();

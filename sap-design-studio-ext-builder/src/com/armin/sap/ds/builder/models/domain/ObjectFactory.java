@@ -116,8 +116,8 @@ public class ObjectFactory {
      * Create an instance of {@link Component }
      * 
      */
-    public Component createComponent() {
-        return new Component();
+    public ComponentExtended createComponent() {
+        return new ComponentExtended();
     }
 
     /**

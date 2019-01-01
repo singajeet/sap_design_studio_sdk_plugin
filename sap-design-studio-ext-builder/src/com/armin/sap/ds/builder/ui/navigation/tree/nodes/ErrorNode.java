@@ -36,7 +36,7 @@ public class ErrorNode extends ProjectItemNode {
 	@Override
 	public Image getImage() {
 		Image image = Activator.getImage("images/error_16x16.gif");
-		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
+		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE_ID));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
 		_image = new Image(Display.getCurrent(), imgData);
 		image.dispose();

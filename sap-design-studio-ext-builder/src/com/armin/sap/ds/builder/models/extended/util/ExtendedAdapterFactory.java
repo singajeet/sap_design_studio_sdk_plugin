@@ -2,9 +2,6 @@
  */
 package com.armin.sap.ds.builder.models.extended.util;
 
-import com.armin.sap.ds.builder.models.core.IComponent;
-import com.armin.sap.ds.builder.models.core.IDescriptable;
-
 import com.armin.sap.ds.builder.models.extended.*;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -19,7 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- * @see com.armin.sap.ds.builder.models.extended.IExtendedPackage
+ * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage
  * @generated
  */
 public class ExtendedAdapterFactory extends AdapterFactoryImpl {
@@ -29,7 +26,7 @@ public class ExtendedAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static IExtendedPackage modelPackage;
+	protected static ExtendedPackage modelPackage;
 
 	/**
 	 * Creates an instance of the adapter factory.
@@ -39,7 +36,7 @@ public class ExtendedAdapterFactory extends AdapterFactoryImpl {
 	 */
 	public ExtendedAdapterFactory() {
 		if (modelPackage == null) {
-			modelPackage = IExtendedPackage.eINSTANCE;
+			modelPackage = ExtendedPackage.eINSTANCE;
 		}
 	}
 
@@ -71,16 +68,36 @@ public class ExtendedAdapterFactory extends AdapterFactoryImpl {
 	protected ExtendedSwitch<Adapter> modelSwitch =
 		new ExtendedSwitch<Adapter>() {
 			@Override
-			public Adapter caseClientComponent(IClientComponent object) {
-				return createClientComponentAdapter();
+			public Adapter caseComponentClient(ComponentClient object) {
+				return createComponentClientAdapter();
 			}
 			@Override
-			public Adapter caseDescriptable(IDescriptable object) {
-				return createDescriptableAdapter();
+			public Adapter caseConstant(Constant object) {
+				return createConstantAdapter();
 			}
 			@Override
-			public Adapter caseComponent(IComponent object) {
-				return createComponentAdapter();
+			public Adapter caseProperty(Property object) {
+				return createPropertyAdapter();
+			}
+			@Override
+			public Adapter caseVariable(Variable object) {
+				return createVariableAdapter();
+			}
+			@Override
+			public Adapter caseMethod(Method object) {
+				return createMethodAdapter();
+			}
+			@Override
+			public Adapter caseParameter(Parameter object) {
+				return createParameterAdapter();
+			}
+			@Override
+			public Adapter caseConstructor(Constructor object) {
+				return createConstructorAdapter();
+			}
+			@Override
+			public Adapter caseConstantsSection(ConstantsSection object) {
+				return createConstantsSectionAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -103,44 +120,114 @@ public class ExtendedAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.extended.IClientComponent <em>Client Component</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.extended.ComponentClient <em>Component Client</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.extended.IClientComponent
+	 * @see com.armin.sap.ds.builder.models.extended.ComponentClient
 	 * @generated
 	 */
-	public Adapter createClientComponentAdapter() {
+	public Adapter createComponentClientAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IDescriptable <em>Descriptable</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.extended.Constant <em>Constant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IDescriptable
+	 * @see com.armin.sap.ds.builder.models.extended.Constant
 	 * @generated
 	 */
-	public Adapter createDescriptableAdapter() {
+	public Adapter createConstantAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IComponent <em>Component</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.extended.Property <em>Property</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IComponent
+	 * @see com.armin.sap.ds.builder.models.extended.Property
 	 * @generated
 	 */
-	public Adapter createComponentAdapter() {
+	public Adapter createPropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.extended.Variable <em>Variable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.armin.sap.ds.builder.models.extended.Variable
+	 * @generated
+	 */
+	public Adapter createVariableAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.extended.Method <em>Method</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.armin.sap.ds.builder.models.extended.Method
+	 * @generated
+	 */
+	public Adapter createMethodAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.extended.Parameter <em>Parameter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.armin.sap.ds.builder.models.extended.Parameter
+	 * @generated
+	 */
+	public Adapter createParameterAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.extended.Constructor <em>Constructor</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.armin.sap.ds.builder.models.extended.Constructor
+	 * @generated
+	 */
+	public Adapter createConstructorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.extended.ConstantsSection <em>Constants Section</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.armin.sap.ds.builder.models.extended.ConstantsSection
+	 * @generated
+	 */
+	public Adapter createConstantsSectionAdapter() {
 		return null;
 	}
 

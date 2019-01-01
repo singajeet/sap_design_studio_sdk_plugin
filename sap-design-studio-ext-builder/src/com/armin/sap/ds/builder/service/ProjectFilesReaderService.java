@@ -13,6 +13,7 @@ import org.eclipse.ui.services.IServiceLocator;
 import com.armin.sap.ds.builder.core.common.IDEConstants;
 import com.armin.sap.ds.builder.models.domain.BackendSystemType;
 import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.ComponentExtended;
 import com.armin.sap.ds.builder.models.domain.Descriptable;
 import com.armin.sap.ds.builder.models.domain.Extension;
 import com.armin.sap.ds.builder.models.domain.Group;
@@ -57,12 +58,12 @@ public class ProjectFilesReaderService implements IProjectFilesReaderService {
 				Extension ext = (Extension)model;
 				fixExtension(ext);
 				
-				List<Component> components = ext.getComponent();
+				List<ComponentExtended> components = ext.getComponent();
 				for(int i=0; i < components.size(); i++) {
 					if(components.get(i) != null) {
 						validateAndFix(components.get(i));
 					} else {
-						Component component = new Component();
+						ComponentExtended component = new ComponentExtended();
 						component.setId(IDEConstants.EMPTY.toLowerCase());
 						component.setName(IDEConstants.EMPTY);
 						component.setTitle(IDEConstants.EMPTY);

@@ -2,9 +2,6 @@
  */
 package com.armin.sap.ds.builder.models.extended.util;
 
-import com.armin.sap.ds.builder.models.core.IComponent;
-import com.armin.sap.ds.builder.models.core.IDescriptable;
-
 import com.armin.sap.ds.builder.models.extended.*;
 
 import org.eclipse.emf.ecore.EObject;
@@ -22,7 +19,7 @@ import org.eclipse.emf.ecore.util.Switch;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see com.armin.sap.ds.builder.models.extended.IExtendedPackage
+ * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage
  * @generated
  */
 public class ExtendedSwitch<T> extends Switch<T> {
@@ -32,7 +29,7 @@ public class ExtendedSwitch<T> extends Switch<T> {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static IExtendedPackage modelPackage;
+	protected static ExtendedPackage modelPackage;
 
 	/**
 	 * Creates an instance of the switch.
@@ -42,7 +39,7 @@ public class ExtendedSwitch<T> extends Switch<T> {
 	 */
 	public ExtendedSwitch() {
 		if (modelPackage == null) {
-			modelPackage = IExtendedPackage.eINSTANCE;
+			modelPackage = ExtendedPackage.eINSTANCE;
 		}
 	}
 
@@ -69,11 +66,51 @@ public class ExtendedSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case IExtendedPackage.CLIENT_COMPONENT: {
-				IClientComponent clientComponent = (IClientComponent)theEObject;
-				T result = caseClientComponent(clientComponent);
-				if (result == null) result = caseComponent(clientComponent);
-				if (result == null) result = caseDescriptable(clientComponent);
+			case ExtendedPackage.COMPONENT_CLIENT: {
+				ComponentClient componentClient = (ComponentClient)theEObject;
+				T result = caseComponentClient(componentClient);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ExtendedPackage.CONSTANT: {
+				Constant constant = (Constant)theEObject;
+				T result = caseConstant(constant);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ExtendedPackage.PROPERTY: {
+				Property property = (Property)theEObject;
+				T result = caseProperty(property);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ExtendedPackage.VARIABLE: {
+				Variable variable = (Variable)theEObject;
+				T result = caseVariable(variable);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ExtendedPackage.METHOD: {
+				Method method = (Method)theEObject;
+				T result = caseMethod(method);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ExtendedPackage.PARAMETER: {
+				Parameter parameter = (Parameter)theEObject;
+				T result = caseParameter(parameter);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ExtendedPackage.CONSTRUCTOR: {
+				Constructor constructor = (Constructor)theEObject;
+				T result = caseConstructor(constructor);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ExtendedPackage.CONSTANTS_SECTION: {
+				ConstantsSection constantsSection = (ConstantsSection)theEObject;
+				T result = caseConstantsSection(constantsSection);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -82,47 +119,122 @@ public class ExtendedSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Client Component</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Component Client</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Client Component</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Component Client</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseClientComponent(IClientComponent object) {
+	public T caseComponentClient(ComponentClient object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Descriptable</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Constant</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Descriptable</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Constant</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseDescriptable(IDescriptable object) {
+	public T caseConstant(Constant object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Component</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Property</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Component</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Property</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseComponent(IComponent object) {
+	public T caseProperty(Property object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Variable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Variable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVariable(Variable object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Method</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Method</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMethod(Method object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Parameter</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Parameter</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseParameter(Parameter object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Constructor</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Constructor</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConstructor(Constructor object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Constants Section</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Constants Section</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConstantsSection(ConstantsSection object) {
 		return null;
 	}
 

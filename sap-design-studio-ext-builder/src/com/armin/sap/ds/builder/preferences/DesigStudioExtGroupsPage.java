@@ -42,7 +42,7 @@ public class DesigStudioExtGroupsPage extends FieldEditorPreferencePage implemen
 		txtNewGroup = new Text(groupPanel, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtNewGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		groupListEditor = new GroupListEditor(Settings.FOR.GROUPS_LIST, "Groups: ", groupPanel);
+		groupListEditor = new GroupListEditor(Settings.FOR.GROUPS_LIST_ID, "Groups: ", groupPanel);
 		addField(groupListEditor);
 		
 	}

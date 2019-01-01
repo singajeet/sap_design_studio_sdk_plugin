@@ -16,23 +16,25 @@ import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.ComponentExtended;
 import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.properties.tree.nodes.ComponentNodeProperties;
 import com.armin.sap.ds.builder.ui.navigation.tree.TreeNodeAccessMode;
 
-public class ComponentNode extends GenericFileNode {
+public class ComponentExtendedNode extends GenericFileNode {
 
 	private URI _diagramURI;
 	private IResource _file;
+//	private ComponentClient _componentClient;
 	
-	public ComponentNode(IProject project, Component component, IProjectItemNode parent) {
+	public ComponentExtendedNode(IProject project, ComponentExtended component, IProjectItemNode parent) {
 		super(project, component, parent);		
 		_children = initializeChildren(component);
 		_file = project.getFile(this.getFilePath());
 		loadDiagramUri();
 	}
 	
-	public ComponentNode(IProject project, Component component, IProjectItemNode parent, TreeNodeAccessMode mode) {
+	public ComponentExtendedNode(IProject project, ComponentExtended component, IProjectItemNode parent, TreeNodeAccessMode mode) {
 		this(project, component, parent);
 		setAccessMode(mode);
 		_file = project.getFile(this.getFilePath());
@@ -48,6 +50,14 @@ public class ComponentNode extends GenericFileNode {
 		}
 	}
 	
+//	public ComponentClient getClientComponent() {
+//		return this._componentClient;
+//	}
+//	
+//	public void setComponentClient(ComponentClient ccomp) {
+//		this._componentClient = ccomp;
+//	}
+	
 	@Override
 	public IResource getAsResource() {		
 		return this._file;
@@ -58,8 +68,8 @@ public class ComponentNode extends GenericFileNode {
 		return ProjectItemNodeType.COMPONENT;
 	}
 	
-	public Component getComponent() {
-		return (Component)_item;
+	public ComponentExtended getComponent() {
+		return (ComponentExtended)_item;
 	}
 	
 	public String getId() {
@@ -103,7 +113,7 @@ public class ComponentNode extends GenericFileNode {
 	@Override
 	public Image getImage() {
 		Image image = Activator.getImage("images/component_16x16.png");
-		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
+		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE_ID));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
 		_image = new Image(Display.getCurrent(), imgData);
 		image.dispose();
@@ -147,7 +157,7 @@ public class ComponentNode extends GenericFileNode {
 
 	/************************************************************************************/
 
-	protected ArrayList<IProjectItemNode> initializeChildren(Component component) {
+	protected ArrayList<IProjectItemNode> initializeChildren(ComponentExtended component) {
 		ArrayList<IProjectItemNode> children = new ArrayList<IProjectItemNode>();
 		try {			
 			

@@ -59,7 +59,7 @@ public class AdvancedPropertySheetNode extends GenericFolderNode {
 	@Override
 	public Image getImage() {
 		Image image = Activator.getImage("images/Properties_16x16.png");
-		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
+		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE_ID));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
 		image.dispose();
 		_image = new Image(Display.getCurrent(), imgData);
@@ -74,7 +74,7 @@ public class AdvancedPropertySheetNode extends GenericFolderNode {
 		 String cssPath = null;
 		 String jsPath = null;
 		 
-		 ComponentNode cmp = (ComponentNode)this.getParent(null);
+		 ComponentExtendedNode cmp = (ComponentExtendedNode)this.getParent(null);
 		 GroupNode grp = (GroupNode)cmp.getParent(null);
 		 ExtensionNode ext = (ExtensionNode)grp.getParent(null);
 		 String extensionId = ext.getExtension().getId();

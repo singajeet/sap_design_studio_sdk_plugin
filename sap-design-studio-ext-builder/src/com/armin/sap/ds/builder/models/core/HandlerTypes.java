@@ -19,7 +19,7 @@ import org.eclipse.emf.common.util.Enumerator;
  *         format of your handler file.
  *       
  * <!-- end-model-doc -->
- * @see com.armin.sap.ds.builder.models.core.ICorePackage#getHandlerTypes()
+ * @see com.armin.sap.ds.builder.models.core.CorePackage#getHandlerTypes()
  * @model extendedMetaData="name='HandlerTypes'"
  * @generated
  */

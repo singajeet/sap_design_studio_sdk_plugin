@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: sap-design-studio-ext-builder;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.armin.sap.ds.builder.models.ExtendedModelsPlugin$Implementation
+Bundle-Activator: com.armin.sap.ds.builder.Activator
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
@@ -28,7 +28,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.graphiti.ui;bundle-version="0.14.0",
  org.eclipse.emf.transaction;bundle-version="1.9.0",
  org.eclipse.emf.common.ui;bundle-version="2.12.0",
- org.eclipse.graphiti.pattern;bundle-version="0.14.0"
+ org.eclipse.graphiti.pattern;bundle-version="0.14.0",
+ org.eclipse.core.databinding.beans,
+ org.eclipse.core.databinding.property,
+ com.ibm.icu
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: com.armin.sap.ds.builder
 Bundle-ActivationPolicy: lazy
@@ -44,11 +47,22 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.jface.action,
    org.eclipse.jface.resource,
    org.eclipse.core.commands",
- com.armin.sap.ds.builder.commands;uses:="org.eclipse.core.commands",
- com.armin.sap.ds.builder.commands.handlers.edit;uses:="org.eclipse.core.commands,com.armin.sap.ds.builder.dnd,org.eclipse.swt.dnd",
- com.armin.sap.ds.builder.commands.handlers.file;uses:="org.eclipse.core.commands,com.armin.sap.ds.builder.ui.navigation.tree.nodes",
- com.armin.sap.ds.builder.context;uses:="org.eclipse.core.resources,com.armin.sap.ds.builder.api.models.domain",
- com.armin.sap.ds.builder.controls;uses:="org.eclipse.swt.widgets,com.armin.sap.ds.builder.api.models.domain,com.armin.sap.ds.builder.api.common.shared",
+ com.armin.sap.ds.builder.commands;
+  uses:="org.eclipse.core.commands",
+ com.armin.sap.ds.builder.commands.handlers.edit;
+  uses:="org.eclipse.core.commands,
+   com.armin.sap.ds.builder.dnd,
+   org.eclipse.swt.dnd",
+ com.armin.sap.ds.builder.commands.handlers.file;
+  uses:="org.eclipse.core.commands,
+   com.armin.sap.ds.builder.ui.navigation.tree.nodes",
+ com.armin.sap.ds.builder.context;
+  uses:="org.eclipse.core.resources,
+   com.armin.sap.ds.builder.api.models.domain",
+ com.armin.sap.ds.builder.controls;
+  uses:="org.eclipse.swt.widgets,
+   com.armin.sap.ds.builder.api.models.domain,
+   com.armin.sap.ds.builder.api.common.shared",
  com.armin.sap.ds.builder.core.common;
   uses:="org.eclipse.ui.navigator,
    org.eclipse.emf.common.util,
@@ -61,16 +75,24 @@ Export-Package: com.armin.sap.ds.builder;
    org.xml.sax.helpers,
    org.xml.sax,
    org.eclipse.core.resources",
- com.armin.sap.ds.builder.core.project.nature;uses:="org.eclipse.core.resources",
- com.armin.sap.ds.builder.decorators;uses:="org.eclipse.jface.viewers",
- com.armin.sap.ds.builder.describer;uses:="org.eclipse.core.runtime.content",
+ com.armin.sap.ds.builder.core.project.nature;
+  uses:="org.eclipse.core.resources",
+ com.armin.sap.ds.builder.decorators;
+  uses:="org.eclipse.jface.viewers",
+ com.armin.sap.ds.builder.describer;
+  uses:="org.eclipse.core.runtime.content",
+ com.armin.sap.ds.builder.diagrams.def,
+ com.armin.sap.ds.builder.diagrams.dialogs,
  com.armin.sap.ds.builder.diagrams.patterns;
   uses:="org.eclipse.graphiti.pattern.config,
    org.eclipse.graphiti.mm.pictograms,
    org.eclipse.graphiti.features.context,
    org.eclipse.graphiti.pattern",
- com.armin.sap.ds.builder.diagrams.providers.component.client;uses:="org.eclipse.graphiti.dt,org.eclipse.graphiti.pattern",
- com.armin.sap.ds.builder.dnd;uses:="org.eclipse.swt.dnd",
+ com.armin.sap.ds.builder.diagrams.providers.component.client;
+  uses:="org.eclipse.graphiti.dt,
+   org.eclipse.graphiti.pattern",
+ com.armin.sap.ds.builder.dnd;
+  uses:="org.eclipse.swt.dnd",
  com.armin.sap.ds.builder.editors;
   uses:="org.eclipse.ui,
    org.eclipse.swt.events,
@@ -87,7 +109,10 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.core.resources,
    com.armin.sap.ds.builder.ui.navigation.tree.nodes,
    org.eclipse.ui.part",
- com.armin.sap.ds.builder.editors.component.diagram;uses:="org.eclipse.emf.common.util,com.armin.sap.ds.builder.ui.navigation.tree.nodes,org.eclipse.graphiti.ui.editor",
+ com.armin.sap.ds.builder.editors.component.diagram;
+  uses:="org.eclipse.emf.common.util,
+   com.armin.sap.ds.builder.ui.navigation.tree.nodes,
+   org.eclipse.graphiti.ui.editor",
  com.armin.sap.ds.builder.editors.extension;
   uses:="org.eclipse.ui,
    org.eclipse.core.runtime,
@@ -112,23 +137,31 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.ui.forms,
    com.armin.sap.ds.builder.ui.navigation.tree.nodes,
    org.eclipse.ui.part",
- com.armin.sap.ds.builder.jobs;uses:="org.eclipse.core.runtime,org.eclipse.core.resources,com.armin.sap.ds.builder.ui.navigation.tree.nodes",
+ com.armin.sap.ds.builder.jobs;
+  uses:="org.eclipse.core.runtime,
+   org.eclipse.core.resources,
+   com.armin.sap.ds.builder.ui.navigation.tree.nodes",
  com.armin.sap.ds.builder.models,
- com.armin.sap.ds.builder.models.core,
- com.armin.sap.ds.builder.models.core.impl,
+ com.armin.sap.ds.builder.models.core, 
  com.armin.sap.ds.builder.models.core.util,
+ com.armin.sap.ds.builder.models.domain,
  com.armin.sap.ds.builder.models.extended,
- com.armin.sap.ds.builder.models.extended.impl,
  com.armin.sap.ds.builder.models.extended.util,
- com.armin.sap.ds.builder.perspectives;uses:="org.eclipse.ui",
+ com.armin.sap.ds.builder.perspectives;
+  uses:="org.eclipse.ui",
  com.armin.sap.ds.builder.preferences;
   uses:="org.eclipse.ui,
    org.eclipse.jface.preference,
    org.eclipse.swt.widgets,
    org.eclipse.core.runtime.preferences",
- com.armin.sap.ds.builder.properties;uses:="org.eclipse.core.runtime",
- com.armin.sap.ds.builder.properties.diagrams;uses:="org.eclipse.emf.ecore,org.eclipse.ui.views.properties",
- com.armin.sap.ds.builder.properties.tree.nodes;uses:="org.eclipse.ui.views.properties,com.armin.sap.ds.builder.ui.navigation.tree.nodes",
+ com.armin.sap.ds.builder.properties;
+  uses:="org.eclipse.core.runtime",
+ com.armin.sap.ds.builder.properties.diagrams;
+  uses:="org.eclipse.emf.ecore,
+   org.eclipse.ui.views.properties",
+ com.armin.sap.ds.builder.properties.tree.nodes;
+  uses:="org.eclipse.ui.views.properties,
+   com.armin.sap.ds.builder.ui.navigation.tree.nodes",
  com.armin.sap.ds.builder.providers;
   uses:="org.eclipse.ui.navigator,
    org.eclipse.ui,
@@ -137,7 +170,8 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.core.resources,
    org.eclipse.jface.viewers,
    com.armin.sap.ds.builder.ui.navigation.tree.nodes",
- com.armin.sap.ds.builder.refactor;uses:="com.armin.sap.ds.builder.api.models.domain",
+ com.armin.sap.ds.builder.refactor;
+  uses:="com.armin.sap.ds.builder.api.models.domain",
  com.armin.sap.ds.builder.service;
   uses:="org.eclipse.ui.services,
    com.armin.sap.ds.builder.api.models.domain,
@@ -146,14 +180,17 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.swt.dnd,
    com.armin.sap.ds.builder.ui.navigation.tree.nodes,
    javax.xml.bind",
- com.armin.sap.ds.builder.service.factory;uses:="org.eclipse.ui.services,com.armin.sap.ds.builder.service",
- com.armin.sap.ds.builder.ui,
- com.armin.sap.ds.builder.ui.dialogs;
+ com.armin.sap.ds.builder.service.factory;
+  uses:="org.eclipse.ui.services,
+   com.armin.sap.ds.builder.service",
+ com.armin.sap.ds.builder.ui;
   uses:="org.eclipse.swt.graphics,
    org.eclipse.swt.widgets,
    org.eclipse.jface.dialogs,
    com.armin.sap.ds.builder.ui.navigation.tree.nodes",
- com.armin.sap.ds.builder.ui.navigation;uses:="org.eclipse.ui.navigator,org.eclipse.jface.viewers",
+ com.armin.sap.ds.builder.ui.navigation;
+  uses:="org.eclipse.ui.navigator,
+   org.eclipse.jface.viewers",
  com.armin.sap.ds.builder.ui.navigation.tree,
  com.armin.sap.ds.builder.ui.navigation.tree.nodes;
   uses:="org.eclipse.swt.graphics,
@@ -172,7 +209,9 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.swt.widgets,
    org.eclipse.jface.viewers,
    org.eclipse.ui.part",
- com.armin.sap.ds.builder.ui.wizards;uses:="com.armin.sap.ds.builder.api.models.domain,org.eclipse.jface.wizard",
+ com.armin.sap.ds.builder.ui.wizards;
+  uses:="com.armin.sap.ds.builder.api.models.domain,
+   org.eclipse.jface.wizard",
  com.armin.sap.ds.builder.ui.wizards.component;
   uses:="org.eclipse.ui,
    org.eclipse.swt.widgets,
@@ -237,11 +276,17 @@ Export-Package: com.armin.sap.ds.builder;
    org.pushingpixels.trident,
    org.eclipse.e4.xwt.metadata,
    org.eclipse.e4.xwt.core",
- org.eclipse.e4.xwt.animation.interpolator;uses:="org.eclipse.swt.graphics,org.pushingpixels.trident.interpolator",
+ org.eclipse.e4.xwt.animation.interpolator;
+  uses:="org.eclipse.swt.graphics,
+   org.pushingpixels.trident.interpolator",
  org.eclipse.e4.xwt.annotation,
  org.eclipse.e4.xwt.callback,
- org.eclipse.e4.xwt.collection;uses:="org.eclipse.e4.xwt.core,org.eclipse.core.databinding.observable",
- org.eclipse.e4.xwt.converters;uses:="org.eclipse.e4.xwt,org.eclipse.core.databinding.conversion",
+ org.eclipse.e4.xwt.collection;
+  uses:="org.eclipse.e4.xwt.core,
+   org.eclipse.core.databinding.observable",
+ org.eclipse.e4.xwt.converters;
+  uses:="org.eclipse.e4.xwt,
+   org.eclipse.core.databinding.conversion",
  org.eclipse.e4.xwt.core;
   uses:="org.eclipse.swt.widgets,
    org.eclipse.core.databinding.observable,
@@ -273,14 +318,18 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.core.databinding.observable.list,
    org.eclipse.core.databinding.observable.value,
    org.eclipse.core.databinding.observable",
- org.eclipse.e4.xwt.forms;uses:="org.eclipse.e4.xwt.callback,org.eclipse.swt.widgets,org.eclipse.ui.forms.widgets",
+ org.eclipse.e4.xwt.forms;
+  uses:="org.eclipse.e4.xwt.callback,
+   org.eclipse.swt.widgets,
+   org.eclipse.ui.forms.widgets",
  org.eclipse.e4.xwt.forms.metaclass;
   uses:="org.eclipse.e4.xwt.javabean.metadata,
    org.eclipse.e4.xwt.metadata,
    org.eclipse.e4.xwt,
    org.eclipse.swt.widgets,
    org.eclipse.ui.forms.widgets",
- org.eclipse.e4.xwt.forms.metaclass.properties;uses:="org.eclipse.e4.xwt.javabean.metadata.properties",
+ org.eclipse.e4.xwt.forms.metaclass.properties;
+  uses:="org.eclipse.e4.xwt.javabean.metadata.properties",
  org.eclipse.e4.xwt.input,
  org.eclipse.e4.xwt.internal.core;x-internal:=true,
  org.eclipse.e4.xwt.internal.databinding.menuitem;x-internal:=true,
@@ -295,7 +344,9 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.e4.xwt.internal.core,
    org.eclipse.e4.xwt.core,
    org.eclipse.core.databinding.conversion",
- org.eclipse.e4.xwt.javabean.metadata;uses:="org.eclipse.e4.xwt,org.eclipse.e4.xwt.metadata",
+ org.eclipse.e4.xwt.javabean.metadata;
+  uses:="org.eclipse.e4.xwt,
+   org.eclipse.e4.xwt.metadata",
  org.eclipse.e4.xwt.javabean.metadata.properties;
   uses:="org.eclipse.e4.xwt.javabean.metadata,
    org.eclipse.swt.events,
@@ -316,19 +367,27 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.e4.xwt.metadata,
    org.eclipse.e4.xwt.core,
    org.eclipse.core.databinding.observable.map",
- org.eclipse.e4.xwt.metadata;uses:="org.eclipse.e4.xwt",
- org.eclipse.e4.xwt.utils;uses:="org.eclipse.swt.graphics",
- org.eclipse.e4.xwt.validation;uses:="org.eclipse.core.runtime,org.eclipse.e4.xwt",
- org.eclipse.wb.swt;uses:="org.eclipse.swt.graphics,org.eclipse.jface.resource",
+ org.eclipse.e4.xwt.metadata;
+  uses:="org.eclipse.e4.xwt",
+ org.eclipse.e4.xwt.utils;
+  uses:="org.eclipse.swt.graphics",
+ org.eclipse.e4.xwt.validation;
+  uses:="org.eclipse.core.runtime,
+   org.eclipse.e4.xwt",
+ org.eclipse.wb.swt;
+  uses:="org.eclipse.swt.graphics,
+   org.eclipse.jface.resource",
  org.pushingpixels.trident;
   uses:="org.pushingpixels.trident.callback,
    new,
    org.pushingpixels.trident,
    org.pushingpixels.trident.ease,
    org.pushingpixels.trident.interpolator",
- org.pushingpixels.trident.callback;uses:="org.pushingpixels.trident",
+ org.pushingpixels.trident.callback;
+  uses:="org.pushingpixels.trident",
  org.pushingpixels.trident.ease,
- org.pushingpixels.trident.interpolator;uses:="org.pushingpixels.trident.ease",
+ org.pushingpixels.trident.interpolator;
+  uses:="org.pushingpixels.trident.ease",
  org.pushingpixels.trident.swt;
   uses:="org.pushingpixels.trident.callback,
    org.eclipse.swt.graphics,
@@ -336,7 +395,7 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.swt.widgets,
    org.pushingpixels.trident.interpolator"
 Bundle-ClassPath: .,
- org.pushingpixels.trident_1.2.0.v20100204-1500.jar,
+ images/org.pushingpixels.trident_1.2.0.v20100204-1500.jar,
  org.pushingpixels.trident_1.2.0.v20100204-1500.jar,
  org.eclipse.e4.xwt_0.9.1.SNAPSHOT.jar,
  org.pushingpixels.trident_1.2.0.v20100204-1500.jar,

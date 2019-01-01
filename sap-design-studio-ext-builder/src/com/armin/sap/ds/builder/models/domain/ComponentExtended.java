@@ -5,6 +5,26 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
+/**
+ * Specifies an extension component.
+ * 
+ * <p>Java class for Component complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType name="ComponentExtended">
+ *   &lt;complexContent>
+ *     &lt;extension base="{http://www.sap.com/bi/zen/sdk}Component">       
+ *     &lt;/extension>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
+ * 
+ */
+
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ComponentExtended")
 public class ComponentExtended extends Component {
@@ -22,6 +42,8 @@ public class ComponentExtended extends Component {
 	private String description;
 	@XmlAttribute(name="packageName")
 	private String packageName;
+	//@XmlAttribute(name="componentClient")
+	//private ComponentClient componentClient;
 	
 	public ComponentExtended() {
 		
@@ -82,6 +104,20 @@ public class ComponentExtended extends Component {
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
 	}
+
+	/**
+	 * @return the componentClient
+	 */
+//	public ComponentClient getComponentClient() {
+//		return componentClient;
+//	}
+
+	/**
+	 * @param componentClient the componentClient to set
+	 */
+//	public void setComponentClient(ComponentClient componentClient) {
+//		this.componentClient = componentClient;
+//	}
 	
 	
 }

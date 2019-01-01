@@ -2,32 +2,87 @@
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/sap-design-studio-ext-builder/src" modelPluginID="sap-design-studio-ext-builder"
     modelName="Sdk_extended" modelPluginClass="com.armin.sap.ds.builder.models.ExtendedModelsPlugin"
-    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="8.0" copyrightFields="false" interfaceNamePattern="I{0}" classNamePattern="{0}"
-    operationReflection="true" importOrganizing="true">
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" suppressInterfaces="true"
+    importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0" copyrightFields="false"
+    tableProviders="true" interfaceNamePattern="I{0}" classNamePattern="{0}" operationReflection="true"
+    runtimePlatform="RCP" importOrganizing="true" decoration="Live" styleProviders="true">
   <foreignModel>sdk_extended.ecore</foreignModel>
   <genPackages prefix="Extended" basePackage="com.armin.sap.ds.builder.models" disposableProviderFactory="true"
-      ecorePackage="sdk_extended.ecore#/">
+      ecorePackage="sdk_extended.ecore#/" publicationLocation="">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="sdk_extended.ecore#//SDKBaseClassType">
       <genEnumLiterals ecoreEnumLiteral="sdk_extended.ecore#//SDKBaseClassType/COMPONENT"/>
       <genEnumLiterals ecoreEnumLiteral="sdk_extended.ecore#//SDKBaseClassType/DATA_SOURCE"/>
       <genEnumLiterals ecoreEnumLiteral="sdk_extended.ecore#//SDKBaseClassType/DATA_BUFFER"/>
       <genEnumLiterals ecoreEnumLiteral="sdk_extended.ecore#//SDKBaseClassType/UI5"/>
     </genEnums>
-    <genClasses ecoreClass="sdk_extended.ecore#//ClientComponent">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ClientComponent/sdkBaseClassType"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ClientComponent/data"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ClientComponent/metadata"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ClientComponent/initMethodBody"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ClientComponent/afterUpdateMethodBody"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ClientComponent/beforeUpdateMethodBody"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ClientComponent/propertiesBody"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ClientComponent/classMethodsBody"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ClientComponent/localMethodsBody"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ClientComponent/constructorParameters"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ClientComponent/localVariables"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ClientComponent/constants"/>
-      <genOperations ecoreOperation="sdk_extended.ecore#//ClientComponent/render"/>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="sdk_extended.ecore#//AccessType">
+      <genEnumLiterals ecoreEnumLiteral="sdk_extended.ecore#//AccessType/PRIVATE"/>
+      <genEnumLiterals ecoreEnumLiteral="sdk_extended.ecore#//AccessType/PUBLIC"/>
+      <genEnumLiterals ecoreEnumLiteral="sdk_extended.ecore#//AccessType/PROTECTED"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="sdk_extended.ecore#//JavaObject"/>
+    <genClasses ecoreClass="sdk_extended.ecore#//ComponentClient">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ComponentClient/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sdk_extended.ecore#//ComponentClient/init"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sdk_extended.ecore#//ComponentClient/afterUpdate"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sdk_extended.ecore#//ComponentClient/beforeUpdate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ComponentClient/sdkBaseClassType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ComponentClient/data"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ComponentClient/metadata"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sdk_extended.ecore#//ComponentClient/properties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sdk_extended.ecore#//ComponentClient/classMethods"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sdk_extended.ecore#//ComponentClient/localMethods"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sdk_extended.ecore#//ComponentClient/constructors"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sdk_extended.ecore#//ComponentClient/localVariables"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sdk_extended.ecore#//ComponentClient/constants"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ComponentClient/comp"/>
+      <genOperations ecoreOperation="sdk_extended.ecore#//ComponentClient/render"/>
+    </genClasses>
+    <genClasses ecoreClass="sdk_extended.ecore#//Constant">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Constant/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Constant/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Constant/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Constant/type"/>
+    </genClasses>
+    <genClasses ecoreClass="sdk_extended.ecore#//Property">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Property/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Property/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Property/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Property/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Property/isReadOnly"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sdk_extended.ecore#//Property/getter"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sdk_extended.ecore#//Property/setter"/>
+    </genClasses>
+    <genClasses ecoreClass="sdk_extended.ecore#//Variable">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Variable/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Variable/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Variable/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Variable/type"/>
+    </genClasses>
+    <genClasses ecoreClass="sdk_extended.ecore#//Method">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Method/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Method/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Method/body"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Method/returnType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Method/parameters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Method/accessibiltyType"/>
+    </genClasses>
+    <genClasses ecoreClass="sdk_extended.ecore#//Parameter">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Parameter/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Parameter/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Parameter/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Parameter/type"/>
+    </genClasses>
+    <genClasses ecoreClass="sdk_extended.ecore#//Constructor">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Constructor/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Constructor/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Constructor/body"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Constructor/parameters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//Constructor/accessibiltyType"/>
+    </genClasses>
+    <genClasses ecoreClass="sdk_extended.ecore#//ConstantsSection">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ConstantsSection/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sdk_extended.ecore#//ConstantsSection/belongsToComponent"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Core" basePackage="com.armin.sap.ds.builder.models" resource="XML"

@@ -76,7 +76,7 @@ public class ImageNode extends GenericFileNode {
 		
 		String imagePath = _imageFileName == null ? (_imagePath) : (_imagePath + "/" + _imageFileName);
 		System.out.println("Image Path: " + imagePath);
-		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
+		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE_ID));
 		IResource imageResource = this.getProject().findMember(imagePath);
 		
 		ImageData imgData = new ImageData(imageResource.getLocation().toFile().getAbsolutePath()).scaledTo(size, size);		

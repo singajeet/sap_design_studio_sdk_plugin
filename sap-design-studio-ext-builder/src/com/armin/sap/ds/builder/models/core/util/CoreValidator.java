@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.xml.type.util.XMLTypeValidator;
  * <!-- begin-user-doc -->
  * The <b>Validator</b> for the model.
  * <!-- end-user-doc -->
- * @see com.armin.sap.ds.builder.models.core.ICorePackage
+ * @see com.armin.sap.ds.builder.models.core.CorePackage
  * @generated
  */
 public class CoreValidator extends EObjectValidator {
@@ -89,7 +89,7 @@ public class CoreValidator extends EObjectValidator {
 	 */
 	@Override
 	protected EPackage getEPackage() {
-	  return ICorePackage.eINSTANCE;
+	  return CorePackage.eINSTANCE;
 	}
 
 	/**
@@ -101,57 +101,57 @@ public class CoreValidator extends EObjectValidator {
 	@Override
 	protected boolean validate(int classifierID, Object value, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		switch (classifierID) {
-			case ICorePackage.COMPONENT:
-				return validateComponent((IComponent)value, diagnostics, context);
-			case ICorePackage.DESCRIPTABLE:
-				return validateDescriptable((IDescriptable)value, diagnostics, context);
-			case ICorePackage.DOCUMENT_ROOT:
-				return validateDocumentRoot((IDocumentRoot)value, diagnostics, context);
-			case ICorePackage.EXTENSION:
-				return validateExtension((IExtension)value, diagnostics, context);
-			case ICorePackage.GROUP:
-				return validateGroup((IGroup)value, diagnostics, context);
-			case ICorePackage.INITIALIZATION:
-				return validateInitialization((IInitialization)value, diagnostics, context);
-			case ICorePackage.OPTION:
-				return validateOption((IOption)value, diagnostics, context);
-			case ICorePackage.POSSIBLE_VALUE_TYPE:
-				return validatePossibleValueType((IPossibleValueType)value, diagnostics, context);
-			case ICorePackage.PROPERTY:
-				return validateProperty((IProperty)value, diagnostics, context);
-			case ICorePackage.PROPERTY_VALUE:
-				return validatePropertyValue((IPropertyValue)value, diagnostics, context);
-			case ICorePackage.REQUIRE_JS_TYPE:
-				return validateRequireJSType((IRequireJSType)value, diagnostics, context);
-			case ICorePackage.STD_INCLUDE:
-				return validateStdInclude((IStdInclude)value, diagnostics, context);
-			case ICorePackage.BACKEND_SYSTEM_TYPE:
+			case CorePackage.COMPONENT:
+				return validateComponent((Component)value, diagnostics, context);
+			case CorePackage.DESCRIPTABLE:
+				return validateDescriptable((Descriptable)value, diagnostics, context);
+			case CorePackage.DOCUMENT_ROOT:
+				return validateDocumentRoot((DocumentRoot)value, diagnostics, context);
+			case CorePackage.EXTENSION:
+				return validateExtension((Extension)value, diagnostics, context);
+			case CorePackage.GROUP:
+				return validateGroup((Group)value, diagnostics, context);
+			case CorePackage.INITIALIZATION:
+				return validateInitialization((Initialization)value, diagnostics, context);
+			case CorePackage.OPTION:
+				return validateOption((Option)value, diagnostics, context);
+			case CorePackage.POSSIBLE_VALUE_TYPE:
+				return validatePossibleValueType((PossibleValueType)value, diagnostics, context);
+			case CorePackage.PROPERTY:
+				return validateProperty((Property)value, diagnostics, context);
+			case CorePackage.PROPERTY_VALUE:
+				return validatePropertyValue((PropertyValue)value, diagnostics, context);
+			case CorePackage.REQUIRE_JS_TYPE:
+				return validateRequireJSType((RequireJSType)value, diagnostics, context);
+			case CorePackage.STD_INCLUDE:
+				return validateStdInclude((StdInclude)value, diagnostics, context);
+			case CorePackage.BACKEND_SYSTEM_TYPE:
 				return validateBackendSystemType((BackendSystemType)value, diagnostics, context);
-			case ICorePackage.HANDLER_TYPES:
+			case CorePackage.HANDLER_TYPES:
 				return validateHandlerTypes((HandlerTypes)value, diagnostics, context);
-			case ICorePackage.KIND_TYPE:
+			case CorePackage.KIND_TYPE:
 				return validateKindType((KindType)value, diagnostics, context);
-			case ICorePackage.PROPERTY_TYPE:
+			case CorePackage.PROPERTY_TYPE:
 				return validatePropertyType((PropertyType)value, diagnostics, context);
-			case ICorePackage.UI5_MODE:
+			case CorePackage.UI5_MODE:
 				return validateUI5Mode((UI5Mode)value, diagnostics, context);
-			case ICorePackage.BACKEND_SYSTEM_TYPE_OBJECT:
+			case CorePackage.BACKEND_SYSTEM_TYPE_OBJECT:
 				return validateBackendSystemTypeObject((BackendSystemType)value, diagnostics, context);
-			case ICorePackage.HANDLER_TYPES_OBJECT:
+			case CorePackage.HANDLER_TYPES_OBJECT:
 				return validateHandlerTypesObject((HandlerTypes)value, diagnostics, context);
-			case ICorePackage.ID_TYPE:
+			case CorePackage.ID_TYPE:
 				return validateIdType((String)value, diagnostics, context);
-			case ICorePackage.ID_TYPE1:
+			case CorePackage.ID_TYPE1:
 				return validateIdType1((String)value, diagnostics, context);
-			case ICorePackage.KIND_TYPE_OBJECT:
+			case CorePackage.KIND_TYPE_OBJECT:
 				return validateKindTypeObject((KindType)value, diagnostics, context);
-			case ICorePackage.PROPERTY_TYPE_OBJECT:
+			case CorePackage.PROPERTY_TYPE_OBJECT:
 				return validatePropertyTypeObject((PropertyType)value, diagnostics, context);
-			case ICorePackage.UI5_MODE_OBJECT:
+			case CorePackage.UI5_MODE_OBJECT:
 				return validateUI5ModeObject((UI5Mode)value, diagnostics, context);
-			case ICorePackage.UI5_MODES:
+			case CorePackage.UI5_MODES:
 				return validateUI5Modes((List<?>)value, diagnostics, context);
-			case ICorePackage.VERSION_TYPE:
+			case CorePackage.VERSION_TYPE:
 				return validateVersionType((String)value, diagnostics, context);
 			default:
 				return true;
@@ -163,7 +163,7 @@ public class CoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateComponent(IComponent component, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateComponent(Component component, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(component, diagnostics, context);
 	}
 
@@ -172,7 +172,7 @@ public class CoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateDescriptable(IDescriptable descriptable, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateDescriptable(Descriptable descriptable, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(descriptable, diagnostics, context);
 	}
 
@@ -181,7 +181,7 @@ public class CoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateDocumentRoot(IDocumentRoot documentRoot, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateDocumentRoot(DocumentRoot documentRoot, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(documentRoot, diagnostics, context);
 	}
 
@@ -190,7 +190,7 @@ public class CoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateExtension(IExtension extension, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateExtension(Extension extension, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(extension, diagnostics, context);
 	}
 
@@ -199,7 +199,7 @@ public class CoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateGroup(IGroup group, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateGroup(Group group, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(group, diagnostics, context);
 	}
 
@@ -208,7 +208,7 @@ public class CoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateInitialization(IInitialization initialization, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateInitialization(Initialization initialization, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(initialization, diagnostics, context);
 	}
 
@@ -217,7 +217,7 @@ public class CoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateOption(IOption option, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateOption(Option option, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(option, diagnostics, context);
 	}
 
@@ -226,7 +226,7 @@ public class CoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validatePossibleValueType(IPossibleValueType possibleValueType, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validatePossibleValueType(PossibleValueType possibleValueType, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(possibleValueType, diagnostics, context);
 	}
 
@@ -235,7 +235,7 @@ public class CoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateProperty(IProperty property, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateProperty(Property property, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(property, diagnostics, context);
 	}
 
@@ -244,7 +244,7 @@ public class CoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validatePropertyValue(IPropertyValue propertyValue, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validatePropertyValue(PropertyValue propertyValue, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(propertyValue, diagnostics, context);
 	}
 
@@ -253,7 +253,7 @@ public class CoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateRequireJSType(IRequireJSType requireJSType, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateRequireJSType(RequireJSType requireJSType, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(requireJSType, diagnostics, context);
 	}
 
@@ -262,7 +262,7 @@ public class CoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateStdInclude(IStdInclude stdInclude, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateStdInclude(StdInclude stdInclude, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(stdInclude, diagnostics, context);
 	}
 
@@ -359,7 +359,7 @@ public class CoreValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateIdType_Pattern(String idType, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validatePattern(ICorePackage.Literals.ID_TYPE, idType, ID_TYPE__PATTERN__VALUES, diagnostics, context);
+		return validatePattern(CorePackage.Literals.ID_TYPE, idType, ID_TYPE__PATTERN__VALUES, diagnostics, context);
 	}
 
 	/**
@@ -392,7 +392,7 @@ public class CoreValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateIdType1_Pattern(String idType1, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validatePattern(ICorePackage.Literals.ID_TYPE1, idType1, ID_TYPE1__PATTERN__VALUES, diagnostics, context);
+		return validatePattern(CorePackage.Literals.ID_TYPE1, idType1, ID_TYPE1__PATTERN__VALUES, diagnostics, context);
 	}
 
 	/**
@@ -442,12 +442,12 @@ public class CoreValidator extends EObjectValidator {
 		boolean result = true;
 		for (Iterator<?> i = ui5Modes.iterator(); i.hasNext() && (result || diagnostics != null); ) {
 			Object item = i.next();
-			if (ICorePackage.Literals.UI5_MODE.isInstance(item)) {
+			if (CorePackage.Literals.UI5_MODE.isInstance(item)) {
 				result &= validateUI5Mode((UI5Mode)item, diagnostics, context);
 			}
 			else {
 				result = false;
-				reportDataValueTypeViolation(ICorePackage.Literals.UI5_MODE, item, diagnostics, context);
+				reportDataValueTypeViolation(CorePackage.Literals.UI5_MODE, item, diagnostics, context);
 			}
 		}
 		return result;
@@ -483,7 +483,7 @@ public class CoreValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateVersionType_Pattern(String versionType, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validatePattern(ICorePackage.Literals.VERSION_TYPE, versionType, VERSION_TYPE__PATTERN__VALUES, diagnostics, context);
+		return validatePattern(CorePackage.Literals.VERSION_TYPE, versionType, VERSION_TYPE__PATTERN__VALUES, diagnostics, context);
 	}
 
 	/**

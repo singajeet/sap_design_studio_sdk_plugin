@@ -60,7 +60,7 @@ import com.armin.sap.ds.builder.models.domain.UI5Mode;
 import com.armin.sap.ds.builder.service.IProjectService;
 import com.armin.sap.ds.builder.service.ProjectService;
 import com.armin.sap.ds.builder.ui.IRefreshForm;
-import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.GroupNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode;
@@ -172,30 +172,30 @@ public class ExtensionEditorFormPage extends AbstractBaseEditorPart {
 		@Override
 		public void update(ViewerCell cell) {			
 			
-			ComponentNode componentNode = (ComponentNode)cell.getElement();
+			ComponentExtendedNode componentExtendedNode = (ComponentExtendedNode)cell.getElement();
 			
 			switch(cell.getColumnIndex()) {
 			case 0:
-				_cellText = componentNode.getComponent().getId();
+				_cellText = componentExtendedNode.getComponent().getId();
 				break;
 			case 1:
-				_cellText = componentNode.getComponent().getTitle();
+				_cellText = componentExtendedNode.getComponent().getTitle();
 				break;
 			case 2:
-				_cellText = componentNode.getComponent().isDatabound() ? "Yes" : "No";
+				_cellText = componentExtendedNode.getComponent().isDatabound() ? "Yes" : "No";
 				break;
 			case 3:
-				_cellText = componentNode.getComponent().getHandlerType().toString();
+				_cellText = componentExtendedNode.getComponent().getHandlerType().toString();
 				break;
 			case 4:
 				_cellText = "";
-				for(UI5Mode mode : componentNode.getComponent().getModes()) {
+				for(UI5Mode mode : componentExtendedNode.getComponent().getModes()) {
 					_cellText = _cellText + mode.toString() + ", ";
 				}
 				_cellText = _cellText.substring(0, _cellText.length() - 2);
 				break;
 			case 5:
-				_cellText = componentNode.getComponent().isVisible() ? "Yes" : "No";
+				_cellText = componentExtendedNode.getComponent().isVisible() ? "Yes" : "No";
 				break;
 			case 6:
 				TableItem item = (TableItem) cell.getItem();

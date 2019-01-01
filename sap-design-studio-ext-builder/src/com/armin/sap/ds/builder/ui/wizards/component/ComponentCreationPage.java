@@ -17,7 +17,6 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.armin.sap.ds.builder.controls.ComponentFormControl;
 import com.armin.sap.ds.builder.controls.IComponentChangedListener;
-import com.armin.sap.ds.builder.models.domain.Component;
 import com.armin.sap.ds.builder.models.domain.ComponentExtended;
 import com.armin.sap.ds.builder.models.domain.IModel;
 import com.armin.sap.ds.builder.preferences.Settings;
@@ -43,7 +42,7 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 	private String INIT_CLASS_TO_EXTEND = "Component";
 	public String EXTENDS_KEYWORD = " extends ";	
 	
-	private Component _model;
+	private ComponentExtended _model;
 	private GroupNode _parentTreeNode;
 	private Composite topLevel;
 	private Composite composite_top;
@@ -113,7 +112,7 @@ public class ComponentCreationPage extends WizardPage implements IWizardDetailsP
 		comboExtends = new Combo(composite_top, SWT.READ_ONLY | SWT.BORDER);
 		comboExtends.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		String parentClassStr = Settings.store().get(Settings.FOR.COMPONENT_PARENT_CLASSES);
+		String parentClassStr = Settings.store().get(Settings.FOR.COMPONENT_PARENT_CLASSES_ID);
 		String[] parentClasses = parentClassStr.split(";");
 		for(String parent : parentClasses) {
 			comboExtends.add(parent);

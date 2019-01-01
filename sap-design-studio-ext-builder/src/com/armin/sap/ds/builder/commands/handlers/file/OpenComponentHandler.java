@@ -21,13 +21,13 @@ import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.editors.IReusableDSEditorPart;
 import com.armin.sap.ds.builder.editors.component.ComponentEditor;
 import com.armin.sap.ds.builder.editors.component.ComponentEditorInput;
-import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode;
 
 public class OpenComponentHandler extends AbstractHandler {
 
 	public static final String COMMAND_ID = "com.armin.sap.ds.builder.editors.component_editor";
-	private ComponentNode _node;
+	private ComponentExtendedNode _node;
 	
 	public OpenComponentHandler() {
 		// TODO Auto-generated constructor stub
@@ -52,7 +52,7 @@ public class OpenComponentHandler extends AbstractHandler {
 			} 			
 			
 			try {
-				if(selectObj instanceof ComponentNode) {
+				if(selectObj instanceof ComponentExtendedNode) {
 					input =  new ComponentEditorInput((IProjectItemNode)selectObj);
 				}
 			}catch(Exception e) {
@@ -92,7 +92,7 @@ public class OpenComponentHandler extends AbstractHandler {
 		}
 		if(!found) {
 			try {
-				if(selectObj instanceof ComponentNode) {
+				if(selectObj instanceof ComponentExtendedNode) {
 						page.openEditor(input, ComponentEditor.ID);
 						//IDE.openEditor(page, input, ExtensionCollectionEditor.ID);
 				}else {

@@ -65,7 +65,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		IFile extensionFile = null;
 		
 		//Get reference to contribution.xml file
-		extensionFile = project.getFile(extensionModel.getId() + "/" + Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME));
+		extensionFile = project.getFile(extensionModel.getId() + "/" + Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME_ID));
 		
 		//Create contribution.xml (extension file) if not already created
 		if(!extensionFile.exists()) {
@@ -105,7 +105,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		IFile componentFile = null;		
 		
 		//Get reference to contribution.ztl file
-		componentFile = project.getFile(extensionModel.getId() + "/" + componentModel.getId() + "/" + Settings.store().get(Settings.FOR.COMPONENT_ZTL_FILE_NAME));
+		componentFile = project.getFile(extensionModel.getId() + "/" + componentModel.getId() + "/" + Settings.store().get(Settings.FOR.COMPONENT_ZTL_FILE_NAME_ID));
 			
 		//setup contribute.ztl file
 		boolean saved = _saveComponent(componentFile, extensionModel, componentModel);		
@@ -131,7 +131,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	
 	private boolean _saveComponent(IFile componentFile, IModel extensionNode, 
 			IModel componentNode) {
-		String ztlTemplate = Settings.store().get(Settings.FOR.ZTL_TEMPLATE);
+		String ztlTemplate = Settings.store().get(Settings.FOR.ZTL_TEMPLATE_ID);
 		Map<String, String> fieldMap = new HashMap<String, String>();
 		fieldMap.put("package", extensionNode.getId());
 		fieldMap.put("class", componentNode.getId());
@@ -171,7 +171,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	}
 	
 	private boolean _saveManifest(IFile manifest, IModel extensionModel) {
-		String mfTemplate = Settings.store().get(Settings.FOR.MF_TEMPLATE);
+		String mfTemplate = Settings.store().get(Settings.FOR.MF_TEMPLATE_ID);
 		Map<String, String> fieldMap = new HashMap<String, String>();
 		fieldMap.put("ext_title", ((Extension)extensionModel).getTitle());
 		fieldMap.put("ext_id",  ((Extension)extensionModel).getId());
@@ -200,7 +200,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	@Override
 	public Extension updateExtension(IModel extensionModel, IProject project) {
 		try {
-			IFile extensionFile = project.getFile(extensionModel.getId() + "/" + Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME));
+			IFile extensionFile = project.getFile(extensionModel.getId() + "/" + Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME_ID));
 			
 			if(extensionFile.exists()) {
 				extensionFile.delete(true, null);
@@ -264,7 +264,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	public String setupCSSIncludeNode(IModel componentModel, IProject project, IModel extension) {
 		//Create cssInclude node		
 		String cssFilePath = extension.getId() + "/" + componentModel.getId() + "/res/css/" + componentModel.getId() + ".css";		
-		createComponentSupportingFile(project, cssFilePath, Settings.store().get(Settings.FOR.CSS_TEMPLATE));
+		createComponentSupportingFile(project, cssFilePath, Settings.store().get(Settings.FOR.CSS_TEMPLATE_ID));
 		return cssFilePath;
 	}
 
@@ -276,8 +276,8 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		String jsPath = validPath + "_aps.js";
 		
 		createComponentSupportingFile(project, htmlPath, Settings.store().get(Settings.FOR.HTML_TEMPLATE));
-		createComponentSupportingFile(project, cssPath, Settings.store().get(Settings.FOR.CSS_TEMPLATE));
-		createComponentSupportingFile(project, jsPath, Settings.store().get(Settings.FOR.JS_TEMPLATE));
+		createComponentSupportingFile(project, cssPath, Settings.store().get(Settings.FOR.CSS_TEMPLATE_ID));
+		createComponentSupportingFile(project, jsPath, Settings.store().get(Settings.FOR.JS_TEMPLATE_ID));
 		return new String[] {htmlPath, cssPath, jsPath};
 	}
 	
@@ -298,7 +298,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	public String setupRequireJSNode(IProject project, IModel componentModel, IModel extensionModel, RequireJSType jsNodeModel) {
 		//Get the mode from the component		
 		String jsFilePath = extensionModel.getId() + "/" + componentModel.getId() + "/res/js/" + componentModel.getId();
-		createComponentSupportingFile(project, jsFilePath + ".js", Settings.store().get(Settings.FOR.JS_TEMPLATE));
+		createComponentSupportingFile(project, jsFilePath + ".js", Settings.store().get(Settings.FOR.JS_TEMPLATE_ID));
 		return jsFilePath;		
 	}
 	
@@ -398,7 +398,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	}
 	
 	private Group getGroupFromPreferences(String groupId) {
-		String rawGroups = Settings.store().get(Settings.FOR.GROUPS_LIST);
+		String rawGroups = Settings.store().get(Settings.FOR.GROUPS_LIST_ID);
 		String[] groups = null;
 		if(rawGroups != null)
 			groups = rawGroups.split(";");
@@ -422,17 +422,17 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 	}
 
 	private void saveGroupInPreferences(String groupId) {
-		String rawGroups = Settings.store().get(Settings.FOR.GROUPS_LIST);
+		String rawGroups = Settings.store().get(Settings.FOR.GROUPS_LIST_ID);
 		if(rawGroups != null) {
 			rawGroups = rawGroups + ";" + groupId.toUpperCase();
 		} else {
 			rawGroups = groupId.toUpperCase();
 		}
-		Settings.store().set(Settings.FOR.GROUPS_LIST, rawGroups);
+		Settings.store().set(Settings.FOR.GROUPS_LIST_ID, rawGroups);
 	}
 
 	private boolean isGroupSavedInPreferences(String groupId) {
-		String rawGroups = Settings.store().get(Settings.FOR.GROUPS_LIST);
+		String rawGroups = Settings.store().get(Settings.FOR.GROUPS_LIST_ID);
 		if(rawGroups != null) {
 			String[] groups = rawGroups.split(";");
 			for(String group : groups) {
@@ -450,7 +450,7 @@ public class ProjectFilesBuilderService implements IProjectFilesBuilderService {
 		IFile extensionFile = null;
 		
 		//Get reference to contribution.xml file
-		extensionFile = project.getFile(extensionModel.getId() + "/" + Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME));
+		extensionFile = project.getFile(extensionModel.getId() + "/" + Settings.store().get(Settings.FOR.EXTENSION_XML_FILE_NAME_ID));
 		
 		try {
 			//Create contribution.xml (extension file) if not already created

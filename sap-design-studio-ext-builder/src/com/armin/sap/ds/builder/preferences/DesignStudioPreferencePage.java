@@ -56,17 +56,17 @@ public class DesignStudioPreferencePage
 		fileNames.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		StringFieldEditor componentFileName = new StringFieldEditor(
-											Settings.FOR.COMPONENT_ZTL_FILE_NAME, 
+											Settings.FOR.COMPONENT_ZTL_FILE_NAME_ID, 
 											"Component's Default File Name:",
 											fileNames);
 		addField(componentFileName);
 		StringFieldEditor extensionFileName = new StringFieldEditor(
-												Settings.FOR.EXTENSION_XML_FILE_NAME,
+												Settings.FOR.EXTENSION_XML_FILE_NAME_ID,
 												"Extension's Default File Name:",
 												fileNames);
 		addField(extensionFileName);
 		
-		RadioGroupFieldEditor iconSize = new RadioGroupFieldEditor(Settings.FOR.ICON_SIZE,
+		RadioGroupFieldEditor iconSize = new RadioGroupFieldEditor(Settings.FOR.ICON_SIZE_ID,
 												"Icon Size (in Pixels):", 1,
 												new String[][] {
 													{"16 x 16", String.valueOf(Settings.FOR.ICON_SIZE_16x16)},
@@ -82,7 +82,7 @@ public class DesignStudioPreferencePage
 		dsPathGroup.setLayout(new GridLayout(1, false));
 		dsPathGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		DirectoryFieldEditor designStudioPath = new DirectoryFieldEditor(Settings.FOR.DESIGN_STUDIO_PATH,
+		DirectoryFieldEditor designStudioPath = new DirectoryFieldEditor(Settings.FOR.DESIGN_STUDIO_PATH_ID,
 														"Location: ", dsPathGroup);
 		addField(designStudioPath);
 	}

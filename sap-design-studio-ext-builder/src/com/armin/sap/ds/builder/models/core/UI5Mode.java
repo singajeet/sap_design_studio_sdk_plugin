@@ -13,7 +13,7 @@ import org.eclipse.emf.common.util.Enumerator;
  * A representation of the literals of the enumeration '<em><b>UI5 Mode</b></em>',
  * and utility methods for working with them.
  * <!-- end-user-doc -->
- * @see com.armin.sap.ds.builder.models.core.ICorePackage#getUI5Mode()
+ * @see com.armin.sap.ds.builder.models.core.CorePackage#getUI5Mode()
  * @model extendedMetaData="name='UI5Mode'"
  * @generated
  */

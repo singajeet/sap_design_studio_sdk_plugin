@@ -46,21 +46,21 @@ public class DesigStudioExtTemplatesPage extends FieldEditorPreferencePage imple
 	@Override
 	protected void createFieldEditors() {
 		MultiTextFieldEditor jsTemplate = new MultiTextFieldEditor(
-				Settings.FOR.JS_TEMPLATE, 
+				Settings.FOR.JS_TEMPLATE_ID, 
 				"JavaScript File Template:",
 				getFieldEditorParent());
 		
 		addField(jsTemplate);		
 		
 		MultiTextFieldEditor cssTemplate = new MultiTextFieldEditor(
-				Settings.FOR.CSS_TEMPLATE, 
+				Settings.FOR.CSS_TEMPLATE_ID, 
 				"CSS File Template:",
 				getFieldEditorParent());
 		
 		addField(cssTemplate);
 		
 		MultiTextFieldEditor ztlTemplate = new MultiTextFieldEditor(
-				Settings.FOR.ZTL_TEMPLATE, 
+				Settings.FOR.ZTL_TEMPLATE_ID, 
 				"ZTL File Template:",
 				getFieldEditorParent());
 		

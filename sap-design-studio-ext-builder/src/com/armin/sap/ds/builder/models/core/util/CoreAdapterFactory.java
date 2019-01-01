@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- * @see com.armin.sap.ds.builder.models.core.ICorePackage
+ * @see com.armin.sap.ds.builder.models.core.CorePackage
  * @generated
  */
 public class CoreAdapterFactory extends AdapterFactoryImpl {
@@ -26,7 +26,7 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static ICorePackage modelPackage;
+	protected static CorePackage modelPackage;
 
 	/**
 	 * Creates an instance of the adapter factory.
@@ -36,7 +36,7 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	 */
 	public CoreAdapterFactory() {
 		if (modelPackage == null) {
-			modelPackage = ICorePackage.eINSTANCE;
+			modelPackage = CorePackage.eINSTANCE;
 		}
 	}
 
@@ -68,51 +68,51 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	protected CoreSwitch<Adapter> modelSwitch =
 		new CoreSwitch<Adapter>() {
 			@Override
-			public Adapter caseComponent(IComponent object) {
+			public Adapter caseComponent(Component object) {
 				return createComponentAdapter();
 			}
 			@Override
-			public Adapter caseDescriptable(IDescriptable object) {
+			public Adapter caseDescriptable(Descriptable object) {
 				return createDescriptableAdapter();
 			}
 			@Override
-			public Adapter caseDocumentRoot(IDocumentRoot object) {
+			public Adapter caseDocumentRoot(DocumentRoot object) {
 				return createDocumentRootAdapter();
 			}
 			@Override
-			public Adapter caseExtension(IExtension object) {
+			public Adapter caseExtension(Extension object) {
 				return createExtensionAdapter();
 			}
 			@Override
-			public Adapter caseGroup(IGroup object) {
+			public Adapter caseGroup(Group object) {
 				return createGroupAdapter();
 			}
 			@Override
-			public Adapter caseInitialization(IInitialization object) {
+			public Adapter caseInitialization(Initialization object) {
 				return createInitializationAdapter();
 			}
 			@Override
-			public Adapter caseOption(IOption object) {
+			public Adapter caseOption(Option object) {
 				return createOptionAdapter();
 			}
 			@Override
-			public Adapter casePossibleValueType(IPossibleValueType object) {
+			public Adapter casePossibleValueType(PossibleValueType object) {
 				return createPossibleValueTypeAdapter();
 			}
 			@Override
-			public Adapter caseProperty(IProperty object) {
+			public Adapter caseProperty(Property object) {
 				return createPropertyAdapter();
 			}
 			@Override
-			public Adapter casePropertyValue(IPropertyValue object) {
+			public Adapter casePropertyValue(PropertyValue object) {
 				return createPropertyValueAdapter();
 			}
 			@Override
-			public Adapter caseRequireJSType(IRequireJSType object) {
+			public Adapter caseRequireJSType(RequireJSType object) {
 				return createRequireJSTypeAdapter();
 			}
 			@Override
-			public Adapter caseStdInclude(IStdInclude object) {
+			public Adapter caseStdInclude(StdInclude object) {
 				return createStdIncludeAdapter();
 			}
 			@Override
@@ -136,13 +136,13 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IComponent <em>Component</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.Component <em>Component</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IComponent
+	 * @see com.armin.sap.ds.builder.models.core.Component
 	 * @generated
 	 */
 	public Adapter createComponentAdapter() {
@@ -150,13 +150,13 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IDescriptable <em>Descriptable</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.Descriptable <em>Descriptable</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IDescriptable
+	 * @see com.armin.sap.ds.builder.models.core.Descriptable
 	 * @generated
 	 */
 	public Adapter createDescriptableAdapter() {
@@ -164,13 +164,13 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IDocumentRoot <em>Document Root</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.DocumentRoot <em>Document Root</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IDocumentRoot
+	 * @see com.armin.sap.ds.builder.models.core.DocumentRoot
 	 * @generated
 	 */
 	public Adapter createDocumentRootAdapter() {
@@ -178,13 +178,13 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IExtension <em>Extension</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.Extension <em>Extension</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IExtension
+	 * @see com.armin.sap.ds.builder.models.core.Extension
 	 * @generated
 	 */
 	public Adapter createExtensionAdapter() {
@@ -192,13 +192,13 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IGroup <em>Group</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.Group <em>Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IGroup
+	 * @see com.armin.sap.ds.builder.models.core.Group
 	 * @generated
 	 */
 	public Adapter createGroupAdapter() {
@@ -206,13 +206,13 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IInitialization <em>Initialization</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.Initialization <em>Initialization</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IInitialization
+	 * @see com.armin.sap.ds.builder.models.core.Initialization
 	 * @generated
 	 */
 	public Adapter createInitializationAdapter() {
@@ -220,13 +220,13 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IOption <em>Option</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.Option <em>Option</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IOption
+	 * @see com.armin.sap.ds.builder.models.core.Option
 	 * @generated
 	 */
 	public Adapter createOptionAdapter() {
@@ -234,13 +234,13 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IPossibleValueType <em>Possible Value Type</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.PossibleValueType <em>Possible Value Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IPossibleValueType
+	 * @see com.armin.sap.ds.builder.models.core.PossibleValueType
 	 * @generated
 	 */
 	public Adapter createPossibleValueTypeAdapter() {
@@ -248,13 +248,13 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IProperty <em>Property</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.Property <em>Property</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IProperty
+	 * @see com.armin.sap.ds.builder.models.core.Property
 	 * @generated
 	 */
 	public Adapter createPropertyAdapter() {
@@ -262,13 +262,13 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IPropertyValue <em>Property Value</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.PropertyValue <em>Property Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IPropertyValue
+	 * @see com.armin.sap.ds.builder.models.core.PropertyValue
 	 * @generated
 	 */
 	public Adapter createPropertyValueAdapter() {
@@ -276,13 +276,13 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IRequireJSType <em>Require JS Type</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.RequireJSType <em>Require JS Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IRequireJSType
+	 * @see com.armin.sap.ds.builder.models.core.RequireJSType
 	 * @generated
 	 */
 	public Adapter createRequireJSTypeAdapter() {
@@ -290,13 +290,13 @@ public class CoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.IStdInclude <em>Std Include</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.core.StdInclude <em>Std Include</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.armin.sap.ds.builder.models.core.IStdInclude
+	 * @see com.armin.sap.ds.builder.models.core.StdInclude
 	 * @generated
 	 */
 	public Adapter createStdIncludeAdapter() {

@@ -267,7 +267,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -289,7 +289,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -586,7 +586,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -608,7 +608,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -939,7 +939,7 @@
                   <iterate
                         ifEmpty="false">
                      <instanceof
-                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode">
+                           value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode">
                      </instanceof>
                   </iterate>
                </with>
@@ -961,7 +961,7 @@
                      <iterate
                            ifEmpty="false">
                         <instanceof
-                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode">
+                              value="com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode">
                         </instanceof>
                      </iterate>
                   </with>
@@ -1295,7 +1295,7 @@
             icon="images/component_28x28.png"
             id="com.armin.sap.ds.builder.editors.component_diagram_editor"
             name="Component Diagram Editor">
-      </editor>
+      </editor>      
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -1598,6 +1598,12 @@
             id="com.armin.sap.ds.builder.preferences.extension_source_editor_preferences"
             name="Extension Source Editor">
       </page>
+      <page
+            category="com.armin.sap.ds.builder.preferences.design_studio_preferences"
+            class="com.armin.sap.ds.builder.preferences.DesigStudioDiagramsPage"
+            id="com.armin.sap.ds.builder.preferences.design_studio_diagram_preferences"
+            name="Diagram">
+      </page>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
@@ -1785,61 +1791,38 @@
          <diagramType
                id="com.armin.sap.ds.builder.diagram.type.component">
          </diagramType>
+         <imageProvider
+               id="com.armin.sap.ds.builder.diagram.imageProvider">
+         </imageProvider>
       </diagramTypeProvider>
    </extension>
-<extension  point="org.eclipse.emf.ecp.view.model.provider.xmi.file">
-<file filePath="src/com/armin/sap/ds/builder/diagrams/views/ClientComponent.view"/>
-</extension>
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated extendedSDK -->
-      <package
-            uri="www.armin.com/lumira_designer/models"
-            class="extendedSDKPackage.ExtendedSDKPackagePackage"
-            genModel="src/com/armin/sap/ds/builder/diagrams/def/extendedSDK.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated extendedModels -->
-      <package
-            uri="www.armin.com/lumira_designer/models"
-            class="com.armin.sap.ds.builder.diagrams.models.ModelsPackage"
-            genModel="src/com/armin/sap/ds/builder/diagrams/def/extendedModels.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated extendedSDK -->
-      <package
-            uri="http://www.sap.com/bi/zen/sdk"
-            class="sdk.SdkPackage"
-            genModel="src/com/armin/sap/ds/builder/diagrams/def/extendedSDK.genmodel"/>
-   </extension>
-
-   <extension point="org.eclipse.emf.ecore.extension_parser">
-      <!-- @generated extendedSDK -->
-      <parser
-            type="sdk"
-            class="sdk.util.SdkResourceFactoryImpl"/>
-   </extension>
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated sdk_extended -->
       <package
             uri="www.armin.com/lumira_designer/models"
-            class="com.armin.sap.ds.builder.models.extended.IExtendedPackage"
+            class="com.armin.sap.ds.builder.models.extended.ExtendedPackage"
             genModel="src/com/armin/sap/ds/builder/diagrams/def/sdk_extended.genmodel"/>
    </extension>
+
 
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated sdk_extended -->
       <package
             uri="http://www.sap.com/bi/zen/sdk"
-            class="com.armin.sap.ds.builder.models.core.ICorePackage"
+            class="com.armin.sap.ds.builder.models.core.CorePackage"
             genModel="src/com/armin/sap/ds/builder/diagrams/def/sdk_extended.genmodel"/>
    </extension>
-
    <extension point="org.eclipse.emf.ecore.extension_parser">
       <!-- @generated sdk_extended -->
       <parser
             type="core"
             class="com.armin.sap.ds.builder.models.core.util.CoreResourceFactory"/>
+   </extension>
+   <extension
+         point="org.eclipse.graphiti.ui.imageProviders">
+      <imageProvider
+            class="com.armin.sap.ds.builder.diagram.images.ImageProvider"
+            id="com.armin.sap.ds.builder.diagram.imageProvider">
+      </imageProvider>
    </extension>
 </plugin>

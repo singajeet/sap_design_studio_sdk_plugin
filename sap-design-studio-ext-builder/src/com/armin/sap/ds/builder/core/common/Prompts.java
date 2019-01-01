@@ -1,17 +1,14 @@
 package com.armin.sap.ds.builder.core.common;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
-import com.armin.sap.ds.builder.models.domain.Component;
-import com.armin.sap.ds.builder.ui.dialogs.ClientComponentCreateFeatureDialog;
-import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode;
-import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode;
+import com.armin.sap.ds.builder.diagrams.dialogs.NewComponentClientDialog;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode;
 
 public class Prompts {
 
@@ -33,9 +30,9 @@ public class Prompts {
 		return ret;
 	}
 	
-	public static HashMap<String, String> askComponentIdAndTitle(ComponentNode node) {
+	public static HashMap<String, String> askComponentInfo(ComponentExtendedNode node) {
 		HashMap<String, String> map = new HashMap<String, String>();
-		ClientComponentCreateFeatureDialog d = new ClientComponentCreateFeatureDialog(getShell(), node, map);
+		NewComponentClientDialog d = new NewComponentClientDialog(getShell(), node, map);
 		
 		int retCode = d.open();
 		if(retCode == Window.OK) {
@@ -44,9 +41,9 @@ public class Prompts {
 		return null;
 	}
 	
-	public static HashMap<String, String> askComponentIdAndTitle(ExtensionNode node) {
+	public static HashMap<String, String> askComponentInfo() {
 		HashMap<String, String> map = new HashMap<String, String>();
-		ClientComponentCreateFeatureDialog d = new ClientComponentCreateFeatureDialog(getShell(), node, map);
+		NewComponentClientDialog d = new NewComponentClientDialog(getShell(), null, map);
 		d.setBlockOnOpen(true);
 		
 		int retCode = d.open();		
@@ -57,17 +54,11 @@ public class Prompts {
 		return null;
 	}
 	
-	public static HashMap<String, String> askComponentIdAndTitle(List<Component> node) {
-		HashMap<String, String> map = new HashMap<String, String>();
-		ClientComponentCreateFeatureDialog d = new ClientComponentCreateFeatureDialog(getShell(), node, map);
+	public static boolean askQuestion(String question) {
 		
-		int retCode = d.open();
-		if(retCode == Window.OK) {
-			return map;			
-		}
-		
-		return null;
+		return false;
 	}
+	
 	
 	private static Shell getShell() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();

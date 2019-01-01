@@ -13,7 +13,7 @@ import org.eclipse.emf.common.util.Enumerator;
  * A representation of the literals of the enumeration '<em><b>Backend System Type</b></em>',
  * and utility methods for working with them.
  * <!-- end-user-doc -->
- * @see com.armin.sap.ds.builder.models.core.ICorePackage#getBackendSystemType()
+ * @see com.armin.sap.ds.builder.models.core.CorePackage#getBackendSystemType()
  * @model extendedMetaData="name='BackendSystemType'"
  * @generated
  */

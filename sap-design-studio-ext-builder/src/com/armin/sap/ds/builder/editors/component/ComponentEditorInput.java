@@ -11,7 +11,7 @@ import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.GroupNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.IProjectItemNode;
@@ -79,9 +79,9 @@ public class ComponentEditorInput implements IEditorInput, IFileEditorInput {
 
 	@Override
 	public IFile getFile() {
-		GroupNode gpNode = (GroupNode)((ComponentNode)_node).getParent(null);
+		GroupNode gpNode = (GroupNode)((ComponentExtendedNode)_node).getParent(null);
 		ExtensionNode exNode = (ExtensionNode)gpNode.getParent(null);
-		String resPath = exNode.getExtension().getId() + "/" + ((ComponentNode)_node).getId() + "/contribution.ztl";
+		String resPath = exNode.getExtension().getId() + "/" + ((ComponentExtendedNode)_node).getId() + "/contribution.ztl";
 		IFile file = _project.getFile(resPath);
 		return file;
 	}

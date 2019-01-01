@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.ComponentExtended;
 import com.armin.sap.ds.builder.models.domain.HandlerTypes;
 import com.armin.sap.ds.builder.models.domain.UI5Mode;
 import com.armin.sap.ds.builder.preferences.Settings;
@@ -29,7 +29,7 @@ import com.armin.sap.ds.builder.preferences.Settings;
 public class ComponentFormControl extends Composite {
 
 	private List<IComponentChangedListener> _listeners;
-	private Component _model;
+	private ComponentExtended _model;
 	
 	private Text txtTitle;
 	private Text txtClass;
@@ -57,24 +57,24 @@ public class ComponentFormControl extends Composite {
 	public ComponentFormControl(Composite parent, int style) {
 		super(parent, style);
 		_listeners = new ArrayList<IComponentChangedListener>();
-		_model = new Component();
+		_model = new ComponentExtended();
 		this.createControl();
 	}
 	
-	public ComponentFormControl(Composite parent, int style, Component model) {		
+	public ComponentFormControl(Composite parent, int style, ComponentExtended model) {		
 		super(parent, style);
 		_listeners = new ArrayList<IComponentChangedListener>();
 		_model = model;
 		this.createControl();
 	}
 	
-	public void setModel(Component model) {
+	public void setModel(ComponentExtended model) {
 		_model = model;
 	}
 	
-	public Component getModel() {
+	public ComponentExtended getModel() {
 		if(_model == null)
-			_model = new Component();
+			_model = new ComponentExtended();
 		
 		return _model;
 	}
@@ -154,7 +154,7 @@ public class ComponentFormControl extends Composite {
 		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
 		if(_model == null)
-			_model = new Component();
+			_model = new ComponentExtended();
 		GridLayout gl_container = new GridLayout(1, false);
 		container.setLayout(gl_container);
 		
@@ -454,7 +454,7 @@ public class ComponentFormControl extends Composite {
 		{
 			comboHandlerType.add(handler.name());
 		}
-		String groupStr = Settings.store().get(Settings.FOR.GROUPS_LIST);
+		String groupStr = Settings.store().get(Settings.FOR.GROUPS_LIST_ID);
 		String[] groups = groupStr.split(";");
 		for(String group : groups) {
 			comboGroup.add(group);

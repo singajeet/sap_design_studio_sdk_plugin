@@ -12,7 +12,7 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
 import org.eclipse.ui.views.properties.IPropertySource;
 
 import com.armin.sap.ds.builder.Activator;
-import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.ComponentExtended;
 import com.armin.sap.ds.builder.models.domain.Extension;
 import com.armin.sap.ds.builder.models.domain.Group;
 import com.armin.sap.ds.builder.preferences.Settings;
@@ -42,7 +42,7 @@ public class GroupNode extends ProjectItemNode {
 	@Override
     public Image getImage() {
 		Image image = Activator.getImage("images/group_28x28.png");
-		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
+		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE_ID));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
 		_image = new Image(Display.getCurrent(), imgData);
 		image.dispose();
@@ -50,7 +50,7 @@ public class GroupNode extends ProjectItemNode {
     }
 	
 	
-	public IProjectItemNode addComponent(Component component) throws Exception{
+	public IProjectItemNode addComponent(ComponentExtended component) throws Exception{
 		if(!exists(component)) {
 			
 			ExtensionNode _parent = (ExtensionNode)this.getParent(this);
@@ -58,13 +58,13 @@ public class GroupNode extends ProjectItemNode {
 			
 			
 			if(getAccessMode() == TreeNodeAccessMode.READ_ONLY) {
-				IProjectItemNode node = new ComponentNode(this.getProject(), component, this);
+				IProjectItemNode node = new ComponentExtendedNode(this.getProject(), component, this);
 				_children.add(node);
 				return node;
 			} else if(getAccessMode() == TreeNodeAccessMode.EDIT) {
 				//DO NOT CHANGE SEQUENCE OF NEXT 2 LINES
 				_projectService.addNewComponent(component, extension);
-				IProjectItemNode node = new ComponentNode(this.getProject(), component, this);
+				IProjectItemNode node = new ComponentExtendedNode(this.getProject(), component, this);
 				_children.add(node);
 				return node;
 			} 
@@ -82,16 +82,16 @@ public class GroupNode extends ProjectItemNode {
 	protected ArrayList<IProjectItemNode> initializeChildren(Group group) {
 		ArrayList<IProjectItemNode> children = new ArrayList<IProjectItemNode>();
     	try {	
-	    		List<Component> components = ((ExtensionNode)this.getParent(this)).getExtension().getComponent();
+	    		List<ComponentExtended> components = ((ExtensionNode)this.getParent(this)).getExtension().getComponent();
 	    		
 	    		for(int i=0;i<components.size();i++) {
-	    			Component component = components.get(i);
+	    			ComponentExtended component = components.get(i);
 	    			String groupName = "DEFAULT";
 	    			if(component.getGroup() != null && !component.getGroup().isEmpty())
 	    				groupName = component.getGroup().toUpperCase();
 	    			
 	    			if(groupName.equals(this.getName())) {
-	    				IProjectItemNode componentNode = new ComponentNode(this.getProject(), component, this);
+	    				IProjectItemNode componentNode = new ComponentExtendedNode(this.getProject(), component, this);
 	    				children.add(componentNode);
 	    			}
 	    		}

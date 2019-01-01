@@ -16,6 +16,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.core.common.IDEConstants;
 import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.ComponentExtended;
 import com.armin.sap.ds.builder.models.domain.Extension;
 import com.armin.sap.ds.builder.models.domain.Group;
 import com.armin.sap.ds.builder.preferences.Settings;
@@ -119,7 +120,7 @@ public class ExtensionNode extends GenericFileNode {
 	@Override
     public Image getImage() {
 		Image image = Activator.getImage("images/extension_28x28.png");
-		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
+		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE_ID));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
 		_image = new Image(Display.getCurrent(), imgData);
 		image.dispose();
@@ -204,7 +205,7 @@ public class ExtensionNode extends GenericFileNode {
 	
 	private boolean isComponentFolder(IResource member) {
 		Extension extension = (Extension)this._item;
-		List<Component> components = extension.getComponent();
+		List<ComponentExtended> components = extension.getComponent();
 		String memberName = member.getName().toUpperCase();
 		for(Component comp : components) {
 			if(comp.getId().toUpperCase().equals(memberName)) {

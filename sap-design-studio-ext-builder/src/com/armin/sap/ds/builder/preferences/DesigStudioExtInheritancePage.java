@@ -43,7 +43,7 @@ public class DesigStudioExtInheritancePage extends FieldEditorPreferencePage imp
 		txtNewParentClass = new Text(groupPanel, SWT.SINGLE | SWT.BORDER | SWT.FILL);
 		txtNewParentClass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		parentClassListEditor = new ParentClassListEditor(Settings.FOR.COMPONENT_PARENT_CLASSES, "Parent Class List: ", groupPanel);
+		parentClassListEditor = new ParentClassListEditor(Settings.FOR.COMPONENT_PARENT_CLASSES_ID, "Parent Class List: ", groupPanel);
 		addField(parentClassListEditor);
 		
 	}

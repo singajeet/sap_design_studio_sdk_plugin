@@ -19,7 +19,7 @@ import org.eclipse.emf.ecore.util.Switch;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see com.armin.sap.ds.builder.models.core.ICorePackage
+ * @see com.armin.sap.ds.builder.models.core.CorePackage
  * @generated
  */
 public class CoreSwitch<T> extends Switch<T> {
@@ -29,7 +29,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static ICorePackage modelPackage;
+	protected static CorePackage modelPackage;
 
 	/**
 	 * Creates an instance of the switch.
@@ -39,7 +39,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 */
 	public CoreSwitch() {
 		if (modelPackage == null) {
-			modelPackage = ICorePackage.eINSTANCE;
+			modelPackage = CorePackage.eINSTANCE;
 		}
 	}
 
@@ -66,77 +66,77 @@ public class CoreSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case ICorePackage.COMPONENT: {
-				IComponent component = (IComponent)theEObject;
+			case CorePackage.COMPONENT: {
+				Component component = (Component)theEObject;
 				T result = caseComponent(component);
 				if (result == null) result = caseDescriptable(component);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ICorePackage.DESCRIPTABLE: {
-				IDescriptable descriptable = (IDescriptable)theEObject;
+			case CorePackage.DESCRIPTABLE: {
+				Descriptable descriptable = (Descriptable)theEObject;
 				T result = caseDescriptable(descriptable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ICorePackage.DOCUMENT_ROOT: {
-				IDocumentRoot documentRoot = (IDocumentRoot)theEObject;
+			case CorePackage.DOCUMENT_ROOT: {
+				DocumentRoot documentRoot = (DocumentRoot)theEObject;
 				T result = caseDocumentRoot(documentRoot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ICorePackage.EXTENSION: {
-				IExtension extension = (IExtension)theEObject;
+			case CorePackage.EXTENSION: {
+				Extension extension = (Extension)theEObject;
 				T result = caseExtension(extension);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ICorePackage.GROUP: {
-				IGroup group = (IGroup)theEObject;
+			case CorePackage.GROUP: {
+				Group group = (Group)theEObject;
 				T result = caseGroup(group);
 				if (result == null) result = caseDescriptable(group);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ICorePackage.INITIALIZATION: {
-				IInitialization initialization = (IInitialization)theEObject;
+			case CorePackage.INITIALIZATION: {
+				Initialization initialization = (Initialization)theEObject;
 				T result = caseInitialization(initialization);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ICorePackage.OPTION: {
-				IOption option = (IOption)theEObject;
+			case CorePackage.OPTION: {
+				Option option = (Option)theEObject;
 				T result = caseOption(option);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ICorePackage.POSSIBLE_VALUE_TYPE: {
-				IPossibleValueType possibleValueType = (IPossibleValueType)theEObject;
+			case CorePackage.POSSIBLE_VALUE_TYPE: {
+				PossibleValueType possibleValueType = (PossibleValueType)theEObject;
 				T result = casePossibleValueType(possibleValueType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ICorePackage.PROPERTY: {
-				IProperty property = (IProperty)theEObject;
+			case CorePackage.PROPERTY: {
+				Property property = (Property)theEObject;
 				T result = caseProperty(property);
 				if (result == null) result = caseDescriptable(property);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ICorePackage.PROPERTY_VALUE: {
-				IPropertyValue propertyValue = (IPropertyValue)theEObject;
+			case CorePackage.PROPERTY_VALUE: {
+				PropertyValue propertyValue = (PropertyValue)theEObject;
 				T result = casePropertyValue(propertyValue);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ICorePackage.REQUIRE_JS_TYPE: {
-				IRequireJSType requireJSType = (IRequireJSType)theEObject;
+			case CorePackage.REQUIRE_JS_TYPE: {
+				RequireJSType requireJSType = (RequireJSType)theEObject;
 				T result = caseRequireJSType(requireJSType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ICorePackage.STD_INCLUDE: {
-				IStdInclude stdInclude = (IStdInclude)theEObject;
+			case CorePackage.STD_INCLUDE: {
+				StdInclude stdInclude = (StdInclude)theEObject;
 				T result = caseStdInclude(stdInclude);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -156,7 +156,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseComponent(IComponent object) {
+	public T caseComponent(Component object) {
 		return null;
 	}
 
@@ -171,7 +171,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseDescriptable(IDescriptable object) {
+	public T caseDescriptable(Descriptable object) {
 		return null;
 	}
 
@@ -186,7 +186,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseDocumentRoot(IDocumentRoot object) {
+	public T caseDocumentRoot(DocumentRoot object) {
 		return null;
 	}
 
@@ -201,7 +201,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseExtension(IExtension object) {
+	public T caseExtension(Extension object) {
 		return null;
 	}
 
@@ -216,7 +216,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseGroup(IGroup object) {
+	public T caseGroup(Group object) {
 		return null;
 	}
 
@@ -231,7 +231,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseInitialization(IInitialization object) {
+	public T caseInitialization(Initialization object) {
 		return null;
 	}
 
@@ -246,7 +246,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseOption(IOption object) {
+	public T caseOption(Option object) {
 		return null;
 	}
 
@@ -261,7 +261,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePossibleValueType(IPossibleValueType object) {
+	public T casePossibleValueType(PossibleValueType object) {
 		return null;
 	}
 
@@ -276,7 +276,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseProperty(IProperty object) {
+	public T caseProperty(Property object) {
 		return null;
 	}
 
@@ -291,7 +291,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePropertyValue(IPropertyValue object) {
+	public T casePropertyValue(PropertyValue object) {
 		return null;
 	}
 
@@ -306,7 +306,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseRequireJSType(IRequireJSType object) {
+	public T caseRequireJSType(RequireJSType object) {
 		return null;
 	}
 
@@ -321,7 +321,7 @@ public class CoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseStdInclude(IStdInclude object) {
+	public T caseStdInclude(StdInclude object) {
 		return null;
 	}
 

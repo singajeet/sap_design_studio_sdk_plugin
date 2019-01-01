@@ -19,6 +19,7 @@ import org.eclipse.ui.services.IServiceLocator;
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.core.project.nature.DesignStudioProjectNature;
 import com.armin.sap.ds.builder.models.domain.Component;
+import com.armin.sap.ds.builder.models.domain.ComponentExtended;
 import com.armin.sap.ds.builder.models.domain.Extension;
 import com.armin.sap.ds.builder.models.domain.Group;
 import com.armin.sap.ds.builder.models.domain.IModel;
@@ -217,7 +218,7 @@ public class ProjectService implements IProjectService {
 		};
 		
 		addFoldersToProjectStructure(_project, folderPaths);
-		((Extension)extensionModel).getComponent().add((Component)componentModel);
+		((Extension)extensionModel).getComponent().add((ComponentExtended)componentModel);
 		
 		assignGroup(((Component)componentModel).getGroup(), extensionModel, _project);
 
@@ -246,6 +247,10 @@ public class ProjectService implements IProjectService {
 			addFoldersToProjectStructure(_project, apsFolder);
 			_filesBuilderService.setupAdvancedPropertySheet(_project, componentModel, extensionModel);
 		}
+		
+//		ComponentClient componentClient = ExtendedFactory.eINSTANCE.createComponentClient();		
+//		((ComponentExtended)comp).setComponentClient(componentClient);
+//		((ComponentExtended)comp).getComponentClient().setComp(comp);
 	}
 	
 	public IModel addNewComponent(IModel componentModel, IModel extensionModel) throws Exception{

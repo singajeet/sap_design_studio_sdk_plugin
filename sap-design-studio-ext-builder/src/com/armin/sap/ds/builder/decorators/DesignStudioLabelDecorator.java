@@ -8,7 +8,7 @@ import org.eclipse.ui.themes.IThemeManager;
 
 import com.armin.sap.ds.builder.Activator;
 import com.armin.sap.ds.builder.models.domain.UI5Mode;
-import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionCollectionNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.GroupNode;
@@ -80,7 +80,7 @@ public class DesignStudioLabelDecorator implements ILightweightLabelDecorator {
 				}
 				decoration.addSuffix(" [" + groupChildCount + " Component(s)]");				
 			} else if(ele.getType() == ProjectItemNodeType.COMPONENT) {
-				ComponentNode component = (ComponentNode)ele;
+				ComponentExtendedNode component = (ComponentExtendedNode)ele;
 				
 				String modes = "";
 				for(UI5Mode mode : component.getComponent().getModes()) {

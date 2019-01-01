@@ -13,7 +13,7 @@ import org.eclipse.emf.common.util.Enumerator;
  * A representation of the literals of the enumeration '<em><b>SDK Base Class Type</b></em>',
  * and utility methods for working with them.
  * <!-- end-user-doc -->
- * @see com.armin.sap.ds.builder.models.extended.IExtendedPackage#getSDKBaseClassType()
+ * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getSDKBaseClassType()
  * @model
  * @generated
  */

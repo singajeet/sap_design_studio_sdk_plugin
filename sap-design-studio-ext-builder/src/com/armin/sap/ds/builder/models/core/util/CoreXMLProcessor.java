@@ -2,7 +2,7 @@
  */
 package com.armin.sap.ds.builder.models.core.util;
 
-import com.armin.sap.ds.builder.models.core.ICorePackage;
+import com.armin.sap.ds.builder.models.core.CorePackage;
 
 import java.util.Map;
 
@@ -28,7 +28,7 @@ public class CoreXMLProcessor extends XMLProcessor {
 	 */
 	public CoreXMLProcessor() {
 		super((EPackage.Registry.INSTANCE));
-		ICorePackage.eINSTANCE.eClass();
+		CorePackage.eINSTANCE.eClass();
 	}
 	
 	/**

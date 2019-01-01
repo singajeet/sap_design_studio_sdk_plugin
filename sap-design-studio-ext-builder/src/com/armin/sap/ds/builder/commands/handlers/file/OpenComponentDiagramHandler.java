@@ -15,7 +15,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.armin.sap.ds.builder.editors.component.diagram.ComponentDiagramEditor;
 import com.armin.sap.ds.builder.editors.component.diagram.ComponentDiagramEditorInput;
-import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentNode;
+import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ExtensionNode;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.GroupNode;
 
@@ -26,7 +26,7 @@ public class OpenComponentDiagramHandler extends AbstractHandler {
 	public static final String DIAGRAM_TYPE_PROVIDER_ID = "com.armin.sap.ds.builder.diagram.type.provider.component";
 	public static final String EDITOR_ID = ComponentDiagramEditor.DIAGRAM_EDITOR_ID;
 	
-	private ComponentNode _node;
+	private ComponentExtendedNode _node;
 	
 	public OpenComponentDiagramHandler() {
 		
@@ -43,8 +43,8 @@ public class OpenComponentDiagramHandler extends AbstractHandler {
 		} 			
 		
 		try {
-			if(selectObj instanceof ComponentNode) {
-				_node = (ComponentNode)selectObj;
+			if(selectObj instanceof ComponentExtendedNode) {
+				_node = (ComponentExtendedNode)selectObj;
 			}
 		}catch(Exception e) {
 			MessageDialog.open(MessageDialog.ERROR, null, "Invalid Selection", "Current selected 'Tree Node' is not valid for 'Component Editor'. Please select 'Component' node and try again!", SWT.SHEET);
@@ -53,7 +53,7 @@ public class OpenComponentDiagramHandler extends AbstractHandler {
 
 		
 		try {
-			if(selectObj instanceof ComponentNode) {
+			if(selectObj instanceof ComponentExtendedNode) {
 				GroupNode grp = (GroupNode)_node.getParent(null);
 				ExtensionNode ext = (ExtensionNode)grp.getParent(null);
 				String path = ext.getExtension().getId() + "/" + _node.getId() + "/res/diagrams/" + _node.getId() + ".diagram";

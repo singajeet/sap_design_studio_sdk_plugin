@@ -26,7 +26,7 @@ public class ImagesFolderNode extends GenericFolderNode {
 	public ImagesFolderNode(IProject project, String extensionBasePath, IProjectItemNode parent) {
 		super(project, extensionBasePath, parent);
 		if(extensionBasePath != null) {			
-			_imagesFolderPath = extensionBasePath + "/" + ((ComponentNode)parent).getId() + "/res/images/";
+			_imagesFolderPath = extensionBasePath + "/" + ((ComponentExtendedNode)parent).getId() + "/res/images/";
 			_children = initializeChildren(_imagesFolderPath);
 			_folder = project.getFolder(_imagesFolderPath);
 		} else {
@@ -62,7 +62,7 @@ public class ImagesFolderNode extends GenericFolderNode {
 	@Override
 	public Image getImage() {
 		Image image = Activator.getImage("images/images_28x28.png");
-		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE));
+		int size = Integer.parseInt(Settings.store().get(Settings.FOR.ICON_SIZE_ID));
 		ImageData imgData = image.getImageData().scaledTo(size, size);
 		_image = new Image(Display.getCurrent(), imgData);
 		image.dispose();
