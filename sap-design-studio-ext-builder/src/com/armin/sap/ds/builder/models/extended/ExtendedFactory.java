@@ -73,6 +73,8 @@ public class ExtendedFactory extends EFactoryImpl {
 			case ExtendedPackage.PARAMETER: return createParameter();
 			case ExtendedPackage.CONSTRUCTOR: return createConstructor();
 			case ExtendedPackage.CONSTANTS_SECTION: return createConstantsSection();
+			case ExtendedPackage.LOCAL_VARIABLES_SECTION: return createLocalVariablesSection();
+			case ExtendedPackage.CONSTRUCTORS_SECTION: return createConstructorsSection();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -194,6 +196,26 @@ public class ExtendedFactory extends EFactoryImpl {
 	public ConstantsSection createConstantsSection() {
 		ConstantsSection constantsSection = new ConstantsSection();
 		return constantsSection;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LocalVariablesSection createLocalVariablesSection() {
+		LocalVariablesSection localVariablesSection = new LocalVariablesSection();
+		return localVariablesSection;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ConstructorsSection createConstructorsSection() {
+		ConstructorsSection constructorsSection = new ConstructorsSection();
+		return constructorsSection;
 	}
 
 	/**

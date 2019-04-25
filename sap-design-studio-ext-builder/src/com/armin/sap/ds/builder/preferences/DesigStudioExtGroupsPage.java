@@ -22,6 +22,7 @@ public class DesigStudioExtGroupsPage extends FieldEditorPreferencePage implemen
 	
 	public DesigStudioExtGroupsPage() {
 		super(GRID);
+		setTitle("Groups");
 		store = Activator.getDefault().getPreferenceStore();
 		setPreferenceStore(store);
 		setDescription("SAP Design Studio Groups Settings");

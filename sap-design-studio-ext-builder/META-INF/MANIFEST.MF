@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: sap-design-studio-ext-builder;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.armin.sap.ds.builder.Activator
+Bundle-Activator: com.armin.sap.ds.builder.models.ExtendedModelsPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
@@ -31,7 +31,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.graphiti.pattern;bundle-version="0.14.0",
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.property,
- com.ibm.icu
+ com.ibm.icu,
+ javax.xml.bind;bundle-version="2.2.0",
+ org.eclipse.pde.ui,
+ org.eclipse.pde;bundle-version="3.13.4",
+ org.eclipse.pde.ui.templates;bundle-version="3.6.100"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: com.armin.sap.ds.builder
 Bundle-ActivationPolicy: lazy
@@ -142,7 +146,7 @@ Export-Package: com.armin.sap.ds.builder;
    org.eclipse.core.resources,
    com.armin.sap.ds.builder.ui.navigation.tree.nodes",
  com.armin.sap.ds.builder.models,
- com.armin.sap.ds.builder.models.core, 
+ com.armin.sap.ds.builder.models.core,
  com.armin.sap.ds.builder.models.core.util,
  com.armin.sap.ds.builder.models.domain,
  com.armin.sap.ds.builder.models.extended,
@@ -400,4 +404,5 @@ Bundle-ClassPath: .,
  org.eclipse.e4.xwt_0.9.1.SNAPSHOT.jar,
  org.pushingpixels.trident_1.2.0.v20100204-1500.jar,
  org.eclipse.e4.xwt_0.9.1.SNAPSHOT.jar,
- org.eclipse.e4.xwt.forms_0.9.1.SNAPSHOT.jar
+ org.eclipse.e4.xwt.forms_0.9.1.SNAPSHOT.jar,
+ org.eclipse.zest.layouts_1.1.300.201606061308.jar

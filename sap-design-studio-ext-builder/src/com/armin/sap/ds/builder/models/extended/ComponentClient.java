@@ -698,7 +698,7 @@ public class ComponentClient extends MinimalEObjectImpl.Container implements EOb
 	 * @return the value of the '<em>Comp</em>' attribute.
 	 * @see #setComp(Object)
 	 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getComponentClient_Comp()
-	 * @model dataType="com.armin.sap.ds.builder.models.extended.JavaObject"
+	 * @model dataType="com.armin.sap.ds.builder.models.extended.JavaObject" transient="true"
 	 * @generated
 	 */
 	public Object getComp() {

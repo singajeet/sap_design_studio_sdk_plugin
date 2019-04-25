@@ -6,21 +6,21 @@ import org.eclipse.emf.ecore.EClass;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Constants Section</b></em>'.
+ * A representation of the model object '<em><b>Constructors Section</b></em>'.
  * <!-- end-user-doc -->
  *
  *
- * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getConstantsSection()
+ * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getConstructorsSection()
  * @model kind="class"
  * @generated
  */
-public class ConstantsSection extends Section {
+public class ConstructorsSection extends Section {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ConstantsSection() {
+	protected ConstructorsSection() {
 		super();
 	}
 
@@ -31,7 +31,7 @@ public class ConstantsSection extends Section {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ExtendedPackage.Literals.CONSTANTS_SECTION;
+		return ExtendedPackage.Literals.CONSTRUCTORS_SECTION;
 	}
 
-} // ConstantsSection
+} // ConstructorsSection

@@ -108,9 +108,30 @@ public class ExtendedSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ExtendedPackage.SECTION: {
+				Section section = (Section)theEObject;
+				T result = caseSection(section);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case ExtendedPackage.CONSTANTS_SECTION: {
 				ConstantsSection constantsSection = (ConstantsSection)theEObject;
 				T result = caseConstantsSection(constantsSection);
+				if (result == null) result = caseSection(constantsSection);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ExtendedPackage.LOCAL_VARIABLES_SECTION: {
+				LocalVariablesSection localVariablesSection = (LocalVariablesSection)theEObject;
+				T result = caseLocalVariablesSection(localVariablesSection);
+				if (result == null) result = caseSection(localVariablesSection);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ExtendedPackage.CONSTRUCTORS_SECTION: {
+				ConstructorsSection constructorsSection = (ConstructorsSection)theEObject;
+				T result = caseConstructorsSection(constructorsSection);
+				if (result == null) result = caseSection(constructorsSection);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -224,6 +245,21 @@ public class ExtendedSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Section</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Section</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSection(Section object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Constants Section</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -235,6 +271,36 @@ public class ExtendedSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseConstantsSection(ConstantsSection object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Local Variables Section</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Local Variables Section</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLocalVariablesSection(LocalVariablesSection object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Constructors Section</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Constructors Section</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConstructorsSection(ConstructorsSection object) {
 		return null;
 	}
 

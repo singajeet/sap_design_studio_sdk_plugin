@@ -36,6 +36,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(Settings.FOR.COMPONENT_CLIENT_DIA_ROW_HEIGHT_ID, Settings.FOR.COMPONENT_CLIENT_DIA_ROW_HEIGHT);
 		
 		store.setDefault(Settings.FOR.CONSTANT_SECTION_NUM_OF_ROWS_ID, Settings.FOR.CONSTANT_SECTION_NUM_OF_ROWS);
+		store.setDefault(Settings.FOR.CONSTANT_SECTION_NAME_ID, Settings.FOR.CONSTANT_SECTION_NAME);
 	}
 
 }

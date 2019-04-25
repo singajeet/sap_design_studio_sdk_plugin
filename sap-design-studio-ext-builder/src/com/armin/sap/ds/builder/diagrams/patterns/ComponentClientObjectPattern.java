@@ -1,5 +1,7 @@
 package com.armin.sap.ds.builder.diagrams.patterns;
 
+import java.util.HashMap;
+
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -22,6 +24,7 @@ import org.eclipse.graphiti.services.IGaLayoutService;
 import org.eclipse.graphiti.ui.editor.IDiagramContainerUI;
 
 import com.armin.sap.ds.builder.Activator;
+import com.armin.sap.ds.builder.core.common.IDEConstants;
 import com.armin.sap.ds.builder.core.common.Prompts;
 import com.armin.sap.ds.builder.diagram.images.ImageProvider;
 import com.armin.sap.ds.builder.diagrams.utils.ShapeUtils;
@@ -31,20 +34,22 @@ import com.armin.sap.ds.builder.models.domain.ComponentExtended;
 import com.armin.sap.ds.builder.models.extended.ComponentClient;
 import com.armin.sap.ds.builder.models.extended.ConstantsSection;
 import com.armin.sap.ds.builder.models.extended.ExtendedFactory;
+import com.armin.sap.ds.builder.models.extended.LocalVariablesSection;
+import com.armin.sap.ds.builder.preferences.Settings;
 import com.armin.sap.ds.builder.ui.navigation.tree.nodes.ComponentExtendedNode;
 
 
 public class ComponentClientObjectPattern extends AbstractPattern implements IPattern {
 
 	public static final String NAME = "Component [Client]";
-	public static final int DEFAULT_HEIGHT = 300;
-	public static final int DEFAULT_WIDTH = 300;
-	public static final int DEFAULT_ROOT_CORNER_WIDTH = 10;
-	public static final int DEFAULT_ROOT_CORNER_HEIGHT = 10;
-	public static final int DEFAULT_ROW_HEIGHT = 20;
-	public static final int DEFAULT_ROOT_CONTAINER_LINE_SIZE = 2;	
-	public static final int DEFAULT_CONSTANTS_CONTAINER_ROWS = 5;
-	public static final String DEFAULT_CONSTANTS_SECTION_NAME = "CONSTANTS_SECTION";	
+	public static final int DEFAULT_HEIGHT = Integer.valueOf(Settings.store().get(Settings.FOR.COMPONENT_CLIENT_DIA_HEIGHT_ID));
+	public static final int DEFAULT_WIDTH = Integer.valueOf(Settings.store().get(Settings.FOR.COMPONENT_CLIENT_DIA_WIDTH_ID));
+	public static final int DEFAULT_ROOT_CORNER_WIDTH = Integer.valueOf(Settings.store().get(Settings.FOR.COMPONENT_CLIENT_DIA_CORNER_WIDTH_ID));
+	public static final int DEFAULT_ROOT_CORNER_HEIGHT = Integer.valueOf(Settings.store().get(Settings.FOR.COMPONENT_CLIENT_DIA_CORNER_HEIGHT_ID));
+	public static final int DEFAULT_ROW_HEIGHT = Integer.valueOf(Settings.store().get(Settings.FOR.COMPONENT_CLIENT_DIA_ROW_HEIGHT_ID));
+	public static final int DEFAULT_ROOT_CONTAINER_LINE_SIZE = Integer.valueOf(Settings.store().get(Settings.FOR.COMPONENT_CLIENT_DIA_CONTAINER_LINE_WIDTH_ID));	
+	public static final String DEFAULT_CONSTANTS_SECTION_NAME = "CONSTANTS_SECTION";
+	public static final String DEFAULT_VARIABLES_SECTION_NAME = "VARIABLES_SECTION";
 	
 	private ILog logger;
 	private ComponentExtendedNode _component;
@@ -123,7 +128,7 @@ public class ComponentClientObjectPattern extends AbstractPattern implements IPa
 
 		ContainerShape mainClientContainerShape = createService.createContainerShape(targetDiagram, true);
 		// define a default size for the shape
-		final int width = context.getWidth() <= 0 ? DEFAULT_WIDTH : context.getWidth();
+         		final int width = context.getWidth() <= 0 ? DEFAULT_WIDTH : context.getWidth();
 		final int height = context.getHeight() <= 0 ? DEFAULT_HEIGHT : context.getHeight();
 		
 		RoundedRectangle mainClientRoundedRectangle; // need to access it later
@@ -143,7 +148,7 @@ public class ComponentClientObjectPattern extends AbstractPattern implements IPa
 		}		
 		// Add header text
 		{
-			Text text = createService.createText(mainClientRoundedRectangle, component.getName());
+			Text text = createService.createText(mainClientRoundedRectangle, component.getName().toUpperCase());
 			text.setStyle(StyleUtils.getStyleForEClassText(targetDiagram));
 			layoutService.setLocationAndSize(text, 0, 0, width, DEFAULT_ROW_HEIGHT);			
 		}
@@ -161,13 +166,13 @@ public class ComponentClientObjectPattern extends AbstractPattern implements IPa
 														.getConstantsSection(
 																mainClientContainerShape,
 																0, DEFAULT_ROW_HEIGHT,
-																DEFAULT_CONSTANTS_CONTAINER_ROWS);
+																componentClient);
 			
 			if(constantsContainerShape != null) {
 				logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Adding constants section for component: " + component.getId() + " [" + component.getTitle() + "]"));
 				ConstantsSection constSection = ExtendedFactory.eINSTANCE.createConstantsSection();
 				constSection.setName(DEFAULT_CONSTANTS_SECTION_NAME);
-				constSection.setBelongsToComponent(component.getId());
+				constSection.setBelongsToComponent(component);
 				
 				if (constSection.eResource() == null) {
 					getDiagram().eResource().getContents().add(constSection);
@@ -175,7 +180,30 @@ public class ComponentClientObjectPattern extends AbstractPattern implements IPa
 				
 				link(constantsContainerShape, constSection);
 			}
+		}
+		//Add VARIABLES section
+		{
+			ContainerShape variablesContainerShape = ShapeUtils
+														.eINSTANCE
+														.getVariablesSection(
+																mainClientContainerShape,
+																0, DEFAULT_ROW_HEIGHT*Integer.valueOf(Settings.store().get(Settings.FOR.CONSTANT_SECTION_NUM_OF_ROWS_ID)),
+																componentClient);
+			
+			if(variablesContainerShape != null) {
+				logger.log(new Status(IStatus.INFO, this.getClass().getName(), "Adding variables section for component: " + component.getId() + " [" + component.getTitle() + "]"));
+				LocalVariablesSection varSection = ExtendedFactory.eINSTANCE.createLocalVariablesSection();
+				varSection.setName(DEFAULT_VARIABLES_SECTION_NAME);
+				varSection.setBelongsToComponent(component);
+				
+				if (varSection.eResource() == null) {
+					getDiagram().eResource().getContents().add(varSection);
+				}
+				
+				link(variablesContainerShape, varSection);
+			}
 		}		
+
 		return mainClientContainerShape;
 	}
 
@@ -232,16 +260,24 @@ public class ComponentClientObjectPattern extends AbstractPattern implements IPa
 					ComponentExtended componentExt = _component.getComponent();
 					ccomp = ExtendedFactory.eINSTANCE.createComponentClient();						
 					ccomp.setComp(componentExt);
+					
+					HashMap<String, String> compName = Prompts.askComponentInfo(_component);
+					ComponentExtended c = new ComponentExtended();
+					c.setId(compName.get(IDEConstants.COMPONENT_ID));
+					c.setName(compName.get(IDEConstants.COMPONENT_TITLE));
+					c.setTitle(compName.get(IDEConstants.COMPONENT_TITLE));
+					ccomp.setComp(c);
+					
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "ComponentClient shape created for existing component: " + componentExt.getId() + " [" + componentExt.getTitle() + "]"));
 				}
 				else {
 					ccomp = ExtendedFactory.eINSTANCE.createComponentClient();
 					
-					String compName = Prompts.askStringValue("Enter Component Name", "Enter valid component name or id", null);					
+					HashMap<String, String> compName = Prompts.askComponentInfo(_component);					
 					ComponentExtended c = new ComponentExtended();
-					c.setId(compName);
-					c.setName(compName);
-					c.setTitle(compName);
+					c.setId(compName.get(IDEConstants.COMPONENT_ID));
+					c.setName(compName.get(IDEConstants.COMPONENT_TITLE));
+					c.setTitle(compName.get(IDEConstants.COMPONENT_TITLE));
 					ccomp.setComp(c);
 					logger.log(new Status(IStatus.INFO, this.getClass().getName(), "ComponentClient shape created for new component: " + c.getId() + " [" + c.getTitle() + "]"));
 				}
@@ -255,12 +291,14 @@ public class ComponentClientObjectPattern extends AbstractPattern implements IPa
 			}
 		}
 		
-		String compName = Prompts.askStringValue("Enter Component Name", "Enter valid component name or id", null);
 		ComponentClient ccomp = ExtendedFactory.eINSTANCE.createComponentClient();
+		
+		HashMap<String, String> compName = Prompts.askComponentInfo(_component);					
 		ComponentExtended c = new ComponentExtended();
-		c.setId(compName);
-		c.setName(compName);
-		c.setTitle(compName);
+		c.setId(compName.get(IDEConstants.COMPONENT_ID));
+		c.setName(compName.get(IDEConstants.COMPONENT_TITLE));
+		c.setTitle(compName.get(IDEConstants.COMPONENT_TITLE));
+		
 		ccomp.setComp(c);
 		logger.log(new Status(IStatus.INFO, this.getClass().getName(), "ComponentClient shape created for new component: " + c.getId() + " [" + c.getTitle() + "]"));
 		

@@ -105,6 +105,14 @@ public class ComponentExtended extends Component {
 		this.packageName = packageName;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return String.format("id=%s, name=%s", id, name);
+	}
+
 	/**
 	 * @return the componentClient
 	 */

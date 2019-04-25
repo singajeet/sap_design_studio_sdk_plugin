@@ -30,7 +30,7 @@ import com.armin.sap.ds.builder.models.extended.Constant;
 import com.armin.sap.ds.builder.models.extended.ConstantsSection;
 import com.armin.sap.ds.builder.models.extended.ExtendedFactory;
 
-public class ConstantsObjectPattern extends AbstractPattern implements IPattern {
+public class VariablesObjectPattern extends AbstractPattern implements IPattern {
 
 	public static final String NAME = "Constant";
 	public static final int DEFAULT_CONSTANTS_CONTAINER_LINE_SIZE = 1;
@@ -39,7 +39,7 @@ public class ConstantsObjectPattern extends AbstractPattern implements IPattern 
 	public static final int DEFAULT_ROOT_CORNER_WIDTH = 5;
 	public static final int DEFAULT_ROOT_CORNER_HEIGHT = 5;
 	
-	public ConstantsObjectPattern() {
+	public VariablesObjectPattern() {
 		super(null);
 	}
 
@@ -47,7 +47,7 @@ public class ConstantsObjectPattern extends AbstractPattern implements IPattern 
 	      return NAME;
 	}
 	
-	public ConstantsObjectPattern(IPatternConfiguration patternConfiguration) {
+	public VariablesObjectPattern(IPatternConfiguration patternConfiguration) {
 		super(patternConfiguration);		
 	}
 

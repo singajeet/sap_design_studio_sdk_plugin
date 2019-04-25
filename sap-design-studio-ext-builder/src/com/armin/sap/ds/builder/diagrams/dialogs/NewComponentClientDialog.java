@@ -1,5 +1,6 @@
 package com.armin.sap.ds.builder.diagrams.dialogs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -88,9 +89,26 @@ public class NewComponentClientDialog extends TitleAreaDialog {
 		if(node != null) {
 			_componentNode = node;
 			_component = node.getComponent();			
-			if(this._components != null)
-				this._components = ((ExtensionNode)((GroupNode)node.getParent(null)).getParent(null)).getExtension().getComponent();
+			if(this._component != null) {
+				_components = new ArrayList<ComponentExtended>();
+				//this._components = ((ExtensionNode)((GroupNode)node.getParent(null)).getParent(null)).getExtension().getComponent();
+				GroupNode parentGrpNode = (GroupNode)node.getParent(null);
+				ExtensionNode parentExtNode = (ExtensionNode)parentGrpNode.getParent(null);
+				
+				//Get all groups under an extension
+				Object[] allgroups = parentExtNode.getChildren(null);
+				for(Object grpObject : allgroups) {
+					GroupNode grpNode = (GroupNode)grpObject;
+					Object[] allcomps = grpNode.getChildren(null);
+					for(Object compObject : allcomps) {
+						ComponentExtendedNode compNode = (ComponentExtendedNode)compObject;
+						
+						this._components.add((ComponentExtended)compNode.getModel());
+					}					
+				}
+			}
 		}
+		this.setBlockOnOpen(true);
 	}
 //
 //	public NewComponentClientDialog(Shell parentShell, java.util.List<Component> components, HashMap<String, String> inputMap) {
@@ -141,7 +159,7 @@ public class NewComponentClientDialog extends TitleAreaDialog {
 		txtComponentId = new Text(form.getBody(), SWT.BORDER);
 		txtComponentId.addVerifyListener(new VerifyListener() {
 			public void verifyText(VerifyEvent e) {
-				if((e.character >= 'a' && e.character <='z') || (e.character >= 'A' && e.character <= 'Z')) {
+				if((e.character >= 'a' && e.character <='z') || (e.character >= 'A' && e.character <= 'Z') || (e.character >= 0 && e.character <= 9) || e.character == '.' || e.character == ' ') {
 					e.doit = true;
 				} else {
 					MessageDialog.openError(null, "Invalid Input", "Character " + e.character + " is invalid!");
@@ -289,15 +307,12 @@ public class NewComponentClientDialog extends TitleAreaDialog {
 				String id = getSelectedComponentId();
 				for(ComponentExtended comp : _components) {
 					if(comp.getId().equalsIgnoreCase(id)) {
-//						txtComponentId.setText(id);
-//						txtComponentTitle.setText(comp.getTitle());
 						_component = comp;
 						updateFieldsFromComponent();
 					}
 				}
 				updateFieldsFromComponent();
 				changeOKButtonState();
-				updateInputMap();
 			}
 
 			@Override
@@ -320,7 +335,7 @@ public class NewComponentClientDialog extends TitleAreaDialog {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if(e.widget instanceof Text) {
-					updateInputMap();
+					//updateInputMap();
 				}
 				
 			}
@@ -340,23 +355,42 @@ public class NewComponentClientDialog extends TitleAreaDialog {
 			_component = this._componentNode.getComponent();
 		}
 			ComponentExtended component = (ComponentExtended)_component; //this._componentNode.getComponent();
+			
 			this.txtComponentId.setText(component.getId());
 			this.txtComponentTitle.setText(component.getTitle() != null ? component.getTitle() : component.getName());
-			this.txtComponentDescription.setText(component.getDescription());
+			if(component.getDescription() != null && !component.getDescription().isEmpty())
+				this.txtComponentDescription.setText(component.getDescription());
+			
 			String compType = component.getClassToExtend();
-			comboComponentType.select(comboComponentType.indexOf(compType));
+			if(compType != null && !compType.isEmpty())
+				comboComponentType.select(comboComponentType.indexOf(compType));
+			
 			btnCheckDatabound.setSelection(component.isDatabound());
-			this.txtGroup.setText(component.getGroup());
-			String handlerType = component.getHandlerType().toString();
-			comboHandlerType.select(comboHandlerType.indexOf(handlerType));
-			java.util.List<UI5Mode> modes = component.getModes();
-			for(UI5Mode mode : modes) {
-				if(mode == UI5Mode.M)
-					btnModeM.setSelection(true);
-				if(mode == UI5Mode.COMMONS)
-					btnModeCommon.setSelection(true);
+			if(component.getGroup() != null && !component.getGroup().isEmpty())
+				this.txtGroup.setText(component.getGroup());
+			
+			String handlerType = null;
+			if(component.getHandlerType() != null)
+				handlerType = component.getHandlerType().toString();
+			
+			if(handlerType != null )
+				comboHandlerType.select(comboHandlerType.indexOf(handlerType));
+			
+			java.util.List<UI5Mode> modes = null;
+			if(component.getModes() != null)
+				modes = component.getModes();
+			
+			if(modes != null) {
+				for(UI5Mode mode : modes) {
+					if(mode == UI5Mode.M)
+						btnModeM.setSelection(true);
+					if(mode == UI5Mode.COMMONS)
+						btnModeCommon.setSelection(true);
+				}
 			}
-			this.txtNewinstanceprefix.setText(component.getNewInstancePrefix());
+			
+			if(component.getNewInstancePrefix() != null && !component.getNewInstancePrefix().isEmpty())
+				this.txtNewinstanceprefix.setText(component.getNewInstancePrefix());
 		
 	}
 	
@@ -368,6 +402,16 @@ public class NewComponentClientDialog extends TitleAreaDialog {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.dialogs.Dialog#okPressed()
+	 */
+	@Override
+	protected void okPressed() {
+		
+		updateInputMap();
+		super.okPressed();
+	}
+
 	private void updateInputMap() {
 		this._inputMap.clear();
 		if(this.isNewComponent()) {
@@ -406,6 +450,8 @@ public class NewComponentClientDialog extends TitleAreaDialog {
 	
 	public String getSelectedComponentId() {		
 		int index = this.componentsList.getSelectionIndex();
+		if(index < 0)
+			return "";
 		return this.componentsList.getItem(index);
 	}
 	
@@ -444,7 +490,7 @@ public class NewComponentClientDialog extends TitleAreaDialog {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				updateInputMap();				
+				//updateInputMap();				
 			}
 
 			@Override

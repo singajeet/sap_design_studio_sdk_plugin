@@ -22,6 +22,7 @@ public class DesigStudioExtInheritancePage extends FieldEditorPreferencePage imp
 	
 	public DesigStudioExtInheritancePage() {
 		super(GRID);
+		setTitle("Inheritance");
 		store = Activator.getDefault().getPreferenceStore();
 		setPreferenceStore(store);
 		setDescription("SAP Design Studio Component's Parent Class");

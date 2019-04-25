@@ -276,13 +276,31 @@ public class ExtendedPackage extends EPackageImpl {
 	public static final int CONSTANT__TYPE = 3;
 
 	/**
+	 * The feature id for the '<em><b>Qualifier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int CONSTANT__QUALIFIER = 4;
+
+	/**
+	 * The feature id for the '<em><b>Is Array</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int CONSTANT__IS_ARRAY = 5;
+
+	/**
 	 * The number of structural features of the '<em>Constant</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	public static final int CONSTANT_FEATURE_COUNT = 4;
+	public static final int CONSTANT_FEATURE_COUNT = 6;
 
 	/**
 	 * The number of operations of the '<em>Constant</em>' class.
@@ -668,14 +686,14 @@ public class ExtendedPackage extends EPackageImpl {
 	public static final int CONSTRUCTOR_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link com.armin.sap.ds.builder.models.extended.ConstantsSection <em>Constants Section</em>}' class.
+	 * The meta object id for the '{@link com.armin.sap.ds.builder.models.extended.Section <em>Section</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see com.armin.sap.ds.builder.models.extended.ConstantsSection
-	 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getConstantsSection()
+	 * @see com.armin.sap.ds.builder.models.extended.Section
+	 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getSection()
 	 * @generated
 	 */
-	public static final int CONSTANTS_SECTION = 7;
+	public static final int SECTION = 7;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -684,7 +702,7 @@ public class ExtendedPackage extends EPackageImpl {
 	 * @generated
 	 * @ordered
 	 */
-	public static final int CONSTANTS_SECTION__NAME = 0;
+	public static final int SECTION__NAME = 0;
 
 	/**
 	 * The feature id for the '<em><b>Belongs To Component</b></em>' attribute.
@@ -693,7 +711,53 @@ public class ExtendedPackage extends EPackageImpl {
 	 * @generated
 	 * @ordered
 	 */
-	public static final int CONSTANTS_SECTION__BELONGS_TO_COMPONENT = 1;
+	public static final int SECTION__BELONGS_TO_COMPONENT = 1;
+
+	/**
+	 * The number of structural features of the '<em>Section</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int SECTION_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Section</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int SECTION_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.armin.sap.ds.builder.models.extended.ConstantsSection <em>Constants Section</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.armin.sap.ds.builder.models.extended.ConstantsSection
+	 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getConstantsSection()
+	 * @generated
+	 */
+	public static final int CONSTANTS_SECTION = 8;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int CONSTANTS_SECTION__NAME = SECTION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Belongs To Component</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int CONSTANTS_SECTION__BELONGS_TO_COMPONENT = SECTION__BELONGS_TO_COMPONENT;
 
 	/**
 	 * The number of structural features of the '<em>Constants Section</em>' class.
@@ -702,7 +766,7 @@ public class ExtendedPackage extends EPackageImpl {
 	 * @generated
 	 * @ordered
 	 */
-	public static final int CONSTANTS_SECTION_FEATURE_COUNT = 2;
+	public static final int CONSTANTS_SECTION_FEATURE_COUNT = SECTION_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Constants Section</em>' class.
@@ -711,7 +775,99 @@ public class ExtendedPackage extends EPackageImpl {
 	 * @generated
 	 * @ordered
 	 */
-	public static final int CONSTANTS_SECTION_OPERATION_COUNT = 0;
+	public static final int CONSTANTS_SECTION_OPERATION_COUNT = SECTION_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.armin.sap.ds.builder.models.extended.LocalVariablesSection <em>Local Variables Section</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.armin.sap.ds.builder.models.extended.LocalVariablesSection
+	 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getLocalVariablesSection()
+	 * @generated
+	 */
+	public static final int LOCAL_VARIABLES_SECTION = 9;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int LOCAL_VARIABLES_SECTION__NAME = SECTION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Belongs To Component</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int LOCAL_VARIABLES_SECTION__BELONGS_TO_COMPONENT = SECTION__BELONGS_TO_COMPONENT;
+
+	/**
+	 * The number of structural features of the '<em>Local Variables Section</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int LOCAL_VARIABLES_SECTION_FEATURE_COUNT = SECTION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Local Variables Section</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int LOCAL_VARIABLES_SECTION_OPERATION_COUNT = SECTION_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.armin.sap.ds.builder.models.extended.ConstructorsSection <em>Constructors Section</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.armin.sap.ds.builder.models.extended.ConstructorsSection
+	 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getConstructorsSection()
+	 * @generated
+	 */
+	public static final int CONSTRUCTORS_SECTION = 10;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int CONSTRUCTORS_SECTION__NAME = SECTION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Belongs To Component</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int CONSTRUCTORS_SECTION__BELONGS_TO_COMPONENT = SECTION__BELONGS_TO_COMPONENT;
+
+	/**
+	 * The number of structural features of the '<em>Constructors Section</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int CONSTRUCTORS_SECTION_FEATURE_COUNT = SECTION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Constructors Section</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	public static final int CONSTRUCTORS_SECTION_OPERATION_COUNT = SECTION_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.armin.sap.ds.builder.models.extended.SDKBaseClassType <em>SDK Base Class Type</em>}' enum.
@@ -721,7 +877,7 @@ public class ExtendedPackage extends EPackageImpl {
 	 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getSDKBaseClassType()
 	 * @generated
 	 */
-	public static final int SDK_BASE_CLASS_TYPE = 8;
+	public static final int SDK_BASE_CLASS_TYPE = 11;
 
 	/**
 	 * The meta object id for the '{@link com.armin.sap.ds.builder.models.extended.AccessType <em>Access Type</em>}' enum.
@@ -731,7 +887,7 @@ public class ExtendedPackage extends EPackageImpl {
 	 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getAccessType()
 	 * @generated
 	 */
-	public static final int ACCESS_TYPE = 9;
+	public static final int ACCESS_TYPE = 12;
 
 	/**
 	 * The meta object id for the '<em>Java Object</em>' data type.
@@ -741,7 +897,7 @@ public class ExtendedPackage extends EPackageImpl {
 	 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getJavaObject()
 	 * @generated
 	 */
-	public static final int JAVA_OBJECT = 10;
+	public static final int JAVA_OBJECT = 13;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -797,7 +953,28 @@ public class ExtendedPackage extends EPackageImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass sectionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass constantsSectionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass localVariablesSectionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass constructorsSectionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1159,6 +1336,34 @@ public class ExtendedPackage extends EPackageImpl {
 	public EAttribute getConstant_Type() {
 		return (EAttribute)constantEClass.getEStructuralFeatures().get(3);
 	}
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.armin.sap.ds.builder.models.extended.Constant#getQualifier <em>Qualifier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Qualifier</em>'.
+	 * @see com.armin.sap.ds.builder.models.extended.Constant#getQualifier()
+	 * @see #getConstant()
+	 * @generated
+	 */
+	public EAttribute getConstant_Qualifier() {
+		return (EAttribute)constantEClass.getEStructuralFeatures().get(4);
+	}
+
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.armin.sap.ds.builder.models.extended.Constant#isIsArray <em>Is Array</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Is Array</em>'.
+	 * @see com.armin.sap.ds.builder.models.extended.Constant#isIsArray()
+	 * @see #getConstant()
+	 * @generated
+	 */
+	public EAttribute getConstant_IsArray() {
+		return (EAttribute)constantEClass.getEStructuralFeatures().get(5);
+	}
+
 
 	/**
 	 * Returns the meta object for class '{@link com.armin.sap.ds.builder.models.extended.Property <em>Property</em>}'.
@@ -1559,6 +1764,47 @@ public class ExtendedPackage extends EPackageImpl {
 	}
 
 	/**
+	 * Returns the meta object for class '{@link com.armin.sap.ds.builder.models.extended.Section <em>Section</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Section</em>'.
+	 * @see com.armin.sap.ds.builder.models.extended.Section
+	 * @generated
+	 */
+	public EClass getSection() {
+		return sectionEClass;
+	}
+
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.armin.sap.ds.builder.models.extended.Section#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see com.armin.sap.ds.builder.models.extended.Section#getName()
+	 * @see #getSection()
+	 * @generated
+	 */
+	public EAttribute getSection_Name() {
+		return (EAttribute)sectionEClass.getEStructuralFeatures().get(0);
+	}
+
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.armin.sap.ds.builder.models.extended.Section#getBelongsToComponent <em>Belongs To Component</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Belongs To Component</em>'.
+	 * @see com.armin.sap.ds.builder.models.extended.Section#getBelongsToComponent()
+	 * @see #getSection()
+	 * @generated
+	 */
+	public EAttribute getSection_BelongsToComponent() {
+		return (EAttribute)sectionEClass.getEStructuralFeatures().get(1);
+	}
+
+
+	/**
 	 * Returns the meta object for class '{@link com.armin.sap.ds.builder.models.extended.ConstantsSection <em>Constants Section</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1571,30 +1817,30 @@ public class ExtendedPackage extends EPackageImpl {
 	}
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.armin.sap.ds.builder.models.extended.ConstantsSection#getName <em>Name</em>}'.
+	 * Returns the meta object for class '{@link com.armin.sap.ds.builder.models.extended.LocalVariablesSection <em>Local Variables Section</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Name</em>'.
-	 * @see com.armin.sap.ds.builder.models.extended.ConstantsSection#getName()
-	 * @see #getConstantsSection()
+	 * @return the meta object for class '<em>Local Variables Section</em>'.
+	 * @see com.armin.sap.ds.builder.models.extended.LocalVariablesSection
 	 * @generated
 	 */
-	public EAttribute getConstantsSection_Name() {
-		return (EAttribute)constantsSectionEClass.getEStructuralFeatures().get(0);
+	public EClass getLocalVariablesSection() {
+		return localVariablesSectionEClass;
 	}
 
+
 	/**
-	 * Returns the meta object for the attribute '{@link com.armin.sap.ds.builder.models.extended.ConstantsSection#getBelongsToComponent <em>Belongs To Component</em>}'.
+	 * Returns the meta object for class '{@link com.armin.sap.ds.builder.models.extended.ConstructorsSection <em>Constructors Section</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Belongs To Component</em>'.
-	 * @see com.armin.sap.ds.builder.models.extended.ConstantsSection#getBelongsToComponent()
-	 * @see #getConstantsSection()
+	 * @return the meta object for class '<em>Constructors Section</em>'.
+	 * @see com.armin.sap.ds.builder.models.extended.ConstructorsSection
 	 * @generated
 	 */
-	public EAttribute getConstantsSection_BelongsToComponent() {
-		return (EAttribute)constantsSectionEClass.getEStructuralFeatures().get(1);
+	public EClass getConstructorsSection() {
+		return constructorsSectionEClass;
 	}
+
 
 	/**
 	 * Returns the meta object for enum '{@link com.armin.sap.ds.builder.models.extended.SDKBaseClassType <em>SDK Base Class Type</em>}'.
@@ -1685,6 +1931,8 @@ public class ExtendedPackage extends EPackageImpl {
 		createEAttribute(constantEClass, CONSTANT__NAME);
 		createEAttribute(constantEClass, CONSTANT__VALUE);
 		createEAttribute(constantEClass, CONSTANT__TYPE);
+		createEAttribute(constantEClass, CONSTANT__QUALIFIER);
+		createEAttribute(constantEClass, CONSTANT__IS_ARRAY);
 
 		propertyEClass = createEClass(PROPERTY);
 		createEAttribute(propertyEClass, PROPERTY__ID);
@@ -1722,9 +1970,15 @@ public class ExtendedPackage extends EPackageImpl {
 		createEAttribute(constructorEClass, CONSTRUCTOR__PARAMETERS);
 		createEAttribute(constructorEClass, CONSTRUCTOR__ACCESSIBILTY_TYPE);
 
+		sectionEClass = createEClass(SECTION);
+		createEAttribute(sectionEClass, SECTION__NAME);
+		createEAttribute(sectionEClass, SECTION__BELONGS_TO_COMPONENT);
+
 		constantsSectionEClass = createEClass(CONSTANTS_SECTION);
-		createEAttribute(constantsSectionEClass, CONSTANTS_SECTION__NAME);
-		createEAttribute(constantsSectionEClass, CONSTANTS_SECTION__BELONGS_TO_COMPONENT);
+
+		localVariablesSectionEClass = createEClass(LOCAL_VARIABLES_SECTION);
+
+		constructorsSectionEClass = createEClass(CONSTRUCTORS_SECTION);
 
 		// Create enums
 		sdkBaseClassTypeEEnum = createEEnum(SDK_BASE_CLASS_TYPE);
@@ -1765,6 +2019,9 @@ public class ExtendedPackage extends EPackageImpl {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		constantsSectionEClass.getESuperTypes().add(this.getSection());
+		localVariablesSectionEClass.getESuperTypes().add(this.getSection());
+		constructorsSectionEClass.getESuperTypes().add(this.getSection());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(componentClientEClass, ComponentClient.class, "ComponentClient", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1790,7 +2047,7 @@ public class ExtendedPackage extends EPackageImpl {
 		getComponentClient_LocalVariables().getEKeys().add(this.getVariable_Id());
 		initEReference(getComponentClient_Constants(), this.getConstant(), null, "constants", null, 0, -1, ComponentClient.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getComponentClient_Constants().getEKeys().add(this.getConstant_Id());
-		initEAttribute(getComponentClient_Comp(), this.getJavaObject(), "comp", null, 0, 1, ComponentClient.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getComponentClient_Comp(), this.getJavaObject(), "comp", null, 0, 1, ComponentClient.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getComponentClient__Render(), null, "render", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -1799,6 +2056,8 @@ public class ExtendedPackage extends EPackageImpl {
 		initEAttribute(getConstant_Name(), ecorePackage.getEString(), "name", null, 0, 1, Constant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getConstant_Value(), ecorePackage.getEString(), "value", null, 0, 1, Constant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getConstant_Type(), ecorePackage.getEString(), "type", null, 0, 1, Constant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConstant_Qualifier(), ecorePackage.getEString(), "qualifier", null, 0, 1, Constant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConstant_IsArray(), ecorePackage.getEBoolean(), "isArray", null, 0, 1, Constant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getProperty_Id(), ecorePackage.getEInt(), "id", null, 0, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1844,9 +2103,15 @@ public class ExtendedPackage extends EPackageImpl {
 		initEAttribute(getConstructor_Parameters(), g1, "parameters", null, 0, 1, Constructor.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getConstructor_AccessibiltyType(), this.getAccessType(), "accessibiltyType", null, 0, 1, Constructor.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(sectionEClass, Section.class, "Section", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSection_Name(), ecorePackage.getEString(), "name", null, 0, 1, Section.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSection_BelongsToComponent(), this.getJavaObject(), "belongsToComponent", null, 0, 1, Section.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(constantsSectionEClass, ConstantsSection.class, "ConstantsSection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getConstantsSection_Name(), ecorePackage.getEString(), "name", null, 0, 1, ConstantsSection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getConstantsSection_BelongsToComponent(), ecorePackage.getEString(), "belongsToComponent", null, 0, 1, ConstantsSection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(localVariablesSectionEClass, LocalVariablesSection.class, "LocalVariablesSection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(constructorsSectionEClass, ConstructorsSection.class, "ConstructorsSection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(sdkBaseClassTypeEEnum, SDKBaseClassType.class, "SDKBaseClassType");
@@ -2052,6 +2317,22 @@ public class ExtendedPackage extends EPackageImpl {
 		 * @generated
 		 */
 		public static final EAttribute CONSTANT__TYPE = eINSTANCE.getConstant_Type();
+
+		/**
+		 * The meta object literal for the '<em><b>Qualifier</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		public static final EAttribute CONSTANT__QUALIFIER = eINSTANCE.getConstant_Qualifier();
+
+		/**
+		 * The meta object literal for the '<em><b>Is Array</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		public static final EAttribute CONSTANT__IS_ARRAY = eINSTANCE.getConstant_IsArray();
 
 		/**
 		 * The meta object literal for the '{@link com.armin.sap.ds.builder.models.extended.Property <em>Property</em>}' class.
@@ -2312,6 +2593,32 @@ public class ExtendedPackage extends EPackageImpl {
 		public static final EAttribute CONSTRUCTOR__ACCESSIBILTY_TYPE = eINSTANCE.getConstructor_AccessibiltyType();
 
 		/**
+		 * The meta object literal for the '{@link com.armin.sap.ds.builder.models.extended.Section <em>Section</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.armin.sap.ds.builder.models.extended.Section
+		 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getSection()
+		 * @generated
+		 */
+		public static final EClass SECTION = eINSTANCE.getSection();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		public static final EAttribute SECTION__NAME = eINSTANCE.getSection_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Belongs To Component</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		public static final EAttribute SECTION__BELONGS_TO_COMPONENT = eINSTANCE.getSection_BelongsToComponent();
+
+		/**
 		 * The meta object literal for the '{@link com.armin.sap.ds.builder.models.extended.ConstantsSection <em>Constants Section</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2322,20 +2629,24 @@ public class ExtendedPackage extends EPackageImpl {
 		public static final EClass CONSTANTS_SECTION = eINSTANCE.getConstantsSection();
 
 		/**
-		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * The meta object literal for the '{@link com.armin.sap.ds.builder.models.extended.LocalVariablesSection <em>Local Variables Section</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 * @see com.armin.sap.ds.builder.models.extended.LocalVariablesSection
+		 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getLocalVariablesSection()
 		 * @generated
 		 */
-		public static final EAttribute CONSTANTS_SECTION__NAME = eINSTANCE.getConstantsSection_Name();
+		public static final EClass LOCAL_VARIABLES_SECTION = eINSTANCE.getLocalVariablesSection();
 
 		/**
-		 * The meta object literal for the '<em><b>Belongs To Component</b></em>' attribute feature.
+		 * The meta object literal for the '{@link com.armin.sap.ds.builder.models.extended.ConstructorsSection <em>Constructors Section</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 * @see com.armin.sap.ds.builder.models.extended.ConstructorsSection
+		 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getConstructorsSection()
 		 * @generated
 		 */
-		public static final EAttribute CONSTANTS_SECTION__BELONGS_TO_COMPONENT = eINSTANCE.getConstantsSection_BelongsToComponent();
+		public static final EClass CONSTRUCTORS_SECTION = eINSTANCE.getConstructorsSection();
 
 		/**
 		 * The meta object literal for the '{@link com.armin.sap.ds.builder.models.extended.SDKBaseClassType <em>SDK Base Class Type</em>}' enum.

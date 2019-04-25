@@ -23,6 +23,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.armin.sap.ds.builder.models.extended.Constant#getName <em>Name</em>}</li>
  *   <li>{@link com.armin.sap.ds.builder.models.extended.Constant#getValue <em>Value</em>}</li>
  *   <li>{@link com.armin.sap.ds.builder.models.extended.Constant#getType <em>Type</em>}</li>
+ *   <li>{@link com.armin.sap.ds.builder.models.extended.Constant#getQualifier <em>Qualifier</em>}</li>
+ *   <li>{@link com.armin.sap.ds.builder.models.extended.Constant#isIsArray <em>Is Array</em>}</li>
  * </ul>
  *
  * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getConstant()
@@ -109,6 +111,46 @@ public class Constant extends MinimalEObjectImpl.Container implements EObject {
 	 * @ordered
 	 */
 	protected String type = TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getQualifier() <em>Qualifier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getQualifier()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String QUALIFIER_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getQualifier() <em>Qualifier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getQualifier()
+	 * @generated
+	 * @ordered
+	 */
+	protected String qualifier = QUALIFIER_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isIsArray() <em>Is Array</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsArray()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean IS_ARRAY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isIsArray() <em>Is Array</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isIsArray()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean isArray = IS_ARRAY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -262,6 +304,72 @@ public class Constant extends MinimalEObjectImpl.Container implements EObject {
 	}
 
 	/**
+	 * Returns the value of the '<em><b>Qualifier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Qualifier</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Qualifier</em>' attribute.
+	 * @see #setQualifier(String)
+	 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getConstant_Qualifier()
+	 * @model
+	 * @generated
+	 */
+	public String getQualifier() {
+		return qualifier;
+	}
+
+	/**
+	 * Sets the value of the '{@link com.armin.sap.ds.builder.models.extended.Constant#getQualifier <em>Qualifier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Qualifier</em>' attribute.
+	 * @see #getQualifier()
+	 * @generated
+	 */
+	public void setQualifier(String newQualifier) {
+		String oldQualifier = qualifier;
+		qualifier = newQualifier;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ExtendedPackage.CONSTANT__QUALIFIER, oldQualifier, qualifier));
+	}
+
+	/**
+	 * Returns the value of the '<em><b>Is Array</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Is Array</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Is Array</em>' attribute.
+	 * @see #setIsArray(boolean)
+	 * @see com.armin.sap.ds.builder.models.extended.ExtendedPackage#getConstant_IsArray()
+	 * @model
+	 * @generated
+	 */
+	public boolean isIsArray() {
+		return isArray;
+	}
+
+	/**
+	 * Sets the value of the '{@link com.armin.sap.ds.builder.models.extended.Constant#isIsArray <em>Is Array</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Is Array</em>' attribute.
+	 * @see #isIsArray()
+	 * @generated
+	 */
+	public void setIsArray(boolean newIsArray) {
+		boolean oldIsArray = isArray;
+		isArray = newIsArray;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ExtendedPackage.CONSTANT__IS_ARRAY, oldIsArray, isArray));
+	}
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -277,6 +385,10 @@ public class Constant extends MinimalEObjectImpl.Container implements EObject {
 				return getValue();
 			case ExtendedPackage.CONSTANT__TYPE:
 				return getType();
+			case ExtendedPackage.CONSTANT__QUALIFIER:
+				return getQualifier();
+			case ExtendedPackage.CONSTANT__IS_ARRAY:
+				return isIsArray();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -300,6 +412,12 @@ public class Constant extends MinimalEObjectImpl.Container implements EObject {
 				return;
 			case ExtendedPackage.CONSTANT__TYPE:
 				setType((String)newValue);
+				return;
+			case ExtendedPackage.CONSTANT__QUALIFIER:
+				setQualifier((String)newValue);
+				return;
+			case ExtendedPackage.CONSTANT__IS_ARRAY:
+				setIsArray((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -325,6 +443,12 @@ public class Constant extends MinimalEObjectImpl.Container implements EObject {
 			case ExtendedPackage.CONSTANT__TYPE:
 				setType(TYPE_EDEFAULT);
 				return;
+			case ExtendedPackage.CONSTANT__QUALIFIER:
+				setQualifier(QUALIFIER_EDEFAULT);
+				return;
+			case ExtendedPackage.CONSTANT__IS_ARRAY:
+				setIsArray(IS_ARRAY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -345,6 +469,10 @@ public class Constant extends MinimalEObjectImpl.Container implements EObject {
 				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
 			case ExtendedPackage.CONSTANT__TYPE:
 				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
+			case ExtendedPackage.CONSTANT__QUALIFIER:
+				return QUALIFIER_EDEFAULT == null ? qualifier != null : !QUALIFIER_EDEFAULT.equals(qualifier);
+			case ExtendedPackage.CONSTANT__IS_ARRAY:
+				return isArray != IS_ARRAY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -367,6 +495,10 @@ public class Constant extends MinimalEObjectImpl.Container implements EObject {
 		result.append(value);
 		result.append(", type: ");
 		result.append(type);
+		result.append(", qualifier: ");
+		result.append(qualifier);
+		result.append(", isArray: ");
+		result.append(isArray);
 		result.append(')');
 		return result.toString();
 	}

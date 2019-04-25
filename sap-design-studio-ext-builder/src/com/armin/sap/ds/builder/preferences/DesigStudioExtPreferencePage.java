@@ -21,6 +21,7 @@ public class DesigStudioExtPreferencePage extends FieldEditorPreferencePage impl
 	
 	public DesigStudioExtPreferencePage() {
 		super(GRID);
+		setTitle("Extensions");
 		store = Activator.getDefault().getPreferenceStore();
 		setPreferenceStore(store);
 		setDescription("SAP Design Studio Preferences");

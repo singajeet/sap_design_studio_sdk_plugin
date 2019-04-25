@@ -68,4 +68,11 @@ public interface IDEConstants {
 	String RESOURCE_MARKER_URI = "resource_marker_uri";
 	String COMPONENT_TYPE = "component_type";
 	String NEW_INSTANCE_PREFIX = "new_instance_prefix";
+	String NAME = "name";
+	String TYPE = "type";
+	String IS_ARRAY = "is_array";
+	String QUALIFIER = "qualifier";
+	String PUBLIC = "public";
+	String PRIVATE = "private";
+	String FALSE = "false";
 }

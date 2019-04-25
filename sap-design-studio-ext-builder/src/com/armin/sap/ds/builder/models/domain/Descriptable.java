@@ -184,7 +184,6 @@ public class Descriptable implements IModel, Serializable {
 	 */
 	@Override
 	public String toString() {
-		return String.format("Descriptable [id=%s, title=%s, tooltip=%s, visible=%s, name=%s]", id, title, tooltip,
-				visible, name);
+		return String.format("id=%s, name=%s", id, name);
 	}
 }

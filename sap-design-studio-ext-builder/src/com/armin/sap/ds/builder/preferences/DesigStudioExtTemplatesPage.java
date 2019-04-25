@@ -26,6 +26,7 @@ public class DesigStudioExtTemplatesPage extends FieldEditorPreferencePage imple
 	
 	public DesigStudioExtTemplatesPage() {
 		super(GRID);
+		setTitle("Templates");
 		store = Activator.getDefault().getPreferenceStore();
 		setPreferenceStore(store);
 		setDescription("SAP Design Studio Templates");

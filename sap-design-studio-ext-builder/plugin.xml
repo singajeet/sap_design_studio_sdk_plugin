@@ -1512,6 +1512,7 @@
             id="com.armin.sap.ds.builder.wizards.category">
       </category>
       <wizard
+            canFinishEarly="false"
             category="com.armin.sap.ds.builder.wizards.category"
             class="com.armin.sap.ds.builder.ui.wizards.project.DesignStudioNewProjectWizard"
             descriptionImage="images/project_16x16.png"
@@ -1600,7 +1601,7 @@
       </page>
       <page
             category="com.armin.sap.ds.builder.preferences.design_studio_preferences"
-            class="com.armin.sap.ds.builder.preferences.DesigStudioDiagramsPage"
+            class="com.armin.sap.ds.builder.preferences.DesignStudioDiagramsPreferencePage"
             id="com.armin.sap.ds.builder.preferences.design_studio_diagram_preferences"
             name="Diagram">
       </page>

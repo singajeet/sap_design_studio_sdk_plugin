@@ -104,8 +104,8 @@ public class Settings {
 		public static final String COMPONENT_CLIENT_DIA_ROW_HEIGHT_ID = "component_client_diagram_row_height";
 		public static final String COMPONENT_CLIENT_DIA_CONTAINER_LINE_WIDTH_ID = "component_client_container_line_width";
 		
-		public static final int COMPONENT_CLIENT_DIA_HEIGHT = 100;
-		public static final int COMPONENT_CLIENT_DIA_WIDTH = 100;
+		public static final int COMPONENT_CLIENT_DIA_HEIGHT = 300;
+		public static final int COMPONENT_CLIENT_DIA_WIDTH = 300;
 		public static final int COMPONENT_CLIENT_DIA_CORNER_WIDTH = 10;
 		public static final int COMPONENT_CLIENT_DIA_CORNER_HEIGHT = 10;
 		public static final int COMPONENT_CLIENT_DIA_ROW_HEIGHT = 20;
@@ -113,8 +113,16 @@ public class Settings {
 				
 		
 		//Settings for Graphiti diagrams - constant section
+		public static final String CONSTANT_SECTION_NAME_ID = "constant_section_name";
+		public static final String CONSTANT_SECTION_NAME = "CONSTANTS";
 		public static final String CONSTANT_SECTION_NUM_OF_ROWS_ID = "constant_section_num_of_rows";
 		public static final int CONSTANT_SECTION_NUM_OF_ROWS = 5;
+		
+		//Settings for Graphiti diagrams - varables section
+		public static final String VARIABLE_SECTION_NAME_ID = "constant_section_name";
+		public static final String VARIABLE_SECTION_NAME = "CONSTANTS";
+		public static final String VARIABLE_SECTION_NUM_OF_ROWS_ID = "constant_section_num_of_rows";
+		public static final int VARIABLE_SECTION_NUM_OF_ROWS = 5;
 	}
 
 }

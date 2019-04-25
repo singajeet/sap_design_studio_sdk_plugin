@@ -96,8 +96,20 @@ public class ExtendedAdapterFactory extends AdapterFactoryImpl {
 				return createConstructorAdapter();
 			}
 			@Override
+			public Adapter caseSection(Section object) {
+				return createSectionAdapter();
+			}
+			@Override
 			public Adapter caseConstantsSection(ConstantsSection object) {
 				return createConstantsSectionAdapter();
+			}
+			@Override
+			public Adapter caseLocalVariablesSection(LocalVariablesSection object) {
+				return createLocalVariablesSectionAdapter();
+			}
+			@Override
+			public Adapter caseConstructorsSection(ConstructorsSection object) {
+				return createConstructorsSectionAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -218,6 +230,20 @@ public class ExtendedAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.extended.Section <em>Section</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.armin.sap.ds.builder.models.extended.Section
+	 * @generated
+	 */
+	public Adapter createSectionAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.extended.ConstantsSection <em>Constants Section</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -228,6 +254,34 @@ public class ExtendedAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createConstantsSectionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.extended.LocalVariablesSection <em>Local Variables Section</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.armin.sap.ds.builder.models.extended.LocalVariablesSection
+	 * @generated
+	 */
+	public Adapter createLocalVariablesSectionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.armin.sap.ds.builder.models.extended.ConstructorsSection <em>Constructors Section</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.armin.sap.ds.builder.models.extended.ConstructorsSection
+	 * @generated
+	 */
+	public Adapter createConstructorsSectionAdapter() {
 		return null;
 	}
 

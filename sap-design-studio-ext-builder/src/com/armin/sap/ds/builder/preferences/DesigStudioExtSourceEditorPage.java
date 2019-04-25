@@ -10,6 +10,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class DesigStudioExtSourceEditorPage extends PreferencePage implements IWorkbenchPreferencePage {
 
 	public DesigStudioExtSourceEditorPage() {
+		setTitle("Extension Source Editor");
 		// TODO Auto-generated constructor stub
 	}
 
